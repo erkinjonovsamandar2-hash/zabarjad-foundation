@@ -9,7 +9,7 @@ const translations = {
       spotlight: "Taxtlar o'yini",
       library: "Kutubxona",
       blog: "Blog",
-      quiz: "Viktorina",
+      quiz: "Kitob tanlash",
       contact: "Aloqa",
     },
     hero: {

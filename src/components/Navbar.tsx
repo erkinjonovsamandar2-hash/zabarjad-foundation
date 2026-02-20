@@ -3,7 +3,7 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useLang } from "@/context/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
-import zabarjadLogo from "@/assets/zabarjad-logo.jpg";
+import zabarjadBird from "@/assets/zabarjad-bird.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -47,9 +47,9 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5">
           <img
-            src={zabarjadLogo}
+            src={zabarjadBird}
             alt="Zabarjad Media"
-            className="h-9 w-9 rounded-full object-cover ring-1 ring-primary/30"
+            className="h-9 w-9 object-contain"
           />
           <span className="font-serif text-xl font-bold tracking-wide text-foreground">
             Zabarjad <span className="text-primary">Media</span>
