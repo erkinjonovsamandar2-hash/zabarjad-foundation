@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { X, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BOOK_PREVIEW_PAGES } from "@/lib/mockData";
 
 interface BookFlipModalProps {
   book: { title: string; author: string } | null;
   onClose: () => void;
 }
 
-const pages = [
-  "Bu kitobning birinchi sahifasi. Qorong'u va sirli bir kecha edi. Shamol daraxtlarning shoxlarini silkitardi va osmon yulduzlarsiz qolgan edi...",
-  "Ikkinchi sahifa davomi. Qahramonimiz yo'lga chiqdi. Uning oldida noma'lum bir sayohat kutayotgan edi. Har bir qadam yangi sirlarni ochardi...",
-  "Uchinchi sahifa. Qadimiy qal'a devorlarida yashirin xat topildi. Bu xat butun mamlakatning taqdirini o'zgartirishi mumkin edi...",
-];
+const pages = BOOK_PREVIEW_PAGES;
 
 const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
   const [isOpen, setIsOpen] = useState(false);

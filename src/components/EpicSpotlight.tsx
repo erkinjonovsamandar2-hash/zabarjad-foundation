@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LanguageContext";
+import { HOTSPOT_IDS, HOTSPOT_POSITIONS } from "@/lib/mockData";
 
-const hotspotIds = ["winterfell", "kings-landing", "wall"] as const;
-
-const hotspotPositions: Record<string, { x: number; y: number }> = {
-  winterfell: { x: 35, y: 25 },
-  "kings-landing": { x: 55, y: 65 },
-  wall: { x: 40, y: 8 },
-};
+const hotspotIds = HOTSPOT_IDS;
+const hotspotPositions = HOTSPOT_POSITIONS;
 
 const EpicSpotlight = () => {
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);

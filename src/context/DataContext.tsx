@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { DEFAULT_QUIZ_CONFIG, DEFAULT_SITE_SETTINGS } from "@/lib/mockData";
 
 // ── Types ──
 export interface Book {
@@ -50,11 +51,7 @@ export interface SiteSettings {
   map: { enabled: boolean; embed_url: string; title: string };
 }
 
-const defaultSiteSettings: SiteSettings = {
-  hero: { motto: "Eng Yaxshisini Ilinamiz", subtitle: "Zabarjad Media — dunyoning eng yaxshi fantastik asarlarini o'zbek tilida taqdim etadi", cta_text: "Kitoblarni ko'rish" },
-  footer: { phone: "+998 90 123 45 67", email: "info@zabarjad.uz", address: "Toshkent, O'zbekiston", telegram: "https://t.me/zabarjad", instagram: "https://instagram.com/zabarjad" },
-  map: { enabled: true, embed_url: "", title: "Bizning manzil" },
-};
+const defaultSiteSettings: SiteSettings = DEFAULT_SITE_SETTINGS;
 
 // ── Context ──
 interface DataContextType {
@@ -75,22 +72,7 @@ interface DataContextType {
   refreshArticles: () => Promise<void>;
 }
 
-const defaultQuiz: QuizConfig = {
-  steps: [
-    { question: "Qaysi janr sizga yoqadi?", options: [{ label: "Fantastika", value: "fantasy" }, { label: "Ilmiy-fantastika", value: "scifi" }, { label: "Klassik adabiyot", value: "classic" }] },
-    { question: "Fantastik yoki real?", options: [{ label: "To'liq sehrli olam", value: "high" }, { label: "Bir oz sehr", value: "low" }, { label: "Butunlay real", value: "none" }] },
-    { question: "Qorong'u yoki yorqin?", options: [{ label: "Qorong'u va dramatik", value: "dark" }, { label: "Sarguzashtli va quvnoq", value: "light" }, { label: "Aralash", value: "mixed" }] },
-  ],
-  paths: [
-    { key: "fantasy-high-dark", bookId: "", reason: "Qorong'u fantezi olamining shoh asari." },
-    { key: "fantasy-low-light", bookId: "", reason: "Sarguzashtga to'la sehrli sayohat!" },
-    { key: "scifi-none-dark", bookId: "", reason: "Kelajak haqidagi eng kuchli ogohlantirish." },
-    { key: "scifi-high-mixed", bookId: "", reason: "Ilm-fan va siyosatning ajoyib uyg'unligi." },
-    { key: "classic-none-light", bookId: "", reason: "Klassik sarguzasht va sehrli dunyo." },
-  ],
-  defaultBookId: "",
-  defaultReason: "Epik fantezi sevuvchilar uchun eng yaxshi tanlov!",
-};
+const defaultQuiz: QuizConfig = DEFAULT_QUIZ_CONFIG;
 
 const DataContext = createContext<DataContextType | null>(null);
 

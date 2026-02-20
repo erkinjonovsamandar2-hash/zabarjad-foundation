@@ -6,16 +6,13 @@ import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { LIBRARY_FILTER_KEYS, LIBRARY_FILTER_MAP } from "@/lib/mockData";
 
 const LibraryPage = () => {
   const { books } = useData();
   const { lang, t } = useLang();
-  const filterKeys = ["new", "soon", "gold"] as const;
-  const filterMap: Record<string, string> = {
-    new: "Yangi Nashrlar",
-    soon: "Tez Kunda",
-    gold: "Oltin Kolleksiya",
-  };
+  const filterKeys = LIBRARY_FILTER_KEYS;
+  const filterMap = LIBRARY_FILTER_MAP;
   const [active, setActive] = useState<string>("new");
   const [selectedBook, setSelectedBook] = useState<{ title: string; author: string } | null>(null);
 
