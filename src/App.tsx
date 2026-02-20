@@ -5,7 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DataProvider } from "@/context/DataContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import Index from "./pages/Index";
+import BlogPage from "./pages/BlogPage";
+import LibraryPage from "./pages/LibraryPage";
+import QuizPage from "./pages/QuizPage";
+import SpotlightPage from "./pages/SpotlightPage";
 import NotFound from "./pages/NotFound";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -29,24 +34,30 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <DataProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
-                <Route index element={<BookManager />} />
-                <Route path="blog" element={<BlogManager />} />
-                <Route path="quiz" element={<QuizManager />} />
-                <Route path="settings" element={<SiteSettingsManager />} />
-                <Route path="users" element={<AdminUsersManager />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <LanguageProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/library" element={<LibraryPage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/spotlight" element={<SpotlightPage />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
+                  <Route index element={<BookManager />} />
+                  <Route path="blog" element={<BlogManager />} />
+                  <Route path="quiz" element={<QuizManager />} />
+                  <Route path="settings" element={<SiteSettingsManager />} />
+                  <Route path="users" element={<AdminUsersManager />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </LanguageProvider>
       </DataProvider>
     </AuthProvider>
   </QueryClientProvider>
