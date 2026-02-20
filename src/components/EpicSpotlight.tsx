@@ -63,14 +63,7 @@ const EpicSpotlight = () => {
         >
           {/* Map background */}
           <div
-            className="absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(ellipse at 30% 30%, hsl(120 20% 8%) 0%, transparent 50%),
-                radial-gradient(ellipse at 60% 70%, hsl(30 20% 8%) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, hsl(210 15% 6%) 0%, hsl(var(--charcoal)) 100%)
-              `,
-            }}
+            className="absolute inset-0 bg-secondary"
           >
             {/* Stylized coastline SVG */}
             <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100" preserveAspectRatio="none">

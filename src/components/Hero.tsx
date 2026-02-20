@@ -3,11 +3,11 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const carouselBooks = [
-  { title: "Muz va Olov Qo'shig'i", author: "Jorj R.R. Martin", color: "210 60% 15%" },
-  { title: "Hobbit", author: "J.R.R. Tolkien", color: "120 40% 12%" },
-  { title: "1984", author: "Jorj Oruell", color: "0 30% 14%" },
-  { title: "Duna", author: "Frank Herbert", color: "35 50% 13%" },
-  { title: "Xarri Potter", author: "J.K. Rouling", color: "270 40% 14%" },
+  { title: "Muz va Olov Qo'shig'i", author: "Jorj R.R. Martin", color: "210 60% 15%", colorLight: "210 50% 85%" },
+  { title: "Hobbit", author: "J.R.R. Tolkien", color: "120 40% 12%", colorLight: "120 35% 85%" },
+  { title: "1984", author: "Jorj Oruell", color: "0 30% 14%", colorLight: "0 25% 88%" },
+  { title: "Duna", author: "Frank Herbert", color: "35 50% 13%", colorLight: "35 45% 85%" },
+  { title: "Xarri Potter", author: "J.K. Rouling", color: "270 40% 14%", colorLight: "270 35% 88%" },
 ];
 
 const Hero = () => {
@@ -20,7 +20,7 @@ const Hero = () => {
 
   return (
     <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center section-padding pt-24 overflow-hidden">
-      {/* Animated background */}
+      {/* Animated background - uses CSS class to switch color per theme */}
       <AnimatePresence mode="wait">
         <motion.div
           key={active}
@@ -33,7 +33,7 @@ const Hero = () => {
           <div
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(ellipse at 50% 40%, hsl(${book.color}) 0%, hsl(var(--background)) 70%)`,
+              background: `radial-gradient(ellipse at 50% 40%, hsl(var(--primary) / 0.12) 0%, hsl(var(--background)) 70%)`,
             }}
           />
         </motion.div>
@@ -96,8 +96,8 @@ const Hero = () => {
                     height: isActive ? "260px" : "220px",
                     background: `linear-gradient(145deg, hsl(${b.color}), hsl(var(--secondary)))`,
                     boxShadow: isActive
-                      ? "0 20px 60px -10px rgba(247,181,0,0.3), 0 0 30px -5px rgba(247,181,0,0.15)"
-                      : "0 10px 30px -10px rgba(0,0,0,0.5)",
+                      ? "0 20px 60px -10px hsl(var(--primary) / 0.3), 0 0 30px -5px hsl(var(--primary) / 0.15)"
+                      : "0 10px 30px -10px rgba(0,0,0,0.3)",
                     transition: "height 0.3s, box-shadow 0.3s",
                   }}
                 >
