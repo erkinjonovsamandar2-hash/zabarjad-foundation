@@ -2,13 +2,15 @@ import { useState, useCallback } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/context/DataContext";
+import { useLang, locField } from "@/context/LanguageContext";
 
 const Hero = () => {
   const { books, siteSettings } = useData();
+  const { lang, t } = useLang();
   const featuredBooks = books.filter((b) => b.featured);
   const [active, setActive] = useState(0);
 
-  const safeActive = Math.min(active, featuredBooks.length - 1);
+  const safeActive = Math.min(active, Math.max(featuredBooks.length - 1, 0));
   const next = useCallback(() => setActive((p) => (p + 1) % featuredBooks.length), [featuredBooks.length]);
   const prev = useCallback(() => setActive((p) => (p - 1 + featuredBooks.length) % featuredBooks.length), [featuredBooks.length]);
 
@@ -45,15 +47,15 @@ const Hero = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <p className="mb-4 text-sm font-sans font-medium uppercase tracking-[0.3em] text-primary">Premium nashriyot</p>
+        <p className="mb-4 text-sm font-sans font-medium uppercase tracking-[0.3em] text-primary">{t.hero.badge}</p>
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold leading-tight text-foreground mb-6">
           {siteSettings.hero.motto.split(" ").slice(0, -1).join(" ")} <span className="text-gold-gradient">{siteSettings.hero.motto.split(" ").slice(-1)[0]}</span>
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
           {siteSettings.hero.subtitle}
         </p>
-        <a href="#library" className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90">
-          {siteSettings.hero.cta_text} <ChevronRight className="h-4 w-4" />
+        <a href="/library" className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90">
+          {t.hero.cta} <ChevronRight className="h-4 w-4" />
         </a>
       </motion.div>
 
@@ -89,11 +91,11 @@ const Hero = () => {
                   }}
                 >
                   {b.cover_url ? (
-                    <img src={b.cover_url} alt={b.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={b.cover_url} alt={locField(b, "title", lang)} className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
                     <>
-                      <span className="font-serif text-sm md:text-base font-bold text-foreground text-center px-4">{b.title}</span>
-                      <span className="text-xs text-muted-foreground mt-2">{b.author}</span>
+                      <span className="font-serif text-sm md:text-base font-bold text-foreground text-center px-4">{locField(b, "title", lang)}</span>
+                      <span className="text-xs text-muted-foreground mt-2">{locField(b, "author", lang)}</span>
                     </>
                   )}
                 </div>

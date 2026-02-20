@@ -17,35 +17,53 @@ export type Database = {
       articles: {
         Row: {
           content: string | null
+          content_en: string | null
+          content_ru: string | null
           cover_url: string | null
           created_at: string
           date: string
           excerpt: string | null
+          excerpt_en: string | null
+          excerpt_ru: string | null
           id: string
           published: boolean | null
           title: string
+          title_en: string | null
+          title_ru: string | null
           updated_at: string
         }
         Insert: {
           content?: string | null
+          content_en?: string | null
+          content_ru?: string | null
           cover_url?: string | null
           created_at?: string
           date?: string
           excerpt?: string | null
+          excerpt_en?: string | null
+          excerpt_ru?: string | null
           id?: string
           published?: boolean | null
           title: string
+          title_en?: string | null
+          title_ru?: string | null
           updated_at?: string
         }
         Update: {
           content?: string | null
+          content_en?: string | null
+          content_ru?: string | null
           cover_url?: string | null
           created_at?: string
           date?: string
           excerpt?: string | null
+          excerpt_en?: string | null
+          excerpt_ru?: string | null
           id?: string
           published?: boolean | null
           title?: string
+          title_en?: string | null
+          title_ru?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -53,47 +71,65 @@ export type Database = {
       books: {
         Row: {
           author: string
+          author_en: string | null
+          author_ru: string | null
           bg_color: string | null
           category: string
           cover_url: string | null
           created_at: string
           description: string | null
+          description_en: string | null
+          description_ru: string | null
           enable_3d_flip: boolean | null
           featured: boolean | null
           id: string
           price: number | null
           sort_order: number | null
           title: string
+          title_en: string | null
+          title_ru: string | null
           updated_at: string
         }
         Insert: {
           author: string
+          author_en?: string | null
+          author_ru?: string | null
           bg_color?: string | null
           category?: string
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          description_en?: string | null
+          description_ru?: string | null
           enable_3d_flip?: boolean | null
           featured?: boolean | null
           id?: string
           price?: number | null
           sort_order?: number | null
           title: string
+          title_en?: string | null
+          title_ru?: string | null
           updated_at?: string
         }
         Update: {
           author?: string
+          author_en?: string | null
+          author_ru?: string | null
           bg_color?: string | null
           category?: string
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          description_en?: string | null
+          description_ru?: string | null
           enable_3d_flip?: boolean | null
           featured?: boolean | null
           id?: string
           price?: number | null
           sort_order?: number | null
           title?: string
+          title_en?: string | null
+          title_ru?: string | null
           updated_at?: string
         }
         Relationships: []
