@@ -78,18 +78,24 @@ const Hero = () => {
                 onClick={() => setActive(i)}
               >
                 <div
-                  className="glass-card flex flex-col items-center justify-center rounded-xl overflow-hidden"
+                  className="glass-card flex flex-col items-center justify-center rounded-xl overflow-hidden relative"
                   style={{
                     height: isActive ? "260px" : "220px",
-                    background: `linear-gradient(145deg, hsl(${b.bgColor}), hsl(var(--secondary)))`,
+                    background: b.cover_url ? undefined : `linear-gradient(145deg, hsl(${b.bg_color}), hsl(var(--secondary)))`,
                     boxShadow: isActive
                       ? "0 20px 60px -10px hsl(var(--primary) / 0.3), 0 0 30px -5px hsl(var(--primary) / 0.15)"
                       : "0 10px 30px -10px rgba(0,0,0,0.3)",
                     transition: "height 0.3s, box-shadow 0.3s",
                   }}
                 >
-                  <span className="font-serif text-sm md:text-base font-bold text-foreground text-center px-4">{b.title}</span>
-                  <span className="text-xs text-muted-foreground mt-2">{b.author}</span>
+                  {b.cover_url ? (
+                    <img src={b.cover_url} alt={b.title} className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <>
+                      <span className="font-serif text-sm md:text-base font-bold text-foreground text-center px-4">{b.title}</span>
+                      <span className="text-xs text-muted-foreground mt-2">{b.author}</span>
+                    </>
+                  )}
                 </div>
               </motion.div>
             );

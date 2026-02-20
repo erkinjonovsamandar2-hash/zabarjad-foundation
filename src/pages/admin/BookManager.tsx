@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useData, Book } from "@/context/DataContext";
-import { Plus, Pencil, Trash2, X, BookOpen } from "lucide-react";
+import { Plus, Pencil, Trash2, X, BookOpen, Image } from "lucide-react";
+import ImageCropper from "@/components/admin/ImageCropper";
 
 const emptyBook: Omit<Book, "id"> = {
-  title: "", author: "", coverUrl: "", description: "", price: 0,
-  category: "Yangi Nashrlar", bgColor: "210 60% 15%", enable3DFlip: false, featured: false,
+  title: "", author: "", cover_url: "", description: "", price: 0,
+  category: "Yangi Nashrlar", bg_color: "210 60% 15%", enable_3d_flip: false, featured: false, sort_order: 0,
 };
 
 const BookManager = () => {
@@ -12,13 +13,17 @@ const BookManager = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<Omit<Book, "id">>(emptyBook);
+  const [saving, setSaving] = useState(false);
 
-  const openAdd = () => { setEditId(null); setForm(emptyBook); setModalOpen(true); };
+  const openAdd = () => { setEditId(null); setForm({ ...emptyBook, sort_order: books.length + 1 }); setModalOpen(true); };
   const openEdit = (book: Book) => { setEditId(book.id); setForm(book); setModalOpen(true); };
-  const handleSave = () => {
-    if (editId) updateBook(editId, form);
-    else addBook(form);
-    setModalOpen(false);
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      if (editId) await updateBook(editId, form);
+      else await addBook(form);
+      setModalOpen(false);
+    } finally { setSaving(false); }
   };
 
   return (
@@ -30,39 +35,47 @@ const BookManager = () => {
         </button>
       </div>
 
-      {/* Table */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
+                <th className="text-left px-4 py-3 font-semibold text-gray-600">Muqova</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Nomi</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden sm:table-cell">Muallif</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden md:table-cell">Kategoriya</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Narxi</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">3D Flip</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Featured</th>
+                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Holat</th>
                 <th className="text-right px-4 py-3 font-semibold text-gray-600">Amallar</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {books.map((book) => (
                 <tr key={book.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-gray-900">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-6 rounded flex items-center justify-center shrink-0" style={{ background: `hsl(${book.bgColor})` }}>
+                  <td className="px-4 py-3">
+                    {book.cover_url ? (
+                      <img src={book.cover_url} alt={book.title} className="h-12 w-8 rounded object-cover" />
+                    ) : (
+                      <div className="h-12 w-8 rounded flex items-center justify-center" style={{ background: `hsl(${book.bg_color})` }}>
                         <BookOpen className="h-3 w-3 text-white/60" />
                       </div>
-                      <span className="truncate max-w-[150px]">{book.title}</span>
-                    </div>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-900">
+                    <span className="truncate max-w-[150px] block">{book.title}</span>
+                    <span className="text-xs text-gray-400 sm:hidden">{book.author}</span>
                   </td>
                   <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{book.author}</td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className="inline-block rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">{book.category}</span>
                   </td>
                   <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">{book.price.toLocaleString()} so'm</td>
-                  <td className="px-4 py-3 hidden lg:table-cell">{book.enable3DFlip ? "✓" : "—"}</td>
-                  <td className="px-4 py-3 hidden lg:table-cell">{book.featured ? "⭐" : "—"}</td>
+                  <td className="px-4 py-3 hidden lg:table-cell">
+                    <div className="flex gap-1.5">
+                      {book.featured && <span className="text-xs bg-amber-100 text-amber-700 rounded px-1.5 py-0.5">Hero</span>}
+                      {book.enable_3d_flip && <span className="text-xs bg-blue-100 text-blue-700 rounded px-1.5 py-0.5">3D</span>}
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
                       <button onClick={() => openEdit(book)} className="p-1.5 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"><Pencil className="h-4 w-4" /></button>
@@ -85,24 +98,32 @@ const BookManager = () => {
               <button onClick={() => setModalOpen(false)} className="p-1 rounded-lg hover:bg-gray-100"><X className="h-5 w-5 text-gray-400" /></button>
             </div>
             <div className="p-5 space-y-4">
+              {/* Cover image with crop */}
+              <ImageCropper
+                currentUrl={form.cover_url}
+                onImageSaved={(url) => setForm({ ...form, cover_url: url })}
+                aspectRatio={2 / 3}
+                label="Muqova rasmi (2:3)"
+              />
+
               <Field label="Nomi" value={form.title} onChange={(v) => setForm({ ...form, title: v })} />
               <Field label="Muallif" value={form.author} onChange={(v) => setForm({ ...form, author: v })} />
-              <Field label="Muqova URL" value={form.coverUrl} onChange={(v) => setForm({ ...form, coverUrl: v })} />
               <Field label="Tavsif" value={form.description} onChange={(v) => setForm({ ...form, description: v })} textarea />
               <Field label="Narxi (so'm)" value={form.price.toString()} onChange={(v) => setForm({ ...form, price: Number(v) || 0 })} type="number" />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Kategoriya</label>
-                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as Book["category"] })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none">
+                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none">
                   <option>Yangi Nashrlar</option>
                   <option>Tez Kunda</option>
                   <option>Oltin Kolleksiya</option>
                   <option>Bestseller</option>
                 </select>
               </div>
-              <Field label="Fon rangi (HSL)" value={form.bgColor} onChange={(v) => setForm({ ...form, bgColor: v })} placeholder="210 60% 15%" />
+              <Field label="Fon rangi (HSL, masalan: 210 60% 15%)" value={form.bg_color} onChange={(v) => setForm({ ...form, bg_color: v })} />
+              <Field label="Tartib raqami" value={form.sort_order.toString()} onChange={(v) => setForm({ ...form, sort_order: Number(v) || 0 })} type="number" />
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" checked={form.enable3DFlip} onChange={(e) => setForm({ ...form, enable3DFlip: e.target.checked })} className="rounded border-gray-300 text-amber-500 focus:ring-amber-200" />
+                  <input type="checkbox" checked={form.enable_3d_flip} onChange={(e) => setForm({ ...form, enable_3d_flip: e.target.checked })} className="rounded border-gray-300 text-amber-500 focus:ring-amber-200" />
                   3D Page-Flip
                 </label>
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
@@ -113,7 +134,9 @@ const BookManager = () => {
             </div>
             <div className="flex justify-end gap-3 p-5 border-t border-gray-100">
               <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Bekor qilish</button>
-              <button onClick={handleSave} className="px-5 py-2 text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 rounded-lg transition-colors">Saqlash</button>
+              <button onClick={handleSave} disabled={saving} className="px-5 py-2 text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 rounded-lg transition-colors">
+                {saving ? "Saqlanmoqda..." : "Saqlash"}
+              </button>
             </div>
           </div>
         </div>

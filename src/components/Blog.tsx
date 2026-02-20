@@ -13,14 +13,19 @@ const Blog = () => {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {published.map((article) => (
-            <article key={article.id} className="glass-card rounded-xl p-6 flex flex-col justify-between gap-4 group cursor-pointer hover:border-primary/20 transition-colors">
-              <div>
-                <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-primary transition-colors">{article.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{article.excerpt}</p>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <CalendarDays className="h-3.5 w-3.5" />
-                <time>{article.date}</time>
+            <article key={article.id} className="glass-card rounded-xl overflow-hidden flex flex-col justify-between group cursor-pointer hover:border-primary/20 transition-colors">
+              {article.cover_url && (
+                <img src={article.cover_url} alt={article.title} className="w-full h-40 object-cover" />
+              )}
+              <div className="p-6 flex flex-col gap-4 flex-1">
+                <div>
+                  <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-primary transition-colors">{article.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{article.excerpt}</p>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mt-auto">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  <time>{article.date}</time>
+                </div>
               </div>
             </article>
           ))}
