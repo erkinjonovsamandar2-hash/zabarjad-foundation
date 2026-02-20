@@ -3,6 +3,19 @@ import { useData, Book } from "@/context/DataContext";
 import { Plus, Pencil, Trash2, X, BookOpen, Image } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
 
+const bgColorOptions = [
+  { label: "Ko'k (qorong'u)", value: "210 60% 15%" },
+  { label: "Yashil (qorong'u)", value: "120 40% 12%" },
+  { label: "Qizil (qorong'u)", value: "0 30% 14%" },
+  { label: "Sariq (qorong'u)", value: "35 50% 13%" },
+  { label: "Binafsha", value: "270 40% 14%" },
+  { label: "Zangori", value: "180 30% 12%" },
+  { label: "Ko'k (o'rta)", value: "200 40% 14%" },
+  { label: "Yashil (to'q)", value: "150 30% 10%" },
+  { label: "Moviy (to'q)", value: "220 50% 12%" },
+  { label: "Jigarrang", value: "45 30% 12%" },
+];
+
 const emptyBook: Omit<Book, "id"> = {
   title: "", author: "", cover_url: "", description: "", price: 0,
   category: "Yangi Nashrlar", bg_color: "210 60% 15%", enable_3d_flip: false, featured: false, sort_order: 0,
@@ -15,7 +28,8 @@ const BookManager = () => {
   const [form, setForm] = useState<Omit<Book, "id">>(emptyBook);
   const [saving, setSaving] = useState(false);
 
-  const openAdd = () => { setEditId(null); setForm({ ...emptyBook, sort_order: books.length + 1 }); setModalOpen(true); };
+  const nextSortOrder = books.length > 0 ? Math.max(...books.map(b => b.sort_order)) + 1 : 1;
+  const openAdd = () => { setEditId(null); setForm({ ...emptyBook, sort_order: nextSortOrder }); setModalOpen(true); };
   const openEdit = (book: Book) => { setEditId(book.id); setForm(book); setModalOpen(true); };
   const handleSave = async () => {
     setSaving(true);
@@ -44,7 +58,6 @@ const BookManager = () => {
                 <th className="text-left px-4 py-3 font-semibold text-gray-600">Nomi</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden sm:table-cell">Muallif</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden md:table-cell">Kategoriya</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Narxi</th>
                 <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Holat</th>
                 <th className="text-right px-4 py-3 font-semibold text-gray-600">Amallar</th>
               </tr>
@@ -69,7 +82,6 @@ const BookManager = () => {
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className="inline-block rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">{book.category}</span>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">{book.price.toLocaleString()} so'm</td>
                   <td className="px-4 py-3 hidden lg:table-cell">
                     <div className="flex gap-1.5">
                       {book.featured && <span className="text-xs bg-amber-100 text-amber-700 rounded px-1.5 py-0.5">Hero</span>}
@@ -109,18 +121,23 @@ const BookManager = () => {
               <Field label="Nomi" value={form.title} onChange={(v) => setForm({ ...form, title: v })} />
               <Field label="Muallif" value={form.author} onChange={(v) => setForm({ ...form, author: v })} />
               <Field label="Tavsif" value={form.description} onChange={(v) => setForm({ ...form, description: v })} textarea />
-              <Field label="Narxi (so'm)" value={form.price.toString()} onChange={(v) => setForm({ ...form, price: Number(v) || 0 })} type="number" />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Kategoriya</label>
-                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none">
+                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white">
                   <option>Yangi Nashrlar</option>
                   <option>Tez Kunda</option>
                   <option>Oltin Kolleksiya</option>
                   <option>Bestseller</option>
                 </select>
               </div>
-              <Field label="Fon rangi (HSL, masalan: 210 60% 15%)" value={form.bg_color} onChange={(v) => setForm({ ...form, bg_color: v })} />
-              <Field label="Tartib raqami" value={form.sort_order.toString()} onChange={(v) => setForm({ ...form, sort_order: Number(v) || 0 })} type="number" />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Fon rangi</label>
+                <select value={form.bg_color} onChange={(e) => setForm({ ...form, bg_color: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white">
+                  {bgColorOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                   <input type="checkbox" checked={form.enable_3d_flip} onChange={(e) => setForm({ ...form, enable_3d_flip: e.target.checked })} className="rounded border-gray-300 text-amber-500 focus:ring-amber-200" />
