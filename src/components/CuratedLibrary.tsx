@@ -42,10 +42,16 @@ const CuratedLibrary = () => {
                 className="glass-card break-inside-avoid rounded-xl overflow-hidden group cursor-pointer"
                 onClick={() => setSelectedBook(book)}
               >
-                <div className="flex items-center justify-center bg-secondary relative overflow-hidden" style={{ height: `${180 + (i % 3) * 40}px` }}>
-                  <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
+                <div className="relative overflow-hidden" style={{ height: `${180 + (i % 3) * 40}px` }}>
+                  {book.cover_url ? (
+                    <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="flex items-center justify-center bg-secondary w-full h-full">
+                      <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors" />
-                  {book.enable3DFlip && (
+                  {book.enable_3d_flip && (
                     <span className="absolute bottom-2 right-2 text-[10px] font-sans text-muted-foreground/40 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
                       Ichiga qarang →
                     </span>

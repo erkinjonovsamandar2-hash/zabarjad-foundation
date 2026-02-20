@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      articles: {
+        Row: {
+          content: string | null
+          cover_url: string | null
+          created_at: string
+          date: string
+          excerpt: string | null
+          id: string
+          published: boolean | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: string | null
+          cover_url?: string | null
+          created_at?: string
+          date?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string | null
+          cover_url?: string | null
+          created_at?: string
+          date?: string
+          excerpt?: string | null
+          id?: string
+          published?: boolean | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      books: {
+        Row: {
+          author: string
+          bg_color: string | null
+          category: string
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          enable_3d_flip: boolean | null
+          featured: boolean | null
+          id: string
+          price: number | null
+          sort_order: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          bg_color?: string | null
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          enable_3d_flip?: boolean | null
+          featured?: boolean | null
+          id?: string
+          price?: number | null
+          sort_order?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          bg_color?: string | null
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          enable_3d_flip?: boolean | null
+          featured?: boolean | null
+          id?: string
+          price?: number | null
+          sort_order?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      quiz_config: {
+        Row: {
+          config: Json
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
