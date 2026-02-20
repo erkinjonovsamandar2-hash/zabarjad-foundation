@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Menu, X, BookOpen } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, BookOpen, Sun, Moon } from "lucide-react";
 
 const navLinks = [
   { label: "Bosh sahifa", href: "#hero" },
@@ -11,6 +11,22 @@ const navLinks = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("zabarjad-theme") as "dark" | "light") || "dark";
+    }
+    return "dark";
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "light") {
+      root.classList.add("light");
+    } else {
+      root.classList.remove("light");
+    }
+    localStorage.setItem("zabarjad-theme", theme);
+  }, [theme]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border rounded-none">
@@ -35,6 +51,15 @@ const Navbar = () => {
               </a>
             </li>
           ))}
+          <li>
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="text-muted-foreground transition-colors hover:text-primary"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+          </li>
         </ul>
 
         {/* Mobile toggle */}
