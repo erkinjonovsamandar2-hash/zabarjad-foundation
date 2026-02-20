@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { BookOpen, FileText, Sparkles, Menu, X, Home } from "lucide-react";
+import { BookOpen, FileText, Sparkles, Menu, X, Home, LogOut } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
   { label: "Kitoblar", to: "/admin", icon: BookOpen, end: true },
@@ -10,6 +11,7 @@ const navItems = [
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { signOut, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -42,10 +44,14 @@ const AdminLayout = () => {
             </NavLink>
           ))}
         </nav>
-        <div className="p-3 border-t border-gray-100">
+        <div className="p-3 border-t border-gray-100 space-y-1">
           <a href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
             <Home className="h-4 w-4" /> Saytga qaytish
           </a>
+          <button onClick={signOut} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors">
+            <LogOut className="h-4 w-4" /> Chiqish
+          </button>
+          {user && <p className="px-3 pt-1 text-xs text-gray-400 truncate">{user.email}</p>}
         </div>
       </aside>
 
