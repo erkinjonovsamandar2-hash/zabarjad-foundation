@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/context/DataContext";
 
 const Hero = () => {
-  const { books } = useData();
+  const { books, siteSettings } = useData();
   const featuredBooks = books.filter((b) => b.featured);
   const [active, setActive] = useState(0);
 
@@ -47,13 +47,13 @@ const Hero = () => {
       >
         <p className="mb-4 text-sm font-sans font-medium uppercase tracking-[0.3em] text-primary">Premium nashriyot</p>
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold leading-tight text-foreground mb-6">
-          Eng Yaxshisini <span className="text-gold-gradient">Ilinamiz.</span>
+          {siteSettings.hero.motto.split(" ").slice(0, -1).join(" ")} <span className="text-gold-gradient">{siteSettings.hero.motto.split(" ").slice(-1)[0]}</span>
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-          Dunyo adabiyotining eng sara namunalarini o'zbek tilida taqdim etamiz.
+          {siteSettings.hero.subtitle}
         </p>
         <a href="#library" className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90">
-          Kutubxonani ko'rish <ChevronRight className="h-4 w-4" />
+          {siteSettings.hero.cta_text} <ChevronRight className="h-4 w-4" />
         </a>
       </motion.div>
 

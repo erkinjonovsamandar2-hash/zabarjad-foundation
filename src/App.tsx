@@ -12,6 +12,8 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import BookManager from "./pages/admin/BookManager";
 import BlogManager from "./pages/admin/BlogManager";
 import QuizManager from "./pages/admin/QuizManager";
+import SiteSettingsManager from "./pages/admin/SiteSettingsManager";
+import AdminUsersManager from "./pages/admin/AdminUsersManager";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,8 @@ const App = () => (
                 <Route index element={<BookManager />} />
                 <Route path="blog" element={<BlogManager />} />
                 <Route path="quiz" element={<QuizManager />} />
+                <Route path="settings" element={<SiteSettingsManager />} />
+                <Route path="users" element={<AdminUsersManager />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
