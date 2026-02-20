@@ -1,6 +1,10 @@
 import { BookOpen, Send, Instagram, Phone, MapPin } from "lucide-react";
+import { useData } from "@/context/DataContext";
 
 const Footer = () => {
+  const { siteSettings } = useData();
+  const { footer, map } = siteSettings;
+
   return (
     <footer id="footer" className="section-padding bg-charcoal border-t border-border">
       <div className="mx-auto max-w-7xl">
@@ -14,7 +18,7 @@ const Footer = () => {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href="https://t.me/"
+              href={footer.telegram}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
@@ -22,7 +26,7 @@ const Footer = () => {
               <Send className="h-4 w-4" /> Telegram
             </a>
             <a
-              href="https://instagram.com/"
+              href={footer.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg glass-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/30"
@@ -31,6 +35,16 @@ const Footer = () => {
             </a>
           </div>
         </div>
+
+        {/* Map */}
+        {map.enabled && map.embed_url && (
+          <div className="mb-10">
+            <h3 className="text-lg font-serif font-semibold text-foreground text-center mb-4">{map.title}</h3>
+            <div className="rounded-xl overflow-hidden border border-border">
+              <iframe src={map.embed_url} width="100%" height="300" style={{ border: 0 }} loading="lazy" allowFullScreen />
+            </div>
+          </div>
+        )}
 
         {/* Info */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 border-t border-border pt-10">
@@ -45,14 +59,14 @@ const Footer = () => {
             <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" />
             <div>
               <h4 className="font-serif font-semibold text-foreground">Manzil</h4>
-              <p className="text-sm text-muted-foreground mt-1">Muqimiy ko'chasi 178/310</p>
+              <p className="text-sm text-muted-foreground mt-1">{footer.address}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Phone className="h-5 w-5 text-primary mt-0.5 shrink-0" />
             <div>
               <h4 className="font-serif font-semibold text-foreground">Aloqa</h4>
-              <p className="text-sm text-muted-foreground mt-1">+998 97 409 04 84</p>
+              <p className="text-sm text-muted-foreground mt-1">{footer.phone}</p>
             </div>
           </div>
         </div>

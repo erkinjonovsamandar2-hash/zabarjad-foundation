@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { BookOpen, FileText, Sparkles, Menu, X, Home, LogOut } from "lucide-react";
+import { BookOpen, FileText, Sparkles, Menu, X, Home, LogOut, Settings, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
   { label: "Kitoblar", to: "/admin", icon: BookOpen, end: true },
   { label: "Blog", to: "/admin/blog", icon: FileText },
   { label: "Quiz", to: "/admin/quiz", icon: Sparkles },
+  { label: "Sozlamalar", to: "/admin/settings", icon: Settings },
+  { label: "Adminlar", to: "/admin/users", icon: ShieldCheck },
 ];
 
 const AdminLayout = () => {

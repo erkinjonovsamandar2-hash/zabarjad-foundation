@@ -44,11 +44,24 @@ export interface QuizConfig {
   defaultReason: string;
 }
 
+export interface SiteSettings {
+  hero: { motto: string; subtitle: string; cta_text: string };
+  footer: { phone: string; email: string; address: string; telegram: string; instagram: string };
+  map: { enabled: boolean; embed_url: string; title: string };
+}
+
+const defaultSiteSettings: SiteSettings = {
+  hero: { motto: "Eng Yaxshisini Ilinamiz", subtitle: "Zabarjad Media — dunyoning eng yaxshi fantastik asarlarini o'zbek tilida taqdim etadi", cta_text: "Kitoblarni ko'rish" },
+  footer: { phone: "+998 90 123 45 67", email: "info@zabarjad.uz", address: "Toshkent, O'zbekiston", telegram: "https://t.me/zabarjad", instagram: "https://instagram.com/zabarjad" },
+  map: { enabled: true, embed_url: "", title: "Bizning manzil" },
+};
+
 // ── Context ──
 interface DataContextType {
   books: Book[];
   articles: Article[];
   quizConfig: QuizConfig;
+  siteSettings: SiteSettings;
   loading: boolean;
   addBook: (book: Omit<Book, "id">) => Promise<void>;
   updateBook: (id: string, book: Partial<Book>) => Promise<void>;
@@ -57,6 +70,7 @@ interface DataContextType {
   updateArticle: (id: string, article: Partial<Article>) => Promise<void>;
   deleteArticle: (id: string) => Promise<void>;
   updateQuizConfig: (config: QuizConfig) => Promise<void>;
+  updateSiteSettings: (settings: SiteSettings) => Promise<void>;
   refreshBooks: () => Promise<void>;
   refreshArticles: () => Promise<void>;
 }
@@ -90,6 +104,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig>(defaultQuiz);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(defaultSiteSettings);
   const [loading, setLoading] = useState(true);
 
   const fetchBooks = async () => {
@@ -121,8 +136,17 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const fetchSiteSettings = async () => {
+    const { data } = await supabase.from("site_settings").select("*");
+    if (data && data.length > 0) {
+      const settings: Record<string, unknown> = {};
+      data.forEach((row: { key: string; value: unknown }) => { settings[row.key] = row.value; });
+      setSiteSettings({ ...defaultSiteSettings, ...settings } as unknown as SiteSettings);
+    }
+  };
+
   useEffect(() => {
-    Promise.all([fetchBooks(), fetchArticles(), fetchQuiz()]).finally(() => setLoading(false));
+    Promise.all([fetchBooks(), fetchArticles(), fetchQuiz(), fetchSiteSettings()]).finally(() => setLoading(false));
   }, []);
 
   const addBook = async (book: Omit<Book, "id">) => {
@@ -192,12 +216,20 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const updateSiteSettingsFn = async (settings: SiteSettings) => {
+    setSiteSettings(settings);
+    for (const [key, value] of Object.entries(settings)) {
+      await supabase.from("site_settings").upsert({ key, value: JSON.parse(JSON.stringify(value)) }, { onConflict: "key" });
+    }
+  };
+
   return (
     <DataContext.Provider value={{
-      books, articles, quizConfig, loading,
+      books, articles, quizConfig, siteSettings, loading,
       addBook, updateBook, deleteBook,
       addArticle, updateArticle, deleteArticle,
       updateQuizConfig: updateQuizConfigFn,
+      updateSiteSettings: updateSiteSettingsFn,
       refreshBooks: fetchBooks, refreshArticles: fetchArticles,
     }}>
       {children}
