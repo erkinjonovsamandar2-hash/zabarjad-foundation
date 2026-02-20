@@ -13,18 +13,20 @@ const AdminUsersManager = () => {
   const [newEmail, setNewEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const callEdge = async (body: Record<string, string>) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await supabase.functions.invoke("admin-users", {
+      body,
+      headers: { Authorization: `Bearer ${session?.access_token}` },
+    });
+    return res;
+  };
 
   const fetchAdmins = async () => {
-    const { data } = await supabase.from("user_roles").select("id, user_id, role").eq("role", "admin");
-    if (!data) return;
-
-    // Get emails for each admin from auth metadata
-    const adminList: AdminUser[] = [];
-    for (const role of data) {
-      // We'll show user_id as fallback since we can't query auth.users from client
-      adminList.push({ id: role.id, user_id: role.user_id, email: role.user_id });
-    }
-    setAdmins(adminList);
+    const { data } = await callEdge({ action: "list_admins" });
+    if (data && Array.isArray(data)) setAdmins(data);
   };
 
   useEffect(() => { fetchAdmins(); }, []);
@@ -33,15 +35,26 @@ const AdminUsersManager = () => {
     if (!newEmail.trim()) return;
     setLoading(true);
     setError("");
+    setSuccess("");
 
-    try {
-      // Look up user by email via edge function or direct query
-      // Since we can't query auth.users from client, we need the user to sign up first
-      // For now, we'll ask for user_id directly or use a workaround
-      setError("Foydalanuvchi avval ro'yxatdan o'tishi kerak. Keyin user ID orqali qo'shiladi.");
-    } finally {
+    // Step 1: lookup user by email
+    const { data: lookupData, error: lookupError } = await callEdge({ action: "lookup", email: newEmail.trim() });
+    if (lookupError || !lookupData?.user_id) {
+      setError(lookupData?.error || "Foydalanuvchi topilmadi. Avval ro'yxatdan o'tishi kerak.");
       setLoading(false);
+      return;
     }
+
+    // Step 2: add admin role
+    const { data: addData } = await callEdge({ action: "add_admin", user_id: lookupData.user_id });
+    if (addData?.error) {
+      setError(addData.error);
+    } else {
+      setSuccess(`${newEmail} admin sifatida qo'shildi!`);
+      setNewEmail("");
+      await fetchAdmins();
+    }
+    setLoading(false);
   };
 
   const handleRemove = async (id: string) => {
@@ -58,10 +71,11 @@ const AdminUsersManager = () => {
 
       <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
         <p className="text-sm text-gray-500 mb-4">
-          Yangi admin qo'shish uchun foydalanuvchi avval saytda ro'yxatdan o'tishi kerak. Keyin email yoki ID orqali admin roli beriladi.
+          Yangi admin qo'shish uchun foydalanuvchi avval saytda ro'yxatdan o'tishi kerak. Keyin emailini kiriting.
         </p>
 
         {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
+        {success && <p className="text-sm text-green-600 mb-3">{success}</p>}
 
         <div className="flex gap-2">
           <input
@@ -69,13 +83,14 @@ const AdminUsersManager = () => {
             onChange={(e) => setNewEmail(e.target.value)}
             placeholder="Foydalanuvchi email..."
             className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
           />
           <button
             onClick={handleAdd}
             disabled={loading}
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-50 transition-colors"
           >
-            <Plus className="h-4 w-4" /> Qo'shish
+            <Plus className="h-4 w-4" /> {loading ? "..." : "Qo'shish"}
           </button>
         </div>
       </div>
@@ -87,7 +102,7 @@ const AdminUsersManager = () => {
               <div className="flex items-center gap-3">
                 <ShieldCheck className="h-5 w-5 text-amber-500" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Admin</p>
+                  <p className="text-sm font-medium text-gray-900">{admin.email}</p>
                   <p className="text-xs text-gray-400 font-mono">{admin.user_id.slice(0, 8)}...</p>
                 </div>
               </div>
@@ -97,7 +112,7 @@ const AdminUsersManager = () => {
             </div>
           ))}
           {admins.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-8">Adminlar topilmadi</p>
+            <p className="text-sm text-gray-400 text-center py-8">Yuklanmoqda...</p>
           )}
         </div>
       </div>
