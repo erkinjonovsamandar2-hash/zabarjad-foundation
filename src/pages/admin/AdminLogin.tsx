@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { BookOpen, Loader2 } from "lucide-react";
 
 const AdminLogin = () => {
   const { signIn } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,7 +20,11 @@ const AdminLogin = () => {
     setError("");
     setSubmitting(true);
     const { error } = await signIn(email, password);
-    if (error) setError(error);
+    if (error) {
+      setError(error);
+    } else {
+      navigate("/admin", { replace: true });
+    }
     setSubmitting(false);
   };
 
