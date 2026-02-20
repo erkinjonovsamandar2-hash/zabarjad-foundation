@@ -11,11 +11,15 @@ const BlogManager = () => {
   const { articles, addArticle, updateArticle, deleteArticle } = useData();
   const [modalOpen, setModalOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState<Omit<Article, "id">>(emptyArticle);
+  const [form, setForm] = useState<Omit<Article, "id">>({ ...emptyArticle });
   const [saving, setSaving] = useState(false);
 
-  const openAdd = () => { setEditId(null); setForm(emptyArticle); setModalOpen(true); };
-  const openEdit = (a: Article) => { setEditId(a.id); setForm(a); setModalOpen(true); };
+  const openAdd = () => { setEditId(null); setForm({ ...emptyArticle }); setModalOpen(true); };
+  const openEdit = (a: Article) => {
+    setEditId(a.id);
+    setForm({ title: a.title, excerpt: a.excerpt, content: a.content, cover_url: a.cover_url, date: a.date, published: a.published });
+    setModalOpen(true);
+  };
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -77,15 +81,15 @@ const BlogManager = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Sarlavha</label>
-                <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Qisqacha tavsif</label>
-                <input value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Sana</label>
-                <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Matn (Rich Text Placeholder)</label>
@@ -95,7 +99,7 @@ const BlogManager = () => {
                       <button key={btn} className="px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-200 rounded transition-colors">{btn}</button>
                     ))}
                   </div>
-                  <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} placeholder="Maqola matnini yozing..." className="w-full px-3 py-3 text-sm outline-none resize-none" />
+                  <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} placeholder="Maqola matnini yozing..." className="w-full px-3 py-3 text-sm text-gray-900 outline-none resize-none" />
                 </div>
               </div>
               <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
