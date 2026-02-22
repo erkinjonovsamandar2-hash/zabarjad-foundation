@@ -1,115 +1,249 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import EpicSpotlight from "@/components/EpicSpotlight";
-import { useData } from "@/context/DataContext";
-import { useLang, locField } from "@/context/LanguageContext";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import gotBg from "@/assets/design/bgot.png";
+import gotBooks from "@/assets/design/got-books.jpg";
+import { ChevronRight } from "lucide-react";
+import { useData } from "@/context/DataContext";
+import { useLang, locField } from "@/context/LanguageContext";
 
 const SpotlightPage = () => {
-  const { books, articles } = useData();
-  const { lang, t } = useLang();
+  const { books } = useData();
+  const { lang } = useLang();
 
-  // Show featured or first few books and published articles
-  const relatedBooks = books.filter((b) => b.featured).slice(0, 4);
-  const relatedArticles = articles.filter((a) => a.published).slice(0, 3);
+  // Filter books specifically for Game of Thrones series
+  const kolleksiyaBooks = books.filter(
+    (b) => {
+      const titleLower = b.title?.toLowerCase() || "";
+      const titleEnLower = b.title_en?.toLowerCase() || "";
+      const titleRuLower = b.title_ru?.toLowerCase() || "";
+      return (
+        titleLower.includes("taxtlar") ||
+        titleLower.includes("qirollar") ||
+        titleEnLower.includes("game") ||
+        titleEnLower.includes("thrones") ||
+        titleRuLower.includes("престол") ||
+        titleRuLower.includes("игра")
+      );
+    }
+  ).slice(0, 8);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <div className="pt-20">
-        <EpicSpotlight />
-
-        {/* Related Books */}
-        {relatedBooks.length > 0 && (
-          <section className="section-padding bg-background">
-            <div className="mx-auto max-w-7xl">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-serif font-bold text-foreground">
-                  {lang === "ru" ? "Связанные книги" : lang === "en" ? "Related Books" : "Tegishli kitoblar"}
-                </h2>
-                <Link to="/library" className="text-sm text-primary hover:underline">{t.seeAll} →</Link>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                {relatedBooks.map((book, i) => (
-                  <motion.div
-                    key={book.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="glass-card rounded-xl overflow-hidden group"
-                  >
-                    {book.cover_url && (
-                      <div className="aspect-[2/3] overflow-hidden">
-                        <img
-                          src={book.cover_url}
-                          alt={locField(book, "title", lang)}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-                    <div className="p-3">
-                      <h3 className="font-serif font-bold text-foreground text-sm line-clamp-2">
-                        {locField(book, "title", lang)}
-                      </h3>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {locField(book, "author", lang)}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Related Articles */}
-        {relatedArticles.length > 0 && (
-          <section className="section-padding bg-charcoal">
-            <div className="mx-auto max-w-7xl">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-serif font-bold text-foreground">
-                  {lang === "ru" ? "Статьи" : lang === "en" ? "Articles" : "Maqolalar"}
-                </h2>
-                <Link to="/blog" className="text-sm text-primary hover:underline">{t.seeAll} →</Link>
-              </div>
-              <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-                {relatedArticles.map((article, i) => (
-                  <motion.div
-                    key={article.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="glass-card rounded-xl overflow-hidden group"
-                  >
-                    {article.cover_url && (
-                      <div className="aspect-video overflow-hidden">
-                        <img
-                          src={article.cover_url}
-                          alt={locField(article, "title", lang)}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-                    <div className="p-4">
-                      <h3 className="font-serif font-bold text-foreground text-sm mb-2 line-clamp-2">
-                        {locField(article, "title", lang)}
-                      </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-3">
-                        {locField(article, "excerpt", lang)}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+    <div className="min-h-screen bg-[#0a0806] pt-24 pb-16 relative">
+      {/* Fixed background texture (very subtle) */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <img 
+          src={gotBg} 
+          alt="" 
+          className="w-full h-full object-cover opacity-10" 
+        />
       </div>
+
+      <Navbar />
+
+      <div className="relative z-10">
+        {/* ── CINEMATIC HERO ──────────────────────────────────────────── */}
+        <section className="mx-auto max-w-7xl px-6 pt-8 md:pt-12 pb-16">
+          <div className="flex flex-col items-center text-center">
+            
+            {/* Title - Game of Thrones style (UNCLIPPED) */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="
+                font-got
+                tracking-[0.15em]
+                text-4xl md:text-5xl lg:text-6xl
+                leading-[1.4]
+                py-4
+                mb-12
+                bg-gradient-to-b from-[#fff7ad] via-[#ffc107] to-[#b91c1c]
+                bg-clip-text text-transparent
+                drop-shadow-[0_2px_20px_rgba(255,160,0,0.3)]
+              "
+            >
+              MUZ VA OLOV QO'SHIG'I
+            </motion.h1>
+
+            {/* Featured Books Image with CINEMATIC CROP */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              {/* Cinematic Cropped Hero */}
+              <div className="relative w-full max-w-5xl mx-auto h-[350px] md:h-[500px] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(251,191,36,0.1)] border border-amber-500/20 mb-12 group">
+                {/* object-top combined with a fixed height naturally chops off the bottom of tall images */}
+                <img 
+                  src={gotBooks} 
+                  alt="Taxtlar O'yini Kitoblari" 
+                  className="w-full h-[130%] object-cover object-[center_15%] transition-transform duration-1000 group-hover:scale-105" 
+                />
+                {/* Inner shadow overlays to blend the sharp edges into the dark page */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0806] via-transparent to-[#0a0806]/50 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0806] via-transparent to-[#0a0806] pointer-events-none" />
+              </div>
+            </motion.div>
+
+            {/* Lore Text (REFINED) */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="
+                max-w-3xl
+                font-serif italic
+                text-neutral-300
+                text-lg md:text-xl
+                leading-relaxed
+                mb-10
+              "
+            >
+              Vesterosning taqdiri qilich damida va ajdaholar nafasida. Zabarjad Media taqdim etadi: Dunyoni o'zgartirgan saga ilk bor o'zbek tilida.
+            </motion.p>
+
+            {/* Navigation Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <Link
+                to="/library?series=got"
+                className="
+                  inline-flex items-center justify-center gap-2
+                  px-10 py-4
+                  rounded-sm
+                  bg-gradient-to-r from-[#1a1510] to-[#0a0806]
+                  border border-amber-700/50
+                  text-amber-500
+                  font-got tracking-widest uppercase text-sm
+                  hover:bg-amber-900/20 hover:border-amber-400 hover:text-amber-400
+                  transition-all duration-300
+                  shadow-[0_0_15px_rgba(217,119,6,0.1)]
+                  hover:shadow-[0_0_25px_rgba(217,119,6,0.3)]
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
+                "
+              >
+                <span>Kutubxonani ko'rish</span>
+                <ChevronRight className="h-4 w-4 shrink-0" />
+              </Link>
+
+              <Link
+                to="/quiz"
+                className="
+                  inline-flex items-center justify-center gap-2
+                  px-10 py-4
+                  rounded-sm
+                  bg-gradient-to-r from-[#1a1510] to-[#0a0806]
+                  border border-amber-700/50
+                  text-amber-500
+                  font-got tracking-widest uppercase text-sm
+                  hover:bg-amber-900/20 hover:border-amber-400 hover:text-amber-400
+                  transition-all duration-300
+                  shadow-[0_0_15px_rgba(217,119,6,0.1)]
+                  hover:shadow-[0_0_25px_rgba(217,119,6,0.3)]
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
+                "
+              >
+                <span>Uyingizni aniqlash</span>
+                <ChevronRight className="h-4 w-4 shrink-0" />
+              </Link>
+            </motion.div>
+
+          </div>
+        </section>
+
+        {/* Archive Vault Divider */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent my-16" />
+
+        {/* ── KOLLEKSIYA (Collection) ────────────────────────────────────── */}
+        {kolleksiyaBooks.length > 0 && (
+          <section className="mx-auto max-w-7xl px-6 py-12">
+            <div className="mb-8">
+              <h2 className="text-3xl font-serif font-bold text-amber-50 mb-2">
+                {lang === "ru" ? "Коллекция" : lang === "en" ? "Collection" : "Kolleksiya"}
+              </h2>
+              <p className="text-sm text-neutral-400">
+                {lang === "ru" ? "Полная серия Песни Льда и Пламени" : lang === "en" ? "The Complete Song of Ice and Fire Series" : "Muz va Olov Qo'shig'ining to'liq seriyasi"}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+              {kolleksiyaBooks.map((book, i) => (
+                <motion.div
+                  key={book.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="bg-black/40 border border-white/10 backdrop-blur-md rounded-xl overflow-hidden group hover:border-amber-500/50 transition-all duration-300"
+                >
+                  {book.cover_url ? (
+                    <div className="aspect-[2/3] overflow-hidden">
+                      <img
+                        src={book.cover_url}
+                        alt={locField(book, "title", lang)}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="aspect-[2/3] flex items-center justify-center"
+                      style={{ background: `hsl(${book.bg_color ?? "210 60% 15%"})` }}
+                    >
+                      <span className="font-serif text-xs text-white/60 text-center px-2">
+                        {locField(book, "title", lang)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="p-3">
+                    <h3 className="font-serif font-bold text-amber-50 text-sm line-clamp-2">
+                      {locField(book, "title", lang)}
+                    </h3>
+                    <p className="text-xs text-neutral-400 mt-1">
+                      {locField(book, "author", lang)}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── SOHA YANGILIKLARI - Placeholder Grid ───────────────────────── */}
+        <div className="mt-24 mb-16 mx-auto max-w-7xl px-6">
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="text-2xl md:text-3xl font-serif text-white">Soha Yangiliklari</h2>
+            <div className="h-px bg-amber-500/20 flex-grow" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Article Card 1 */}
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-amber-500/40 transition-all duration-300 cursor-pointer group hover:-translate-y-1">
+              <div className="w-full h-48 bg-[#0a0806] rounded-lg mb-4 flex items-center justify-center border border-white/5">
+                <span className="text-4xl opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">📜</span>
+              </div>
+              <h3 className="text-amber-500 font-medium mb-2 group-hover:text-amber-400 line-clamp-2">Jorj R.R. Martin yangi asar ustida ishlamoqda</h3>
+              <p className="text-neutral-400 text-sm line-clamp-3">Vesteros olami kengayishda davom etmoqda. Muallif o'zining so'nggi intervyusida kelajakdagi rejalarini ma'lum qildi...</p>
+            </div>
+
+            {/* Article Card 2 */}
+            <div className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-amber-500/40 transition-all duration-300 cursor-pointer group hover:-translate-y-1">
+              <div className="w-full h-48 bg-[#0a0806] rounded-lg mb-4 flex items-center justify-center border border-white/5">
+                <span className="text-4xl opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">⚔️</span>
+              </div>
+              <h3 className="text-amber-500 font-medium mb-2 group-hover:text-amber-400 line-clamp-2">Ajdaholar raqsi: Tarixiy faktlar</h3>
+              <p className="text-neutral-400 text-sm line-clamp-3">Targaryenlar xonadonidagi eng qonli fuqarolar urushi qanday boshlangan edi? Kitob va serial o'rtasidagi farqlar...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <Footer />
     </div>
   );

@@ -1,3 +1,7 @@
+import AnimatedRoutes from "@/components/AnimatedRoutes";
+import PageTransition from "@/components/PageTransition";
+import GlobalEffects from "@/components/GlobalEffects";
+import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +23,9 @@ import BlogManager from "./pages/admin/BlogManager";
 import QuizManager from "./pages/admin/QuizManager";
 import SiteSettingsManager from "./pages/admin/SiteSettingsManager";
 import AdminUsersManager from "./pages/admin/AdminUsersManager";
+import AdminReviews from "@/pages/AdminReviews";
+import About from "./pages/About";
+import BookDetails from "./pages/BookDetails";
 
 const queryClient = new QueryClient();
 
@@ -39,22 +46,30 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/library" element={<LibraryPage />} />
-                <Route path="/quiz" element={<QuizPage />} />
-                <Route path="/spotlight" element={<SpotlightPage />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
+              <GlobalEffects />
+              {/* Navbar sits OUTSIDE AnimatedRoutes to preserve fixed positioning */}
+              <Navbar />
+              <AnimatedRoutes>
+              <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+              <Route path="/biz-haqimizda" element={<PageTransition><About /></PageTransition>} />
+              <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+              <Route path="/library" element={<PageTransition><LibraryPage /></PageTransition>} />
+              <Route path="/book/:id" element={<PageTransition><BookDetails /></PageTransition>} />
+              <Route path="/quiz" element={<PageTransition><QuizPage /></PageTransition>} />
+              <Route path="/spotlight" element={<PageTransition><SpotlightPage /></PageTransition>} />
+              <Route path="/admin/login" element={<PageTransition><AdminLogin /></PageTransition>} />
+                {/* Admin nested routes */}
                 <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
-                  <Route index element={<BookManager />} />
-                  <Route path="blog" element={<BlogManager />} />
-                  <Route path="quiz" element={<QuizManager />} />
-                  <Route path="settings" element={<SiteSettingsManager />} />
-                  <Route path="users" element={<AdminUsersManager />} />
+                  <Route index element={<PageTransition><BookManager /></PageTransition>} />
+                  <Route path="blog" element={<PageTransition><BlogManager /></PageTransition>} />
+                  <Route path="quiz" element={<PageTransition><QuizManager /></PageTransition>} />
+                  <Route path="settings" element={<PageTransition><SiteSettingsManager /></PageTransition>} />
+                  <Route path="users" element={<PageTransition><AdminUsersManager /></PageTransition>} />
+                  <Route path="reviews" element={<PageTransition><AdminReviews /></PageTransition>} />
                 </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+    
+                <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+              </AnimatedRoutes>
             </BrowserRouter>
           </TooltipProvider>
         </LanguageProvider>

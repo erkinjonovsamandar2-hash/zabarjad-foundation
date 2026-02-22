@@ -1,50 +1,87 @@
 import { useState } from "react";
-import { useData, Book } from "@/context/DataContext";
-import { Plus, Pencil, Trash2, X, BookOpen, Image } from "lucide-react";
+import { useData } from "@/context/DataContext";
+import type { Book } from "@/context/DataContext";
+import { Plus, Pencil, Trash2, X, BookOpen } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
+import { LIBRARY_FILTER_KEYS, LIBRARY_FILTER_MAP } from "@/lib/constants";
 
 const bgColorOptions = [
-  { label: "Ko'k (qorong'u)", value: "210 60% 15%" },
+  { label: "Ko'k (qorong'u)",  value: "210 60% 15%" },
   { label: "Yashil (qorong'u)", value: "120 40% 12%" },
-  { label: "Qizil (qorong'u)", value: "0 30% 14%" },
-  { label: "Sariq (qorong'u)", value: "35 50% 13%" },
-  { label: "Binafsha", value: "270 40% 14%" },
-  { label: "Zangori", value: "180 30% 12%" },
-  { label: "Ko'k (o'rta)", value: "200 40% 14%" },
-  { label: "Yashil (to'q)", value: "150 30% 10%" },
-  { label: "Moviy (to'q)", value: "220 50% 12%" },
-  { label: "Jigarrang", value: "45 30% 12%" },
+  { label: "Qizil (qorong'u)",  value: "0 30% 14%"   },
+  { label: "Sariq (qorong'u)",  value: "35 50% 13%"  },
+  { label: "Binafsha",          value: "270 40% 14%" },
+  { label: "Zangori",           value: "180 30% 12%" },
+  { label: "Ko'k (o'rta)",     value: "200 40% 14%" },
+  { label: "Yashil (to'q)",    value: "150 30% 10%" },
+  { label: "Moviy (to'q)",     value: "220 50% 12%" },
+  { label: "Jigarrang",         value: "45 30% 12%"  },
 ];
 
-const emptyBook: Omit<Book, "id"> = {
-  title: "", author: "", cover_url: "", description: "", price: 0,
-  category: "Yangi Nashrlar", bg_color: "210 60% 15%", enable_3d_flip: false, featured: false, sort_order: 0,
+// category defaults to the raw DB key "new", never a translated label
+const emptyBook: Omit<Book, "id" | "created_at" | "updated_at"> = {
+  title:          "",
+  title_en:       null,
+  title_ru:       null,
+  author:         "",
+  author_en:      null,
+  author_ru:      null,
+  description:    null,
+  description_en: null,
+  description_ru: null,
+  cover_url:      null,
+  bg_color:       "210 60% 15%",
+  category:       "new",
+  price:          null,
+  enable_3d_flip: false,
+  featured:       false,
+  sort_order:     0,
 };
 
 const BookManager = () => {
   const { books, addBook, updateBook, deleteBook } = useData();
   const [modalOpen, setModalOpen] = useState(false);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState<Omit<Book, "id">>(emptyBook);
-  const [saving, setSaving] = useState(false);
+  const [editId,    setEditId]    = useState<string | null>(null);
+  const [form,      setForm]      = useState<Omit<Book, "id" | "created_at" | "updated_at">>(emptyBook);
+  const [saving,    setSaving]    = useState(false);
 
-  const nextSortOrder = books.length > 0 ? Math.max(...books.map(b => b.sort_order)) + 1 : 1;
-  const openAdd = () => { setEditId(null); setForm({ ...emptyBook, sort_order: nextSortOrder }); setModalOpen(true); };
-  const openEdit = (book: Book) => { setEditId(book.id); setForm(book); setModalOpen(true); };
+  const nextSortOrder = books.length > 0
+    ? Math.max(...books.map((b) => b.sort_order ?? 0)) + 1
+    : 1;
+
+  const openAdd = () => {
+    setEditId(null);
+    setForm({ ...emptyBook, sort_order: nextSortOrder });
+    setModalOpen(true);
+  };
+
+  const openEdit = (book: Book) => {
+    setEditId(book.id);
+    // Omit read-only fields from the form
+    const { id: _id, created_at: _c, updated_at: _u, ...rest } = book;
+    setForm(rest);
+    setModalOpen(true);
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
       if (editId) await updateBook(editId, form);
       else await addBook(form);
       setModalOpen(false);
-    } finally { setSaving(false); }
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Kitoblar</h1>
-        <button onClick={openAdd} className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 transition-colors">
+        <button
+          onClick={openAdd}
+          className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 transition-colors"
+        >
           <Plus className="h-4 w-4" /> Yangi kitob
         </button>
       </div>
@@ -67,9 +104,16 @@ const BookManager = () => {
                 <tr key={book.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3">
                     {book.cover_url ? (
-                      <img src={book.cover_url} alt={book.title} className="h-12 w-8 rounded object-cover" />
+                      <img
+                        src={book.cover_url}
+                        alt={book.title}
+                        className="h-12 w-8 rounded object-cover"
+                      />
                     ) : (
-                      <div className="h-12 w-8 rounded flex items-center justify-center" style={{ background: `hsl(${book.bg_color})` }}>
+                      <div
+                        className="h-12 w-8 rounded flex items-center justify-center"
+                        style={{ background: `hsl(${book.bg_color ?? "210 60% 15%"})` }}
+                      >
                         <BookOpen className="h-3 w-3 text-white/60" />
                       </div>
                     )}
@@ -80,18 +124,25 @@ const BookManager = () => {
                   </td>
                   <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{book.author}</td>
                   <td className="px-4 py-3 hidden md:table-cell">
-                    <span className="inline-block rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">{book.category}</span>
+                    {/* Display the translated label for the raw DB key */}
+                    <span className="inline-block rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">
+                      {LIBRARY_FILTER_MAP[book.category as keyof typeof LIBRARY_FILTER_MAP] ?? book.category}
+                    </span>
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell">
                     <div className="flex gap-1.5">
-                      {book.featured && <span className="text-xs bg-amber-100 text-amber-700 rounded px-1.5 py-0.5">Hero</span>}
-                      {book.enable_3d_flip && <span className="text-xs bg-blue-100 text-blue-700 rounded px-1.5 py-0.5">3D</span>}
+                      {book.featured      && <span className="text-xs bg-amber-100 text-amber-700 rounded px-1.5 py-0.5">Hero</span>}
+                      {book.enable_3d_flip && <span className="text-xs bg-blue-100  text-blue-700  rounded px-1.5 py-0.5">3D</span>}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      <button onClick={() => openEdit(book)} className="p-1.5 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"><Pencil className="h-4 w-4" /></button>
-                      <button onClick={() => deleteBook(book.id)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"><Trash2 className="h-4 w-4" /></button>
+                      <button onClick={() => openEdit(book)} className="p-1.5 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors">
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => deleteBook(book.id)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -101,57 +152,96 @@ const BookManager = () => {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* ── Modal ─────────────────────────────────────────────────────────── */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900">{editId ? "Kitobni tahrirlash" : "Yangi kitob"}</h2>
-              <button onClick={() => setModalOpen(false)} className="p-1 rounded-lg hover:bg-gray-100"><X className="h-5 w-5 text-gray-400" /></button>
+              <h2 className="text-lg font-bold text-gray-900">
+                {editId ? "Kitobni tahrirlash" : "Yangi kitob"}
+              </h2>
+              <button onClick={() => setModalOpen(false)} className="p-1 rounded-lg hover:bg-gray-100">
+                <X className="h-5 w-5 text-gray-400" />
+              </button>
             </div>
+
             <div className="p-5 space-y-4">
-              {/* Cover image with crop */}
               <ImageCropper
-                currentUrl={form.cover_url}
+                currentUrl={form.cover_url ?? ""}
                 onImageSaved={(url) => setForm({ ...form, cover_url: url })}
                 aspectRatio={2 / 3}
                 label="Muqova rasmi (2:3)"
               />
 
-              <Field label="Nomi" value={form.title} onChange={(v) => setForm({ ...form, title: v })} />
-              <Field label="Muallif" value={form.author} onChange={(v) => setForm({ ...form, author: v })} />
-              <Field label="Tavsif" value={form.description} onChange={(v) => setForm({ ...form, description: v })} textarea />
+              <Field label="Nomi (UZ)"  value={form.title        ?? ""} onChange={(v) => setForm({ ...form, title:    v })} />
+              <Field label="Nomi (EN)"  value={form.title_en     ?? ""} onChange={(v) => setForm({ ...form, title_en: v || null })} />
+              <Field label="Nomi (RU)"  value={form.title_ru     ?? ""} onChange={(v) => setForm({ ...form, title_ru: v || null })} />
+              <Field label="Muallif (UZ)" value={form.author     ?? ""} onChange={(v) => setForm({ ...form, author:    v })} />
+              <Field label="Muallif (EN)" value={form.author_en  ?? ""} onChange={(v) => setForm({ ...form, author_en: v || null })} />
+              <Field label="Muallif (RU)" value={form.author_ru  ?? ""} onChange={(v) => setForm({ ...form, author_ru: v || null })} />
+              <Field label="Tavsif"     value={form.description  ?? ""} onChange={(v) => setForm({ ...form, description: v || null })} textarea />
+
+              {/* Category — value is always a raw DB key */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Kategoriya</label>
-                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white">
-                  <option>Yangi Nashrlar</option>
-                  <option>Tez Kunda</option>
-                  <option>Oltin Kolleksiya</option>
-                  <option>Bestseller</option>
+                <select
+                  value={form.category}
+                  onChange={(e) => setForm({ ...form, category: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white"
+                >
+                  {LIBRARY_FILTER_KEYS.map((key) => (
+                    <option key={key} value={key}>
+                      {LIBRARY_FILTER_MAP[key]}
+                    </option>
+                  ))}
                 </select>
               </div>
+
+              {/* Background color */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Fon rangi</label>
-                <select value={form.bg_color} onChange={(e) => setForm({ ...form, bg_color: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white">
+                <select
+                  value={form.bg_color ?? "210 60% 15%"}
+                  onChange={(e) => setForm({ ...form, bg_color: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white"
+                >
                   {bgColorOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                   ))}
                 </select>
               </div>
+
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" checked={form.enable_3d_flip} onChange={(e) => setForm({ ...form, enable_3d_flip: e.target.checked })} className="rounded border-gray-300 text-amber-500 focus:ring-amber-200" />
+                  <input
+                    type="checkbox"
+                    checked={form.enable_3d_flip ?? false}
+                    onChange={(e) => setForm({ ...form, enable_3d_flip: e.target.checked })}
+                    className="rounded border-gray-300 text-amber-500 focus:ring-amber-200"
+                  />
                   3D Page-Flip
                 </label>
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                  <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="rounded border-gray-300 text-amber-500 focus:ring-amber-200" />
+                  <input
+                    type="checkbox"
+                    checked={form.featured ?? false}
+                    onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                    className="rounded border-gray-300 text-amber-500 focus:ring-amber-200"
+                  />
                   Hero karuselda ko'rsatish
                 </label>
               </div>
             </div>
+
             <div className="flex justify-end gap-3 p-5 border-t border-gray-100">
-              <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Bekor qilish</button>
-              <button onClick={handleSave} disabled={saving} className="px-5 py-2 text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 rounded-lg transition-colors">
+              <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                Bekor qilish
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-5 py-2 text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 rounded-lg transition-colors"
+              >
                 {saving ? "Saqlanmoqda..." : "Saqlash"}
               </button>
             </div>
@@ -162,13 +252,34 @@ const BookManager = () => {
   );
 };
 
-const Field = ({ label, value, onChange, type = "text", textarea, placeholder }: { label: string; value: string; onChange: (v: string) => void; type?: string; textarea?: boolean; placeholder?: string }) => (
+const Field = ({
+  label, value, onChange, type = "text", textarea, placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  textarea?: boolean;
+  placeholder?: string;
+}) => (
   <div>
     <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
     {textarea ? (
-      <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={3} placeholder={placeholder} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none" />
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={3}
+        placeholder={placeholder}
+        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+      />
     ) : (
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+      />
     )}
   </div>
 );

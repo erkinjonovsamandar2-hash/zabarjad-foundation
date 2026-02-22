@@ -1,53 +1,257 @@
-import { CalendarDays } from "lucide-react";
-import { useData } from "@/context/DataContext";
-import { useLang, locField } from "@/context/LanguageContext";
+import { useState } from "react";
+import { CalendarDays, Feather } from "lucide-react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLang } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import parchmentTexture from "@/assets/design/parchment-texture.png";
+import blogHeaderArt from "@/assets/design/blog-header-art.png"; // Your newly generated art!
+
+// ── Mock Data for Design Preview ──────────────────────────────────────────────
+const MOCK_ARTICLES = [
+  {
+    id: 1,
+    title: "Jorj R.R. Martin yangi asar ustida ishlamoqda: Vesterosga qaytish",
+    excerpt: "Vesteros olami kengayishda davom etmoqda. Muallif o'zining so'nggi intervyusida 'Qish shamollari' va kelajakdagi rejalar haqida ma'lumot berdi...",
+    category: "Taxtlar O'yini",
+    date: "12 May, 2025",
+    readTime: "5 daqiqa",
+    image: "https://images.squarespace-cdn.com/content/v1/5fbc4a62c2150e62cfcb09aa/1711923533756-RKYMH1UTDE6GRWN9TFA4/maxresdefault.jpg"
+  },
+  {
+    id: 2,
+    title: "Kuzgi xalqaro kitob ko'rgazmasi: Zabarjad Media yangiliklari",
+    excerpt: "Bu yilgi xalqaro kitob ko'rgazmasida nashriyotimiz o'zining eng sara asarlari va yangi tarjimalari bilan ishtirok etadi.",
+    category: "Yangiliklar",
+    date: "05 May, 2025",
+    readTime: "3 daqiqa",
+    image: "https://www.gazeta.uz/media/img/2023/12/0TgTqp17029053661735_l.jpg"
+  },
+  {
+    id: 3,
+    title: "Tarjima san'ati: 'Dorian Greyning portreti' qanday o'zbekchalashtirildi?",
+    excerpt: "Oskar Uayldning mashhur asarini o'zbek tiliga o'girishdagi qiyinchiliklar, badiiy echimlar va yutuqlar haqida mutaxassislar bilan suhbat.",
+    category: "Maqolalar",
+    date: "28 Aprel, 2024",
+    readTime: "8 daqiqa",
+    image: "https://assets.asaxiy.uz/product/items/desktop/c9f0f895fb98ab9159f51fd0297e236d2025031722075875443vyRTNlvRhA.jpg.webp"
+  }
+];
+
+const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar", "Taxtlar O'yini"];
 
 const BlogPage = () => {
-  const { articles } = useData();
-  const { lang, t } = useLang();
-  const published = articles.filter((a) => a.published);
+  const { t } = useLang();
+  const [activeTab, setActiveTab] = useState("Barchasi");
+
+  // On the main blog page, we DO NOT use .slice(0,3). We show everything!
+  const displayed = activeTab === "Barchasi" 
+    ? MOCK_ARTICLES 
+    : MOCK_ARTICLES.filter(a => a.category === activeTab);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative isolate flex flex-col">
       <Navbar />
-      <section className="section-padding pt-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="mb-3 text-xs font-sans font-semibold uppercase tracking-[0.3em] text-primary">{t.blog.badge}</p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-foreground mb-10">{t.blog.title}</h1>
+      
+      {/* ── 1. The Physical Canvas Background ── */}
+      <div 
+        className="absolute inset-0 pointer-events-none -z-20 opacity-20 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen fixed" 
+        style={{ backgroundImage: `url(${parchmentTexture})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      />
+      
+      {/* ── 2. Cinematic Lighting Orbs ── */}
+      <div className="absolute top-0 right-0 w-[500px] md:w-[1000px] h-[500px] md:h-[1000px] bg-amber-500/15 dark:bg-amber-500/10 rounded-full blur-[120px] md:blur-[180px] pointer-events-none -z-10 fixed" />
+      <div className="absolute bottom-0 left-0 w-[400px] md:w-[800px] h-[400px] md:h-[800px] bg-amber-700/15 dark:bg-amber-900/20 rounded-full blur-[120px] md:blur-[150px] pointer-events-none -z-10 fixed" />
+      <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_90%)] fixed" />
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {published.map((article) => (
-              <article key={article.id} className="glass-card rounded-xl overflow-hidden flex flex-col justify-between group cursor-pointer hover:border-primary/20 transition-colors">
-                {article.cover_url && (
-                  <img src={article.cover_url} alt={locField(article, "title", lang)} className="w-full h-40 object-cover" />
-                )}
-                <div className="p-6 flex flex-col gap-4 flex-1">
-                  <div>
-                    <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {locField(article, "title", lang)}
-                    </h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                      {locField(article, "excerpt", lang)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-auto">
-                    <CalendarDays className="h-3.5 w-3.5" />
-                    <time>{article.date}</time>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {published.length === 0 && (
-            <p className="text-center text-muted-foreground py-20">
-              {lang === "uz" ? "Hozircha maqolalar yo'q." : lang === "ru" ? "Статей пока нет." : "No articles yet."}
+      {/* ── Main Content Wrapper ── */}
+      <main className="flex-grow pt-32 pb-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl w-full">
+        
+        {/* ── Cinematic Editorial Hero Header ──────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24 relative z-10">
+          {/* Left Column: Text */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-start"
+          >
+            <div className="inline-flex items-center gap-4 mb-6">
+              <span className="w-12 h-[1px] bg-amber-500/50"></span>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600 dark:text-amber-500">
+                Zabarjad Kundaligi
+              </p>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-foreground mb-8 tracking-tight leading-tight">
+              {t.blog?.title || "So'nggi maqolalar"}
+            </h1>
+            
+            {/* Elegant Blockquote Style Description */}
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mb-10 border-l-2 border-amber-500/40 pl-5">
+              Adabiyot olami yangiliklari, eksklyuziv intervyular, asarlar tahlili va nashriyotimizdagi so'nggi jarayonlar bilan tanishing.
             </p>
-          )}
+
+            {/* Action Button & Meta-tags */}
+            <div className="flex flex-wrap items-center gap-6">
+              <button 
+                onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}
+                className="px-8 py-3.5 rounded-full bg-amber-500 text-black font-bold tracking-wider uppercase text-xs md:text-sm hover:bg-amber-400 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]"
+              >
+                Maqolalarni o'qish &darr;
+              </button>
+              
+              <div className="flex items-center gap-3 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                <span>Intervyular</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500/50"></span>
+                <span>Tahlil</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Artistic Element Showcase */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative hidden lg:block"
+          >
+            {/* Premium Golden Corner Accents */}
+            <div className="absolute -top-4 -left-4 w-16 h-16 border-t-2 border-l-2 border-amber-500/50 rounded-tl-2xl z-10 pointer-events-none" />
+            <div className="absolute -bottom-4 -right-4 w-16 h-16 border-b-2 border-r-2 border-amber-500/50 rounded-br-2xl z-10 pointer-events-none" />
+
+            {/* The Artistic Image Container */}
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-amber-900/30 dark:shadow-amber-500/10 border border-border/50 group">
+              <img 
+                src={blogHeaderArt} 
+                alt="Zabarjad Kundaligi Art" 
+                className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-1000"
+              />
+              
+              {/* Dark gradient at the bottom so the text pops */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* Floating Caption / Stamp */}
+              <div className="absolute bottom-6 left-8 z-20">
+                 <p className="text-amber-400 font-serif italic text-2xl drop-shadow-lg">"Qalam va Qog'oz Sehri"</p>
+                 <p className="text-white/70 text-xs tracking-widest uppercase font-bold mt-2">Nashriyot Kundaligi</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </section>
+
+        {/* ── Premium Category Tabs ────────────────────────────────────────── */}
+        <motion.div
+          className="flex flex-wrap items-center gap-3 mb-12 border-b border-border/50 pb-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          {BLOG_CATEGORIES.map((category) => {
+            const isActive = activeTab === category;
+            const isGoT = category === "Taxtlar O'yini";
+
+            return (
+              <button
+                key={category}
+                onClick={() => setActiveTab(category)}
+                className={`
+                  px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300
+                  ${isActive 
+                    ? isGoT 
+                      ? "bg-amber-500 text-black font-got tracking-wider shadow-md transform scale-105" 
+                      : "bg-foreground text-background shadow-md transform scale-105"
+                    : "bg-muted/30 text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
+                  }
+                `}
+              >
+                {category}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* ── Article Grid ─────────────────────────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: "easeInOut" }}
+          >
+            {displayed.length === 0 ? (
+              // Empty State
+              <div className="border border-dashed border-border/60 bg-muted/10 py-32 flex flex-col items-center justify-center rounded-3xl">
+                <Feather className="w-12 h-12 text-amber-500/30 mb-6" />
+                <p className="font-serif text-xl text-muted-foreground">
+                  Hozircha ushbu ruknda maqolalar yo'q
+                </p>
+              </div>
+            ) : (
+              // Grid
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {displayed.map((article, i) => (
+                  <motion.article
+                    key={article.id}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0, transition: { duration: 0.35, delay: i * 0.05 } }}
+                    className="group flex flex-col h-full bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-amber-500/5 hover:-translate-y-1 transition-all duration-500"
+                  >
+                    <Link to={`/blog/${article.id}`} className="flex flex-col h-full">
+                      {/* Image */}
+                      <div className="relative w-full aspect-[16/10] overflow-hidden bg-muted">
+                        <img 
+                          src={article.image} 
+                          alt={article.title} 
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        />
+                        <div className="absolute top-4 left-4 z-10">
+                          <span className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md backdrop-blur-md
+                            ${article.category === "Taxtlar O'yini" 
+                              ? "bg-amber-500/90 text-black font-got shadow-amber-500/20" 
+                              : "bg-background/90 text-foreground border border-border/50"
+                            }`}
+                          >
+                            {article.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-6 flex flex-col flex-grow">
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4 font-medium uppercase tracking-wide">
+                          <div className="flex items-center gap-1.5">
+                            <CalendarDays className="w-3.5 h-3.5" />
+                            <span>{article.date}</span>
+                          </div>
+                          <span className="w-1 h-1 rounded-full bg-amber-500/50"></span>
+                          <span>{article.readTime}</span>
+                        </div>
+                        
+                        <h3 className="text-xl font-serif font-bold text-foreground leading-snug mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors line-clamp-2">
+                          {article.title}
+                        </h3>
+                        
+                        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-6 flex-grow">
+                          {article.excerpt}
+                        </p>
+
+                        <div className="mt-auto flex items-center text-sm font-bold text-foreground group-hover:text-amber-500 transition-colors uppercase tracking-widest">
+                          Batafsil o'qish 
+                          <span className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300">&rarr;</span>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.article>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+      </main>
       <Footer />
     </div>
   );

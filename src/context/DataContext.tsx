@@ -1,78 +1,70 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_QUIZ_CONFIG, DEFAULT_SITE_SETTINGS } from "@/lib/mockData";
+import type { Book, Article } from "@/types/database";
 
-// ── Types ──
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  cover_url: string;
-  description: string;
-  price: number;
-  category: string;
-  bg_color: string;
-  enable_3d_flip: boolean;
-  featured: boolean;
-  sort_order: number;
+// Re-export so all consumers can import from DataContext as before
+export type { Book, Article };
+
+// ── Review type ───────────────────────────────────────────────────────────────
+export interface Review {
+  id:         string;
+  name:       string;
+  role:       string | null;
+  city:       string | null;
+  text:       string;
+  stars:      number;
+  status:     "pending" | "published" | "rejected";
+  created_at: string;
 }
 
-export interface Article {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  cover_url: string;
-  date: string;
-  published: boolean;
-}
-
+// ── Types not yet in the DB ───────────────────────────────────────────────────
 export interface QuizStep {
   question: string;
   options: { label: string; value: string }[];
 }
 
 export interface QuizPath {
-  key: string;
+  key:    string;
   bookId: string;
   reason: string;
 }
 
 export interface QuizConfig {
-  steps: QuizStep[];
-  paths: QuizPath[];
+  steps:         QuizStep[];
+  paths:         QuizPath[];
   defaultBookId: string;
   defaultReason: string;
 }
 
 export interface SiteSettings {
-  hero: { motto: string; subtitle: string; cta_text: string };
+  hero:   { motto: string; subtitle: string; cta_text: string };
   footer: { phone: string; email: string; address: string; telegram: string; instagram: string };
-  map: { enabled: boolean; embed_url: string; title: string };
+  map:    { enabled: boolean; embed_url: string; title: string };
 }
 
-const defaultSiteSettings: SiteSettings = DEFAULT_SITE_SETTINGS;
-
-// ── Context ──
+// ── Context shape ─────────────────────────────────────────────────────────────
 interface DataContextType {
-  books: Book[];
-  articles: Article[];
-  quizConfig: QuizConfig;
+  books:        Book[];
+  articles:     Article[];
+  reviews:      Review[];
+  quizConfig:   QuizConfig;
   siteSettings: SiteSettings;
-  loading: boolean;
-  addBook: (book: Omit<Book, "id">) => Promise<void>;
-  updateBook: (id: string, book: Partial<Book>) => Promise<void>;
-  deleteBook: (id: string) => Promise<void>;
-  addArticle: (article: Omit<Article, "id">) => Promise<void>;
-  updateArticle: (id: string, article: Partial<Article>) => Promise<void>;
-  deleteArticle: (id: string) => Promise<void>;
-  updateQuizConfig: (config: QuizConfig) => Promise<void>;
+  loading:      boolean;
+  addBook:            (book: Omit<Book, "id" | "created_at" | "updated_at">) => Promise<void>;
+  updateBook:         (id: string, data: Partial<Book>) => Promise<void>;
+  deleteBook:         (id: string) => Promise<void>;
+  addArticle:         (article: Omit<Article, "id" | "created_at" | "updated_at">) => Promise<void>;
+  updateArticle:      (id: string, data: Partial<Article>) => Promise<void>;
+  deleteArticle:      (id: string) => Promise<void>;
+  updateQuizConfig:   (config: QuizConfig) => Promise<void>;
   updateSiteSettings: (settings: SiteSettings) => Promise<void>;
-  refreshBooks: () => Promise<void>;
-  refreshArticles: () => Promise<void>;
+  refreshBooks:       () => Promise<void>;
+  refreshArticles:    () => Promise<void>;
+  submitReview: (
+    payload: Omit<Review, "id" | "status" | "created_at">
+  ) => Promise<{ error: string | null }>;
 }
-
-const defaultQuiz: QuizConfig = DEFAULT_QUIZ_CONFIG;
 
 const DataContext = createContext<DataContextType | null>(null);
 
@@ -82,138 +74,231 @@ export const useData = () => {
   return ctx;
 };
 
+// ── Provider ──────────────────────────────────────────────────────────────────
 export const DataProvider = ({ children }: { children: ReactNode }) => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [quizConfig, setQuizConfig] = useState<QuizConfig>(defaultQuiz);
-  const [siteSettings, setSiteSettings] = useState<SiteSettings>(defaultSiteSettings);
-  const [loading, setLoading] = useState(true);
+  const [books,        setBooks]        = useState<Book[]>([]);
+  const [articles,     setArticles]     = useState<Article[]>([]);
+  const [reviews,      setReviews]      = useState<Review[]>([]);
+  const [quizConfig,   setQuizConfig]   = useState<QuizConfig>(DEFAULT_QUIZ_CONFIG);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
+  const [loading,      setLoading]      = useState(true);
+
+  // ── Fetchers ──────────────────────────────────────────────────────────────
 
   const fetchBooks = async () => {
-    const { data } = await supabase.from("books").select("*").order("sort_order");
-    if (data) setBooks(data.map((b) => ({
-      id: b.id, title: b.title, author: b.author,
-      cover_url: b.cover_url || "", description: b.description || "",
-      price: b.price || 0, category: b.category,
-      bg_color: b.bg_color || "210 60% 15%",
-      enable_3d_flip: b.enable_3d_flip || false,
-      featured: b.featured || false,
-      sort_order: b.sort_order || 0,
-    })));
+    const { data, error } = await supabase
+      .from("books")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) { console.error("[DataContext] fetchBooks error:", error.message); return; }
+    if (data) setBooks(data as Book[]);
   };
 
   const fetchArticles = async () => {
-    const { data } = await supabase.from("articles").select("*").order("date", { ascending: false });
-    if (data) setArticles(data.map((a) => ({
-      id: a.id, title: a.title, excerpt: a.excerpt || "",
-      content: a.content || "", cover_url: a.cover_url || "",
-      date: a.date, published: a.published || false,
-    })));
+    const { data, error } = await supabase
+      .from("articles")
+      .select("*")
+      .order("date", { ascending: false });
+    if (error) { console.error("[DataContext] fetchArticles error:", error.message); return; }
+    if (data) setArticles(data as Article[]);
+  };
+
+  // ── NEW: fetch published reviews only ─────────────────────────────────────
+  const fetchReviews = async () => {
+    const { data, error } = await (supabase as any)
+      .from("reviews")
+      .select("*")
+      .eq("status", "published")
+      .order("created_at", { ascending: false });
+    if (error) { console.error("[DataContext] fetchReviews error:", error.message); return; }
+    if (data) setReviews(data as Review[]);
   };
 
   const fetchQuiz = async () => {
-    const { data } = await supabase.from("quiz_config").select("*").limit(1).single();
-    if (data?.config) {
-      setQuizConfig(data.config as unknown as QuizConfig);
+    const { data, error } = await supabase
+      .from("quiz_config")
+      .select("*")
+      .limit(1)
+      .single();
+    if (error && error.code !== "PGRST116") {
+      console.error("[DataContext] fetchQuiz error:", error.message);
+      return;
     }
+    if (data?.config) setQuizConfig(data.config as unknown as QuizConfig);
   };
 
   const fetchSiteSettings = async () => {
-    const { data } = await supabase.from("site_settings").select("*");
+    const { data, error } = await supabase.from("site_settings").select("*");
+    if (error) { console.error("[DataContext] fetchSiteSettings error:", error.message); return; }
     if (data && data.length > 0) {
       const settings: Record<string, unknown> = {};
-      data.forEach((row: { key: string; value: unknown }) => { settings[row.key] = row.value; });
-      setSiteSettings({ ...defaultSiteSettings, ...settings } as unknown as SiteSettings);
+      data.forEach((row: { key: string; value: unknown }) => {
+        settings[row.key] = row.value;
+      });
+      setSiteSettings({ ...DEFAULT_SITE_SETTINGS, ...settings } as unknown as SiteSettings);
     }
   };
 
   useEffect(() => {
-    Promise.all([fetchBooks(), fetchArticles(), fetchQuiz(), fetchSiteSettings()]).finally(() => setLoading(false));
+    Promise.all([
+      fetchBooks(),
+      fetchArticles(),
+      fetchReviews(),       // ← added
+      fetchQuiz(),
+      fetchSiteSettings(),
+    ]).finally(() => setLoading(false));
   }, []);
 
-  const addBook = async (book: Omit<Book, "id">) => {
-    await supabase.from("books").insert({
-      title: book.title, author: book.author, cover_url: book.cover_url,
-      description: book.description, price: book.price, category: book.category,
-      bg_color: book.bg_color, enable_3d_flip: book.enable_3d_flip,
-      featured: book.featured, sort_order: book.sort_order,
+  // ── NEW: submitReview — inserts pending row ───────────────────────────────
+  const submitReview = async (
+    payload: Omit<Review, "id" | "status" | "created_at">
+  ): Promise<{ error: string | null }> => {
+    const { error } = await (supabase as any)
+      .from("reviews")
+      .insert({ ...payload, status: "pending" });
+    return { error: error?.message ?? null };
+  };
+
+  // ── Mutators — Books ──────────────────────────────────────────────────────
+
+  const addBook = async (book: Omit<Book, "id" | "created_at" | "updated_at">) => {
+    const { error } = await supabase.from("books").insert({
+      title:          book.title,
+      title_en:       book.title_en,
+      title_ru:       book.title_ru,
+      author:         book.author,
+      author_en:      book.author_en,
+      author_ru:      book.author_ru,
+      description:    book.description,
+      description_en: book.description_en,
+      description_ru: book.description_ru,
+      cover_url:      book.cover_url,
+      bg_color:       book.bg_color,
+      category:       book.category,
+      price:          book.price,
+      enable_3d_flip: book.enable_3d_flip,
+      featured:       book.featured,
+      sort_order:     book.sort_order,
     });
+    if (error) console.error("[DataContext] addBook error:", error.message);
     await fetchBooks();
   };
 
   const updateBook = async (id: string, data: Partial<Book>) => {
-    const updateData: Record<string, unknown> = {};
-    if (data.title !== undefined) updateData.title = data.title;
-    if (data.author !== undefined) updateData.author = data.author;
-    if (data.cover_url !== undefined) updateData.cover_url = data.cover_url;
-    if (data.description !== undefined) updateData.description = data.description;
-    if (data.price !== undefined) updateData.price = data.price;
-    if (data.category !== undefined) updateData.category = data.category;
-    if (data.bg_color !== undefined) updateData.bg_color = data.bg_color;
-    if (data.enable_3d_flip !== undefined) updateData.enable_3d_flip = data.enable_3d_flip;
-    if (data.featured !== undefined) updateData.featured = data.featured;
-    if (data.sort_order !== undefined) updateData.sort_order = data.sort_order;
-    await supabase.from("books").update(updateData).eq("id", id);
+    const payload: Record<string, unknown> = {};
+    if (data.title          !== undefined) payload.title          = data.title;
+    if (data.title_en       !== undefined) payload.title_en       = data.title_en;
+    if (data.title_ru       !== undefined) payload.title_ru       = data.title_ru;
+    if (data.author         !== undefined) payload.author         = data.author;
+    if (data.author_en      !== undefined) payload.author_en      = data.author_en;
+    if (data.author_ru      !== undefined) payload.author_ru      = data.author_ru;
+    if (data.description    !== undefined) payload.description    = data.description;
+    if (data.description_en !== undefined) payload.description_en = data.description_en;
+    if (data.description_ru !== undefined) payload.description_ru = data.description_ru;
+    if (data.cover_url      !== undefined) payload.cover_url      = data.cover_url;
+    if (data.bg_color       !== undefined) payload.bg_color       = data.bg_color;
+    if (data.category       !== undefined) payload.category       = data.category;
+    if (data.price          !== undefined) payload.price          = data.price;
+    if (data.enable_3d_flip !== undefined) payload.enable_3d_flip = data.enable_3d_flip;
+    if (data.featured       !== undefined) payload.featured       = data.featured;
+    if (data.sort_order     !== undefined) payload.sort_order     = data.sort_order;
+    const { error } = await supabase.from("books").update(payload).eq("id", id);
+    if (error) console.error("[DataContext] updateBook error:", error.message);
     await fetchBooks();
   };
 
   const deleteBook = async (id: string) => {
-    await supabase.from("books").delete().eq("id", id);
+    const { error } = await supabase.from("books").delete().eq("id", id);
+    if (error) console.error("[DataContext] deleteBook error:", error.message);
     await fetchBooks();
   };
 
-  const addArticle = async (article: Omit<Article, "id">) => {
-    await supabase.from("articles").insert({
-      title: article.title, excerpt: article.excerpt, content: article.content,
-      cover_url: article.cover_url, date: article.date, published: article.published,
+  // ── Mutators — Articles ───────────────────────────────────────────────────
+
+  const addArticle = async (article: Omit<Article, "id" | "created_at" | "updated_at">) => {
+    const { error } = await supabase.from("articles").insert({
+      title:       article.title,
+      title_en:    article.title_en,
+      title_ru:    article.title_ru,
+      excerpt:     article.excerpt,
+      excerpt_en:  article.excerpt_en,
+      excerpt_ru:  article.excerpt_ru,
+      content:     article.content,
+      content_en:  article.content_en,
+      content_ru:  article.content_ru,
+      cover_url:   article.cover_url,
+      date:        article.date,
+      published:   article.published,
     });
+    if (error) console.error("[DataContext] addArticle error:", error.message);
     await fetchArticles();
   };
 
   const updateArticle = async (id: string, data: Partial<Article>) => {
-    const updateData: Record<string, unknown> = {};
-    if (data.title !== undefined) updateData.title = data.title;
-    if (data.excerpt !== undefined) updateData.excerpt = data.excerpt;
-    if (data.content !== undefined) updateData.content = data.content;
-    if (data.cover_url !== undefined) updateData.cover_url = data.cover_url;
-    if (data.date !== undefined) updateData.date = data.date;
-    if (data.published !== undefined) updateData.published = data.published;
-    await supabase.from("articles").update(updateData).eq("id", id);
+    const payload: Record<string, unknown> = {};
+    if (data.title      !== undefined) payload.title      = data.title;
+    if (data.title_en   !== undefined) payload.title_en   = data.title_en;
+    if (data.title_ru   !== undefined) payload.title_ru   = data.title_ru;
+    if (data.excerpt    !== undefined) payload.excerpt    = data.excerpt;
+    if (data.excerpt_en !== undefined) payload.excerpt_en = data.excerpt_en;
+    if (data.excerpt_ru !== undefined) payload.excerpt_ru = data.excerpt_ru;
+    if (data.content    !== undefined) payload.content    = data.content;
+    if (data.content_en !== undefined) payload.content_en = data.content_en;
+    if (data.content_ru !== undefined) payload.content_ru = data.content_ru;
+    if (data.cover_url  !== undefined) payload.cover_url  = data.cover_url;
+    if (data.date       !== undefined) payload.date       = data.date;
+    if (data.published  !== undefined) payload.published  = data.published;
+    const { error } = await supabase.from("articles").update(payload).eq("id", id);
+    if (error) console.error("[DataContext] updateArticle error:", error.message);
     await fetchArticles();
   };
 
   const deleteArticle = async (id: string) => {
-    await supabase.from("articles").delete().eq("id", id);
+    const { error } = await supabase.from("articles").delete().eq("id", id);
+    if (error) console.error("[DataContext] deleteArticle error:", error.message);
     await fetchArticles();
   };
 
-  const updateQuizConfigFn = async (config: QuizConfig) => {
+  // ── Mutators — Quiz & Settings ────────────────────────────────────────────
+
+  const updateQuizConfig = async (config: QuizConfig) => {
     setQuizConfig(config);
-    // Upsert — check if row exists
-    const { data: existing } = await supabase.from("quiz_config").select("id").limit(1).single();
+    const { data: existing } = await supabase
+      .from("quiz_config")
+      .select("id")
+      .limit(1)
+      .single();
+    const serialized = JSON.parse(JSON.stringify(config));
     if (existing) {
-      await supabase.from("quiz_config").update({ config: JSON.parse(JSON.stringify(config)) }).eq("id", existing.id);
+      await supabase.from("quiz_config").update({ config: serialized }).eq("id", existing.id);
     } else {
-      await supabase.from("quiz_config").insert({ config: JSON.parse(JSON.stringify(config)) });
+      await supabase.from("quiz_config").insert({ config: serialized });
     }
   };
 
-  const updateSiteSettingsFn = async (settings: SiteSettings) => {
+  const updateSiteSettings = async (settings: SiteSettings) => {
     setSiteSettings(settings);
     for (const [key, value] of Object.entries(settings)) {
-      await supabase.from("site_settings").upsert({ key, value: JSON.parse(JSON.stringify(value)) }, { onConflict: "key" });
+      await supabase
+        .from("site_settings")
+        .upsert({ key, value: JSON.parse(JSON.stringify(value)) }, { onConflict: "key" });
     }
   };
 
+  // ── Render ────────────────────────────────────────────────────────────────
+
   return (
-    <DataContext.Provider value={{
-      books, articles, quizConfig, siteSettings, loading,
-      addBook, updateBook, deleteBook,
-      addArticle, updateArticle, deleteArticle,
-      updateQuizConfig: updateQuizConfigFn,
-      updateSiteSettings: updateSiteSettingsFn,
-      refreshBooks: fetchBooks, refreshArticles: fetchArticles,
-    }}>
+    <DataContext.Provider
+      value={{
+        books, articles, reviews, quizConfig, siteSettings, loading,
+        addBook, updateBook, deleteBook,
+        addArticle, updateArticle, deleteArticle,
+        updateQuizConfig, updateSiteSettings,
+        refreshBooks:    fetchBooks,
+        refreshArticles: fetchArticles,
+        submitReview,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

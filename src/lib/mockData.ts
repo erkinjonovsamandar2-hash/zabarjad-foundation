@@ -75,15 +75,15 @@ export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   hero: {
     motto: "Eng Yaxshisini Ilinamiz",
-    subtitle: "Zabarjad Media — dunyoning eng yaxshi fantastik asarlarini o'zbek tilida taqdim etadi",
+    subtitle: "Zabarjad Media — dunyoning eng yaxshi asarlarini o'zbek tilida taqdim etadi",
     cta_text: "Kitoblarni ko'rish",
   },
   footer: {
-    phone: "+998 90 123 45 67",
-    email: "info@zabarjad.uz",
-    address: "Toshkent, O'zbekiston",
-    telegram: "https://t.me/zabarjad",
-    instagram: "https://instagram.com/zabarjad",
+    phone: "+998 97 409 04 84",
+    email: "Mamuraxon0484@mail.ru",
+    address: "Toshkent shahri, Chilonzor tumani, Muqimiy ko‘chasi 178/310",
+    telegram: "https://t.me/zabarjadmedia",
+    instagram: "https://www.instagram.com/zabarjadmedia",
   },
   map: { enabled: true, embed_url: "", title: "Bizning manzil" },
 };

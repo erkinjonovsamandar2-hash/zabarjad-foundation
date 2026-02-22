@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { X, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { BOOK_PREVIEW_PAGES } from "@/lib/mockData";
 
 interface BookFlipModalProps {
-  book: { title: string; author: string } | null;
+  book: { id: string; title: string; author: string } | null;
   onClose: () => void;
 }
 
@@ -13,32 +14,43 @@ const pages = BOOK_PREVIEW_PAGES;
 const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
 
   if (!book) return null;
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-background/90 backdrop-blur-md"
+        className="fixed inset-0 z-[100] flex flex-col items-center justify-center w-screen h-screen bg-background/95 backdrop-blur-xl overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
+        {/* Back to Library Button - Anchored to Modal */}
+        <button 
+          onClick={onClose}
+          className="absolute top-6 left-6 md:top-10 md:left-10 z-50 flex items-center gap-2 px-5 py-2.5 bg-background/50 backdrop-blur-md border border-border/50 rounded-full text-foreground font-medium hover:bg-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-sm cursor-pointer group"
+        >
+          <span className="transform transition-transform duration-300 group-hover:-translate-x-1">&larr;</span> 
+          Kutubxonaga qaytish
+        </button>
+
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 z-10 glass-card p-2 rounded-full text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-6 right-6 z-50 glass-card p-2 rounded-full text-muted-foreground hover:text-foreground transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
 
-        <div className="flex flex-col items-center gap-8 px-4">
+        {/* Centered Content Container */}
+        <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-4xl px-4 mt-8 gap-8">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
           >
-            <h2 className="text-2xl md:text-3xl font-serif font-bold text-foreground text-center">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground text-center mb-2">
               {book.title}
             </h2>
             <p className="text-muted-foreground text-center mt-1">{book.author}</p>
@@ -85,10 +97,10 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
                 </div>
               </motion.div>
 
-              {/* Pages inside */}
+              {/* Pages inside (Physical Paper Styling) */}
               {isOpen && (
                 <motion.div
-                  className="absolute top-0 left-0 w-full rounded-lg overflow-hidden"
+                  className="absolute top-0 left-0 w-full rounded-r-3xl rounded-l-md overflow-hidden"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
@@ -97,44 +109,45 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
                     zIndex: 3,
                   }}
                 >
-                  <div
-                    className="h-full p-6 md:p-8 flex flex-col"
-                    style={{
-                      background: "linear-gradient(135deg, hsl(40 20% 92%), hsl(40 15% 85%))",
-                      boxShadow: "inset 4px 0 15px rgba(0,0,0,0.15), inset 0 0 30px rgba(0,0,0,0.05)",
-                    }}
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs font-sans text-neutral-500 uppercase tracking-wider">
+                  <div className="relative h-full p-6 md:p-8 flex flex-col bg-[#FDFBF7] dark:bg-[#1A1814] shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-l-[12px] border-[#3b2f2f] dark:border-[#0a0806]">
+                    
+                    {/* Page crease shadow */}
+                    <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-black/10 to-transparent pointer-events-none" />
+                    
+                    {/* Header with page number */}
+                    <div className="flex items-center justify-between mb-4 relative z-10">
+                      <span className="text-xs font-sans text-amber-700 dark:text-amber-500 uppercase tracking-wider font-semibold">
                         Sahifa {currentPage + 1} / {pages.length}
                       </span>
-                      <span className="font-serif text-xs text-neutral-400 italic">{book.title}</span>
+                      <span className="font-serif text-xs text-amber-600 dark:text-amber-400 italic">{book.title}</span>
                     </div>
 
+                    {/* Reading content with elegant typography */}
                     <AnimatePresence mode="wait">
                       <motion.p
                         key={currentPage}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
-                        className="text-sm md:text-base leading-relaxed text-neutral-800 font-serif flex-1"
+                        className="font-serif text-slate-800 dark:text-slate-200 text-lg leading-relaxed text-justify first-letter:text-5xl first-letter:font-bold first-letter:text-amber-600 first-letter:mr-2 first-letter:float-left flex-1 relative z-10"
                       >
                         {pages[currentPage]}
                       </motion.p>
                     </AnimatePresence>
 
-                    <div className="flex items-center justify-between mt-4">
+                    {/* Navigation buttons */}
+                    <div className="flex items-center justify-between mt-4 relative z-10">
                       <button
                         onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
                         disabled={currentPage === 0}
-                        className="p-1 text-neutral-500 disabled:opacity-30 hover:text-neutral-800 transition-colors"
+                        className="p-2 text-amber-700 dark:text-amber-500 disabled:opacity-30 hover:text-amber-900 dark:hover:text-amber-300 transition-colors rounded-full hover:bg-amber-500/10"
                       >
                         <ChevronLeft className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
                         disabled={currentPage === pages.length - 1}
-                        className="p-1 text-neutral-500 disabled:opacity-30 hover:text-neutral-800 transition-colors"
+                        className="p-2 text-amber-700 dark:text-amber-500 disabled:opacity-30 hover:text-amber-900 dark:hover:text-amber-300 transition-colors rounded-full hover:bg-amber-500/10"
                       >
                         <ChevronRight className="h-5 w-5" />
                       </button>
@@ -156,14 +169,30 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
           </div>
 
           {!isOpen && (
-            <motion.p
-              className="text-sm text-muted-foreground font-sans"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              Kitobni ochish uchun muqovaga bosing →
-            </motion.p>
+            <>
+              <motion.p
+                className="text-sm text-muted-foreground font-sans"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                Kitobni ochish uchun muqovaga bosing →
+              </motion.p>
+              
+              {/* Full Details Button */}
+              <motion.button
+                onClick={() => {
+                  onClose();
+                  navigate(`/book/${book.id}`);
+                }}
+                className="mt-6 px-8 py-3 bg-amber-500 text-black font-bold rounded-full hover:scale-105 hover:shadow-[0_0_25px_rgba(251,191,36,0.4)] transition-all"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
+                To'liq ma'lumotni ko'rish
+              </motion.button>
+            </>
           )}
         </div>
       </motion.div>
