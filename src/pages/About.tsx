@@ -1,169 +1,343 @@
-import { motion } from "framer-motion";
+// @refresh reset
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+// Imported your JPG logo
+import zabarjadLogo from "@/assets/zabarjad-logo.jpg";
 
-// ── Process Timeline Steps ────────────────────────────────────────────────────
-const STEPS = [
-  {
-    number: 1,
-    title: "Tanlov",
-    subtitle: "Selection",
-    desc: "Dunyoning eng sara asarlarini tanlash — klassik romanlar, falsafa, she'riyat. Har bir kitob o'zbek o'quvchisi uchun qimmatli xazina bo'lishi kerak.",
-  },
-  {
-    number: 2,
-    title: "Huquqlar",
-    subtitle: "Rights Acquisition",
-    desc: "Xalqaro nashriyotlar bilan hamkorlik qilish. Rasmiy tarjima huquqlarini olish — bu jarayon ko'pincha oylar davom etadi, lekin bu sifat kafolatidir.",
-  },
-  {
-    number: 3,
-    title: "Tarjima San'ati",
-    subtitle: "The Art of Translation",
-    desc: "Eng yaxshi tarjimonlar bilan ishlash. Har bir jumla asl asarning ruhini saqlab qolishi kerak. Bu — ilm emas, san'at.",
-  },
-  {
-    number: 4,
-    title: "Nashr",
-    subtitle: "Premium Printing",
-    desc: "Yuqori sifatli qog'oz, chiroyli muqova dizayni, professional bosma. Kitob faqat matn emas — bu sizning qo'lingizdagi san'at asari.",
-  },
-];
-
-const About = () => {
+// ── Reveal wrapper ────────────────────────────────────────────────────────────
+const Reveal = ({
+  children, delay = 0, className = "", from = "bottom",
+}: {
+  children: React.ReactNode; delay?: number; className?: string; from?: "bottom" | "left" | "right";
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const initial =
+    from === "left"  ? { opacity: 0, x: -28 } :
+    from === "right" ? { opacity: 0, x:  28 } :
+                       { opacity: 0, y:  22 };
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="min-h-screen bg-[#fdfbf7] dark:bg-[#1a1a1a]"
+    <motion.div ref={ref} className={className}
+      initial={initial}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
     >
-      <Navbar />
-
-      {/* ── Hero Header ─────────────────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 py-20 sm:py-28 text-center">
-        {/* Badge */}
-        <div className="
-          inline-flex items-center gap-2
-          px-4 py-1.5
-          rounded-full
-          border border-amber-500/30
-          bg-amber-500/10
-          text-amber-700 dark:text-amber-400
-          font-bold tracking-[0.2em]
-          text-xs sm:text-sm
-          mb-6
-        ">
-          <span className="text-lg leading-none">✦</span>
-          BIZNING HIKOYA
-        </div>
-
-        {/* Headline */}
-        <h1 className="
-          text-4xl sm:text-5xl lg:text-6xl
-          font-serif font-bold
-          text-neutral-900 dark:text-neutral-100
-          leading-tight
-          mb-6
-        ">
-          Kitob sahifalaridan ko'ngilga ko'chgan so'zlar.
-        </h1>
-
-        {/* Mission paragraph */}
-        <p className="
-          text-lg
-          text-neutral-600 dark:text-neutral-400
-          leading-relaxed
-          max-w-2xl mx-auto
-        ">
-          Zabarjad Media — bu dunyo adabiyotining eng sara asarlarini o'zbek tiliga 
-          professional tarjima qiladigan va yuqori sifatli kitoblar nashr etadigan 
-          zamonaviy nashriyot. Bizning maqsadimiz — har bir o'zbek o'quvchisiga jahon 
-          klassikalarini ona tilida o'qish imkoniyatini yaratish.
-        </p>
-      </section>
-
-      {/* ── Process Timeline (4 Steps) ──────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-16 space-y-24">
-        
-        {STEPS.map((step, index) => {
-          const isEven = index % 2 === 0;
-
-          return (
-            <motion.div
-              key={step.number}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
-            >
-              {/* Text column */}
-              <div className={isEven ? "order-1" : "order-1 lg:order-2"}>
-                {/* Step number badge */}
-                <span className="
-                  text-sm font-bold tracking-widest uppercase
-                  text-amber-600 dark:text-amber-500
-                  mb-2 block
-                ">
-                  QADAM {step.number}
-                </span>
-
-                {/* Step title */}
-                <h2 className="
-                  text-3xl font-serif
-                  text-amber-900 dark:text-amber-200
-                  mb-2
-                ">
-                  {step.title}
-                </h2>
-
-                {/* Subtitle (English) */}
-                <p className="
-                  text-sm font-sans italic
-                  text-neutral-500 dark:text-neutral-500
-                  mb-4
-                ">
-                  {step.subtitle}
-                </p>
-
-                {/* Description */}
-                <p className="
-                  text-base
-                  text-neutral-600 dark:text-neutral-400
-                  leading-relaxed
-                ">
-                  {step.desc}
-                </p>
-              </div>
-
-              {/* Image placeholder */}
-              <div className={isEven ? "order-2" : "order-2 lg:order-1"}>
-                <div className="
-                  w-full h-64
-                  bg-amber-100/50 dark:bg-amber-900/10
-                  rounded-2xl
-                  border border-amber-200/50 dark:border-amber-800/30
-                  flex items-center justify-center
-                ">
-                  {/* Decorative icon */}
-                  <span className="text-6xl opacity-20">
-                    {step.number === 1 && "🔍"}
-                    {step.number === 2 && "📜"}
-                    {step.number === 3 && "✍️"}
-                    {step.number === 4 && "📚"}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-
-      </section>
-
-      <Footer />
+      {children}
     </motion.div>
   );
 };
+
+// ── Amber diamond divider ─────────────────────────────────────────────────────
+const Divider = () => (
+  <div className="flex items-center gap-4 my-4" aria-hidden>
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent to-amber-500/30" />
+    <div className="w-2 h-2 rotate-45 shrink-0 bg-amber-500/60 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-amber-500/30" />
+  </div>
+);
+
+// ── Section heading ───────────────────────────────────────────────────────────
+const SectionLabel = ({ label, title }: { label: string; title: string }) => (
+  <div className="text-center mb-12">
+    <div className="inline-flex items-center gap-3 mb-3">
+      <div className="h-px w-8 bg-amber-500/40" />
+      <span className="font-sans text-[11px] uppercase tracking-[0.45em] text-amber-600 dark:text-amber-500 font-bold">{label}</span>
+      <div className="h-px w-8 bg-amber-500/40" />
+    </div>
+    <h2 className="font-serif font-extrabold text-foreground drop-shadow-sm" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
+      {title}
+    </h2>
+  </div>
+);
+
+// ── Process steps ─────────────────────────────────────────────────────────────
+const STEPS = [
+  {
+    num: "01", uz: "Tanlov", en: "Curation",
+    desc: "Dunyo adabiyotining eng sara asarlari — klassikdan zamonaviyga. Har bir kitob o'zbek o'quvchisi uchun haqiqiy xazina sifatida tanlanadi.",
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
+        <circle cx="20" cy="20" r="17" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 4"/>
+        <path d="M13 20l5 5 9-10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
+    num: "02", uz: "Huquqlar", en: "Rights",
+    desc: "Xalqaro nashriyotlar bilan rasmiy hamkorlik. Tarjima huquqlari olish — sifat kafolati va muallif hurmatining ifodasi.",
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
+        <rect x="8" y="10" width="24" height="22" rx="2.5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M14 17h12M14 22h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M27 6v7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
+    num: "03", uz: "Tarjima San'ati", en: "Translation",
+    desc: "Matn emas — ruh ko'chiriladi. Eng yaxshi tarjimonlar har bir jumlada asl asarning nafasini saqlab qoladi.",
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
+        <path d="M7 13h12M13 9v4M9 13c1 4 5 7 9 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M22 22l9 11M22 33l9-11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <line x1="20" y1="20" x2="33" y2="20" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 3"/>
+      </svg>
+    ),
+  },
+  {
+    num: "04", uz: "Nashr", en: "Premium Print",
+    desc: "Yuqori sifatli qog'oz, professional muqova, mukammal bosma. Kitob — qo'lingizdagi san'at asari.",
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
+        <rect x="9" y="7" width="14" height="26" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+        <rect x="17" y="9" width="14" height="26" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+        <line x1="20" y1="16" x2="28" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="20" y1="21" x2="28" y2="21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="20" y1="26" x2="25" y2="26" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+];
+
+// ══════════════════════════════════════════════════════════════════════════════
+const About = () => (
+  <motion.div
+    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45 }}
+    className="min-h-screen bg-[#faf9f5] dark:bg-[#080808] relative"
+  >
+    {/* ── Canvas Grain Texture ── */}
+    <svg width="0" height="0" className="absolute" aria-hidden>
+      <defs>
+        <filter id="about-grain"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feBlend in="SourceGraphic" mode="multiply"/></filter>
+      </defs>
+    </svg>
+    <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none" style={{ filter: "url(#about-grain)" }} />
+
+    <Navbar />
+
+    {/* ╔══════════════════════════════════════════════════════════════╗
+        ║  §1 — HERO: Logo card + headline + name meaning              ║
+        ╚══════════════════════════════════════════════════════════════╝ */}
+    <section className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-24 sm:pt-32 pb-16">
+      {/* Changed to items-center on lg so the card's height is natural and not over-stretched */}
+      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-16 xl:gap-20">
+
+        {/* ── Identity card ────────────────────────────────────────── */}
+        <Reveal from="left" className="w-full max-w-[360px] lg:w-[350px] xl:w-[380px] shrink-0">
+          <div
+            className="relative w-full rounded-[2rem] overflow-hidden flex flex-col border border-amber-500/20"
+            style={{
+              background: "linear-gradient(160deg, #38250f 0%, #1a1205 55%, #0f0a02 100%)",
+              boxShadow: "0 40px 90px -20px rgba(245,158,11,0.25), inset 0 1px 0 rgba(255,255,255,0.1)",
+            }}
+          >
+            {/* Decorative rings */}
+            <svg viewBox="0 0 340 440" fill="none" aria-hidden className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
+              <circle cx="170" cy="200" r="90"  stroke="#f59e0b" strokeWidth="1" strokeDasharray="3 8"/>
+              <circle cx="170" cy="200" r="130" stroke="#f59e0b" strokeWidth="0.5" strokeDasharray="2 12"/>
+              <circle cx="170" cy="200" r="168" stroke="#f59e0b" strokeWidth="0.3" strokeDasharray="1 16"/>
+              <path d="M50 440 Q170 100 290 440" stroke="#f59e0b" strokeWidth="1" fill="none"/>
+            </svg>
+
+            {/* Nashriyot label - UPDATED TO 2018 */}
+            <div className="relative z-10 pt-8 pb-2 flex justify-center">
+              <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-amber-500/80 font-bold">
+                Nashriyot · Est. 2018
+              </span>
+            </div>
+
+            {/* ── BIG logo — hero of the card ── */}
+            <div className="relative z-10 flex flex-col items-center justify-center gap-7 px-8 py-8">
+              <motion.div
+                className="relative flex items-center justify-center"
+                initial={{ scale: 0.82, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.18, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* Ambient glow halo */}
+                <div className="absolute inset-[-30px] pointer-events-none bg-amber-500/25 blur-[35px] rounded-full" />
+                
+                {/* THE NEW LOGO FRAME: Parchment background blends seamlessly with JPG */}
+                <div
+                  className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-[2rem] flex items-center justify-center shadow-[0_20px_40px_-10px_rgba(0,0,0,0.7)] bg-[#fdfbf7]"
+                  style={{ border: "3px solid rgba(245, 158, 11, 0.2)" }}
+                >
+                  <img
+                    src={zabarjadLogo}
+                    alt="Zabarjad Media Logo"
+                    className="w-[85%] h-[85%] object-contain"
+                    style={{ mixBlendMode: "multiply" }} // This makes the white background of the JPG invisible against the parchment!
+                  />
+                </div>
+              </motion.div>
+
+              {/* Name below logo */}
+              <div className="text-center mt-2 mb-2">
+                <h2 className="font-serif font-bold leading-none tracking-tight text-amber-50 text-4xl sm:text-[2.75rem] drop-shadow-md">
+                  Zabarjad
+                </h2>
+                {/* UPGRADED "MEDIA" TEXT */}
+                <p className="font-sans uppercase mt-4 text-[14px] tracking-[0.55em] text-amber-400 font-black drop-shadow-sm">
+                  Media
+                </p>
+              </div>
+            </div>
+
+            {/* ── Stats bar ── */}
+            <div className="relative z-10 mt-auto w-full flex bg-black/40 backdrop-blur-md border-t border-amber-500/20">
+              {[
+                { value: "150+", label: "Sara kitob" },
+                { value: "7",    label: "Yillik tajriba" },
+                { value: "3",    label: "Til" },
+              ].map(({ value, label }, i) => (
+                <div key={label} className="flex-1 flex flex-col items-center gap-1.5 py-5" style={{ borderRight: i < 2 ? "1px solid rgba(245,158,11,0.15)" : undefined }}>
+                  <span className="font-serif font-bold text-2xl text-amber-400">{value}</span>
+                  <span className="font-sans uppercase text-[8px] tracking-[0.3em] text-amber-500/70 font-bold">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* ── Right column ─────────────────────────────────────────── */}
+        <div className="flex flex-col justify-center flex-1 gap-6 sm:gap-8 pt-4 lg:pt-8">
+          <Reveal delay={0.1}>
+            <div className="inline-flex items-center gap-3">
+              <div className="h-px w-8 bg-amber-500/50" />
+              <span className="font-sans text-[11px] uppercase tracking-[0.4em] text-amber-600 dark:text-amber-500 font-bold">Bizning hikoya</span>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <h1 className="font-serif font-extrabold text-foreground leading-[1.1] text-4xl sm:text-5xl lg:text-6xl drop-shadow-sm">
+              Kitob sahifalaridan{" "}
+              <em className="not-italic bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 bg-clip-text text-transparent">ko'ngilga</em>{" "}
+              ko'chgan so'zlar.
+            </h1>
+          </Reveal>
+
+          <Reveal delay={0.22}>
+            <p className="font-serif text-lg sm:text-xl text-foreground/80 leading-relaxed max-w-xl">
+              Zabarjad Media — dunyo adabiyotining eng sara asarlarini o'zbek tiliga
+              professional tarjima qiladigan va yuqori sifatli kitoblar nashr etadigan
+              zamonaviy nashriyot.
+            </p>
+          </Reveal>
+
+          {/* "Nega Zabarjad?" Glass Box */}
+          <Reveal delay={0.3}>
+            <div className="relative rounded-2xl overflow-hidden bg-white/60 dark:bg-neutral-900/50 backdrop-blur-md border border-neutral-200 dark:border-white/10 shadow-lg mt-4">
+              {/* Left accent bar */}
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-amber-400 via-amber-600 to-amber-400" />
+              
+              <div className="pl-7 pr-6 py-6">
+                <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-amber-600 dark:text-amber-500 font-black mb-2">
+                  Nega aynan "Zabarjad"?
+                </p>
+                <p className="font-serif text-xl font-bold text-foreground leading-snug mb-3">
+                  Arabcha — <span className="text-amber-600 dark:text-amber-500">asl, bebaho.</span>
+                </p>
+                <p className="font-sans text-sm text-foreground/70 leading-relaxed">
+                  Nashriyot o'z oldiga kitobxonlar uchun asl va bebaho sanalib kelingan
+                  kitoblarni nashr etishni maqsad qilib qo'ygan. Maqsadimiz — 
+                  kitob bozorida haqiqiy sifat inqilobini amalga oshirish.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+
+    {/* Divider */}
+    <div className="relative z-10 max-w-5xl mx-auto px-8"><Divider /></div>
+
+    {/* ╔══════════════════════════════════════════════════════════════╗
+        ║  §2 — PROCESS: 4-step timeline                               ║
+        ╚══════════════════════════════════════════════════════════════╝ */}
+    <section className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+      <Reveal><SectionLabel label="Jarayon" title="Kitob qanday yaratiladi?" /></Reveal>
+
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Horizontal connector line — desktop */}
+        <div aria-hidden className="hidden lg:block absolute top-[36px] left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
+
+        {STEPS.map((step, i) => (
+          <Reveal key={step.num} delay={i * 0.1}>
+            <div className="relative flex flex-col gap-5 p-6 rounded-2xl h-full group cursor-default transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-amber-500/50 bg-white/70 dark:bg-black/40 backdrop-blur-xl border border-neutral-200/80 dark:border-white/10 shadow-lg overflow-hidden">
+              
+              {/* Hover glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+              {/* Icon + Number */}
+              <div className="flex items-center justify-between">
+                <div className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-900/10 border border-amber-300 dark:border-amber-700/50 text-amber-700 dark:text-amber-400 shadow-inner">
+                  {step.icon}
+                </div>
+                <span className="font-serif font-black leading-none select-none text-5xl text-neutral-200 dark:text-white/5 group-hover:text-amber-500/10 transition-colors duration-300">
+                  {step.num}
+                </span>
+              </div>
+
+              <div className="relative z-10 mt-2">
+                <h3 className="font-serif text-xl font-bold text-foreground leading-tight mb-1">{step.uz}</h3>
+                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-amber-600 dark:text-amber-500 font-bold mb-3">{step.en}</p>
+                <p className="font-sans text-sm text-foreground/70 leading-relaxed">{step.desc}</p>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+
+    {/* Divider */}
+    <div className="relative z-10 max-w-5xl mx-auto px-8"><Divider /></div>
+
+    {/* ╔══════════════════════════════════════════════════════════════╗
+        ║  §3 — CLOSING MANIFESTO                                      ║
+        ╚══════════════════════════════════════════════════════════════╝ */}
+    <section className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+      <Reveal>
+        <div
+          className="relative rounded-[2.5rem] px-8 sm:px-14 md:px-20 py-16 sm:py-20 text-center overflow-hidden border border-amber-500/20"
+          style={{
+            background: "linear-gradient(160deg, #38250f 0%, #1a1205 100%)",
+            boxShadow: "0 32px 80px -16px rgba(245,158,11,0.25)",
+          }}
+        >
+          {/* Background rings */}
+          <svg viewBox="0 0 560 240" fill="none" aria-hidden className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
+            <circle cx="280" cy="120" r="100" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3 8"/>
+            <circle cx="280" cy="120" r="148" stroke="#f59e0b" strokeWidth="0.5" strokeDasharray="2 12"/>
+            <path d="M80 240 Q280 20 480 240" stroke="#f59e0b" strokeWidth="1" fill="none"/>
+          </svg>
+
+          {/* Big decorative quote */}
+          <span aria-hidden className="absolute top-0 left-6 font-serif leading-none select-none pointer-events-none text-9xl text-amber-500/10">
+            "
+          </span>
+
+          <div className="relative z-10">
+            <blockquote className="font-serif font-extrabold leading-snug mb-8 text-amber-50 drop-shadow-md" style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)" }}>
+              Har bir kitob — yangi dunyoning eshigi.
+              <br />
+              <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">Biz o'sha eshiklarni yaratamiz.</span>
+            </blockquote>
+            
+            <div className="flex items-center justify-center gap-5">
+              <div className="h-px w-12 bg-amber-600/60" />
+              <span className="font-sans uppercase text-[11px] tracking-[0.5em] text-amber-500 font-bold">
+                Zabarjad Media
+              </span>
+              <div className="h-px w-12 bg-amber-600/60" />
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+
+    <Footer />
+  </motion.div>
+);
 
 export default About;

@@ -75,7 +75,7 @@ export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   hero: {
     motto: "Eng Yaxshisini Ilinamiz",
-    subtitle: "Zabarjad Media — dunyoning eng yaxshi asarlarini o'zbek tilida taqdim etadi",
+    subtitle: "Zabarjad Media nashriyoti — jahon va o'zbek adabiyotining eng yaxshi asarlarini o'zbek tilida taqdim etadi.",
     cta_text: "Kitoblarni ko'rish",
   },
   footer: {

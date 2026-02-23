@@ -194,10 +194,23 @@ const Footer = () => {
 
         </div>
 
-        {/* ── Bottom Bar: Copyright Only ────────────────────────── */}
-        <div className="pt-8 border-t border-border/50 flex flex-col items-center justify-center text-center">
+        {/* ── Bottom Bar ────────────────────────────────────────── */}
+        <div className="pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <p className="text-sm text-muted-foreground font-medium">
             &copy; {currentYear} Zabarjad Media. {t.footer.rights || "Barcha huquqlar himoyalangan."}
+          </p>
+          <p className="text-sm text-muted-foreground flex items-center gap-1.5 whitespace-nowrap">
+            <span>Muhabbat bilan yaratildi</span>
+            <span className="text-red-400 text-base leading-none">♥</span>
+            <span className="text-muted-foreground/40 mx-0.5">·</span>
+            <a
+              href="https://github.com/erkinjonovsamandar2-hash"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-foreground/70 hover:text-primary transition-colors duration-200"
+            >
+              Samandar Erkinjonov
+            </a>
           </p>
         </div>
 

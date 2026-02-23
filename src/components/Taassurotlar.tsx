@@ -9,6 +9,10 @@ import FeedbackForm from "./FeedbackForm";
 import waxSeal from "@/assets/design/seal.png";
 import pen     from "@/assets/design/pen.png";
 
+// Import the new Van Gogh background (PNG)
+let bgImg: string | undefined;
+try { bgImg = new URL("@/assets/design/taassurotlar-bg.png", import.meta.url).href; } catch { bgImg = undefined; }
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Review {
   id:    string | number;
@@ -94,21 +98,21 @@ const PAUSE_MS    = 8000;
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const SECTION_TEXT = {
   uz: {
-    badge:         "Kitobxonlar fikri", // UPDATED
+    badge:         "Kitobxonlar fikri",
     title:         "Taassurotlar",
     subtitle:      "Kitob sahifalaridan ko'ngilga ko'chgan so'zlar.",
     leaveFeedback: "Fikr qoldiring",
     hideForm:      "Yopish",
   },
   ru: {
-    badge:         "Мнения читателей", // UPDATED to align with "fikri"
+    badge:         "Мнения читателей",
     title:         "Отзывы",
     subtitle:      "Слова, которые перешли со страниц книг в сердца.",
     leaveFeedback: "Оставить отзыв",
     hideForm:      "Закрыть",
   },
   en: {
-    badge:         "Readers' Thoughts", // UPDATED to align with "fikri"
+    badge:         "Readers' Thoughts",
     title:         "Testimonials",
     subtitle:      "Words that travelled from the page into the heart.",
     leaveFeedback: "Leave a Review",
@@ -122,7 +126,7 @@ type SectionLang = keyof typeof SECTION_TEXT;
 const Stars = ({ count }: { count: number }) => (
   <div className="flex gap-0.5 mb-4" aria-label={`${count} yulduz`}>
     {Array.from({ length: 5 }).map((_, i) => (
-      <span key={i} className={`text-sm leading-none ${i < count ? "text-primary" : "text-neutral-300 dark:text-neutral-600"}`}>
+      <span key={i} className={`text-sm leading-none ${i < count ? "text-amber-500" : "text-neutral-300 dark:text-neutral-600"}`}>
         ★
       </span>
     ))}
@@ -148,33 +152,32 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
       whileHover={reduced ? {} : { rotate: 0, y: -8, scale: 1.02, zIndex: 30, transition: { duration: 0.2 } }}
       className="
         relative w-[85vw] max-w-[400px] shrink-0 snap-center whitespace-normal
-        rounded-xl p-7 cursor-default select-none
-        bg-[#fdfbf7] dark:bg-[#1a1a1a]
-        shadow-xl border border-amber-100/80 dark:border-amber-900/20
+        rounded-xl p-6 cursor-default select-none
+        bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md
+        shadow-2xl border border-white/50 dark:border-neutral-700/50
       "
       style={{ rotate: rotateDeg, transformOrigin: "center bottom" }}
     >
       <img
         src={waxSeal} alt="" aria-hidden draggable={false}
-        className="absolute -top-4 -right-4 w-14 h-14 object-contain pointer-events-none select-none"
-        style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.22))" }}
+        className="absolute -top-4 -right-4 w-14 h-14 object-contain pointer-events-none select-none drop-shadow-xl hover:scale-110 transition-transform duration-300"
       />
       <div
-        className="font-serif text-primary/20 dark:text-primary/15 select-none mb-1 leading-none"
-        style={{ fontSize: "52px", lineHeight: 1, marginTop: "-4px" }}
+        className="font-serif text-amber-500/20 dark:text-amber-500/15 select-none mb-1 leading-none"
+        style={{ fontSize: "48px", lineHeight: 1, marginTop: "-4px" }}
         aria-hidden
       >
         "
       </div>
       <Stars count={review.stars} />
-      <p className="font-serif text-sm italic leading-relaxed mb-6 break-words text-neutral-700 dark:text-neutral-300">
+      <p className="font-serif text-sm italic leading-relaxed mb-4 break-words text-neutral-800 dark:text-neutral-200">
         {review.text}
       </p>
-      <div className="h-px w-10 bg-amber-300/50 dark:bg-amber-700/30 mb-4" />
-      <p className="font-serif text-sm font-semibold text-neutral-900 dark:text-neutral-100 leading-tight">
+      <div className="h-px w-10 bg-amber-400/50 dark:bg-amber-600/50 mb-4" />
+      <p className="font-serif text-sm font-bold text-neutral-900 dark:text-white leading-tight">
         {review.name}
       </p>
-      <p className="font-sans text-[11px] text-neutral-400 dark:text-neutral-500 mt-0.5">
+      <p className="font-sans text-[11px] text-neutral-500 dark:text-neutral-400 mt-1 font-medium">
         {[review.role, review.city].filter(Boolean).join(" · ")}
       </p>
     </motion.div>
@@ -245,66 +248,64 @@ const Taassurotlar = () => {
     <section
       ref={sectionRef}
       id="taassurotlar"
-      className="
-        relative overflow-hidden py-16 md:py-20
-        bg-stone-50 dark:bg-[#0f0f0f]
-        border-y border-stone-200 dark:border-neutral-800/60
-      "
+      // TIGHTER PADDING for compact view
+      className="relative overflow-hidden py-12 md:py-16 border-y border-neutral-200/50 dark:border-white/10 z-10"
     >
-      {/* Decorative pen (Background) */}
-      <div className="pointer-events-none absolute -right-10 top-1/2 -translate-y-1/2 select-none" aria-hidden>
-        <img src={pen} alt="" draggable={false}
-          className="w-48 md:w-64 object-contain opacity-[0.05] dark:opacity-[0.03]"
-          style={{ transform: "rotate(-22deg)", filter: "grayscale(1)" }}
+      {/* ── Background: Painted Masterpiece ── */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div aria-hidden className="absolute inset-0 transition-opacity duration-700"
+          style={{
+            backgroundImage: bgImg ? `url(${bgImg})` : undefined,
+            backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+            opacity: 0.9, 
+          }}
         />
+        {/* The user's requested bg-white/40 overlay */}
+        <div className="absolute inset-0 bg-white/40 dark:bg-black/60" />
       </div>
-
-      {/* Vignette light */}
-      <div className="pointer-events-none absolute inset-0 block dark:hidden"
-        style={{ background: "radial-gradient(ellipse 85% 75% at 50% 50%, transparent 40%, rgba(245,235,220,0.4) 100%)" }}
-      />
-      {/* Vignette dark */}
-      <div className="pointer-events-none absolute inset-0 hidden dark:block"
-        style={{ background: "radial-gradient(ellipse 85% 75% at 50% 50%, transparent 40%, rgba(0,0,0,0.5) 100%)" }}
-      />
 
       <div className="relative z-10">
 
-        {/* Header (UPDATED) */}
+        {/* ── HIGH-CONTRAST HEADER ── */}
         <motion.div
-          className="text-center px-6 mb-12"
+          // REDUCED MARGIN BOTTOM
+          className="text-center px-6 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65 }}
         >
           <div className="inline-flex items-center justify-center gap-4 mb-4">
-            {/* Left Pen - Flipped horizontally to point inwards */}
+            {/* Left Pen - Darker for visibility */}
             <img src={pen} alt="" aria-hidden draggable={false}
-              className="w-7 h-7 object-contain opacity-60 dark:opacity-40 -scale-x-100 drop-shadow-sm"
-              style={{ filter: "grayscale(0.4)" }}
+              className="w-7 h-7 object-contain opacity-90 dark:opacity-60 -scale-x-100 drop-shadow-md"
+              style={{ filter: "grayscale(0.2)" }}
             />
-            {/* Badge Text (Updated in tx variable) */}
-            <p className="text-xs font-sans font-semibold uppercase tracking-[0.35em] text-primary whitespace-nowrap">
+            {/* BADGE - Dark amber, extra bold */}
+            <p className="text-xs font-sans font-black uppercase tracking-[0.35em] text-amber-950 dark:text-amber-400 whitespace-nowrap drop-shadow-sm">
               {tx.badge}
             </p>
-            {/* Right Pen - Default orientation pointing inwards */}
+            {/* Right Pen */}
             <img src={pen} alt="" aria-hidden draggable={false}
-              className="w-7 h-7 object-contain opacity-60 dark:opacity-40 drop-shadow-sm"
-              style={{ filter: "grayscale(0.4)" }}
+              className="w-7 h-7 object-contain opacity-90 dark:opacity-60 drop-shadow-md"
+              style={{ filter: "grayscale(0.2)" }}
             />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-foreground mb-3">
+          
+          {/* TITLE */}
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-black text-amber-950 dark:text-white mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-tight">
             {tx.title}
           </h2>
-          <p className="font-serif italic text-muted-foreground/70 text-base max-w-md mx-auto">
+          
+          {/* SUBTITLE */}
+          <p className="font-serif italic text-amber-950 dark:text-neutral-100 text-lg md:text-xl max-w-md mx-auto font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)] dark:drop-shadow-md">
             {tx.subtitle}
           </p>
         </motion.div>
 
-        {/* Carousel */}
+        {/* Carousel - REDUCED VERTICAL PADDING */}
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto gap-8 pb-10 pt-6 px-6 sm:px-12 md:px-20 snap-x snap-mandatory"
+          className="flex overflow-x-auto gap-8 pb-8 pt-4 px-6 sm:px-12 md:px-20 snap-x snap-mandatory"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
         >
           <style>{`#taassurotlar div::-webkit-scrollbar{display:none}`}</style>
@@ -315,26 +316,26 @@ const Taassurotlar = () => {
         </div>
 
         {/* Controls row */}
-        <div className="flex items-center justify-center gap-4 mt-6">
+        <div className="flex items-center justify-center gap-5 mt-2">
           <motion.button
             whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.90 }}
             onClick={handleLeft}
-            className="glass-card p-2.5 rounded-full text-muted-foreground hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none"
             aria-label="Oldingi sharh"
           >
             <ChevronLeft className="h-5 w-5" />
           </motion.button>
 
           {/* Auto-play indicator */}
-          <div className="flex items-center gap-1.5 w-6 justify-center">
+          <div className="flex items-center gap-2 w-8 justify-center">
             {isPaused ? (
               <>
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
+                <span className="h-1.5 w-1.5 rounded-full bg-neutral-400/50 dark:bg-neutral-600/50" />
+                <span className="h-1.5 w-1.5 rounded-full bg-neutral-400/50 dark:bg-neutral-600/50" />
               </>
             ) : (
               <motion.span
-                className="h-1.5 w-1.5 rounded-full bg-primary/50"
+                className="h-2 w-2 rounded-full bg-amber-500/80"
                 animate={{ scale: [1, 1.4, 1] }}
                 transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
               />
@@ -344,28 +345,29 @@ const Taassurotlar = () => {
           <motion.button
             whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.90 }}
             onClick={handleRight}
-            className="glass-card p-2.5 rounded-full text-muted-foreground hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none"
             aria-label="Keyingi sharh"
           >
             <ChevronRight className="h-5 w-5" />
           </motion.button>
         </div>
 
-        {/* Leave feedback toggle */}
-        <div className="flex justify-center mt-8">
+        {/* Leave feedback toggle - REDUCED MARGIN TOP */}
+        <div className="flex justify-center mt-6">
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => { setShowForm((p) => !p); triggerPause(); }}
             className="
-              inline-flex items-center gap-2 rounded-xl px-6 py-2.5
-              text-sm font-semibold font-sans
-              bg-amber-100 dark:bg-amber-900/20
-              border border-amber-300 dark:border-amber-800/40
-              text-amber-900 dark:text-amber-200
-              hover:bg-amber-200 dark:hover:bg-amber-900/30
-              transition-colors
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
+              inline-flex items-center gap-2 rounded-xl px-8 py-3.5
+              text-sm font-bold font-sans shadow-lg
+              bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md
+              border border-amber-200 dark:border-amber-900/50
+              text-amber-900 dark:text-amber-400
+              hover:bg-amber-600 hover:text-white hover:border-amber-600
+              dark:hover:bg-amber-600 dark:hover:text-white dark:hover:border-amber-600
+              transition-all duration-300
+              focus:outline-none
             "
           >
             <PenLine className="h-4 w-4" />
@@ -390,19 +392,19 @@ const Taassurotlar = () => {
           )}
         </AnimatePresence>
 
-        {/* Bottom flourish */}
+        {/* Bottom flourish - REDUCED MARGIN & THICKER, BOLDER LINES */}
         <motion.div
-          className="flex items-center justify-center gap-4 mt-10"
+          className="flex items-center justify-center gap-4 mt-8 pb-2"
           initial={{ opacity: 0 }}
           animate={headerInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.7, duration: 0.6 }}
         >
-          <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-400/40" />
+          {/* Thicker h-[2px] and solid amber colors */}
+          <div className="h-[2px] w-20 bg-gradient-to-r from-amber-600/10 to-amber-600/80 dark:from-amber-500/10 dark:to-amber-500/80" />
           <img src={waxSeal} alt="" aria-hidden draggable={false}
-            className="w-7 h-7 object-contain opacity-25"
-            style={{ filter: "grayscale(0.4)" }}
+            className="w-10 h-10 object-contain drop-shadow-md"
           />
-          <div className="h-px w-16 bg-gradient-to-l from-transparent to-amber-400/40" />
+          <div className="h-[2px] w-20 bg-gradient-to-l from-amber-600/10 to-amber-600/80 dark:from-amber-500/10 dark:to-amber-500/80" />
         </motion.div>
 
       </div>

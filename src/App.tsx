@@ -1,7 +1,9 @@
+// --- App.tsx ---
 import AnimatedRoutes from "@/components/AnimatedRoutes";
 import PageTransition from "@/components/PageTransition";
 import GlobalEffects from "@/components/GlobalEffects";
 import Navbar from "@/components/Navbar";
+import ScrollToTop from "@/components/ScrollToTop"; // <-- ADDED THIS
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -46,18 +48,23 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <ScrollToTop /> {/* <-- ADDED THIS: Fixes the scroll-to-bottom issue! */}
               <GlobalEffects />
               {/* Navbar sits OUTSIDE AnimatedRoutes to preserve fixed positioning */}
               <Navbar />
               <AnimatedRoutes>
-              <Route path="/" element={<PageTransition><Index /></PageTransition>} />
-              <Route path="/biz-haqimizda" element={<PageTransition><About /></PageTransition>} />
-              <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
-              <Route path="/library" element={<PageTransition><LibraryPage /></PageTransition>} />
-              <Route path="/book/:id" element={<PageTransition><BookDetails /></PageTransition>} />
-              <Route path="/quiz" element={<PageTransition><QuizPage /></PageTransition>} />
-              <Route path="/spotlight" element={<PageTransition><SpotlightPage /></PageTransition>} />
-              <Route path="/admin/login" element={<PageTransition><AdminLogin /></PageTransition>} />
+                <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+                
+                {/* MATCHED TO FOOTER: Changed from /biz-haqimizda to /about */}
+                <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+                
+                <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+                <Route path="/library" element={<PageTransition><LibraryPage /></PageTransition>} />
+                <Route path="/book/:id" element={<PageTransition><BookDetails /></PageTransition>} />
+                <Route path="/quiz" element={<PageTransition><QuizPage /></PageTransition>} />
+                <Route path="/spotlight" element={<PageTransition><SpotlightPage /></PageTransition>} />
+                <Route path="/admin/login" element={<PageTransition><AdminLogin /></PageTransition>} />
+                
                 {/* Admin nested routes */}
                 <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
                   <Route index element={<PageTransition><BookManager /></PageTransition>} />
@@ -68,6 +75,7 @@ const App = () => (
                   <Route path="reviews" element={<PageTransition><AdminReviews /></PageTransition>} />
                 </Route>
     
+                {/* If a route doesn't exist yet (like /oferta or /contact), it will safely fall back to NotFound */}
                 <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </AnimatedRoutes>
             </BrowserRouter>

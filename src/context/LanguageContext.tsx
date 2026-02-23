@@ -9,7 +9,7 @@ const translations = {
       spotlight: "Taxtlar o'yini",
       library: "Kutubxona",
       blog: "Blog",
-      quiz: "Kitob tanlash",
+      quiz: "Kitob sovchilari",
       contact: "Aloqa",
     },
     hero: {
@@ -65,7 +65,7 @@ const translations = {
       spotlight: "Игра престолов",
       library: "Библиотека",
       blog: "Блог",
-      quiz: "Викторина",
+      quiz: "Книжная сваха",
       contact: "Контакт",
     },
     hero: {
@@ -121,7 +121,7 @@ const translations = {
       spotlight: "Game of Thrones",
       library: "Library",
       blog: "Blog",
-      quiz: "Quiz",
+      quiz: "Book Matchmaker",
       contact: "Contact",
     },
     hero: {
