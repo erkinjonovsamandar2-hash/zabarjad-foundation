@@ -7,6 +7,7 @@ import type { Book } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import EmptyState from "@/components/EmptyState"; // <-- Added import
 import librarySeal from "@/assets/design/library-seal.png";
 
 // ── Local Categories Configuration ────────────────────────────────────────────
@@ -234,59 +235,72 @@ const LibraryPage = () => {
             </div>
           </div>
 
-          {/* ── PHYSICAL HARDCOVER 3D ILLUSION CARDS (Direct Routing) ──── */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((book, i) => (
-                <Link to={`/book/${book.id}`} key={book.id}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.3, delay: i * 0.05 }}
-                    className="group flex flex-col gap-4 cursor-pointer"
-                  >
-                    {/* Physical Hardcover Book with Spine & Page Geometry */}
-                    <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-[4px_4px_10px_rgba(0,0,0,0.15),_inset_-4px_0_4px_rgba(255,255,255,0.4)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.5),_inset_-4px_0_4px_rgba(255,255,255,0.1)] group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.2)] dark:group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-3 group-hover:-rotate-1 transition-all duration-500 border border-black/5 dark:border-white/10">
-                      {book.cover_url ? (
-                        <img 
-                          src={book.cover_url} 
-                          alt={locField(book, "title", lang)} 
-                          className="w-full h-full object-cover" 
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center bg-secondary w-full h-full">
-                          <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
+          {/* ── CONDITIONAL RENDER: Empty State vs Book Grid ──── */}
+          {filtered.length === 0 ? (
+            // The New Empty State Component
+            <div className="py-10 max-w-2xl mx-auto">
+              <EmptyState 
+                title="Sahifalar hozircha bo'sh..."
+                description="Ushbu ruknda hozircha kitoblar yo'q. Biz uni tez orada yangi va sara asarlar bilan boyitamiz."
+                actionLabel="Barcha kitoblarni ko'rish"
+                onAction={() => setActive("all")}
+              />
+            </div>
+          ) : (
+            // The Regular Book Grid
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+              <AnimatePresence mode="popLayout">
+                {filtered.map((book, i) => (
+                  <Link to={`/book/${book.id}`} key={book.id}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.3, delay: i * 0.05 }}
+                      className="group flex flex-col gap-4 cursor-pointer"
+                    >
+                      {/* Physical Hardcover Book with Spine & Page Geometry */}
+                      <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-[4px_4px_10px_rgba(0,0,0,0.15),_inset_-4px_0_4px_rgba(255,255,255,0.4)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.5),_inset_-4px_0_4px_rgba(255,255,255,0.1)] group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.2)] dark:group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-3 group-hover:-rotate-1 transition-all duration-500 border border-black/5 dark:border-white/10">
+                        {book.cover_url ? (
+                          <img 
+                            src={book.cover_url} 
+                            alt={locField(book, "title", lang)} 
+                            className="w-full h-full object-cover" 
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center bg-secondary w-full h-full">
+                            <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
+                          </div>
+                        )}
+
+                        {/* Hinge/Crease Gradient - Hardcover Book Indentation */}
+                        <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/40 via-white/20 to-transparent pointer-events-none border-l border-white/20" />
+                        
+                        {/* Glass Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <span className="px-5 py-2.5 bg-amber-500 text-black text-xs font-bold uppercase tracking-widest rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                            Batafsil
+                          </span>
                         </div>
-                      )}
-
-                      {/* Hinge/Crease Gradient - Hardcover Book Indentation */}
-                      <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/40 via-white/20 to-transparent pointer-events-none border-l border-white/20" />
-                      
-                      {/* Glass Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <span className="px-5 py-2.5 bg-amber-500 text-black text-xs font-bold uppercase tracking-widest rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                          Batafsil
-                        </span>
                       </div>
-                    </div>
 
-                    {/* Museum Placard Typography */}
-                    <div className="flex flex-col items-center text-center mt-5 px-2">
-                      <h3 className="font-serif font-bold text-base md:text-[17px] text-foreground leading-snug line-clamp-2 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
-                        {locField(book, "title", lang)}
-                      </h3>
-                      {/* Expanding Gold Divider */}
-                      <span className="w-8 h-[1.5px] bg-amber-500/40 my-2.5 transition-all duration-500 group-hover:w-16 group-hover:bg-amber-500" />
-                      <p className="text-[11px] font-semibold text-muted-foreground tracking-[0.15em] uppercase">
-                        {locField(book, "author", lang)}
-                      </p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </AnimatePresence>
-          </div>
+                      {/* Museum Placard Typography */}
+                      <div className="flex flex-col items-center text-center mt-5 px-2">
+                        <h3 className="font-serif font-bold text-base md:text-[17px] text-foreground leading-snug line-clamp-2 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+                          {locField(book, "title", lang)}
+                        </h3>
+                        {/* Expanding Gold Divider */}
+                        <span className="w-8 h-[1.5px] bg-amber-500/40 my-2.5 transition-all duration-500 group-hover:w-16 group-hover:bg-amber-500" />
+                        <p className="text-[11px] font-semibold text-muted-foreground tracking-[0.15em] uppercase">
+                          {locField(book, "author", lang)}
+                        </p>
+                      </div>
+                    </motion.div>
+                  </Link>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
       </section>
       <Footer />

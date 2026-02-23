@@ -3,7 +3,7 @@ import AnimatedRoutes from "@/components/AnimatedRoutes";
 import PageTransition from "@/components/PageTransition";
 import GlobalEffects from "@/components/GlobalEffects";
 import Navbar from "@/components/Navbar";
-import ScrollToTop from "@/components/ScrollToTop"; // <-- ADDED THIS
+import ScrollToTop from "@/components/ScrollToTop";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +12,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DataProvider } from "@/context/DataContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { Analytics } from "@vercel/analytics/react"; // <-- VERCEL ANALYTICS IMPORT
+
 import Index from "./pages/Index";
 import BlogPage from "./pages/BlogPage";
 import LibraryPage from "./pages/LibraryPage";
@@ -48,16 +50,12 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <ScrollToTop /> {/* <-- ADDED THIS: Fixes the scroll-to-bottom issue! */}
+              <ScrollToTop />
               <GlobalEffects />
-              {/* Navbar sits OUTSIDE AnimatedRoutes to preserve fixed positioning */}
               <Navbar />
               <AnimatedRoutes>
                 <Route path="/" element={<PageTransition><Index /></PageTransition>} />
-                
-                {/* MATCHED TO FOOTER: Changed from /biz-haqimizda to /about */}
                 <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-                
                 <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
                 <Route path="/library" element={<PageTransition><LibraryPage /></PageTransition>} />
                 <Route path="/book/:id" element={<PageTransition><BookDetails /></PageTransition>} />
@@ -75,10 +73,13 @@ const App = () => (
                   <Route path="reviews" element={<PageTransition><AdminReviews /></PageTransition>} />
                 </Route>
     
-                {/* If a route doesn't exist yet (like /oferta or /contact), it will safely fall back to NotFound */}
                 <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </AnimatedRoutes>
             </BrowserRouter>
+            
+            {/* VERCEL ANALYTICS COMPONENT */}
+            <Analytics /> 
+            
           </TooltipProvider>
         </LanguageProvider>
       </DataProvider>
