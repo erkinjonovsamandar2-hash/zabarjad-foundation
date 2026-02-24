@@ -1,7 +1,7 @@
 // @refresh reset
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion, useInView } from "framer-motion";
-import { ChevronRight, ChevronLeft, Library, BookOpen, ChevronDown } from "lucide-react";
+import { ChevronRight, ChevronLeft, Library, BookOpen, ChevronDown, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "@/context/DataContext";
 import { useLang, locField, type Lang } from "@/context/LanguageContext";
@@ -143,7 +143,7 @@ const CtaStatsBand = ({ onNavigate }: { onNavigate: () => void }) => {
   );
 };
 
-// ── Active book Showcase (STRONG CAPTION & RESPONSIVE PROPORTIONS) ────────────
+// ── Active book Showcase (FIXED BADGE POSITIONING) ────────────────────────────
 const ActiveBookShowcase = ({ book, lang, onClick }: { book: Book; lang: Lang; onClick: () => void }) => {
   const imgSrc = getImageUrl(book.cover_url);
   const glow   = `hsl(${book.bg_color ?? "40 65% 30%"})`;
@@ -161,28 +161,42 @@ const ActiveBookShowcase = ({ book, lang, onClick }: { book: Book; lang: Lang; o
       <motion.div className="relative w-full flex items-center justify-center mb-3 sm:mb-4"
         animate={{ y: [-3, 3, -3] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}>
         
+        {/* Glow behind */}
         <div className="absolute pointer-events-none rounded-full blur-[25px]"
           style={{ width: "80%", height: "80%", background: `radial-gradient(circle, ${glow}50 0%, transparent 70%)` }} />
 
-        {/* 3D Cover - Slightly smaller on mobile to avoid crushing text */}
-        <motion.div className="relative w-[150px] sm:w-[200px] lg:w-[240px] aspect-[2/3] rounded-[6px] sm:rounded-[10px] z-20 overflow-hidden"
-          style={{ boxShadow: `0 20px 40px -12px ${glow}99, 0 10px 20px -8px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.2)` }}
-          whileHover={{ scale: 1.05, rotateY: -5, rotateX: 2 }}
-        >
-          {imgSrc ? <img src={imgSrc} alt={locField(book, "title", lang)} className="w-full h-full object-cover rounded-[6px] sm:rounded-[10px]" draggable={false} /> : <div className="w-full h-full bg-neutral-800 rounded-[6px] sm:rounded-[10px]" />}
-          
-          <motion.div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent mix-blend-overlay pointer-events-none"
-            initial={{ x: "-100%" }} animate={{ x: "100%" }} transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }} />
-          <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.08] via-transparent to-black/25 pointer-events-none" />
-        </motion.div>
+        {/* WRAPPER: This relative div ensures the Star Badge (absolute) 
+           is positioned relative to the BOOK SIZE, not the screen width.
+        */}
+        <div className="relative w-[150px] sm:w-[200px] lg:w-[240px] aspect-[2/3] z-20">
+            
+            {/* The Book Cover */}
+            <motion.div 
+              className="w-full h-full rounded-[6px] sm:rounded-[10px] overflow-hidden relative"
+              style={{ boxShadow: `0 20px 40px -12px ${glow}99, 0 10px 20px -8px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.2)` }}
+              whileHover={{ scale: 1.05, rotateY: -5, rotateX: 2 }}
+            >
+              {imgSrc ? <img src={imgSrc} alt={locField(book, "title", lang)} className="w-full h-full object-cover rounded-[6px] sm:rounded-[10px]" draggable={false} /> : <div className="w-full h-full bg-neutral-800 rounded-[6px] sm:rounded-[10px]" />}
+              
+              <motion.div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent mix-blend-overlay pointer-events-none"
+                initial={{ x: "-100%" }} animate={{ x: "100%" }} transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }} />
+              <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.08] via-transparent to-black/25 pointer-events-none" />
+            </motion.div>
 
-        <div className="absolute z-30 top-[2%] right-[2%] sm:right-[5%] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[7px] sm:text-[8px] font-bold uppercase tracking-widest text-primary-foreground bg-gradient-to-br from-primary to-primary/80 shadow-md">
-          Tanlangan
+            {/* STAR BADGE: Now inside the wrapper, so it sticks to the corner properly on all devices */}
+            <motion.div 
+              animate={{ rotate: [0, 10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-3 -right-3 w-10 h-10 bg-amber-100/90 dark:bg-amber-900/90 backdrop-blur-md rounded-full border border-amber-200 dark:border-amber-700 flex items-center justify-center shadow-lg z-30"
+            >
+              <Star className="w-5 h-5 text-amber-600 dark:text-amber-400 fill-amber-600 dark:fill-amber-400" />
+            </motion.div>
         </div>
+
       </motion.div>
       
-      {/* PERFECT VISIBILITY CAPTION: Same background texture as Stats Box */}
+      {/* Caption */}
       <motion.div 
          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
          className="text-center px-4 py-2 sm:px-6 sm:py-3 w-max max-w-[95%] mx-auto rounded-xl backdrop-blur-xl bg-amber-50/95 dark:bg-amber-950/95 border border-amber-200/60 dark:border-amber-800/60 shadow-lg z-30"
