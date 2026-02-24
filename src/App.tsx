@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DataProvider } from "@/context/DataContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import LegalPage from "./pages/LegalPage";
 import { Analytics } from "@vercel/analytics/react"; // <-- VERCEL ANALYTICS IMPORT
 
 import Index from "./pages/Index";
@@ -62,7 +63,32 @@ const App = () => (
                 <Route path="/quiz" element={<PageTransition><QuizPage /></PageTransition>} />
                 <Route path="/spotlight" element={<PageTransition><SpotlightPage /></PageTransition>} />
                 <Route path="/admin/login" element={<PageTransition><AdminLogin /></PageTransition>} />
-                
+                <Route path="/privacy" element={
+  <PageTransition>
+    <LegalPage title="Maxfiylik Siyosati">
+      <p>Ushbu maxfiylik siyosati Zabarjad Media saytidan foydalanish qoidalarini belgilaydi...</p>
+      <h3>1. Ma'lumotlarni yig'ish</h3>
+      <p>Biz foydalanuvchilarning shaxsiy ma'lumotlarini qat'iy himoya qilamiz...</p>
+      {/* You can add real text later */}
+    </LegalPage>
+  </PageTransition>
+} />
+
+                <Route path="/terms" element={
+  <PageTransition>
+    <LegalPage title="Foydalanish Shartlari">
+      <p>Saytga tashrif buyurish orqali siz quyidagi shartlarga rozilik bildirasiz...</p>
+    </LegalPage>
+  </PageTransition>
+} />
+
+                <Route path="/oferta" element={
+  <PageTransition>
+    <LegalPage title="Ommaviy Oferta">
+      <p>Ushbu oferta kitob mahsulotlarini sotib olish bo'yicha rasmiy taklif hisoblanadi...</p>
+    </LegalPage>
+  </PageTransition>
+} />
                 {/* Admin nested routes */}
                 <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
                   <Route index element={<PageTransition><BookManager /></PageTransition>} />
