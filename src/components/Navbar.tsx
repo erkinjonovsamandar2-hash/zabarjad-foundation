@@ -83,10 +83,10 @@ const Navbar = () => {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-[100]"
+        className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-[1000]"
         style={{ scaleX: scrollYProgress }}
       />
-      <nav className="fixed top-0 left-0 right-0 z-[90] bg-white/40 dark:bg-black/20 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out">
+      <nav className="fixed top-0 left-0 right-0 z-[999] bg-white/40 dark:bg-black/20 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
 
           {/* ── Logo ── */}
@@ -151,8 +151,8 @@ const Navbar = () => {
                     href={link.href}
                     className={`
                       relative inline-flex items-center gap-1.5
-                      font-sans font-bold text-[12px] sm:text-[13px] tracking-wide uppercase px-4 py-2 rounded-full transition-all duration-300
-                      ${isActive(link.href) ? "bg-primary/10 text-primary dark:bg-primary/20" : "text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"}
+                      font-serif font-bold text-lg sm:text-xl px-4 py-1.5 rounded-lg transition-colors duration-300
+                      ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
                     {link.label}
@@ -164,8 +164,8 @@ const Navbar = () => {
                     to={link.href}
                     className={`
                       relative inline-flex items-center gap-1.5
-                      font-sans font-bold text-[12px] sm:text-[13px] tracking-wide uppercase px-4 py-2 rounded-full transition-all duration-300
-                      ${isActive(link.href) ? "bg-primary/10 text-primary dark:bg-primary/20" : "text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"}
+                      font-serif font-bold text-lg sm:text-xl px-4 py-1.5 rounded-lg transition-colors duration-300
+                      ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
                     {link.label}
@@ -231,41 +231,39 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-screen max-w-4xl bg-background/98 dark:bg-slate-950/98 backdrop-blur-3xl border border-border/50 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-2xl overflow-hidden z-[100]"
+                className="w-[96vw] max-w-4xl bg-background/98 dark:bg-slate-950/98 backdrop-blur-2xl border border-border/50 shadow-[0_30px_100px_-15px_rgba(0,0,0,0.4)] rounded-2xl p-6 lg:p-8 z-[1000]"
               >
-                <div className="p-6 lg:p-8">
-                  <div className="grid grid-cols-3 gap-6 lg:gap-8">
-                    {MEGA_MENU_CATEGORIES.map((cat) => (
-                      <Link
-                        key={cat.id}
-                        to={`/library?category=${cat.id}`}
-                        className="group flex flex-col p-3 rounded-xl hover:bg-muted/50 transition-colors"
-                        onClick={() => setMegaMenuOpen(false)}
-                      >
-                        <div className="w-full h-32 bg-primary/10 rounded-xl mb-4 overflow-hidden border border-border/30 shadow-inner relative">
-                          {cat.img ? (
-                            <img
-                              src={cat.img}
-                              alt={cat.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                              <span className="text-4xl opacity-40 group-hover:opacity-70 transition-opacity">📚</span>
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
-                        </div>
+                <div className="grid grid-cols-3 gap-6 lg:gap-8">
+                  {MEGA_MENU_CATEGORIES.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      to={`/library?category=${cat.id}`}
+                      className="group flex flex-col p-3 rounded-xl hover:bg-muted/50 transition-colors"
+                      onClick={() => setMegaMenuOpen(false)}
+                    >
+                      <div className="w-full h-32 bg-primary/10 rounded-xl mb-4 overflow-hidden border border-border/30 shadow-inner relative">
+                        {cat.img ? (
+                          <img
+                            src={cat.img}
+                            alt={cat.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                            <span className="text-4xl opacity-40 group-hover:opacity-70 transition-opacity">📚</span>
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
+                      </div>
 
-                        <h3 className="font-heading tracking-wide leading-tight text-base lg:text-lg text-foreground group-hover:text-accent transition-colors mb-1.5">
-                          {cat.title}
-                        </h3>
-                        <p className="text-xs text-foreground/70 leading-relaxed font-serif">
-                          {cat.desc}
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
+                      <h3 className="font-heading tracking-wide leading-tight text-base lg:text-lg text-foreground group-hover:text-accent transition-colors mb-1.5">
+                        {cat.title}
+                      </h3>
+                      <p className="text-xs text-foreground/70 leading-relaxed font-serif">
+                        {cat.desc}
+                      </p>
+                    </Link>
+                  ))}
                 </div>
               </motion.div>
             </div>
@@ -290,10 +288,9 @@ const Navbar = () => {
                         to={link.href}
                         onClick={() => setOpen(false)}
                         className={`
-                          block py-3 px-4 rounded-full
-                          font-sans font-bold text-[12px] sm:text-[13px] tracking-wide uppercase
-                          transition-all duration-300 active:bg-primary/10
-                          ${isActive(link.href) ? "bg-primary/10 text-primary dark:bg-primary/20" : "text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"}
+                          block py-2.5 px-4 mb-1 rounded-lg
+                          font-serif font-bold text-lg sm:text-xl transition-colors duration-300 active:bg-primary/10
+                          ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                         `}
                       >
                         <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
@@ -305,10 +302,9 @@ const Navbar = () => {
                         to={link.href}
                         onClick={() => setOpen(false)}
                         className={`
-                          block py-3 px-4 rounded-full
-                          font-sans font-bold text-[12px] sm:text-[13px] tracking-wide uppercase
-                          transition-all duration-300 active:bg-primary/10
-                          ${isActive(link.href) ? "bg-primary/10 text-primary dark:bg-primary/20" : "text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"}
+                          block py-2.5 px-4 mb-1 rounded-lg
+                          font-serif font-bold text-lg sm:text-xl transition-colors duration-300 active:bg-primary/10
+                          ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                         `}
                       >
                         {link.label}
@@ -333,10 +329,10 @@ const Navbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+      </nav >
 
       {/* ── Global Search Modal ── */}
-      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      < SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 };

@@ -36,7 +36,7 @@ const LoadingSplash = () => {
 
       {/* ── Centerpiece: Animated Logo ── */}
       <div className="relative mb-12 flex flex-col items-center">
-        {/* Soft pulsing aura behind logo text */}
+        {/* Soft pulsing aura behind logo */}
         <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.15, 0.35, 0.15] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -47,12 +47,15 @@ const LoadingSplash = () => {
           initial={{ y: 15, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative flex flex-col items-center"
+          className="relative flex flex-col items-center z-30"
         >
-          {/* Brand Name */}
-          <h1 className="mt-6 font-sans text-5xl sm:text-6xl font-black tracking-tight text-foreground relative z-30">
-            Booktopia <span className="text-primary">.</span>
-          </h1>
+          {/* Brand Logo Image (Replaced Text) */}
+          <img
+            src="/src/assets/Logo-blue.png"
+            alt="Booktopia Logo"
+            className="h-16 sm:h-24 w-auto object-contain drop-shadow-md"
+            draggable={false}
+          />
         </motion.div>
       </div>
 
