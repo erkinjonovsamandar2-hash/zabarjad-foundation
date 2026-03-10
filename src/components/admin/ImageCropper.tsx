@@ -65,12 +65,30 @@ const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "
     try {
       const blob = await getCroppedBlob();
       if (!blob) return;
-      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
-      const { error } = await supabase.storage.from("media").upload(fileName, blob, { contentType: "image/webp" });
-      if (error) { console.error("Upload error:", error); return; }
-      const { data: urlData } = supabase.storage.from("media").getPublicUrl(fileName);
+
+      const fileName = `${Date.now()}-${crypto.randomUUID() || Math.random().toString(36).slice(2)}.webp`;
+
+      const { data, error } = await supabase.storage
+        .from("books")
+        .upload(fileName, blob, {
+          contentType: "image/webp",
+          cacheControl: "3600",
+          upsert: false
+        });
+
+      if (error) {
+        alert("Rasm yuklashda xatolik: " + error.message);
+        throw new Error(error.message);
+      }
+
+      // Get the full public URL from Supabase
+      const { data: urlData } = supabase.storage.from("books").getPublicUrl(data.path);
+
+      // Save the complete HTTP URL to the database
       onImageSaved(urlData.publicUrl);
       setSrc(null);
+    } catch (err: any) {
+      console.error("Upload error:", err);
     } finally {
       setUploading(false);
     }
@@ -78,7 +96,7 @@ const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-foreground/80 mb-1">{label}</label>
 
       {/* Current preview */}
       {currentUrl && !src && (
@@ -92,7 +110,7 @@ const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "
       {!src && (
         <div>
           <input ref={inputRef} type="file" accept="image/*" onChange={onSelectFile} className="hidden" />
-          <button onClick={() => inputRef.current?.click()} className="inline-flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-4 py-2 text-sm text-gray-500 hover:border-amber-400 hover:text-amber-600 transition-colors">
+          <button onClick={() => inputRef.current?.click()} className="inline-flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-4 py-2 text-sm text-muted-foreground hover:border-amber-400 hover:text-primary transition-colors">
             <Upload className="h-4 w-4" /> Rasm yuklash
           </button>
         </div>
@@ -105,10 +123,10 @@ const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "
             <img ref={imgRef} src={src} onLoad={onImageLoad} className="max-h-64 rounded-lg" alt="Crop" />
           </ReactCrop>
           <div className="flex gap-2">
-            <button onClick={handleUpload} disabled={uploading} className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-50 transition-colors">
+            <button onClick={handleUpload} disabled={uploading} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50 transition-colors">
               <CropIcon className="h-4 w-4" /> {uploading ? "Yuklanmoqda..." : "Kesib saqlash"}
             </button>
-            <button onClick={() => setSrc(null)} className="px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">Bekor qilish</button>
+            <button onClick={() => setSrc(null)} className="px-4 py-2 text-sm text-muted-foreground hover:bg-gray-100 rounded-lg transition-colors">Bekor qilish</button>
           </div>
         </div>
       )}

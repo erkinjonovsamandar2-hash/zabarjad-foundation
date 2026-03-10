@@ -5,45 +5,52 @@ import { Plus, Pencil, Trash2, X, BookOpen } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
 import { LIBRARY_FILTER_KEYS, LIBRARY_FILTER_MAP } from "@/lib/constants";
 
+const getImageUrl = (url: string | null | undefined): string => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  const base = import.meta.env.VITE_SUPABASE_URL as string;
+  return `${base}/storage/v1/object/public/${url}`;
+};
+
 const bgColorOptions = [
-  { label: "Ko'k (qorong'u)",  value: "210 60% 15%" },
+  { label: "Ko'k (qorong'u)", value: "210 60% 15%" },
   { label: "Yashil (qorong'u)", value: "120 40% 12%" },
-  { label: "Qizil (qorong'u)",  value: "0 30% 14%"   },
-  { label: "Sariq (qorong'u)",  value: "35 50% 13%"  },
-  { label: "Binafsha",          value: "270 40% 14%" },
-  { label: "Zangori",           value: "180 30% 12%" },
-  { label: "Ko'k (o'rta)",     value: "200 40% 14%" },
-  { label: "Yashil (to'q)",    value: "150 30% 10%" },
-  { label: "Moviy (to'q)",     value: "220 50% 12%" },
-  { label: "Jigarrang",         value: "45 30% 12%"  },
+  { label: "Qizil (qorong'u)", value: "0 30% 14%" },
+  { label: "Sariq (qorong'u)", value: "35 50% 13%" },
+  { label: "Binafsha", value: "270 40% 14%" },
+  { label: "Zangori", value: "180 30% 12%" },
+  { label: "Ko'k (o'rta)", value: "200 40% 14%" },
+  { label: "Yashil (to'q)", value: "150 30% 10%" },
+  { label: "Moviy (to'q)", value: "220 50% 12%" },
+  { label: "Jigarrang", value: "45 30% 12%" },
 ];
 
 // category defaults to the raw DB key "new", never a translated label
 const emptyBook: Omit<Book, "id" | "created_at" | "updated_at"> = {
-  title:          "",
-  title_en:       null,
-  title_ru:       null,
-  author:         "",
-  author_en:      null,
-  author_ru:      null,
-  description:    null,
+  title: "",
+  title_en: null,
+  title_ru: null,
+  author: "",
+  author_en: null,
+  author_ru: null,
+  description: null,
   description_en: null,
   description_ru: null,
-  cover_url:      null,
-  bg_color:       "210 60% 15%",
-  category:       "new",
-  price:          null,
+  cover_url: null,
+  bg_color: "210 60% 15%",
+  category: "new",
+  price: null,
   enable_3d_flip: false,
-  featured:       false,
-  sort_order:     0,
+  featured: false,
+  sort_order: 0,
 };
 
 const BookManager = () => {
   const { books, addBook, updateBook, deleteBook } = useData();
   const [modalOpen, setModalOpen] = useState(false);
-  const [editId,    setEditId]    = useState<string | null>(null);
-  const [form,      setForm]      = useState<Omit<Book, "id" | "created_at" | "updated_at">>(emptyBook);
-  const [saving,    setSaving]    = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [form, setForm] = useState<Omit<Book, "id" | "created_at" | "updated_at">>(emptyBook);
+  const [saving, setSaving] = useState(false);
 
   const nextSortOrder = books.length > 0
     ? Math.max(...books.map((b) => b.sort_order ?? 0)) + 1
@@ -69,6 +76,8 @@ const BookManager = () => {
       if (editId) await updateBook(editId, form);
       else await addBook(form);
       setModalOpen(false);
+    } catch (err: any) {
+      alert("Saqlashda xatolik yuz berdi: " + err.message);
     } finally {
       setSaving(false);
     }
@@ -77,10 +86,10 @@ const BookManager = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Kitoblar</h1>
+        <h1 className="text-2xl font-bold text-foreground">Kitoblar</h1>
         <button
           onClick={openAdd}
-          className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors"
         >
           <Plus className="h-4 w-4" /> Yangi kitob
         </button>
@@ -91,12 +100,12 @@ const BookManager = () => {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600">Muqova</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600">Nomi</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden sm:table-cell">Muallif</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden md:table-cell">Kategoriya</th>
-                <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Holat</th>
-                <th className="text-right px-4 py-3 font-semibold text-gray-600">Amallar</th>
+                <th className="text-left px-4 py-3 font-semibold text-foreground/70">Muqova</th>
+                <th className="text-left px-4 py-3 font-semibold text-foreground/70">Nomi</th>
+                <th className="text-left px-4 py-3 font-semibold text-foreground/70 hidden sm:table-cell">Muallif</th>
+                <th className="text-left px-4 py-3 font-semibold text-foreground/70 hidden md:table-cell">Kategoriya</th>
+                <th className="text-left px-4 py-3 font-semibold text-foreground/70 hidden lg:table-cell">Holat</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground/70">Amallar</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -105,7 +114,7 @@ const BookManager = () => {
                   <td className="px-4 py-3">
                     {book.cover_url ? (
                       <img
-                        src={book.cover_url}
+                        src={`${getImageUrl(book.cover_url)}?t=${Date.now()}`}
                         alt={book.title}
                         className="h-12 w-8 rounded object-cover"
                       />
@@ -118,29 +127,40 @@ const BookManager = () => {
                       </div>
                     )}
                   </td>
-                  <td className="px-4 py-3 font-medium text-gray-900">
+                  <td className="px-4 py-3 font-medium text-foreground">
                     <span className="truncate max-w-[150px] block">{book.title}</span>
-                    <span className="text-xs text-gray-400 sm:hidden">{book.author}</span>
+                    <span className="text-xs text-muted-foreground/80 sm:hidden">{book.author}</span>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 hidden sm:table-cell">{book.author}</td>
+                  <td className="px-4 py-3 text-foreground/70 hidden sm:table-cell">{book.author}</td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     {/* Display the translated label for the raw DB key */}
-                    <span className="inline-block rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">
+                    <span className="inline-block rounded-full bg-primary/5 px-2.5 py-0.5 text-xs font-medium text-primary/90">
                       {LIBRARY_FILTER_MAP[book.category as keyof typeof LIBRARY_FILTER_MAP] ?? book.category}
                     </span>
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell">
                     <div className="flex gap-1.5">
-                      {book.featured      && <span className="text-xs bg-amber-100 text-amber-700 rounded px-1.5 py-0.5">Hero</span>}
+                      {book.featured && <span className="text-xs bg-primary/10 text-primary/90 rounded px-1.5 py-0.5">Hero</span>}
                       {book.enable_3d_flip && <span className="text-xs bg-blue-100  text-blue-700  rounded px-1.5 py-0.5">3D</span>}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
-                      <button onClick={() => openEdit(book)} className="p-1.5 rounded-lg text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors">
+                      <button onClick={() => openEdit(book)} className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors">
                         <Pencil className="h-4 w-4" />
                       </button>
-                      <button onClick={() => deleteBook(book.id)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+                      <button
+                        onClick={async () => {
+                          if (window.confirm("Haqiqatan ham bu kitobni o'chirmoqchimisiz?")) {
+                            try {
+                              await deleteBook(book.id);
+                            } catch (err: any) {
+                              alert("O'chirishda xatolik: " + err.message);
+                            }
+                          }
+                        }}
+                        className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-600 hover:bg-red-50 transition-colors"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -157,11 +177,11 @@ const BookManager = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900">
+              <h2 className="text-lg font-bold text-foreground">
                 {editId ? "Kitobni tahrirlash" : "Yangi kitob"}
               </h2>
               <button onClick={() => setModalOpen(false)} className="p-1 rounded-lg hover:bg-gray-100">
-                <X className="h-5 w-5 text-gray-400" />
+                <X className="h-5 w-5 text-muted-foreground/80" />
               </button>
             </div>
 
@@ -173,17 +193,17 @@ const BookManager = () => {
                 label="Muqova rasmi (2:3)"
               />
 
-              <Field label="Nomi (UZ)"  value={form.title        ?? ""} onChange={(v) => setForm({ ...form, title:    v })} />
-              <Field label="Nomi (EN)"  value={form.title_en     ?? ""} onChange={(v) => setForm({ ...form, title_en: v || null })} />
-              <Field label="Nomi (RU)"  value={form.title_ru     ?? ""} onChange={(v) => setForm({ ...form, title_ru: v || null })} />
-              <Field label="Muallif (UZ)" value={form.author     ?? ""} onChange={(v) => setForm({ ...form, author:    v })} />
-              <Field label="Muallif (EN)" value={form.author_en  ?? ""} onChange={(v) => setForm({ ...form, author_en: v || null })} />
-              <Field label="Muallif (RU)" value={form.author_ru  ?? ""} onChange={(v) => setForm({ ...form, author_ru: v || null })} />
-              <Field label="Tavsif"     value={form.description  ?? ""} onChange={(v) => setForm({ ...form, description: v || null })} textarea />
+              <Field label="Nomi (UZ)" value={form.title ?? ""} onChange={(v) => setForm({ ...form, title: v })} />
+              <Field label="Nomi (EN)" value={form.title_en ?? ""} onChange={(v) => setForm({ ...form, title_en: v || null })} />
+              <Field label="Nomi (RU)" value={form.title_ru ?? ""} onChange={(v) => setForm({ ...form, title_ru: v || null })} />
+              <Field label="Muallif (UZ)" value={form.author ?? ""} onChange={(v) => setForm({ ...form, author: v })} />
+              <Field label="Muallif (EN)" value={form.author_en ?? ""} onChange={(v) => setForm({ ...form, author_en: v || null })} />
+              <Field label="Muallif (RU)" value={form.author_ru ?? ""} onChange={(v) => setForm({ ...form, author_ru: v || null })} />
+              <Field label="Tavsif" value={form.description ?? ""} onChange={(v) => setForm({ ...form, description: v || null })} textarea />
 
               {/* Category — value is always a raw DB key */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Kategoriya</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-1">Kategoriya</label>
                 <select
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
@@ -199,7 +219,7 @@ const BookManager = () => {
 
               {/* Background color */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Fon rangi</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-1">Fon rangi</label>
                 <select
                   value={form.bg_color ?? "210 60% 15%"}
                   onChange={(e) => setForm({ ...form, bg_color: e.target.value })}
@@ -212,21 +232,21 @@ const BookManager = () => {
               </div>
 
               <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={form.enable_3d_flip ?? false}
                     onChange={(e) => setForm({ ...form, enable_3d_flip: e.target.checked })}
-                    className="rounded border-gray-300 text-amber-500 focus:ring-amber-200"
+                    className="rounded border-gray-300 text-accent focus:ring-amber-200"
                   />
                   3D Page-Flip
                 </label>
-                <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={form.featured ?? false}
                     onChange={(e) => setForm({ ...form, featured: e.target.checked })}
-                    className="rounded border-gray-300 text-amber-500 focus:ring-amber-200"
+                    className="rounded border-gray-300 text-accent focus:ring-amber-200"
                   />
                   Hero karuselda ko'rsatish
                 </label>
@@ -234,13 +254,13 @@ const BookManager = () => {
             </div>
 
             <div className="flex justify-end gap-3 p-5 border-t border-gray-100">
-              <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+              <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-foreground/70 hover:bg-gray-100 rounded-lg transition-colors">
                 Bekor qilish
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-5 py-2 text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 disabled:opacity-50 rounded-lg transition-colors"
+                className="px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 disabled:opacity-50 rounded-lg transition-colors"
               >
                 {saving ? "Saqlanmoqda..." : "Saqlash"}
               </button>
@@ -263,14 +283,14 @@ const Field = ({
   placeholder?: string;
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <label className="block text-sm font-medium text-foreground/80 mb-1">{label}</label>
     {textarea ? (
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={3}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
       />
     ) : (
       <input
@@ -278,7 +298,7 @@ const Field = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
       />
     )}
   </div>

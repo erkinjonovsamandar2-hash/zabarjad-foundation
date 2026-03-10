@@ -1,5 +1,5 @@
 /**
- * Static UI constants for the Zabarjad Media application.
+ * Static UI constants for the Booktopia application.
  *
  * These values are permanent UI configuration — not mock data —
  * and are safe to import after mockData.ts is eventually deleted.

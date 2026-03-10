@@ -49,7 +49,7 @@ const NotFound = () => {
       />
       
       {/* ── 2. Cinematic Lighting (Lost in the dark) ── */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/10 dark:bg-amber-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/90/10 dark:bg-primary/10 rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(circle_at_center,transparent_0%,var(--background)_80%)]" />
 
       {/* ── Giant Background Watermark ── */}
@@ -67,22 +67,22 @@ const NotFound = () => {
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="mb-8 p-6 rounded-full bg-amber-500/10 border border-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.15)]"
+          className="mb-8 p-6 rounded-full bg-primary/10 border border-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.15)]"
         >
-          <Compass className="w-12 h-12 text-amber-500" strokeWidth={1.5} />
+          <Compass className="w-12 h-12 text-accent" strokeWidth={1.5} />
         </motion.div>
 
         {/* Badge */}
         <div className="inline-flex items-center gap-4 mb-6">
-          <span className="w-12 h-[1px] bg-amber-500/50"></span>
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600 dark:text-amber-500">
+          <span className="w-12 h-[1px] bg-primary/50"></span>
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary dark:text-accent">
             {text.badge}
           </p>
-          <span className="w-12 h-[1px] bg-amber-500/50"></span>
+          <span className="w-12 h-[1px] bg-primary/50"></span>
         </div>
 
         {/* Main Title */}
-        <h1 className="text-5xl md:text-7xl font-serif font-bold text-foreground mb-6 tracking-tight drop-shadow-md">
+        <h1 className="text-5xl md:text-7xl font-heading font-black tracking-tight font-bold text-foreground mb-6 tracking-tight drop-shadow-md">
           {text.title}
         </h1>
 
@@ -94,9 +94,9 @@ const NotFound = () => {
         {/* Premium Back Button */}
         <Link 
           to="/" 
-          className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-amber-700/50 bg-gradient-to-r from-[#1a1510] to-[#0a0806] text-amber-500 font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-amber-900/30 hover:border-amber-400 hover:text-amber-400 transition-all duration-300 shadow-[0_0_20px_rgba(217,119,6,0.15)] hover:shadow-[0_0_30px_rgba(217,119,6,0.3)] overflow-hidden"
+          className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-amber-700/50 bg-gradient-to-r from-[#1a1510] to-[#0a0806] text-accent font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-amber-900/30 hover:border-amber-400 hover:text-accent transition-all duration-300 shadow-[0_0_20px_rgba(217,119,6,0.15)] hover:shadow-[0_0_30px_rgba(217,119,6,0.3)] overflow-hidden"
         >
-          <span className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <Home className="relative z-10 w-4 h-4" />
           <span className="relative z-10">{text.btn}</span>
         </Link>

@@ -24,7 +24,7 @@ const EpicSpotlight = () => {
           <p className="mb-3 text-xs font-sans font-semibold uppercase tracking-[0.3em] text-primary">
             {t.spotlight.badge}
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-foreground mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black tracking-tight font-bold text-foreground mb-4">
             {t.spotlight.title}
           </h2>
           <p className="max-w-xl text-muted-foreground mb-10">
@@ -88,7 +88,7 @@ const EpicSpotlight = () => {
                       className="absolute left-1/2 -translate-x-1/2 top-8 z-20 w-64 glass-card rounded-lg p-4"
                       onMouseLeave={() => setActiveHotspot(null)}
                     >
-                      <h4 className="font-serif font-bold text-foreground text-sm mb-2">{spotData.label}</h4>
+                      <h4 className="font-heading font-black tracking-tight font-bold text-foreground text-sm mb-2">{spotData.label}</h4>
                       <p className="text-xs text-muted-foreground leading-relaxed">{spotData.lore}</p>
                     </motion.div>
                   )}

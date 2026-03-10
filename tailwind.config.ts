@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -14,60 +19,75 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ["Playfair Display", "Georgia", "serif"],
-        sans: ["Inter", "system-ui", "sans-serif"],
-        got: ['"GameOfThrones"', 'serif'], // <-- Added Game of Thrones font here!
+        heading: ["Soria", "Georgia", "serif"],
+        // font-serif → Neuton (used on nav & footer links)
+        serif:   ["Neuton", "serif"],
+        sans:    ["Inter", "sans-serif"],
+        got:     ['"GameOfThrones"', "serif"],
       },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        // ── FIXED: <alpha-value> injection enables bg-x/50, text-x/80, etc. ──
+        border:     "hsl(var(--border) / <alpha-value>)",
+        input:      "hsl(var(--input) / <alpha-value>)",
+        ring:       "hsl(var(--ring) / <alpha-value>)",
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT:    "hsl(var(--primary) / <alpha-value>)",
+          foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT:    "hsl(var(--secondary) / <alpha-value>)",
+          foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT:    "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT:    "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT:    "hsl(var(--accent) / <alpha-value>)",
+          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT:    "hsl(var(--popover) / <alpha-value>)",
+          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT:    "hsl(var(--card) / <alpha-value>)",
+          foreground: "hsl(var(--card-foreground) / <alpha-value>)",
         },
+
+        // Legacy tokens
         gold: {
-          DEFAULT: "hsl(var(--gold))",
-          dim: "hsl(var(--gold-dim))",
+          DEFAULT: "hsl(var(--gold) / <alpha-value>)",
+          dim:     "hsl(var(--gold-dim) / <alpha-value>)",
         },
-        silver: "hsl(var(--silver))",
-        obsidian: "hsl(var(--obsidian))",
-        charcoal: "hsl(var(--charcoal))",
+        silver:   "hsl(var(--silver) / <alpha-value>)",
+        obsidian: "hsl(var(--obsidian) / <alpha-value>)",
+        charcoal: "hsl(var(--charcoal) / <alpha-value>)",
+
+        // Explicit Booktopia palette for direct utility (text-booktopia-navy)
+        booktopia: {
+          cream:    "#F4F2C9",
+          navy:     "#265999",
+          blue:     "#4488BF",
+          gold:     "#D5AD36",
+          darkNavy: "#0A192F",
+        },
+
         sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+          DEFAULT:            "hsl(var(--sidebar-background) / <alpha-value>)",
+          foreground:         "hsl(var(--sidebar-foreground) / <alpha-value>)",
+          primary:            "hsl(var(--sidebar-primary) / <alpha-value>)",
+          "primary-foreground":"hsl(var(--sidebar-primary-foreground) / <alpha-value>)",
+          accent:             "hsl(var(--sidebar-accent) / <alpha-value>)",
+          "accent-foreground":"hsl(var(--sidebar-accent-foreground) / <alpha-value>)",
+          border:             "hsl(var(--sidebar-border) / <alpha-value>)",
+          ring:               "hsl(var(--sidebar-ring) / <alpha-value>)",
         },
       },
       borderRadius: {
@@ -78,16 +98,16 @@ export default {
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          to:   { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to:   { height: "0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-up":   "accordion-up 0.2s ease-out",
       },
     },
   },

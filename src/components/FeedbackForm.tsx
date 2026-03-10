@@ -292,7 +292,7 @@ const FeedbackForm = () => {
       {/* ── Moderation warning ────────────────────────────────────────────── */}
       <div className="
         flex items-start gap-3 rounded-lg px-4 py-3
-        bg-amber-50 dark:bg-amber-900/15
+        bg-primary/5 dark:bg-amber-900/15
         border border-amber-200 dark:border-amber-800/30
       ">
         <span className="text-base shrink-0 mt-0.5">⚠️</span>
@@ -316,7 +316,7 @@ const FeedbackForm = () => {
                 flex-1 py-2.5 text-sm font-semibold font-sans transition-colors
                 ${feedbackType === type
                   ? "bg-primary text-primary-foreground"
-                  : "bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-amber-50 dark:hover:bg-neutral-700"
+                  : "bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-primary/5 dark:hover:bg-neutral-700"
                 }
               `}
             >
@@ -448,7 +448,7 @@ const FeedbackForm = () => {
           />
           <span className={`
             absolute bottom-2.5 right-3 font-sans text-[10px]
-            ${text.length > 250 ? "text-amber-500" : "text-neutral-400 dark:text-neutral-600"}
+            ${text.length > 250 ? "text-accent" : "text-neutral-400 dark:text-neutral-600"}
           `}>
             {tx.charCount(text.length)}
           </span>

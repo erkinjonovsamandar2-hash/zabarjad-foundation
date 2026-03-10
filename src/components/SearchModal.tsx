@@ -66,7 +66,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
               
               {/* Search Header */}
               <div className="relative flex items-center px-4 py-4 border-b border-neutral-200 dark:border-neutral-800">
-                <Search className="w-5 h-5 text-amber-500 mr-3" />
+                <Search className="w-5 h-5 text-accent mr-3" />
                 <input
                   autoFocus
                   type="text"
@@ -97,7 +97,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                         key={book.id}
                         to={`/book/${book.id}`}
                         onClick={onClose}
-                        className="flex items-center gap-4 p-3 rounded-xl hover:bg-amber-50 dark:hover:bg-white/5 transition-colors group"
+                        className="flex items-center gap-4 p-3 rounded-xl hover:bg-primary/5 dark:hover:bg-white/5 transition-colors group"
                       >
                         {/* Tiny Cover Thumbnail */}
                         <div className="w-12 h-16 shrink-0 rounded-md overflow-hidden bg-neutral-200 border border-neutral-200 dark:border-neutral-700">
@@ -112,13 +112,13 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                         
                         {/* Text Info */}
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-serif font-bold text-foreground truncate group-hover:text-amber-600 transition-colors">
+                          <h4 className="font-heading font-black tracking-tight font-bold text-foreground truncate group-hover:text-primary transition-colors">
                             {book.title}
                           </h4>
                           <p className="text-sm text-neutral-500 truncate">{book.author}</p>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-neutral-300 group-hover:text-amber-500 opacity-0 group-hover:opacity-100 transition-all" />
+                        <ChevronRight className="w-4 h-4 text-neutral-300 group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all" />
                       </Link>
                     ))}
                   </div>
@@ -135,7 +135,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
 
               {/* Footer Tip */}
               <div className="bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center text-[10px] text-neutral-400 font-sans uppercase tracking-wider">
-                <span>Zabarjad Qidiruv</span>
+                <span>Booktopia Qidiruv</span>
                 <span>ESC — Yopish</span>
               </div>
             </div>

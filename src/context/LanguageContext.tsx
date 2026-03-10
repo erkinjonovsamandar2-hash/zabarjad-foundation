@@ -46,11 +46,11 @@ const translations = {
       restart: "Qaytadan boshlash",
     },
     blog: {
-      badge: "Zabarjad kundaligi",
+      badge: "Booktopia kundaligi",
       title: "So'nggi maqolalar",
     },
     footer: {
-      heading: "Zabarjad oilasiga qo'shiling.",
+      heading: "Booktopia oilasiga qo'shiling.",
       desc: "Yangi nashrlar, maxsus takliflar va adabiyot dunyosidan xabarlar olish uchun bizga qo'shiling.",
       address: "Manzil",
       contact: "Aloqa",
@@ -158,11 +158,11 @@ const translations = {
       restart: "Start over",
     },
     blog: {
-      badge: "Zabarjad Diary",
+      badge: "Booktopia Diary",
       title: "Latest Articles",
     },
     footer: {
-      heading: "Join the Zabarjad family.",
+      heading: "Join the Booktopia family.",
       desc: "Stay updated on new releases, exclusive offers, and news from the world of literature.",
       address: "Address",
       contact: "Contact",
@@ -192,14 +192,14 @@ export const useLang = () => {
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLang] = useState<Lang>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("zabarjad-lang") as Lang) || "uz";
+      return (localStorage.getItem("booktopia-lang") as Lang) || "uz";
     }
     return "uz";
   });
 
   const handleSetLang = (newLang: Lang) => {
     setLang(newLang);
-    localStorage.setItem("zabarjad-lang", newLang);
+    localStorage.setItem("booktopia-lang", newLang);
   };
 
   return (

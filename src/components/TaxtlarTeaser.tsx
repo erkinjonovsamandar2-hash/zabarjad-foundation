@@ -107,7 +107,7 @@ const InfoCard = ({
     {/* Icon with enhanced glow */}
     <div className="
       flex h-14 w-14 shrink-0 items-center justify-center rounded-md
-      bg-amber-500/10
+      bg-primary/10
     ">
       <img
         src={icon}
@@ -119,7 +119,7 @@ const InfoCard = ({
     {/* Text */}
     <div className="flex flex-col items-center text-center">
       <span className="
-        font-bold text-amber-500 tracking-wide
+        font-bold text-accent tracking-wide
         text-sm md:text-base
         drop-shadow-sm
       ">
@@ -306,10 +306,10 @@ const TaxtlarTeaser = () => {
 
               <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                 <div>
-                  <h3 className="font-got text-xl text-amber-400 mb-1 tracking-wider drop-shadow-md">Yangi Nashrlar</h3>
+                  <h3 className="font-got text-xl text-accent mb-1 tracking-wider drop-shadow-md">Yangi Nashrlar</h3>
                   <p className="text-sm text-neutral-300 drop-shadow-md">Taxtlar O'yini & Qirollar To'qnashuvi</p>
                 </div>
-                <div className="hidden sm:block px-4 py-1.5 bg-amber-500/20 border border-amber-500/50 rounded-full text-xs text-amber-200 backdrop-blur-md">
+                <div className="hidden sm:block px-4 py-1.5 bg-primary/20 border border-amber-500/50 rounded-full text-xs text-amber-200 backdrop-blur-md">
                   Oldindan buyurtma
                 </div>
               </div>
@@ -379,9 +379,9 @@ const TaxtlarTeaser = () => {
               rounded-sm
               bg-gradient-to-r from-[#1a1510] to-[#0a0806]
               border border-amber-700/50
-              text-amber-500
+              text-accent
               font-got tracking-[0.15em] uppercase text-sm
-              hover:bg-amber-900/20 hover:border-amber-400 hover:text-amber-400
+              hover:bg-amber-900/20 hover:border-amber-400 hover:text-accent
               transition-all duration-300
               shadow-[0_0_15px_rgba(217,119,6,0.1)]
               hover:shadow-[0_0_25px_rgba(217,119,6,0.3)]

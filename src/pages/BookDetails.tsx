@@ -6,6 +6,23 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import type { Book } from "@/context/DataContext";
+import { motion, useScroll, useSpring } from "framer-motion";
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-50 shadow-[0_0_10px_rgba(var(--primary),0.6)]"
+      style={{ scaleX }}
+    />
+  );
+}
 
 const BookDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,7 +68,7 @@ const BookDetails = () => {
         <div className="min-h-screen bg-background">
           <Navbar />
           <div className="section-padding pt-32 flex flex-col items-center justify-center gap-6">
-            <h1 className="text-3xl font-serif font-bold text-foreground">Kitob topilmadi</h1>
+            <h1 className="text-3xl font-heading font-black tracking-tight font-bold text-foreground">Kitob topilmadi</h1>
             <p className="text-muted-foreground">Ushbu kitob mavjud emas yoki o'chirilgan.</p>
             <button
               onClick={() => navigate("/library")}
@@ -73,23 +90,25 @@ const BookDetails = () => {
 
   return (
     <PageTransition>
+      <ScrollProgress />
       <div className="min-h-screen bg-background">
         <Navbar />
         <div className="section-padding pt-32 pb-16 bg-charcoal relative">
           <div className="mx-auto max-w-7xl">
-            
+
             {/* Back Button */}
             <button
               onClick={() => navigate(-1)}
-              className="relative z-10 flex items-center gap-2 text-muted-foreground hover:text-amber-500 transition-colors mb-12 font-medium"
+              className="relative z-10 flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-500 ease-out mb-12 font-sans text-[11px] tracking-wider uppercase font-bold"
             >
-              <span>&larr;</span> Kutubxonaga qaytish
+              <span className="transform transition-transform group-hover:-translate-x-1">&larr;</span> Kutubxonaga qaytish
             </button>
 
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20 items-start">
-              
+
               {/* Left: Book Cover Showcase */}
-              <div
+              <motion.div
+                layoutId={`book-cover-${book.id}`}
                 className="w-full max-w-md mx-auto aspect-[2/3] rounded-r-3xl rounded-l-sm border-l-8 border-[#2a2118] relative overflow-hidden transform md:hover:scale-105 transition-all duration-700"
                 style={{ boxShadow: dynamicShadow }}
               >
@@ -102,51 +121,51 @@ const BookDetails = () => {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent pointer-events-none" />
                 <div className="absolute inset-y-0 left-0 w-5 bg-gradient-to-r from-black/60 via-white/20 to-transparent pointer-events-none" />
-              </div>
+              </motion.div>
 
               {/* Right: Metadata & Actions */}
               <div className="flex flex-col pt-4">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-tight mb-4 drop-shadow-sm">
+                <h1 className="font-heading font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-wide text-foreground mb-4 drop-shadow-sm">
                   {locField(book, "title", lang)}
                 </h1>
-                <p className="text-xl text-amber-600 dark:text-amber-500 font-bold tracking-widest uppercase mb-8">
+                <p className="font-sans text-[13px] font-bold tracking-[0.2em] uppercase text-primary dark:text-accent mb-8">
                   {locField(book, "author", lang)}
                 </p>
 
-                <div className="text-lg text-muted-foreground leading-relaxed mb-10 border-l-2 border-amber-500/30 pl-6">
+                <div className="font-serif text-lg leading-loose text-muted-foreground mb-10 border-l-2 border-primary/30 pl-6">
                   {locField(book, "description", lang) ||
-                    "Ushbu kitob haqida to'liq ma'lumot tez orada qo'shiladi. Zabarjad Media kutubxonasini kuzatib boring."}
+                    "Ushbu kitob haqida to'liq ma'lumot tez orada qo'shiladi. Booktopia kutubxonasini kuzatib boring."}
                 </div>
 
                 {/* Specs Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-12 py-8 border-y border-border/50">
                   <div>
-                    <p className="text-xs text-muted-foreground font-semibold uppercase mb-1">
+                    <p className="font-sans text-[10px] tracking-wider uppercase font-bold text-muted-foreground mb-2">
                       Muqova
                     </p>
-                    <p className="font-medium text-foreground">Qattiq</p>
+                    <p className="font-serif text-lg text-foreground">Qattiq</p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground font-semibold uppercase mb-1">
+                    <p className="font-sans text-[10px] tracking-wider uppercase font-bold text-muted-foreground mb-2">
                       Kategoriya
                     </p>
-                    <p className="font-medium text-foreground capitalize">
+                    <p className="font-serif text-lg text-foreground capitalize">
                       {book.category || "Nashr"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground font-semibold uppercase mb-1">
+                    <p className="font-sans text-[10px] tracking-wider uppercase font-bold text-muted-foreground mb-2">
                       3D Format
                     </p>
-                    <p className="font-medium text-foreground">
+                    <p className="font-serif text-lg text-foreground">
                       {book.enable_3d_flip ? "Mavjud" : "Yo'q"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground font-semibold uppercase mb-1">
+                    <p className="font-sans text-[10px] tracking-wider uppercase font-bold text-muted-foreground mb-2">
                       Narx
                     </p>
-                    <p className="font-bold text-amber-500 text-lg">
+                    <p className="font-heading font-bold text-xl text-primary">
                       {book.price ? `${book.price} so'm` : "Tez kunda"}
                     </p>
                   </div>
@@ -154,10 +173,10 @@ const BookDetails = () => {
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 mt-auto">
-                  <button className="px-10 py-4 bg-foreground text-background font-bold rounded-full hover:scale-105 hover:shadow-xl transition-all text-base md:text-lg">
+                  <button className="px-10 py-5 bg-primary text-primary-foreground font-sans text-[11px] font-bold uppercase tracking-[0.2em] rounded-full shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)] transform hover:scale-[1.02] transition-all duration-500 ease-out">
                     Xarid qilish
                   </button>
-                  <button className="px-10 py-4 border border-border/80 bg-background/50 backdrop-blur-sm text-foreground font-bold rounded-full hover:border-amber-500 hover:text-amber-500 transition-all text-base md:text-lg">
+                  <button className="px-10 py-5 bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 text-foreground font-sans text-[11px] font-bold uppercase tracking-[0.2em] rounded-full hover:shadow-[0_8px_30px_rgba(38,89,153,0.12)] hover:text-primary transition-all duration-500 ease-out">
                     Parchani o'qish
                   </button>
                 </div>

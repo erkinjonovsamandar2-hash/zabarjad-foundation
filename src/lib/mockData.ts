@@ -1,5 +1,5 @@
 /**
- * Centralized mock / default data for the Zabarjad Media application.
+ * Centralized mock / default data for the Booktopia application.
  *
  * All hardcoded content lives here so it can be easily swapped
  * with real API responses or a CMS later.
@@ -74,16 +74,16 @@ export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
 // ── Default site settings (used when DB has no site_settings rows) ──
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   hero: {
-    motto: "Eng Yaxshisini Ilinamiz",
-    subtitle: "Zabarjad Media nashriyoti — jahon va o'zbek adabiyotining eng yaxshi asarlarini o'zbek tilida taqdim etadi.",
+    motto: "Kitobsevarlar uchun yangi olam",
+    subtitle: "Booktopia nashriyoti — jahon va o'zbek adabiyotining eng yaxshi asarlarini o'zbek tilida taqdim etadi.",
     cta_text: "Kitoblarni ko'rish",
   },
   footer: {
     phone: "+998 97 409 04 84",
-    email: "Mamuraxon0484@mail.ru",
+    email: "hello@booktopia.uz",
     address: "Toshkent shahri, Chilonzor tumani, Muqimiy ko‘chasi 178/310",
-    telegram: "https://t.me/zabarjadmedia",
-    instagram: "https://www.instagram.com/zabarjadmedia",
+    telegram: "https://t.me/booktopia",
+    instagram: "https://www.instagram.com/booktopia",
   },
   map: { enabled: true, embed_url: "", title: "Bizning manzil" },
 };

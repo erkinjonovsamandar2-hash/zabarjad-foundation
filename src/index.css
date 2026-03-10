@@ -1,126 +1,287 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* Tailwind directives should be right after imports */
 /* stylelint-disable at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 /* stylelint-enable at-rule-no-unknown */
 
-/* Custom Fonts */
+/* ── Custom Fonts ─────────────────────────────────────────────────────────── */
 @layer base {
   @font-face {
-    font-family: 'GameOfThrones';
-    src: url('./assets/fonts/GameOfThrones.ttf') format('truetype');
+    font-family: 'Soria';
+    src: url('./assets/fonts/soria.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
   }
-}
 
-@layer base {
-  :root {
-    --background: 0 0% 7.1%;
-    --foreground: 0 0% 100%;
-
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
-
-    --primary: 44 100% 48.4%;
-    --primary-foreground: 0 0% 7.1%;
-
-    --secondary: 0 0% 14%;
-    --secondary-foreground: 0 0% 70.2%;
-
-    --muted: 0 0% 16%;
-    --muted-foreground: 0 0% 70.2%;
-
-    --accent: 44 100% 48.4%;
-    --accent-foreground: 0 0% 7.1%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 44 100% 48.4%;
-
-    --radius: 0.75rem;
-
-    --sidebar-background: 0 0% 9%;
-    --sidebar-foreground: 0 0% 70.2%;
-    --sidebar-primary: 44 100% 48.4%;
-    --sidebar-primary-foreground: 0 0% 7.1%;
-    --sidebar-accent: 0 0% 14%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 44 100% 48.4%;
-
-    /* Custom Zabarjad tokens */
-    --gold: 44 100% 48.4%;
-    --gold-dim: 44 60% 35%;
-    --obsidian: 0 0% 7.1%;
-    --charcoal: 0 0% 12%;
-    --silver: 0 0% 70.2%;
-    --glass-bg: 0 0% 100% / 0.04;
-    --glass-border: 0 0% 100% / 0.08;
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-
-    font-family: 'Inter', sans-serif;
+  @font-face {
+    font-family: 'Neuton';
+    src: url('./assets/fonts/neuton/Neuton-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
   }
 
-  .light {
-    --background: 40 20% 96%;
-    --foreground: 0 0% 12%;
+  @font-face {
+    font-family: 'Neuton';
+    src: url('./assets/fonts/neuton/Neuton-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 12%;
+  @font-face {
+    font-family: 'Neuton';
+    src: url('./assets/fonts/neuton/Neuton-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+}
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
+/*
+  Booktopia Color Palette (HSL)
+  Cream:        #F4F2C9 → hsl(56, 62%, 87%)
+  Navy:         #265999 → hsl(213, 60%, 37%)
+  Sky Blue:     #4488BF → hsl(207, 48%, 51%)
+  Mustard Gold: #D5AD36 → hsl(45, 66%, 52%)
+  Dark Navy:    #0A192F → hsl(216, 65%, 11%)
+  Cyan Primary: #00CDFE → hsl(192, 100%, 50%)
+*/
 
-    --primary: 44 100% 48.4%;
-    --primary-foreground: 0 0% 100%;
+@layer base {
 
-    --secondary: 40 15% 90%;
-    --secondary-foreground: 0 0% 30%;
+  /* ── DEFAULT: Dark Mode (Booktopia Deep Navy) ───────────────────────────── */
+  /* FIXED: :root defines the fallback defaults only.                          */
+  /* Theme overrides are on html.theme-N so they win the cascade correctly.    */
+  :root {
+    --background: 216 65% 11%;
+    --foreground: 56 62% 87%;
 
-    --muted: 40 10% 92%;
-    --muted-foreground: 0 0% 40%;
+    --card: 216 60% 15%;
+    --card-foreground: 56 62% 87%;
 
-    --accent: 44 100% 48.4%;
+    --popover: 216 60% 15%;
+    --popover-foreground: 56 62% 87%;
+
+    --primary: 192 100% 50%;
+    --primary-foreground: 216 65% 11%;
+
+    --secondary: 216 40% 20%;
+    --secondary-foreground: 56 62% 87%;
+
+    --muted: 216 30% 25%;
+    --muted-foreground: 60 20% 75%;
+
+    --accent: 45 66% 52%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 10% 85%;
-    --input: 40 10% 85%;
-    --ring: 44 100% 48.4%;
+    --border: 216 30% 25%;
+    --input: 216 30% 25%;
+    --ring: 192 100% 50%;
 
-    --sidebar-background: 40 15% 94%;
-    --sidebar-foreground: 0 0% 40%;
-    --sidebar-primary: 44 100% 48.4%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 15% 90%;
-    --sidebar-accent-foreground: 0 0% 12%;
-    --sidebar-border: 40 10% 85%;
-    --sidebar-ring: 44 100% 48.4%;
+    --radius: 0.75rem;
 
-    --gold: 44 100% 48.4%;
-    --gold-dim: 44 60% 35%;
-    --obsidian: 40 20% 96%;
-    --charcoal: 40 10% 92%;
-    --silver: 0 0% 40%;
-    --glass-bg: 0 0% 0% / 0.03;
-    --glass-border: 0 0% 0% / 0.08;
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+    --gold: 45 66% 52%;
+    --gold-dim: 45 50% 35%;
+    --obsidian: 216 65% 11%;
+    --charcoal: 216 60% 15%;
+    --silver: 60 20% 75%;
+
+    --glass-bg: 255 255% 255% / 0.05;
+    --glass-border: 255 255% 255% / 0.1;
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+    font-family: 'Inter', sans-serif;
   }
+
+  /* ── LIGHT MODE ─────────────────────────────────────────────────────────── */
+  /* FIXED: was .light — now html.light so it targets the same element        */
+  /* as :root and wins the specificity battle correctly.                       */
+  html.light {
+    --background: 56 62% 87%;
+    --foreground: 213 60% 37%;
+
+    --card: 56 50% 92%;
+    --card-foreground: 213 60% 37%;
+
+    --popover: 56 50% 92%;
+    --popover-foreground: 213 60% 37%;
+
+    --primary: 192 100% 50%;
+    --primary-foreground: 216 65% 11%;
+
+    --secondary: 56 40% 80%;
+    --secondary-foreground: 213 60% 37%;
+
+    --muted: 56 30% 75%;
+    --muted-foreground: 213 40% 45%;
+
+    --accent: 45 66% 52%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 56 40% 75%;
+    --input: 56 40% 75%;
+    --ring: 192 100% 50%;
+
+    --gold: 45 66% 52%;
+    --gold-dim: 45 50% 35%;
+    --obsidian: 56 62% 87%;
+    --charcoal: 56 50% 92%;
+    --silver: 213 40% 45%;
+
+    --glass-bg: 213 60% 37% / 0.05;
+    --glass-border: 213 60% 37% / 0.1;
+    --glass-shadow: 0 8px 32px 0 rgba(38, 89, 153, 0.1);
+  }
+
+  /* ── Theme 1: Warm Parchment ────────────────────────────────────────────── */
+  /* FIXED: was .theme-1 — now html.theme-1 so it overrides :root variables   */
+  /* on the SAME element. A class on a child div cannot override :root.        */
+  html.theme-1 {
+    --background: 44 43% 94%;
+    --foreground: 34 8% 16%;
+
+    --primary: 192 100% 50%;
+    --primary-foreground: 216 65% 11%;
+
+    --secondary: 44 30% 82%;
+    --secondary-foreground: 34 8% 16%;
+
+    --muted: 44 25% 86%;
+    --muted-foreground: 34 8% 45%;
+
+    --accent: 45 66% 52%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 44 20% 80%;
+    --input: 44 20% 80%;
+    --ring: 192 100% 50%;
+
+    --card: 44 40% 97%;
+    --card-foreground: 34 8% 16%;
+
+    --popover: 44 40% 97%;
+    --popover-foreground: 34 8% 16%;
+
+    --gold: 45 66% 52%;
+    --gold-dim: 45 50% 35%;
+    --obsidian: 44 43% 94%;
+    --charcoal: 44 40% 97%;
+    --silver: 34 8% 55%;
+
+    --glass-bg: 34 8% 16% / 0.05;
+    --glass-border: 34 8% 16% / 0.1;
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+
+    --radius: 0.75rem;
+  }
+
+  /* ── Theme 2: Linen & Blue ──────────────────────────────────────────────── */
+  /* FIXED: was .theme-2 — now html.theme-2                                   */
+  html.theme-2 {
+    --background: 210 40% 96%;
+    --foreground: 211 62% 16%;
+
+    --primary: 192 100% 50%;
+    --primary-foreground: 216 65% 11%;
+
+    --secondary: 210 30% 88%;
+    --secondary-foreground: 211 62% 16%;
+
+    --muted: 210 25% 90%;
+    --muted-foreground: 211 40% 40%;
+
+    --accent: 45 66% 52%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 20% 85%;
+    --input: 210 20% 85%;
+    --ring: 192 100% 50%;
+
+    --card: 210 40% 98%;
+    --card-foreground: 211 62% 16%;
+
+    --popover: 210 40% 98%;
+    --popover-foreground: 211 62% 16%;
+
+    --gold: 45 66% 52%;
+    --gold-dim: 45 50% 35%;
+    --obsidian: 210 40% 96%;
+    --charcoal: 210 40% 98%;
+    --silver: 211 40% 55%;
+
+    --glass-bg: 211 62% 16% / 0.05;
+    --glass-border: 211 62% 16% / 0.1;
+    --glass-shadow: 0 8px 32px 0 rgba(33, 62, 100, 0.08);
+
+    --radius: 0.75rem;
+  }
+
+  /* ── Theme 3: Smooth Sky & Cloud White ───────────────────────────────────── */
+html.theme-3 {
+  /* Core Background & Text */
+  --background: 204 25% 97%; /* A very faint, smooth sky-blue/grey wash */
+  --foreground: 210 40% 20%; /* Deep, soft slate-navy for highly readable text */
+
+  /* Primary (Your punchy #00CDFE Cyan for buttons) */
+  --primary: 192 100% 50%;
+  --primary-foreground: 0 0% 100%; /* White text on cyan buttons */
+
+  /* Cards & Popovers (Pure Cloud White for smooth layering) */
+  --card: 0 0% 100%; /* Pure white to pop gently off the sky background */
+  --card-foreground: 210 40% 20%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 40% 20%;
+
+  /* Secondary & Muted (Soft, cool sky tones for subtle UI elements) */
+  --secondary: 204 30% 92%; /* Smooth sky blue for secondary buttons */
+  --secondary-foreground: 210 40% 20%;
+  --muted: 204 20% 94%; /* Faint cool grey for backgrounds */
+  --muted-foreground: 210 25% 50%; /* Smooth, readable grey text */
+
+  /* Accents & UI States (Hover states) */
+  --accent: 204 30% 92%; /* Subtle sky-blue highlight on hover */
+  --accent-foreground: 210 40% 20%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borders, Inputs & Rings */
+  --border: 204 20% 90%; /* Very soft, cool border */
+  --input: 204 20% 90%;
+  --ring: 192 100% 50%; /* Cyan focus ring */
+
+  /* Custom Brand Tokens */
+  --gold: 45 66% 52%;
+  --gold-dim: 45 50% 35%;
+  --obsidian: 222 47% 11%;
+  --charcoal: 215 25% 25%;
+  --silver: 210 20% 60%;
+
+  /* Glassmorphism settings adapted for the cool, clear theme */
+  --glass-bg: 204 25% 97% / 0.7; /* Frosted sky glass */
+  --glass-border: 204 20% 90% / 0.5;
+  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.04);
+
+  --radius: 0.75rem;
+}
 }
 
+/* ── Global Base Resets ───────────────────────────────────────────────────── */
 @layer base {
   * {
     border-color: hsl(var(--border));
@@ -129,16 +290,17 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: 'Playfair Display', serif;
+    font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
+/* ── Component Utilities ──────────────────────────────────────────────────── */
 @layer components {
   .glass-card {
-    background: hsl(var(--glass-bg)); /* Changed hsla to hsl */
-    border: 1px solid hsl(var(--glass-border)); /* Changed hsla to hsl */
+    background: hsl(var(--glass-bg));
+    border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--glass-shadow);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -146,7 +308,7 @@
   }
 
   .text-gold-gradient {
-    background: linear-gradient(135deg, hsl(44 100% 55%), hsl(44 80% 40%));
+    background: linear-gradient(135deg, hsl(207 48% 51%), hsl(213 60% 37%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -173,5 +335,18 @@
       padding-top: 6rem;
       padding-bottom: 6rem;
     }
+  }
+
+  /* Premium text selection — Mustard Gold */
+  ::selection {
+    background-color: #D5AD36;
+    color: #ffffff;
+    text-shadow: none;
+  }
+
+  ::-moz-selection {
+    background-color: #D5AD36;
+    color: #ffffff;
+    text-shadow: none;
   }
 }

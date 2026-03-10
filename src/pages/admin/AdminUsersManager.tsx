@@ -66,11 +66,11 @@ const AdminUsersManager = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Admin Foydalanuvchilar</h1>
+        <h1 className="text-2xl font-bold text-foreground">Admin Foydalanuvchilar</h1>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Yangi admin qo'shish uchun foydalanuvchi avval saytda ro'yxatdan o'tishi kerak. Keyin emailini kiriting.
         </p>
 
@@ -88,7 +88,7 @@ const AdminUsersManager = () => {
           <button
             onClick={handleAdd}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-50 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
             <Plus className="h-4 w-4" /> {loading ? "..." : "Qo'shish"}
           </button>
@@ -100,19 +100,19 @@ const AdminUsersManager = () => {
           {admins.map((admin) => (
             <div key={admin.id} className="flex items-center justify-between px-5 py-3">
               <div className="flex items-center gap-3">
-                <ShieldCheck className="h-5 w-5 text-amber-500" />
+                <ShieldCheck className="h-5 w-5 text-accent" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{admin.email}</p>
-                  <p className="text-xs text-gray-400 font-mono">{admin.user_id.slice(0, 8)}...</p>
+                  <p className="text-sm font-medium text-foreground">{admin.email}</p>
+                  <p className="text-xs text-muted-foreground/80 font-mono">{admin.user_id.slice(0, 8)}...</p>
                 </div>
               </div>
-              <button onClick={() => handleRemove(admin.id)} className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">
+              <button onClick={() => handleRemove(admin.id)} className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-600 hover:bg-red-50 transition-colors">
                 <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
           {admins.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-8">Yuklanmoqda...</p>
+            <p className="text-sm text-muted-foreground/80 text-center py-8">Yuklanmoqda...</p>
           )}
         </div>
       </div>

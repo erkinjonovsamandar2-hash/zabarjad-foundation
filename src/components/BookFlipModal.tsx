@@ -29,7 +29,7 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
         {/* Back to Library Button - Anchored to Modal */}
         <button 
           onClick={onClose}
-          className="absolute top-6 left-6 md:top-10 md:left-10 z-50 flex items-center gap-2 px-5 py-2.5 bg-background/50 backdrop-blur-md border border-border/50 rounded-full text-foreground font-medium hover:bg-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300 shadow-sm cursor-pointer group"
+          className="absolute top-6 left-6 md:top-10 md:left-10 z-50 flex items-center gap-2 px-5 py-2.5 bg-background/50 backdrop-blur-md border border-border/50 rounded-full text-foreground font-medium hover:bg-primary hover:text-white hover:border-amber-500 transition-all duration-300 shadow-sm cursor-pointer group"
         >
           <span className="transform transition-transform duration-300 group-hover:-translate-x-1">&larr;</span> 
           Kutubxonaga qaytish
@@ -50,7 +50,7 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
           >
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground text-center mb-2">
+            <h2 className="text-3xl md:text-4xl font-heading font-black tracking-tight font-bold text-foreground text-center mb-2">
               {book.title}
             </h2>
             <p className="text-muted-foreground text-center mt-1">{book.author}</p>
@@ -116,10 +116,10 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
                     
                     {/* Header with page number */}
                     <div className="flex items-center justify-between mb-4 relative z-10">
-                      <span className="text-xs font-sans text-amber-700 dark:text-amber-500 uppercase tracking-wider font-semibold">
+                      <span className="text-xs font-sans text-primary/90 dark:text-accent uppercase tracking-wider font-semibold">
                         Sahifa {currentPage + 1} / {pages.length}
                       </span>
-                      <span className="font-serif text-xs text-amber-600 dark:text-amber-400 italic">{book.title}</span>
+                      <span className="font-serif text-xs text-primary dark:text-accent italic">{book.title}</span>
                     </div>
 
                     {/* Reading content with elegant typography */}
@@ -129,7 +129,7 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
-                        className="font-serif text-slate-800 dark:text-slate-200 text-lg leading-relaxed text-justify first-letter:text-5xl first-letter:font-bold first-letter:text-amber-600 first-letter:mr-2 first-letter:float-left flex-1 relative z-10"
+                        className="font-serif text-slate-800 dark:text-slate-200 text-lg leading-relaxed text-justify first-letter:text-5xl first-letter:font-bold first-letter:text-primary first-letter:mr-2 first-letter:float-left flex-1 relative z-10"
                       >
                         {pages[currentPage]}
                       </motion.p>
@@ -140,14 +140,14 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
                       <button
                         onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
                         disabled={currentPage === 0}
-                        className="p-2 text-amber-700 dark:text-amber-500 disabled:opacity-30 hover:text-amber-900 dark:hover:text-amber-300 transition-colors rounded-full hover:bg-amber-500/10"
+                        className="p-2 text-primary/90 dark:text-accent disabled:opacity-30 hover:text-amber-900 dark:hover:text-amber-300 transition-colors rounded-full hover:bg-primary/10"
                       >
                         <ChevronLeft className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => setCurrentPage(Math.min(pages.length - 1, currentPage + 1))}
                         disabled={currentPage === pages.length - 1}
-                        className="p-2 text-amber-700 dark:text-amber-500 disabled:opacity-30 hover:text-amber-900 dark:hover:text-amber-300 transition-colors rounded-full hover:bg-amber-500/10"
+                        className="p-2 text-primary/90 dark:text-accent disabled:opacity-30 hover:text-amber-900 dark:hover:text-amber-300 transition-colors rounded-full hover:bg-primary/10"
                       >
                         <ChevronRight className="h-5 w-5" />
                       </button>
@@ -185,7 +185,7 @@ const BookFlipModal = ({ book, onClose }: BookFlipModalProps) => {
                   onClose();
                   navigate(`/book/${book.id}`);
                 }}
-                className="mt-6 px-8 py-3 bg-amber-500 text-black font-bold rounded-full hover:scale-105 hover:shadow-[0_0_25px_rgba(251,191,36,0.4)] transition-all"
+                className="mt-6 px-8 py-3 bg-primary text-foreground font-bold rounded-full hover:scale-105 hover:shadow-[0_0_25px_rgba(251,191,36,0.4)] transition-all"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}

@@ -7,7 +7,8 @@ import type { Book } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import EmptyState from "@/components/EmptyState"; // <-- Added import
+import EmptyState from "@/components/EmptyState";
+import SpotlightCard from "@/components/SpotlightCard"; // <-- Added Spotlight Import
 import librarySeal from "@/assets/design/library-seal.png";
 
 // ── Local Categories Configuration ────────────────────────────────────────────
@@ -128,7 +129,7 @@ const LibraryPage = () => {
                 className="flex-1 flex justify-center items-center relative z-10"
               >
                 {/* Glowing Aura Behind Book */}
-                <div className="absolute inset-0 bg-amber-500/20 blur-[60px] rounded-full scale-75" />
+                <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full scale-75" />
                 <img 
                   src={featuredBook.coverImage} 
                   alt={featuredBook.title} 
@@ -145,10 +146,10 @@ const LibraryPage = () => {
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
                 className="flex-1 flex flex-col justify-center items-start text-left mt-8 md:mt-0 relative z-10"
               >
-                <span className="text-amber-600 dark:text-amber-500 font-bold tracking-[0.2em] text-xs uppercase mb-4">
+                <span className="text-primary dark:text-accent font-bold tracking-[0.2em] text-xs uppercase mb-4">
                   Hafta Tanlovi
                 </span>
-                <h2 className="text-4xl md:text-5xl font-serif text-foreground mb-4 leading-tight">
+                <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground mb-4 leading-tight">
                   {featuredBook.title}
                 </h2>
                 <p className="text-muted-foreground text-base md:text-lg mb-8 line-clamp-3 max-w-xl">
@@ -168,7 +169,7 @@ const LibraryPage = () => {
                   onClick={() => setCurrentIndex(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     index === currentIndex
-                      ? "bg-amber-500 w-8"
+                      ? "bg-primary w-8"
                       : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
                   }`}
                   aria-label={`Go to book ${index + 1}`}
@@ -181,10 +182,10 @@ const LibraryPage = () => {
           <div className="mb-10 mt-16">
             {/* Premium Centered Header */}
             <div className="text-center mb-8">
-              <p className="text-sm font-semibold tracking-[0.2em] text-amber-500 uppercase mb-3">
+              <p className="text-sm font-semibold tracking-[0.2em] text-accent uppercase mb-3">
                 KUTUBXONA
               </p>
-              <h1 className="text-4xl md:text-5xl font-serif text-foreground">
+              <h1 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground">
                 Tanlangan kitoblar
               </h1>
             </div>
@@ -206,7 +207,7 @@ const LibraryPage = () => {
                         transition-all duration-300
                         ${isActive 
                           ? isGoT
-                            ? "bg-amber-500 text-black font-got tracking-wider shadow-md transform scale-105"
+                            ? "bg-primary text-foreground font-got tracking-wider shadow-md transform scale-105"
                             : "bg-foreground text-background shadow-md transform scale-105"
                           : "bg-muted/50 text-muted-foreground border border-transparent hover:bg-muted hover:text-foreground hover:border-border/50"
                         }
@@ -220,10 +221,10 @@ const LibraryPage = () => {
 
               {/* PDF Catalog Download Button */}
               <a 
-                href="/zabarjad-katalog.pdf" 
+                href="/booktopia-katalog.pdf" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-border/50 bg-card/50 backdrop-blur-md text-sm font-medium hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-600 dark:hover:text-amber-500 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-border/50 bg-card/50 backdrop-blur-md text-sm font-medium hover:bg-primary/10 hover:border-amber-500/30 hover:text-primary dark:hover:text-accent transition-all duration-300"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -247,56 +248,65 @@ const LibraryPage = () => {
               />
             </div>
           ) : (
-            // The Regular Book Grid
+            // ── The Regular Book Grid with SPOTLIGHT Effect ──
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
               <AnimatePresence mode="popLayout">
                 {filtered.map((book, i) => (
-                  <Link to={`/book/${book.id}`} key={book.id}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.3, delay: i * 0.05 }}
-                      className="group flex flex-col gap-4 cursor-pointer"
-                    >
-                      {/* Physical Hardcover Book with Spine & Page Geometry */}
-                      <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-[4px_4px_10px_rgba(0,0,0,0.15),_inset_-4px_0_4px_rgba(255,255,255,0.4)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.5),_inset_-4px_0_4px_rgba(255,255,255,0.1)] group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.2)] dark:group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.6)] group-hover:-translate-y-3 group-hover:-rotate-1 transition-all duration-500 border border-black/5 dark:border-white/10">
-                        {book.cover_url ? (
-                          <img 
-                            src={book.cover_url} 
-                            alt={locField(book, "title", lang)} 
-                            className="w-full h-full object-cover" 
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center bg-secondary w-full h-full">
-                            <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
+                  <motion.div
+                    key={book.id}
+                    layout // Allows grid to shuffle smoothly
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3, delay: i * 0.05 }}
+                  >
+                    <Link to={`/book/${book.id}`} className="h-full block">
+                      {/* WRAPPER: The Spotlight Card acts as the container */}
+                      <SpotlightCard className="h-full p-4 md:p-6 group cursor-pointer">
+                        <div className="flex flex-col gap-4 h-full">
+                          
+                          {/* 1. Physical Hardcover Book */}
+                          <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-md group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-500 border border-black/5 dark:border-white/10 mx-auto">
+                            {book.cover_url ? (
+                              <img 
+                                src={book.cover_url} 
+                                alt={locField(book, "title", lang)} 
+                                className="w-full h-full object-cover" 
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center bg-secondary w-full h-full">
+                                <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
+                              </div>
+                            )}
+
+                            {/* Hinge/Crease Gradient */}
+                            <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/40 via-white/20 to-transparent pointer-events-none border-l border-white/20" />
+                            
+                            {/* Glass Hover Overlay */}
+                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                              <span className="px-4 py-2 bg-primary text-foreground text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                                Ko'rish
+                              </span>
+                            </div>
                           </div>
-                        )}
 
-                        {/* Hinge/Crease Gradient - Hardcover Book Indentation */}
-                        <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/40 via-white/20 to-transparent pointer-events-none border-l border-white/20" />
-                        
-                        {/* Glass Hover Overlay */}
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <span className="px-5 py-2.5 bg-amber-500 text-black text-xs font-bold uppercase tracking-widest rounded-full shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                            Batafsil
-                          </span>
+                          {/* 2. Text Content */}
+                          <div className="flex flex-col items-center text-center mt-auto">
+                            <h3 className="font-heading font-black tracking-tight font-bold text-base md:text-[17px] text-foreground leading-snug line-clamp-2 group-hover:text-primary dark:group-hover:text-accent transition-colors">
+                              {locField(book, "title", lang)}
+                            </h3>
+                            
+                            {/* Gold Divider */}
+                            <span className="w-8 h-[1.5px] bg-primary/30 my-3 transition-all duration-500 group-hover:w-16 group-hover:bg-primary" />
+                            
+                            <p className="text-[10px] font-bold text-muted-foreground tracking-[0.15em] uppercase">
+                              {locField(book, "author", lang)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Museum Placard Typography */}
-                      <div className="flex flex-col items-center text-center mt-5 px-2">
-                        <h3 className="font-serif font-bold text-base md:text-[17px] text-foreground leading-snug line-clamp-2 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
-                          {locField(book, "title", lang)}
-                        </h3>
-                        {/* Expanding Gold Divider */}
-                        <span className="w-8 h-[1.5px] bg-amber-500/40 my-2.5 transition-all duration-500 group-hover:w-16 group-hover:bg-amber-500" />
-                        <p className="text-[11px] font-semibold text-muted-foreground tracking-[0.15em] uppercase">
-                          {locField(book, "author", lang)}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
+                      </SpotlightCard>
+                    </Link>
+                  </motion.div>
                 ))}
               </AnimatePresence>
             </div>

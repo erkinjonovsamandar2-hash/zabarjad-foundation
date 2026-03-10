@@ -101,7 +101,7 @@ const SpotlightPage = () => {
                 mb-10
               "
             >
-              Vesterosning taqdiri qilich damida va ajdaholar nafasida. Zabarjad Media taqdim etadi: Dunyoni o'zgartirgan saga ilk bor o'zbek tilida.
+              Vesterosning taqdiri qilich damida va ajdaholar nafasida. Booktopia taqdim etadi: Dunyoni o'zgartirgan saga ilk bor o'zbek tilida.
             </motion.p>
 
             {/* Navigation Buttons */}
@@ -119,9 +119,9 @@ const SpotlightPage = () => {
                   rounded-sm
                   bg-gradient-to-r from-[#1a1510] to-[#0a0806]
                   border border-amber-700/50
-                  text-amber-500
+                  text-accent
                   font-got tracking-widest uppercase text-sm
-                  hover:bg-amber-900/20 hover:border-amber-400 hover:text-amber-400
+                  hover:bg-amber-900/20 hover:border-amber-400 hover:text-accent
                   transition-all duration-300
                   shadow-[0_0_15px_rgba(217,119,6,0.1)]
                   hover:shadow-[0_0_25px_rgba(217,119,6,0.3)]
@@ -140,9 +140,9 @@ const SpotlightPage = () => {
                   rounded-sm
                   bg-gradient-to-r from-[#1a1510] to-[#0a0806]
                   border border-amber-700/50
-                  text-amber-500
+                  text-accent
                   font-got tracking-widest uppercase text-sm
-                  hover:bg-amber-900/20 hover:border-amber-400 hover:text-amber-400
+                  hover:bg-amber-900/20 hover:border-amber-400 hover:text-accent
                   transition-all duration-300
                   shadow-[0_0_15px_rgba(217,119,6,0.1)]
                   hover:shadow-[0_0_25px_rgba(217,119,6,0.3)]
@@ -164,7 +164,7 @@ const SpotlightPage = () => {
         {kolleksiyaBooks.length > 0 && (
           <section className="mx-auto max-w-7xl px-6 py-12">
             <div className="mb-8">
-              <h2 className="text-3xl font-serif font-bold text-amber-50 mb-2">
+              <h2 className="text-3xl font-heading font-black tracking-tight font-bold text-amber-50 mb-2">
                 {lang === "ru" ? "Коллекция" : lang === "en" ? "Collection" : "Kolleksiya"}
               </h2>
               <p className="text-sm text-neutral-400">
@@ -201,7 +201,7 @@ const SpotlightPage = () => {
                     </div>
                   )}
                   <div className="p-3">
-                    <h3 className="font-serif font-bold text-amber-50 text-sm line-clamp-2">
+                    <h3 className="font-heading font-black tracking-tight font-bold text-amber-50 text-sm line-clamp-2">
                       {locField(book, "title", lang)}
                     </h3>
                     <p className="text-xs text-neutral-400 mt-1">
@@ -217,8 +217,8 @@ const SpotlightPage = () => {
         {/* ── SOHA YANGILIKLARI - Placeholder Grid ───────────────────────── */}
         <div className="mt-24 mb-16 mx-auto max-w-7xl px-6">
           <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-2xl md:text-3xl font-serif text-white">Soha Yangiliklari</h2>
-            <div className="h-px bg-amber-500/20 flex-grow" />
+            <h2 className="text-2xl md:text-3xl font-heading font-black tracking-tight text-white">Soha Yangiliklari</h2>
+            <div className="h-px bg-primary/20 flex-grow" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -227,7 +227,7 @@ const SpotlightPage = () => {
               <div className="w-full h-48 bg-[#0a0806] rounded-lg mb-4 flex items-center justify-center border border-white/5">
                 <span className="text-4xl opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">📜</span>
               </div>
-              <h3 className="text-amber-500 font-medium mb-2 group-hover:text-amber-400 line-clamp-2">Jorj R.R. Martin yangi asar ustida ishlamoqda</h3>
+              <h3 className="text-accent font-medium mb-2 group-hover:text-accent line-clamp-2">Jorj R.R. Martin yangi asar ustida ishlamoqda</h3>
               <p className="text-neutral-400 text-sm line-clamp-3">Vesteros olami kengayishda davom etmoqda. Muallif o'zining so'nggi intervyusida kelajakdagi rejalarini ma'lum qildi...</p>
             </div>
 
@@ -236,7 +236,7 @@ const SpotlightPage = () => {
               <div className="w-full h-48 bg-[#0a0806] rounded-lg mb-4 flex items-center justify-center border border-white/5">
                 <span className="text-4xl opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all">⚔️</span>
               </div>
-              <h3 className="text-amber-500 font-medium mb-2 group-hover:text-amber-400 line-clamp-2">Ajdaholar raqsi: Tarixiy faktlar</h3>
+              <h3 className="text-accent font-medium mb-2 group-hover:text-accent line-clamp-2">Ajdaholar raqsi: Tarixiy faktlar</h3>
               <p className="text-neutral-400 text-sm line-clamp-3">Targaryenlar xonadonidagi eng qonli fuqarolar urushi qanday boshlangan edi? Kitob va serial o'rtasidagi farqlar...</p>
             </div>
           </div>

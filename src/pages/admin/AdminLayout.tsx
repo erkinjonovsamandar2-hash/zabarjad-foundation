@@ -37,14 +37,14 @@ const AdminLayout = () => {
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
       `}>
         <div className="flex items-center justify-between p-5 border-b border-gray-100">
-          <span className="font-bold text-gray-900 text-lg">
-            Zabarjad <span className="text-amber-500">CMS</span>
+          <span className="font-bold text-foreground text-lg">
+            Booktopia <span className="text-accent">CMS</span>
           </span>
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden p-1 rounded hover:bg-gray-100"
           >
-            <X className="h-5 w-5 text-gray-400" />
+            <X className="h-5 w-5 text-muted-foreground/80" />
           </button>
         </div>
 
@@ -58,8 +58,8 @@ const AdminLayout = () => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-amber-50 text-amber-700"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    ? "bg-primary/5 text-primary/90"
+                    : "text-foreground/70 hover:bg-gray-100 hover:text-foreground"
                 }`
               }
             >
@@ -72,18 +72,18 @@ const AdminLayout = () => {
         <div className="p-3 border-t border-gray-100 space-y-1">
           <a
             href="/"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/70 hover:bg-gray-100 hover:text-foreground transition-colors"
           >
             <Home className="h-4 w-4" /> Saytga qaytish
           </a>
           <button
             onClick={signOut}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/70 hover:bg-red-50 hover:text-red-600 transition-colors"
           >
             <LogOut className="h-4 w-4" /> Chiqish
           </button>
           {user && (
-            <p className="px-3 pt-1 text-xs text-gray-400 truncate">{user.email}</p>
+            <p className="px-3 pt-1 text-xs text-muted-foreground/80 truncate">{user.email}</p>
           )}
         </div>
       </aside>
@@ -95,9 +95,9 @@ const AdminLayout = () => {
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100"
           >
-            <Menu className="h-5 w-5 text-gray-600" />
+            <Menu className="h-5 w-5 text-foreground/70" />
           </button>
-          <span className="text-sm text-gray-500 font-medium">Admin Panel</span>
+          <span className="text-sm text-muted-foreground font-medium">Admin Panel</span>
         </header>
         <main className="flex-1 p-4 lg:p-6 overflow-auto">
           <Outlet />

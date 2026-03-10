@@ -8,13 +8,13 @@ export type { Book, Article };
 
 // ── Review type ───────────────────────────────────────────────────────────────
 export interface Review {
-  id:         string;
-  name:       string;
-  role:       string | null;
-  city:       string | null;
-  text:       string;
-  stars:      number;
-  status:     "pending" | "published" | "rejected";
+  id: string;
+  name: string;
+  role: string | null;
+  city: string | null;
+  text: string;
+  stars: number;
+  status: "pending" | "published" | "rejected";
   created_at: string;
 }
 
@@ -25,42 +25,42 @@ export interface QuizStep {
 }
 
 export interface QuizPath {
-  key:    string;
+  key: string;
   bookId: string;
   reason: string;
 }
 
 export interface QuizConfig {
-  steps:         QuizStep[];
-  paths:         QuizPath[];
+  steps: QuizStep[];
+  paths: QuizPath[];
   defaultBookId: string;
   defaultReason: string;
 }
 
 export interface SiteSettings {
-  hero:   { motto: string; subtitle: string; cta_text: string };
+  hero: { motto: string; subtitle: string; cta_text: string };
   footer: { phone: string; email: string; address: string; telegram: string; instagram: string };
-  map:    { enabled: boolean; embed_url: string; title: string };
+  map: { enabled: boolean; embed_url: string; title: string };
 }
 
 // ── Context shape ─────────────────────────────────────────────────────────────
 interface DataContextType {
-  books:        Book[];
-  articles:     Article[];
-  reviews:      Review[];
-  quizConfig:   QuizConfig;
+  books: Book[];
+  articles: Article[];
+  reviews: Review[];
+  quizConfig: QuizConfig;
   siteSettings: SiteSettings;
-  loading:      boolean;
-  addBook:            (book: Omit<Book, "id" | "created_at" | "updated_at">) => Promise<void>;
-  updateBook:         (id: string, data: Partial<Book>) => Promise<void>;
-  deleteBook:         (id: string) => Promise<void>;
-  addArticle:         (article: Omit<Article, "id" | "created_at" | "updated_at">) => Promise<void>;
-  updateArticle:      (id: string, data: Partial<Article>) => Promise<void>;
-  deleteArticle:      (id: string) => Promise<void>;
-  updateQuizConfig:   (config: QuizConfig) => Promise<void>;
+  loading: boolean;
+  addBook: (book: Omit<Book, "id" | "created_at" | "updated_at">) => Promise<void>;
+  updateBook: (id: string, data: Partial<Book>) => Promise<void>;
+  deleteBook: (id: string) => Promise<void>;
+  addArticle: (article: Omit<Article, "id" | "created_at" | "updated_at">) => Promise<void>;
+  updateArticle: (id: string, data: Partial<Article>) => Promise<void>;
+  deleteArticle: (id: string) => Promise<void>;
+  updateQuizConfig: (config: QuizConfig) => Promise<void>;
   updateSiteSettings: (settings: SiteSettings) => Promise<void>;
-  refreshBooks:       () => Promise<void>;
-  refreshArticles:    () => Promise<void>;
+  refreshBooks: () => Promise<void>;
+  refreshArticles: () => Promise<void>;
   submitReview: (
     payload: Omit<Review, "id" | "status" | "created_at">
   ) => Promise<{ error: string | null }>;
@@ -76,12 +76,12 @@ export const useData = () => {
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 export const DataProvider = ({ children }: { children: ReactNode }) => {
-  const [books,        setBooks]        = useState<Book[]>([]);
-  const [articles,     setArticles]     = useState<Article[]>([]);
-  const [reviews,      setReviews]      = useState<Review[]>([]);
-  const [quizConfig,   setQuizConfig]   = useState<QuizConfig>(DEFAULT_QUIZ_CONFIG);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [quizConfig, setQuizConfig] = useState<QuizConfig>(DEFAULT_QUIZ_CONFIG);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
-  const [loading,      setLoading]      = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // ── Fetchers ──────────────────────────────────────────────────────────────
 
@@ -89,7 +89,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const { data, error } = await supabase
       .from("books")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      // Cache-busting: add a dummy query param that changes to avoid stale responses
+      .setHeader("x-client-info", `booktopia-${Date.now()}`);
+
     if (error) { console.error("[DataContext] fetchBooks error:", error.message); return; }
     if (data) setBooks(data as Book[]);
   };
@@ -163,53 +166,67 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
   const addBook = async (book: Omit<Book, "id" | "created_at" | "updated_at">) => {
     const { error } = await supabase.from("books").insert({
-      title:          book.title,
-      title_en:       book.title_en,
-      title_ru:       book.title_ru,
-      author:         book.author,
-      author_en:      book.author_en,
-      author_ru:      book.author_ru,
-      description:    book.description,
+      title: book.title,
+      title_en: book.title_en,
+      title_ru: book.title_ru,
+      author: book.author,
+      author_en: book.author_en,
+      author_ru: book.author_ru,
+      description: book.description,
       description_en: book.description_en,
       description_ru: book.description_ru,
-      cover_url:      book.cover_url,
-      bg_color:       book.bg_color,
-      category:       book.category,
-      price:          book.price,
+      cover_url: book.cover_url,
+      bg_color: book.bg_color,
+      category: book.category,
+      price: book.price,
       enable_3d_flip: book.enable_3d_flip,
-      featured:       book.featured,
-      sort_order:     book.sort_order,
+      featured: book.featured,
+      sort_order: book.sort_order,
     });
-    if (error) console.error("[DataContext] addBook error:", error.message);
+    if (error) {
+      console.error("[DataContext] addBook error:", error.message);
+      throw new Error(error.message);
+    }
     await fetchBooks();
   };
 
   const updateBook = async (id: string, data: Partial<Book>) => {
     const payload: Record<string, unknown> = {};
-    if (data.title          !== undefined) payload.title          = data.title;
-    if (data.title_en       !== undefined) payload.title_en       = data.title_en;
-    if (data.title_ru       !== undefined) payload.title_ru       = data.title_ru;
-    if (data.author         !== undefined) payload.author         = data.author;
-    if (data.author_en      !== undefined) payload.author_en      = data.author_en;
-    if (data.author_ru      !== undefined) payload.author_ru      = data.author_ru;
-    if (data.description    !== undefined) payload.description    = data.description;
+    if (data.title !== undefined) payload.title = data.title;
+    if (data.title_en !== undefined) payload.title_en = data.title_en;
+    if (data.title_ru !== undefined) payload.title_ru = data.title_ru;
+    if (data.author !== undefined) payload.author = data.author;
+    if (data.author_en !== undefined) payload.author_en = data.author_en;
+    if (data.author_ru !== undefined) payload.author_ru = data.author_ru;
+    if (data.description !== undefined) payload.description = data.description;
     if (data.description_en !== undefined) payload.description_en = data.description_en;
     if (data.description_ru !== undefined) payload.description_ru = data.description_ru;
-    if (data.cover_url      !== undefined) payload.cover_url      = data.cover_url;
-    if (data.bg_color       !== undefined) payload.bg_color       = data.bg_color;
-    if (data.category       !== undefined) payload.category       = data.category;
-    if (data.price          !== undefined) payload.price          = data.price;
+    if (data.cover_url !== undefined) payload.cover_url = data.cover_url;
+    if (data.bg_color !== undefined) payload.bg_color = data.bg_color;
+    if (data.category !== undefined) payload.category = data.category;
+    if (data.price !== undefined) payload.price = data.price;
     if (data.enable_3d_flip !== undefined) payload.enable_3d_flip = data.enable_3d_flip;
-    if (data.featured       !== undefined) payload.featured       = data.featured;
-    if (data.sort_order     !== undefined) payload.sort_order     = data.sort_order;
+    if (data.featured !== undefined) payload.featured = data.featured;
+    if (data.sort_order !== undefined) payload.sort_order = data.sort_order;
     const { error } = await supabase.from("books").update(payload).eq("id", id);
-    if (error) console.error("[DataContext] updateBook error:", error.message);
+    if (error) {
+      console.error("[DataContext] updateBook error:", error.message);
+      throw new Error(error.message);
+    }
+
+    // Optimistically update local state so the UI reflects the change immediately
+    setBooks((prev) => prev.map((b) => (b.id === id ? { ...b, ...payload } : b)));
+
+    // Then re-fetch to ensure sync with remote
     await fetchBooks();
   };
 
   const deleteBook = async (id: string) => {
     const { error } = await supabase.from("books").delete().eq("id", id);
-    if (error) console.error("[DataContext] deleteBook error:", error.message);
+    if (error) {
+      console.error("[DataContext] deleteBook error:", error.message);
+      throw new Error(error.message);
+    }
     await fetchBooks();
   };
 
@@ -217,45 +234,54 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
   const addArticle = async (article: Omit<Article, "id" | "created_at" | "updated_at">) => {
     const { error } = await supabase.from("articles").insert({
-      title:       article.title,
-      title_en:    article.title_en,
-      title_ru:    article.title_ru,
-      excerpt:     article.excerpt,
-      excerpt_en:  article.excerpt_en,
-      excerpt_ru:  article.excerpt_ru,
-      content:     article.content,
-      content_en:  article.content_en,
-      content_ru:  article.content_ru,
-      cover_url:   article.cover_url,
-      date:        article.date,
-      published:   article.published,
+      title: article.title,
+      title_en: article.title_en,
+      title_ru: article.title_ru,
+      excerpt: article.excerpt,
+      excerpt_en: article.excerpt_en,
+      excerpt_ru: article.excerpt_ru,
+      content: article.content,
+      content_en: article.content_en,
+      content_ru: article.content_ru,
+      cover_url: article.cover_url,
+      date: article.date,
+      published: article.published,
     });
-    if (error) console.error("[DataContext] addArticle error:", error.message);
+    if (error) {
+      console.error("[DataContext] addArticle error:", error.message);
+      throw new Error(error.message);
+    }
     await fetchArticles();
   };
 
   const updateArticle = async (id: string, data: Partial<Article>) => {
     const payload: Record<string, unknown> = {};
-    if (data.title      !== undefined) payload.title      = data.title;
-    if (data.title_en   !== undefined) payload.title_en   = data.title_en;
-    if (data.title_ru   !== undefined) payload.title_ru   = data.title_ru;
-    if (data.excerpt    !== undefined) payload.excerpt    = data.excerpt;
+    if (data.title !== undefined) payload.title = data.title;
+    if (data.title_en !== undefined) payload.title_en = data.title_en;
+    if (data.title_ru !== undefined) payload.title_ru = data.title_ru;
+    if (data.excerpt !== undefined) payload.excerpt = data.excerpt;
     if (data.excerpt_en !== undefined) payload.excerpt_en = data.excerpt_en;
     if (data.excerpt_ru !== undefined) payload.excerpt_ru = data.excerpt_ru;
-    if (data.content    !== undefined) payload.content    = data.content;
+    if (data.content !== undefined) payload.content = data.content;
     if (data.content_en !== undefined) payload.content_en = data.content_en;
     if (data.content_ru !== undefined) payload.content_ru = data.content_ru;
-    if (data.cover_url  !== undefined) payload.cover_url  = data.cover_url;
-    if (data.date       !== undefined) payload.date       = data.date;
-    if (data.published  !== undefined) payload.published  = data.published;
+    if (data.cover_url !== undefined) payload.cover_url = data.cover_url;
+    if (data.date !== undefined) payload.date = data.date;
+    if (data.published !== undefined) payload.published = data.published;
     const { error } = await supabase.from("articles").update(payload).eq("id", id);
-    if (error) console.error("[DataContext] updateArticle error:", error.message);
+    if (error) {
+      console.error("[DataContext] updateArticle error:", error.message);
+      throw new Error(error.message);
+    }
     await fetchArticles();
   };
 
   const deleteArticle = async (id: string) => {
     const { error } = await supabase.from("articles").delete().eq("id", id);
-    if (error) console.error("[DataContext] deleteArticle error:", error.message);
+    if (error) {
+      console.error("[DataContext] deleteArticle error:", error.message);
+      throw new Error(error.message);
+    }
     await fetchArticles();
   };
 
@@ -270,18 +296,30 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       .single();
     const serialized = JSON.parse(JSON.stringify(config));
     if (existing) {
-      await supabase.from("quiz_config").update({ config: serialized }).eq("id", existing.id);
+      const { error } = await supabase.from("quiz_config").update({ config: serialized }).eq("id", existing.id);
+      if (error) {
+        console.error("[DataContext] updateQuizConfig error:", error.message);
+        throw new Error(error.message);
+      }
     } else {
-      await supabase.from("quiz_config").insert({ config: serialized });
+      const { error } = await supabase.from("quiz_config").insert({ config: serialized });
+      if (error) {
+        console.error("[DataContext] updateQuizConfig error:", error.message);
+        throw new Error(error.message);
+      }
     }
   };
 
   const updateSiteSettings = async (settings: SiteSettings) => {
     setSiteSettings(settings);
     for (const [key, value] of Object.entries(settings)) {
-      await supabase
+      const { error } = await supabase
         .from("site_settings")
         .upsert({ key, value: JSON.parse(JSON.stringify(value)) }, { onConflict: "key" });
+      if (error) {
+        console.error("[DataContext] updateSiteSettings error:", error.message);
+        throw new Error(error.message);
+      }
     }
   };
 
@@ -294,7 +332,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         addBook, updateBook, deleteBook,
         addArticle, updateArticle, deleteArticle,
         updateQuizConfig, updateSiteSettings,
-        refreshBooks:    fetchBooks,
+        refreshBooks: fetchBooks,
         refreshArticles: fetchArticles,
         submitReview,
       }}

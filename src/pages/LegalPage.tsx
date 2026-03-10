@@ -21,10 +21,10 @@ const LegalPage = ({ title, updatedAt = "2024-03-15", children }: LegalPageProps
         >
           {/* Header */}
           <div className="mb-12 border-b border-amber-500/20 pb-8">
-            <span className="font-sans text-xs font-bold tracking-[0.2em] text-amber-600 uppercase mb-3 block">
+            <span className="font-sans text-xs font-bold tracking-[0.2em] text-primary uppercase mb-3 block">
               Huquqiy Hujjat
             </span>
-            <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h1 className="font-heading font-black tracking-tight text-3xl md:text-4xl font-bold text-foreground mb-4">
               {title}
             </h1>
             <p className="text-sm text-neutral-500">

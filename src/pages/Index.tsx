@@ -2,7 +2,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import TaxtlarTeaser from "@/components/TaxtlarTeaser";
+import GlobalClassics from "@/components/GlobalClassics";
 import MatchmakerQuiz from "@/components/MatchmakerQuiz";
 import CuratedLibrary from "@/components/CuratedLibrary";
 import Blog from "@/components/Blog";
@@ -11,12 +11,16 @@ import Footer from "@/components/Footer";
 import { useData } from "@/context/DataContext";
 import BookOfTheMonth from "@/components/BookOfTheMonth";
 import LoadingSplash from "@/components/LoadingSplash";
+import AuthorSpotlight from "@/components/AuthorSpotlight";
+import Team from "@/components/Team";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const Index = () => {
   const { loading } = useData();
 
   return (
     <div className="min-h-screen bg-background">
+      <ScrollToTop />
       {/* mode="wait" ensures the splash screen finishes fading out BEFORE the homepage fades in */}
       <AnimatePresence mode="wait">
         {loading ? (
@@ -32,12 +36,17 @@ const Index = () => {
             <Navbar />
             <main className="flex-1">
               <Hero />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
               <BookOfTheMonth />
-              <TaxtlarTeaser />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
+              <GlobalClassics />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
               <MatchmakerQuiz />
               <CuratedLibrary />
               <Taassurotlar />
               <Blog />
+              <AuthorSpotlight />
+              <Team />
             </main>
             <Footer />
           </motion.div>

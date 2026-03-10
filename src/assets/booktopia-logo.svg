@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4488BF" />
+      <stop offset="100%" stop-color="#265999" />
+    </linearGradient>
+  </defs>
+  <text x="50" y="65" font-family="'Soria', 'Georgia', serif" font-weight="900" font-size="64" fill="url(#primaryGrad)" letter-spacing="-2">
+    Booktopia <tspan fill="#D5AD36">.</tspan>
+  </text>
+</svg>

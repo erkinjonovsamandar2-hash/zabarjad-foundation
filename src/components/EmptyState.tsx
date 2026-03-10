@@ -24,21 +24,21 @@ const EmptyState = ({
     >
       {/* Subtle Background Glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-64 h-64 bg-amber-500/5 dark:bg-amber-500/10 blur-[80px] rounded-full" />
+        <div className="w-64 h-64 bg-primary/5 dark:bg-primary/10 blur-[80px] rounded-full" />
       </div>
 
       {/* Floating Feather Icon */}
       <motion.div
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 shadow-inner"
+        className="relative w-20 h-20 mb-6 flex items-center justify-center rounded-full bg-primary/5 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 shadow-inner"
       >
-        <Feather className="w-8 h-8 text-amber-600 dark:text-amber-500 opacity-80" strokeWidth={1.5} />
+        <Feather className="w-8 h-8 text-primary dark:text-accent opacity-80" strokeWidth={1.5} />
       </motion.div>
 
       {/* Text Content */}
       <div className="relative z-10 max-w-md">
-        <h3 className="font-serif text-2xl font-bold text-foreground mb-3 drop-shadow-sm">
+        <h3 className="font-heading font-black tracking-tight text-2xl font-bold text-foreground mb-3 drop-shadow-sm">
           {title}
         </h3>
         <p className="font-sans text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-8">
@@ -49,7 +49,7 @@ const EmptyState = ({
         {actionLabel && onAction && (
           <button
             onClick={onAction}
-            className="inline-flex items-center justify-center px-6 py-2.5 rounded-full font-sans text-xs uppercase tracking-widest font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-colors focus:outline-none"
+            className="inline-flex items-center justify-center px-6 py-2.5 rounded-full font-sans text-xs uppercase tracking-widest font-bold bg-primary/10 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-colors focus:outline-none"
           >
             {actionLabel}
           </button>

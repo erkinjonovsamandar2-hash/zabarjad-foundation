@@ -26,7 +26,7 @@ const FILTER_LABELS: Record<FilterStatus, string> = {
 
 // ── Stars ─────────────────────────────────────────────────────────────────────
 const Stars = ({ count }: { count: number }) => (
-  <span className="text-sm text-amber-500">
+  <span className="text-sm text-accent">
     {"★".repeat(count)}
     <span className="text-gray-300">{"★".repeat(5 - count)}</span>
   </span>
@@ -35,7 +35,7 @@ const Stars = ({ count }: { count: number }) => (
 // ── Status badge ──────────────────────────────────────────────────────────────
 const StatusBadge = ({ status }: { status: Review["status"] }) => {
   const styles = {
-    pending:   "bg-amber-100 text-amber-700",
+    pending:   "bg-primary/10 text-primary/90",
     published: "bg-green-100 text-green-700",
     rejected:  "bg-red-100  text-red-700",
   };
@@ -130,10 +130,10 @@ const AdminReviews = () => {
       {/* ── Page header ──────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 font-serif">
+          <h1 className="text-xl font-bold text-foreground font-heading font-black tracking-tight">
             Sharhlar boshqaruvi
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <p className="text-sm text-muted-foreground mt-0.5">
             Foydalanuvchi sharhlarini ko'rib chiqish va tasdiqlash
           </p>
         </div>
@@ -141,7 +141,7 @@ const AdminReviews = () => {
         <div className="flex items-center gap-3">
           {/* Pending badge */}
           {pendingCount > 0 && filter !== "pending" && (
-            <span className="rounded-full bg-amber-500 text-white text-xs font-bold px-2.5 py-1">
+            <span className="rounded-full bg-primary text-white text-xs font-bold px-2.5 py-1">
               {pendingCount} kutilmoqda
             </span>
           )}
@@ -151,7 +151,7 @@ const AdminReviews = () => {
             whileHover={{ rotate: 180 }}
             transition={{ duration: 0.4 }}
             onClick={fetchReviews}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors"
+            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-100 text-muted-foreground hover:text-foreground/80 transition-colors"
             aria-label="Yangilash"
           >
             <RefreshCw className="h-4 w-4" />
@@ -168,8 +168,8 @@ const AdminReviews = () => {
             className={`
               rounded-lg px-4 py-2 text-sm font-medium transition-colors
               ${filter === f
-                ? "bg-amber-500 text-white"
-                : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+                ? "bg-primary text-white"
+                : "bg-white border border-gray-200 text-foreground/70 hover:bg-gray-50"
               }
             `}
           >
@@ -194,10 +194,10 @@ const AdminReviews = () => {
         // Empty state
         <div className="text-center py-24 bg-white rounded-xl border border-gray-200">
           <p className="text-4xl mb-4">📭</p>
-          <p className="font-serif text-lg text-gray-500">
+          <p className="font-serif text-lg text-muted-foreground">
             Bu toifada sharhlar yo'q
           </p>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-muted-foreground/80 mt-1">
             {filter === "pending"
               ? "Yangi sharhlar tushganda bu yerda ko'rinadi"
               : "Hech narsa topilmadi"
@@ -225,10 +225,10 @@ const AdminReviews = () => {
                 {/* Top row — name + status */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-serif font-semibold text-gray-900 leading-tight truncate">
+                    <p className="font-serif font-semibold text-foreground leading-tight truncate">
                       {review.name}
                     </p>
-                    <p className="text-[11px] text-gray-400 font-sans mt-0.5">
+                    <p className="text-[11px] text-muted-foreground/80 font-sans mt-0.5">
                       {[review.role, review.city].filter(Boolean).join(" · ")}
                     </p>
                   </div>
@@ -239,12 +239,12 @@ const AdminReviews = () => {
                 <Stars count={review.stars} />
 
                 {/* Review text */}
-                <p className="font-serif text-sm italic text-gray-600 leading-relaxed line-clamp-4">
+                <p className="font-serif text-sm italic text-foreground/70 leading-relaxed line-clamp-4">
                   "{review.text}"
                 </p>
 
                 {/* Date */}
-                <p className="text-[10px] text-gray-400 font-sans">
+                <p className="text-[10px] text-muted-foreground/80 font-sans">
                   {new Date(review.created_at).toLocaleDateString("uz-UZ", {
                     day:    "numeric",
                     month:  "long",

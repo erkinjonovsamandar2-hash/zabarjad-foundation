@@ -7,7 +7,7 @@ import FeedbackForm from "./FeedbackForm";
 
 // ── Design assets ─────────────────────────────────────────────────────────────
 import waxSeal from "@/assets/design/seal.png";
-import pen     from "@/assets/design/pen.png";
+import pen from "@/assets/design/pen.png";
 
 // Import the new Van Gogh background (PNG)
 let bgImg: string | undefined;
@@ -15,108 +15,108 @@ try { bgImg = new URL("@/assets/design/taassurotlar-bg.png", import.meta.url).hr
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Review {
-  id:    string | number;
-  name:  string;
-  role:  string | null;
-  city:  string | null;
-  text:  string;
+  id: string | number;
+  name: string;
+  role: string | null;
+  city: string | null;
+  text: string;
   stars: number;
 }
 
 // ── Hardcoded seed reviews (shown when DB is empty / loading) ─────────────────
 const SEED_REVIEWS: Review[] = [
   {
-    id:    "seed-1",
-    name:  "Malika Yusupova",
-    role:  "Adabiyot o'qituvchisi",
-    city:  "Toshkent",
-    text:  "Tarjima shunchalik ravonki, asar ichiga sho'ng'ib ketdim. Har bir so'z o'z joyida — go'yo kitob dastlab o'zbek tilida yozilgandek. Bu — haqiqiy san'at.",
+    id: "seed-1",
+    name: "Malika Yusupova",
+    role: "Adabiyot o'qituvchisi",
+    city: "Toshkent",
+    text: "Tarjima shunchalik ravonki, asar ichiga sho'ng'ib ketdim. Har bir so'z o'z joyida — go'yo kitob dastlab o'zbek tilida yozilgandek. Bu — haqiqiy san'at.",
     stars: 5,
   },
   {
-    id:    "seed-2",
-    name:  "Jasur Normatov",
-    role:  "Yozuvchi va bloger",
-    city:  "Samarqand",
-    text:  "Zabarjad Media tarjimalarida tilning ruhi saqlanib qolgan. Xarakterlarning nutqi, his-tuyg'ulari — hammasi juda tabiiy. Bolalarimga katta faxr bilan tavsiya etaman.",
+    id: "seed-2",
+    name: "Jasur Normatov",
+    role: "Yozuvchi va bloger",
+    city: "Samarqand",
+    text: "Booktopia tarjimalarida tilning ruhi saqlanib qolgan. Xarakterlarning nutqi, his-tuyg'ulari — hammasi juda tabiiy. Bolalarimga katta faxr bilan tavsiya etaman.",
     stars: 5,
   },
   {
-    id:    "seed-3",
-    name:  "Dilnoza Rahimova",
-    role:  "Universitet talabasi",
-    city:  "Buxoro",
-    text:  "Avval rus tilidagi versiyasini o'qigandim. O'zbek tarjimasini o'qib, yangi kitob kashf etgandek his qildim — bu qadar boy va ifodali. Rahmat, Zabarjad!",
+    id: "seed-3",
+    name: "Dilnoza Rahimova",
+    role: "Universitet talabasi",
+    city: "Buxoro",
+    text: "Avval rus tilidagi versiyasini o'qigandim. O'zbek tarjimasini o'qib, yangi kitob kashf etgandek his qildim — bu qadar boy va ifodali. Rahmat, Booktopia!",
     stars: 5,
   },
   {
-    id:    "seed-4",
-    name:  "Sherzod Karimov",
-    role:  "Muhandis, kitob ixlosmandi",
-    city:  "Namangan",
-    text:  "Texnik odam bo'lsam ham, Zabarjad kitoblarini qo'yib yuborolmayapman. Uslub shunchalik o'tkir va aniqki, har bir jumla ichingda qoladi. G'oyat professional ish.",
+    id: "seed-4",
+    name: "Sherzod Karimov",
+    role: "Muhandis, kitob ixlosmandi",
+    city: "Namangan",
+    text: "Texnik odam bo'lsam ham, Booktopia kitoblarini qo'yib yuborolmayapman. Uslub shunchalik o'tkir va aniqki, har bir jumla ichingda qoladi. G'oyat professional ish.",
     stars: 5,
   },
   {
-    id:    "seed-5",
-    name:  "Feruza Mirzayeva",
-    role:  "Psixolog",
-    city:  "Farg'ona",
-    text:  "Insonning ichki dunyosini tasvirlashda tarjimonlar juda nozik yondashgan. Hissiyotlar bir tomchi ham yo'qolmagan. Bunday sifatli tarjimani uzoq kutgan edik.",
+    id: "seed-5",
+    name: "Feruza Mirzayeva",
+    role: "Psixolog",
+    city: "Farg'ona",
+    text: "Insonning ichki dunyosini tasvirlashda tarjimonlar juda nozik yondashgan. Hissiyotlar bir tomchi ham yo'qolmagan. Bunday sifatli tarjimani uzoq kutgan edik.",
     stars: 5,
   },
   {
-    id:    "seed-6",
-    name:  "Otabek Xolmatov",
-    role:  "Jurnalist",
-    city:  "Qarshi",
-    text:  "Zabarjad — shunchaki nashriyot emas, bu — madaniy missiya. Har bir kitob o'zbek tiliga yangi nafas olib kirmoqda. Tahririyat jamoasiga katta rahmat!",
+    id: "seed-6",
+    name: "Otabek Xolmatov",
+    role: "Jurnalist",
+    city: "Qarshi",
+    text: "Booktopia — shunchaki nashriyot emas, bu — madaniy missiya. Har bir kitob o'zbek tiliga yangi nafas olib kirmoqda. Tahririyat jamoasiga katta rahmat!",
     stars: 5,
   },
   {
-    id:    "seed-7",
-    name:  "Mohira Sultonova",
-    role:  "Doktorant, filolog",
-    city:  "Toshkent",
-    text:  "Ilmiy nuqtai nazardan ham tarjima sifati yuqori darajada. Leksika, sintaksis, uslub — hamma jihat puxta o'ylangan. O'zbek adabiyotiga qo'shilgan munosib hissa.",
+    id: "seed-7",
+    name: "Mohira Sultonova",
+    role: "Doktorant, filolog",
+    city: "Toshkent",
+    text: "Ilmiy nuqtai nazardan ham tarjima sifati yuqori darajada. Leksika, sintaksis, uslub — hamma jihat puxta o'ylangan. O'zbek adabiyotiga qo'shilgan munosib hissa.",
     stars: 5,
   },
   {
-    id:    "seed-8",
-    name:  "Bahodir Toshmatov",
-    role:  "Maktab o'quvchisi",
-    city:  "Andijon",
-    text:  "O'qishni yoqtirmas edim, lekin Zabarjad kitobini olganimdan keyin tunlari yashirincha o'qidim! Endi navbatdagi kitobni kutib o'tiraman. Juda zo'r!",
+    id: "seed-8",
+    name: "Bahodir Toshmatov",
+    role: "Maktab o'quvchisi",
+    city: "Andijon",
+    text: "O'qishni yoqtirmas edim, lekin Booktopia kitobini olganimdan keyin tunlari yashirincha o'qidim! Endi navbatdagi kitobni kutib o'tiraman. Juda zo'r!",
     stars: 5,
   },
 ];
 
 const SCROLL_STEP = 432;
 const AUTOPLAY_MS = 4000;
-const PAUSE_MS    = 8000;
+const PAUSE_MS = 8000;
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const SECTION_TEXT = {
   uz: {
-    badge:         "Kitobxonlar fikri",
-    title:         "Taassurotlar",
-    subtitle:      "Kitob sahifalaridan ko'ngilga ko'chgan so'zlar.",
+    badge: "Kitobxonlar fikri",
+    title: "Taassurotlar",
+    subtitle: "Kitob sahifalaridan ko'ngilga ko'chgan so'zlar.",
     leaveFeedback: "Fikr qoldiring",
-    hideForm:      "Yopish",
+    hideForm: "Yopish",
   },
   ru: {
-    badge:         "Мнения читателей",
-    title:         "Отзывы",
-    subtitle:      "Слова, которые перешли со страниц книг в сердца.",
+    badge: "Мнения читателей",
+    title: "Отзывы",
+    subtitle: "Слова, которые перешли со страниц книг в сердца.",
     leaveFeedback: "Оставить отзыв",
-    hideForm:      "Закрыть",
+    hideForm: "Закрыть",
   },
   en: {
-    badge:         "Readers' Thoughts",
-    title:         "Testimonials",
-    subtitle:      "Words that travelled from the page into the heart.",
+    badge: "Readers' Thoughts",
+    title: "Testimonials",
+    subtitle: "Words that travelled from the page into the heart.",
     leaveFeedback: "Leave a Review",
-    hideForm:      "Close",
+    hideForm: "Close",
   },
 } as const;
 
@@ -126,7 +126,7 @@ type SectionLang = keyof typeof SECTION_TEXT;
 const Stars = ({ count }: { count: number }) => (
   <div className="flex gap-0.5 mb-4" aria-label={`${count} yulduz`}>
     {Array.from({ length: 5 }).map((_, i) => (
-      <span key={i} className={`text-sm leading-none ${i < count ? "text-amber-500" : "text-neutral-300 dark:text-neutral-600"}`}>
+      <span key={i} className={`text-sm leading-none ${i < count ? "text-accent" : "text-neutral-300 dark:text-neutral-600"}`}>
         ★
       </span>
     ))}
@@ -135,8 +135,8 @@ const Stars = ({ count }: { count: number }) => (
 
 // ── Review card ───────────────────────────────────────────────────────────────
 const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
-  const reduced    = useReducedMotion();
-  const rotateDeg  = reduced ? 0 : index % 2 === 0 ? 1.6 : -1.6;
+  const reduced = useReducedMotion();
+  const rotateDeg = reduced ? 0 : index % 2 === 0 ? 1.6 : -1.6;
 
   return (
     <motion.div
@@ -163,7 +163,7 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
         className="absolute -top-4 -right-4 w-14 h-14 object-contain pointer-events-none select-none drop-shadow-xl hover:scale-110 transition-transform duration-300"
       />
       <div
-        className="font-serif text-amber-500/20 dark:text-amber-500/15 select-none mb-1 leading-none"
+        className="font-serif text-accent/20 dark:text-accent/15 select-none mb-1 leading-none"
         style={{ fontSize: "48px", lineHeight: 1, marginTop: "-4px" }}
         aria-hidden
       >
@@ -173,7 +173,7 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
       <p className="font-serif text-sm italic leading-relaxed mb-4 break-words text-neutral-800 dark:text-neutral-200">
         {review.text}
       </p>
-      <div className="h-px w-10 bg-amber-400/50 dark:bg-amber-600/50 mb-4" />
+      <div className="h-px w-10 bg-amber-400/50 dark:bg-primary/90/50 mb-4" />
       <p className="font-serif text-sm font-bold text-neutral-900 dark:text-white leading-tight">
         {review.name}
       </p>
@@ -186,16 +186,16 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 const Taassurotlar = () => {
-  const { lang }     = useLang();
+  const { lang } = useLang();
   const { reviews: dbReviews = [] } = useData() as any;
-  const sectionRef   = useRef<HTMLElement>(null);
-  const scrollRef    = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(sectionRef, { once: true, margin: "-60px" });
-  const reduced      = useReducedMotion();
+  const reduced = useReducedMotion();
 
-  const [isPaused,  setIsPaused]  = useState(false);
-  const [showForm,  setShowForm]  = useState(false);
-  const pauseTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const pauseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tx = SECTION_TEXT[(lang as SectionLang)] ?? SECTION_TEXT.uz;
 
@@ -203,9 +203,9 @@ const Taassurotlar = () => {
   const reviews: Review[] = dbReviews.length >= 4
     ? dbReviews
     : [
-        ...dbReviews,
-        ...SEED_REVIEWS.slice(dbReviews.length),
-      ];
+      ...dbReviews,
+      ...SEED_REVIEWS.slice(dbReviews.length),
+    ];
 
   // ── Scroll helpers ────────────────────────────────────────────────────────
   const scrollRight = useCallback(() => {
@@ -229,7 +229,7 @@ const Taassurotlar = () => {
     pauseTimer.current = setTimeout(() => setIsPaused(false), PAUSE_MS);
   }, []);
 
-  const handleLeft  = useCallback(() => { scrollLeft();  triggerPause(); }, [scrollLeft,  triggerPause]);
+  const handleLeft = useCallback(() => { scrollLeft(); triggerPause(); }, [scrollLeft, triggerPause]);
   const handleRight = useCallback(() => { scrollRight(); triggerPause(); }, [scrollRight, triggerPause]);
 
   // ── Auto-play ─────────────────────────────────────────────────────────────
@@ -257,7 +257,7 @@ const Taassurotlar = () => {
           style={{
             backgroundImage: bgImg ? `url(${bgImg})` : undefined,
             backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
-            opacity: 0.9, 
+            opacity: 0.9,
           }}
         />
         {/* The user's requested bg-white/40 overlay */}
@@ -281,7 +281,7 @@ const Taassurotlar = () => {
               style={{ filter: "grayscale(0.2)" }}
             />
             {/* BADGE - Dark amber, extra bold */}
-            <p className="text-xs font-sans font-black uppercase tracking-[0.35em] text-amber-950 dark:text-amber-400 whitespace-nowrap drop-shadow-sm">
+            <p className="text-xs font-heading font-black uppercase tracking-[0.35em] text-amber-950 dark:text-accent whitespace-nowrap drop-shadow-sm">
               {tx.badge}
             </p>
             {/* Right Pen */}
@@ -290,14 +290,14 @@ const Taassurotlar = () => {
               style={{ filter: "grayscale(0.2)" }}
             />
           </div>
-          
+
           {/* TITLE */}
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-black text-amber-950 dark:text-white mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-tight">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold leading-[1.05] tracking-wide text-amber-950 dark:text-white mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             {tx.title}
           </h2>
-          
+
           {/* SUBTITLE */}
-          <p className="font-serif italic text-amber-950 dark:text-neutral-100 text-lg md:text-xl max-w-md mx-auto font-bold drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)] dark:drop-shadow-md">
+          <p className="font-serif italic text-amber-950 dark:text-neutral-100 text-lg md:text-xl leading-loose max-w-md mx-auto drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)] dark:drop-shadow-md">
             {tx.subtitle}
           </p>
         </motion.div>
@@ -320,7 +320,7 @@ const Taassurotlar = () => {
           <motion.button
             whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.90 }}
             onClick={handleLeft}
-            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none"
+            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-accent transition-colors focus:outline-none"
             aria-label="Oldingi sharh"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -335,7 +335,7 @@ const Taassurotlar = () => {
               </>
             ) : (
               <motion.span
-                className="h-2 w-2 rounded-full bg-amber-500/80"
+                className="h-2 w-2 rounded-full bg-primary/80"
                 animate={{ scale: [1, 1.4, 1] }}
                 transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
               />
@@ -345,7 +345,7 @@ const Taassurotlar = () => {
           <motion.button
             whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.90 }}
             onClick={handleRight}
-            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none"
+            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-accent transition-colors focus:outline-none"
             aria-label="Keyingi sharh"
           >
             <ChevronRight className="h-5 w-5" />
@@ -359,15 +359,10 @@ const Taassurotlar = () => {
             whileTap={{ scale: 0.97 }}
             onClick={() => { setShowForm((p) => !p); triggerPause(); }}
             className="
-              inline-flex items-center gap-2 rounded-xl px-8 py-3.5
-              text-sm font-bold font-sans shadow-lg
-              bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md
-              border border-amber-200 dark:border-amber-900/50
-              text-amber-900 dark:text-amber-400
-              hover:bg-amber-600 hover:text-white hover:border-amber-600
-              dark:hover:bg-amber-600 dark:hover:text-white dark:hover:border-amber-600
-              transition-all duration-300
-              focus:outline-none
+              inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl
+              bg-primary text-primary-foreground font-sans font-bold text-[11px] tracking-[0.2em] uppercase
+              shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)]
+              hover:bg-primary/90 transition-all duration-500 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
             "
           >
             <PenLine className="h-4 w-4" />
@@ -381,7 +376,7 @@ const Taassurotlar = () => {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              exit={{   opacity: 0, height: 0 }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className="overflow-hidden"
             >

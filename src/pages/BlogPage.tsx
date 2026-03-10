@@ -21,7 +21,7 @@ const MOCK_ARTICLES = [
   },
   {
     id: 2,
-    title: "Kuzgi xalqaro kitob ko'rgazmasi: Zabarjad Media yangiliklari",
+    title: "Kuzgi xalqaro kitob ko'rgazmasi: Booktopia yangiliklari",
     excerpt: "Bu yilgi xalqaro kitob ko'rgazmasida nashriyotimiz o'zining eng sara asarlari va yangi tarjimalari bilan ishtirok etadi.",
     category: "Yangiliklar",
     date: "05 May, 2025",
@@ -61,7 +61,7 @@ const BlogPage = () => {
       />
       
       {/* ── 2. Cinematic Lighting Orbs ── */}
-      <div className="absolute top-0 right-0 w-[500px] md:w-[1000px] h-[500px] md:h-[1000px] bg-amber-500/15 dark:bg-amber-500/10 rounded-full blur-[120px] md:blur-[180px] pointer-events-none -z-10 fixed" />
+      <div className="absolute top-0 right-0 w-[500px] md:w-[1000px] h-[500px] md:h-[1000px] bg-primary/15 dark:bg-primary/10 rounded-full blur-[120px] md:blur-[180px] pointer-events-none -z-10 fixed" />
       <div className="absolute bottom-0 left-0 w-[400px] md:w-[800px] h-[400px] md:h-[800px] bg-amber-700/15 dark:bg-amber-900/20 rounded-full blur-[120px] md:blur-[150px] pointer-events-none -z-10 fixed" />
       <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_90%)] fixed" />
 
@@ -78,13 +78,13 @@ const BlogPage = () => {
             className="flex flex-col items-start"
           >
             <div className="inline-flex items-center gap-4 mb-6">
-              <span className="w-12 h-[1px] bg-amber-500/50"></span>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600 dark:text-amber-500">
-                Zabarjad Kundaligi
+              <span className="w-12 h-[1px] bg-primary/50"></span>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary dark:text-accent">
+                Booktopia Kundaligi
               </p>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-foreground mb-8 tracking-tight leading-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-black tracking-tight font-bold text-foreground mb-8 tracking-tight leading-tight">
               {t.blog?.title || "So'nggi maqolalar"}
             </h1>
             
@@ -97,14 +97,14 @@ const BlogPage = () => {
             <div className="flex flex-wrap items-center gap-6">
               <button 
                 onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}
-                className="px-8 py-3.5 rounded-full bg-amber-500 text-black font-bold tracking-wider uppercase text-xs md:text-sm hover:bg-amber-400 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]"
+                className="px-8 py-3.5 rounded-full bg-primary text-foreground font-bold tracking-wider uppercase text-xs md:text-sm hover:bg-amber-400 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]"
               >
                 Maqolalarni o'qish &darr;
               </button>
               
               <div className="flex items-center gap-3 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
                 <span>Intervyular</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500/50"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/50"></span>
                 <span>Tahlil</span>
               </div>
             </div>
@@ -125,7 +125,7 @@ const BlogPage = () => {
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-amber-900/30 dark:shadow-amber-500/10 border border-border/50 group">
               <img 
                 src={blogHeaderArt} 
-                alt="Zabarjad Kundaligi Art" 
+                alt="Booktopia Kundaligi Art" 
                 className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-1000"
               />
               
@@ -134,7 +134,7 @@ const BlogPage = () => {
               
               {/* Floating Caption / Stamp */}
               <div className="absolute bottom-6 left-8 z-20">
-                 <p className="text-amber-400 font-serif italic text-2xl drop-shadow-lg">"Qalam va Qog'oz Sehri"</p>
+                 <p className="text-accent font-serif italic text-2xl drop-shadow-lg">"Qalam va Qog'oz Sehri"</p>
                  <p className="text-white/70 text-xs tracking-widest uppercase font-bold mt-2">Nashriyot Kundaligi</p>
               </div>
             </div>
@@ -160,7 +160,7 @@ const BlogPage = () => {
                   px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300
                   ${isActive 
                     ? isGoT 
-                      ? "bg-amber-500 text-black font-got tracking-wider shadow-md transform scale-105" 
+                      ? "bg-primary text-foreground font-got tracking-wider shadow-md transform scale-105" 
                       : "bg-foreground text-background shadow-md transform scale-105"
                     : "bg-muted/30 text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
                   }
@@ -184,7 +184,7 @@ const BlogPage = () => {
             {displayed.length === 0 ? (
               // Empty State
               <div className="border border-dashed border-border/60 bg-muted/10 py-32 flex flex-col items-center justify-center rounded-3xl">
-                <Feather className="w-12 h-12 text-amber-500/30 mb-6" />
+                <Feather className="w-12 h-12 text-accent/30 mb-6" />
                 <p className="font-serif text-xl text-muted-foreground">
                   Hozircha ushbu ruknda maqolalar yo'q
                 </p>
@@ -210,7 +210,7 @@ const BlogPage = () => {
                         <div className="absolute top-4 left-4 z-10">
                           <span className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md backdrop-blur-md
                             ${article.category === "Taxtlar O'yini" 
-                              ? "bg-amber-500/90 text-black font-got shadow-amber-500/20" 
+                              ? "bg-primary/90 text-foreground font-got shadow-amber-500/20" 
                               : "bg-background/90 text-foreground border border-border/50"
                             }`}
                           >
@@ -226,11 +226,11 @@ const BlogPage = () => {
                             <CalendarDays className="w-3.5 h-3.5" />
                             <span>{article.date}</span>
                           </div>
-                          <span className="w-1 h-1 rounded-full bg-amber-500/50"></span>
+                          <span className="w-1 h-1 rounded-full bg-primary/50"></span>
                           <span>{article.readTime}</span>
                         </div>
                         
-                        <h3 className="text-xl font-serif font-bold text-foreground leading-snug mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors line-clamp-2">
+                        <h3 className="text-xl font-heading font-black tracking-tight font-bold text-foreground leading-snug mb-3 group-hover:text-primary dark:group-hover:text-accent transition-colors line-clamp-2">
                           {article.title}
                         </h3>
                         
@@ -238,7 +238,7 @@ const BlogPage = () => {
                           {article.excerpt}
                         </p>
 
-                        <div className="mt-auto flex items-center text-sm font-bold text-foreground group-hover:text-amber-500 transition-colors uppercase tracking-widest">
+                        <div className="mt-auto flex items-center text-sm font-bold text-foreground group-hover:text-accent transition-colors uppercase tracking-widest">
                           Batafsil o'qish 
                           <span className="ml-2 transform group-hover:translate-x-2 transition-transform duration-300">&rarr;</span>
                         </div>
