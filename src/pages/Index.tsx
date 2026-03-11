@@ -36,11 +36,11 @@ const Index = () => {
             <Navbar />
             <main className="flex-1">
               <Hero />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <BookOfTheMonth />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <GlobalClassics />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent my-4" />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <MatchmakerQuiz />
               <CuratedLibrary />
               <Taassurotlar />

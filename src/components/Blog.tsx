@@ -71,8 +71,8 @@ const Blog = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 flex flex-col items-center text-center"
         >
           {/* Classic Book-Plate Badge */}
@@ -98,8 +98,8 @@ const Blog = () => {
           className="flex flex-wrap items-center justify-center w-full gap-3 mb-10 border-b border-border/50 pb-6"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         >
           {BLOG_CATEGORIES.map((category) => {
             const isActive = activeTab === category;
@@ -153,11 +153,19 @@ const Blog = () => {
                     <Link to={`/blog/${article.id}`} className="flex flex-col h-full">
                       {/* Image Container with 16/10 Ratio */}
                       <div className="relative w-full aspect-[16/10] overflow-hidden bg-muted">
-                        <img
-                          src={article.image}
-                          alt={article.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                        />
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          viewport={{ once: true, margin: "-100px" }}
+                          transition={{ duration: 1.2 }}
+                          className="w-full h-full"
+                        >
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          />
+                        </motion.div>
                         {/* Floating Category Badge */}
                         <div className="absolute top-4 left-4 z-10">
                           <span className={`px-3 py-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] rounded-full shadow-md backdrop-blur-md

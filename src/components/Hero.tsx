@@ -218,7 +218,17 @@ const ActiveBookShowcase = ({
             whileHover={{ scale: 1.05, rotateY: -5, rotateX: 2 }}
           >
             {imgSrc
-              ? <img src={imgSrc} alt={locField(book, "title", lang)} className="w-full h-full object-cover" draggable={false} />
+              ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 1.2 }}
+                  className="w-full h-full"
+                >
+                  <img src={imgSrc} alt={locField(book, "title", lang)} className="w-full h-full object-cover" draggable={false} />
+                </motion.div>
+              )
               : <div className="w-full h-full bg-muted" />
             }
             <motion.div
@@ -353,7 +363,17 @@ const MiniShelf = ({
               }}
             >
               {imgSrc
-                ? <img src={imgSrc} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-105" draggable={false} />
+                ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 1.2 }}
+                    className="w-full h-full"
+                  >
+                    <img src={imgSrc} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-105" draggable={false} />
+                  </motion.div>
+                )
                 : <div className="w-full h-full bg-muted" />
               }
               {!isActive && (

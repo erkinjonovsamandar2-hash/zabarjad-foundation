@@ -202,7 +202,7 @@ export default function GlobalClassics() {
       id="library"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       viewport={{ once: true, margin: "-100px" }}
       className="relative w-full min-h-screen bg-cover bg-center transition-all duration-1000 ease-in-out overflow-hidden"
       style={{
@@ -428,11 +428,18 @@ export default function GlobalClassics() {
                 {/* Cover */}
                 <div className="w-[140px] sm:w-[160px] md:w-[260px] shrink-0 mx-auto mb-6 relative z-10">
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-accent/30 dark:bg-accent/20 blur-[40px] -z-10 rounded-full pointer-events-none" />
-                  <img
-                    src={getImageUrl(book.cover_url)}
-                    alt={book.title}
-                    className="w-full h-auto aspect-[2/3] object-cover rounded-md shadow-2xl relative z-10"
-                  />
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 1.2 }}
+                  >
+                    <img
+                      src={getImageUrl(book.cover_url)}
+                      alt={book.title}
+                      className="w-full h-auto aspect-[2/3] object-cover rounded-md shadow-2xl relative z-10"
+                    />
+                  </motion.div>
                 </div>
 
                 {/* Info card */}

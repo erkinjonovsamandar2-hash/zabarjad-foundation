@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type { CSSProperties } from "react";
+import { motion } from "framer-motion";
 
 import akbarImg from "../assets/team/akbar.png";
 
@@ -100,7 +101,13 @@ export default function Team() {
             <div className="relative z-10 container mx-auto px-6 lg:px-16">
 
                 {/* ── Headline ── */}
-                <div className="mb-12 md:mb-20 text-center">
+                <motion.div
+                    className="mb-12 md:mb-20 text-center"
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                >
                     <p className="mb-3 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
                         Booktopia
                     </p>
@@ -111,7 +118,7 @@ export default function Team() {
                         sohaning eng ilg&apos;or mutaxassislari bilan
                     </p>
                     <div className="mx-auto mt-8 w-16 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-                </div>
+                </motion.div>
 
                 {/* ── Mobile: single-card auto-slideshow (< md) ── */}
                 <div className="md:hidden flex flex-col items-center gap-6">
