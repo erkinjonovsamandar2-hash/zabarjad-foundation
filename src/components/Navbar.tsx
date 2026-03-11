@@ -80,6 +80,11 @@ const Navbar = () => {
     return location.pathname === href;
   };
 
+  // ── Hide Navbar on Admin Dashboard ──
+  if (location.pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <>
       <motion.div
@@ -231,7 +236,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-[96vw] max-w-4xl bg-background/98 dark:bg-slate-950/98 backdrop-blur-2xl border border-border/50 shadow-[0_30px_100px_-15px_rgba(0,0,0,0.4)] rounded-2xl p-6 lg:p-8 z-[1000]"
+                className="w-[96vw] max-w-4xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl border border-border/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] rounded-2xl p-6 lg:p-8 z-[1000]"
               >
                 <div className="grid grid-cols-3 gap-6 lg:gap-8">
                   {MEGA_MENU_CATEGORIES.map((cat) => (
