@@ -51,7 +51,7 @@ const LoadingSplash = () => {
         >
           {/* Brand Logo Image (Replaced Text) */}
           <img
-            src="/src/assets/Logo-blue.png"
+            src="/public/Logo-blue.png"
             alt="Booktopia Logo"
             className="h-16 sm:h-24 w-auto object-contain drop-shadow-md"
             draggable={false}
