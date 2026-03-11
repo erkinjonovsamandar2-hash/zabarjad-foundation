@@ -32,7 +32,7 @@ const Background = () => (
     />
 
     {/* FIXED: removed mix-blend-overlay which was fighting theme colors */}
-    <div className="absolute inset-0 bg-background/30 backdrop-blur-[2px] z-0 transition-colors duration-500" />
+    <div className="absolute inset-0 bg-background/40 backdrop-blur-[2px] z-0 transition-colors duration-500" />
 
     {/* FIXED: removed dark:opacity-10 — single opacity value, theme controls the color via --primary */}
     <div
