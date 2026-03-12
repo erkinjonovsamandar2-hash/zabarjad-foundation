@@ -222,14 +222,14 @@ const ActiveBookShowcase = ({
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={{ once: true, amount: 0.1, margin: "50px" }}
                   transition={{ duration: 1.2 }}
-                  className="w-full h-full"
+                  className="w-full h-full bg-muted aspect-[2/3]"
                 >
                   <img src={imgSrc} alt={locField(book, "title", lang)} className="w-full h-full object-cover" draggable={false} />
                 </motion.div>
               )
-              : <div className="w-full h-full bg-muted" />
+              : <div className="w-full h-full bg-muted aspect-[2/3]" />
             }
             <motion.div
               className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent mix-blend-overlay pointer-events-none"
@@ -367,14 +367,14 @@ const MiniShelf = ({
                   <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, amount: 0.1, margin: "50px" }}
                     transition={{ duration: 1.2 }}
-                    className="w-full h-full"
+                    className="w-full h-full bg-muted aspect-[2/3] transform-gpu"
                   >
                     <img src={imgSrc} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-105" draggable={false} />
                   </motion.div>
                 )
-                : <div className="w-full h-full bg-muted" />
+                : <div className="w-full h-full bg-muted aspect-[2/3]" />
               }
               {!isActive && (
                 <div className="absolute inset-0 ring-2 ring-primary/0 group-hover:ring-primary/40 transition-all rounded-[5px]" />

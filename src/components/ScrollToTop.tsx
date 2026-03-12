@@ -1,29 +1,25 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { ChevronUp } from "lucide-react";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
+  const { scrollY } = useScroll();
 
   useEffect(() => {
     // Instantly scroll to the top left corner whenever the route changes
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest > 300) {
+      if (!isVisible) setIsVisible(true);
+    } else {
+      if (isVisible) setIsVisible(false);
+    }
+  });
 
   const scrollToTop = () => {
     window.scrollTo({

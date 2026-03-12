@@ -6,9 +6,9 @@ import { useData } from "@/context/DataContext";
 import type { Book } from "@/types/database";
 
 import margaritaBg from "../assets/backgrounds/margarita-bg.png";
-import edenBg      from "../assets/backgrounds/eden-bg.png";
-import ascanioBg   from "../assets/backgrounds/ascanio-bg.png";
-import xukBg       from "../assets/backgrounds/xuk-bg.png";
+import edenBg from "../assets/backgrounds/eden-bg.png";
+import ascanioBg from "../assets/backgrounds/ascanio-bg.png";
+import xukBg from "../assets/backgrounds/xuk-bg.png";
 
 // ── Per-book tension hooks ────────────────────────────────────────────────────
 const BOOK_HOOKS = [
@@ -38,11 +38,11 @@ const getImageUrl = (url: string | null | undefined): string => {
 
 // ── NavControls — stable top-level component (not inside GlobalClassics) ─────
 interface NavControlsProps {
-  onPrev:       () => void;
-  onNext:       () => void;
-  onDot:        (i: number) => void;
+  onPrev: () => void;
+  onNext: () => void;
+  onDot: (i: number) => void;
   displayBooks: Book[];
-  activeIndex:  number;
+  activeIndex: number;
 }
 
 const NavControls = ({
@@ -87,7 +87,7 @@ const NavControls = ({
           key={b.id}
           onClick={() => onDot(i)}
           animate={{
-            width:           i === activeIndex ? 20 : 4,
+            width: i === activeIndex ? 20 : 4,
             backgroundColor: i === activeIndex
               ? "var(--accent)"
               : "rgba(255,255,255,0.25)",
@@ -105,16 +105,16 @@ const NavControls = ({
 export default function GlobalClassics() {
   const { books, loading } = useData();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection]     = useState(1);
+  const [direction, setDirection] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isMobile, setIsMobile]       = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [mobileIndex, setMobileIndex] = useState(0);
-  const timerRef        = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
   const displayBooks = useMemo(() => books.slice(0, 4), [books]);
-  const total        = displayBooks.length;
-  const activeBook   = displayBooks[activeIndex];
+  const total = displayBooks.length;
+  const activeBook = displayBooks[activeIndex];
   const displayIndex = isMobile ? mobileIndex : activeIndex;
 
   const thumbBooks = useMemo(() => {
@@ -135,8 +135,8 @@ export default function GlobalClassics() {
   useEffect(() => {
     if (!isMobile || !mobileScrollRef.current || total === 0) return;
     const scroller = mobileScrollRef.current;
-    const delay    = mobileIndex === 0 ? 3000 : 6000;
-    const timer    = setTimeout(() => {
+    const delay = mobileIndex === 0 ? 3000 : 6000;
+    const timer = setTimeout(() => {
       const isEnd = mobileIndex >= total - 1;
       if (isEnd) {
         scroller.scrollTo({ left: 0, behavior: "smooth" });
@@ -179,9 +179,9 @@ export default function GlobalClassics() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [resetTimer]);
 
-  const onNext  = useCallback(() => { handleNext(); resetTimer(); }, [handleNext, resetTimer]);
-  const onPrev  = useCallback(() => { handlePrev(); resetTimer(); }, [handlePrev, resetTimer]);
-  const onDot   = useCallback((i: number) => {
+  const onNext = useCallback(() => { handleNext(); resetTimer(); }, [handleNext, resetTimer]);
+  const onPrev = useCallback(() => { handlePrev(); resetTimer(); }, [handlePrev, resetTimer]);
+  const onDot = useCallback((i: number) => {
     if (i !== activeIndex) { goTo(i, i > activeIndex ? 1 : -1); resetTimer(); }
   }, [activeIndex, goTo, resetTimer]);
   const onThumb = useCallback((i: number) => {
@@ -233,8 +233,8 @@ export default function GlobalClassics() {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="relative w-full min-h-screen bg-cover bg-center transition-all duration-1000 ease-in-out overflow-hidden"
+      viewport={{ once: true, amount: 0.1, margin: "50px" }}
+      className="relative w-full min-h-screen bg-cover bg-center transition-all duration-1000 ease-in-out overflow-hidden transform-gpu"
       style={{ backgroundImage: `url(${BOOK_BACKGROUNDS[displayIndex] || BOOK_BACKGROUNDS[0]})` }}
     >
       {/* Overlay */}
@@ -346,9 +346,9 @@ export default function GlobalClassics() {
                     key={`hero-${activeBook.id}`}
                     custom={direction}
                     variants={{
-                      initial: (dir: number) => ({ opacity: 0, x: dir > 0 ? 90  : -90,  scale: 0.93 }),
-                      animate: {                   opacity: 1, x: 0,              scale: 1    },
-                      exit:    (dir: number) => ({ opacity: 0, x: dir > 0 ? -90 : 90,   scale: 0.93 }),
+                      initial: (dir: number) => ({ opacity: 0, x: dir > 0 ? 90 : -90, scale: 0.93 }),
+                      animate: { opacity: 1, x: 0, scale: 1 },
+                      exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -90 : 90, scale: 0.93 }),
                     }}
                     initial="initial"
                     animate="animate"
@@ -390,8 +390,8 @@ export default function GlobalClassics() {
                   transition={{ duration: 0.5, delay: i * 0.07, ease: "easeOut" }}
                   className="relative w-[clamp(76px,7.5vw,105px)] aspect-[2/3] rounded-lg overflow-hidden cursor-pointer border border-accent/20 shadow-lg shrink-0 bg-muted"
                   style={{
-                    backgroundImage:    `url(${getImageUrl(book.cover_url)})`,
-                    backgroundSize:     "cover",
+                    backgroundImage: `url(${getImageUrl(book.cover_url)})`,
+                    backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
                 >
@@ -429,7 +429,7 @@ export default function GlobalClassics() {
             ref={mobileScrollRef}
             onScroll={(e) => {
               const scroller = e.currentTarget;
-              const index    = Math.round(
+              const index = Math.round(
                 scroller.scrollLeft / (scroller.scrollWidth / total)
               );
               setMobileIndex(index);
@@ -454,7 +454,7 @@ export default function GlobalClassics() {
                       loading="lazy"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
-                      viewport={{ once: true, margin: "-100px" }}
+                      viewport={{ once: true, amount: 0.1, margin: "50px" }}
                       transition={{ duration: 0.8 }}
                       className="w-full h-full object-cover"
                     />

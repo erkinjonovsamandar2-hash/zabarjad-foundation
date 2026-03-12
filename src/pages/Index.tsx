@@ -34,7 +34,7 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col min-h-screen"
+            className="flex flex-col min-h-screen will-change-transform transform-gpu"
           >
             <Navbar />
             <main className="flex-1">

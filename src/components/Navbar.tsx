@@ -88,10 +88,10 @@ const Navbar = () => {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-[1000]"
+        className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-[1000] will-change-transform transform-gpu"
         style={{ scaleX: scrollYProgress }}
       />
-      <nav className="fixed top-0 left-0 right-0 z-[999] bg-white/40 dark:bg-black/20 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out">
+      <nav className="fixed top-0 left-0 right-0 z-[999] bg-white/40 dark:bg-black/20 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out will-change-transform transform-gpu">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
 
           {/* ── Logo ── */}
@@ -236,7 +236,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-[96vw] max-w-4xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl border border-border/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] rounded-2xl p-6 lg:p-8 z-[1000]"
+                className="w-[96vw] max-w-4xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl border border-border/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] rounded-2xl p-6 lg:p-8 z-[1000] will-change-transform transform-gpu"
               >
                 <div className="grid grid-cols-3 gap-6 lg:gap-8">
                   {MEGA_MENU_CATEGORIES.map((cat) => (

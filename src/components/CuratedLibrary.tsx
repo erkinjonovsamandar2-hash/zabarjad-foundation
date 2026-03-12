@@ -13,11 +13,11 @@ const GOT_CATEGORY_KEY = "got";
 // ── Helper: Get Category Label (Multilingual) ─────────────────────────────────
 const getCategoryLabel = (key: string, lang: string): string => {
   const labels: Record<string, { uz: string; ru: string; en: string }> = {
-    all:      { uz: "Barchasi",          ru: "Все",                  en: "All" },
-    new:      { uz: "Yangi nashrlar",    ru: "Новинки",              en: "New Releases" },
-    featured: { uz: "Tez kunda",         ru: "Скоро",                en: "Coming Soon" },
-    golden:   { uz: "Oltin kolleksiya",  ru: "Золотая коллекция",    en: "Golden Collection" },
-    got:      { uz: "Taxtlar O'yini",    ru: "Игра Престолов",       en: "Game of Thrones" },
+    all: { uz: "Barchasi", ru: "Все", en: "All" },
+    new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
+    featured: { uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
+    golden: { uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Golden Collection" },
+    got: { uz: "Taxtlar O'yini", ru: "Игра Престолов", en: "Game of Thrones" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };
@@ -43,17 +43,17 @@ const CuratedLibrary = () => {
       if (activeTab === "all") return true;
 
       if (activeTab === GOT_CATEGORY_KEY) {
-        const seriesLower  = (b as any).series?.toLowerCase() || "";
-        const titleLower   = b.title?.toLowerCase() || "";
+        const seriesLower = (b as any).series?.toLowerCase() || "";
+        const titleLower = b.title?.toLowerCase() || "";
         const titleEnLower = b.title_en?.toLowerCase() || "";
         const titleRuLower = b.title_ru?.toLowerCase() || "";
         return (
-          seriesLower.includes("taxtlar")  ||
-          seriesLower.includes("game")     ||
-          seriesLower.includes("thrones")  ||
-          titleLower.includes("taxtlar")   ||
-          titleLower.includes("qirollar")  ||
-          titleEnLower.includes("game")    ||
+          seriesLower.includes("taxtlar") ||
+          seriesLower.includes("game") ||
+          seriesLower.includes("thrones") ||
+          titleLower.includes("taxtlar") ||
+          titleLower.includes("qirollar") ||
+          titleEnLower.includes("game") ||
           titleEnLower.includes("thrones") ||
           titleRuLower.includes("престол") ||
           titleRuLower.includes("игра")
@@ -74,8 +74,8 @@ const CuratedLibrary = () => {
       <div
         className="absolute inset-0 pointer-events-none -z-10 opacity-20 mix-blend-multiply"
         style={{
-          backgroundImage:    `url(${parchmentTexture})`,
-          backgroundSize:     "cover",
+          backgroundImage: `url(${parchmentTexture})`,
+          backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       />
@@ -119,7 +119,7 @@ const CuratedLibrary = () => {
         <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
           {CATEGORIES.map((categoryKey) => {
             const isActive = activeTab === categoryKey;
-            const isGoT    = categoryKey === GOT_CATEGORY_KEY;
+            const isGoT = categoryKey === GOT_CATEGORY_KEY;
 
             return (
               <button
@@ -150,7 +150,21 @@ const CuratedLibrary = () => {
         </div>
 
         {/* ── 3D Book Grid ── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-3xl md:max-w-4xl mx-auto px-4">
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-3xl md:max-w-4xl mx-auto px-4"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1, margin: "50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+        >
           <AnimatePresence mode="popLayout">
             {displayedBooks.map((book, i) => {
               const imgSrc = getImageUrl(book.cover_url);
@@ -158,13 +172,14 @@ const CuratedLibrary = () => {
               return (
                 <motion.div
                   key={book.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+                  }}
                   exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.3, delay: i * 0.05 }}
                   onClick={() => navigate(`/book/${book.id}`)}
                   // PERF: content-visibility:auto skips layout+paint for off-screen cards
-                  className="group flex flex-col gap-2 max-w-[220px] mx-auto w-full cursor-pointer will-change-transform [content-visibility:auto] [contain-intrinsic-size:380px]"
+                  className="group flex flex-col gap-2 max-w-[220px] mx-auto w-full cursor-pointer will-change-transform transform-gpu [content-visibility:auto] [contain-intrinsic-size:380px]"
                 >
                   {/* 3D Hardcover Cover */}
                   <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-[4px_4px_10px_rgba(0,0,0,0.15),_inset_-4px_0_4px_rgba(255,255,255,0.4)] group-hover:-translate-y-3 group-hover:-rotate-1 group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.2)] transition-all duration-500 bg-muted will-change-transform">
@@ -219,7 +234,7 @@ const CuratedLibrary = () => {
               );
             })}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         {/* ── View All Button ── */}
         <div className="flex justify-center mt-10 mb-8">
