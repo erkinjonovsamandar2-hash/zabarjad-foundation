@@ -113,7 +113,7 @@ const Footer = () => {
           <div className="flex flex-col gap-6 lg:pr-8">
             <Link to="/" className="flex items-center gap-3 group mb-2">
               <img
-                src="/public/Logo-blue.png"
+                src="/Logo-blue.png"
                 alt="Booktopia Logo"
                 className="h-12 w-auto object-contain transition-transform group-hover:scale-[1.02]"
               />

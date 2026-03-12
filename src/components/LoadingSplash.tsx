@@ -29,6 +29,7 @@ const LoadingSplash = () => {
       <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
+          exit={{ opacity: 0, transition: { duration: 0.2, repeat: 0 } }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           className="w-[800px] h-[800px] rounded-full border border-accent/30 border-dashed"
         />
@@ -39,6 +40,7 @@ const LoadingSplash = () => {
         {/* Soft pulsing aura behind logo */}
         <motion.div
           animate={{ scale: [1, 1.25, 1], opacity: [0.15, 0.35, 0.15] }}
+          exit={{ opacity: 0, scale: 1, transition: { duration: 0.2, repeat: 0 } }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           className="absolute inset-[-40px] bg-accent blur-[50px] rounded-full"
         />
@@ -51,7 +53,7 @@ const LoadingSplash = () => {
         >
           {/* Brand Logo Image (Replaced Text) */}
           <img
-            src="/public/Logo-blue.png"
+            src="/Logo-blue.png"
             alt="Booktopia Logo"
             className="h-16 sm:h-24 w-auto object-contain drop-shadow-md"
             draggable={false}
@@ -89,7 +91,7 @@ const LoadingSplash = () => {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="font-sans text-[10px] uppercase tracking-[0.5em] text-foreground/40 font-bold"
         >
-          Nashriyot · Est. 2018
+          Nashriyot · Est. 2024
         </motion.p>
       </div>
     </motion.div>

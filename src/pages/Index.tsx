@@ -18,6 +18,9 @@ import ScrollToTop from "@/components/ScrollToTop";
 const Index = () => {
   const { loading } = useData();
 
+  // DEBUG LOG
+  console.log("[Index.tsx] Render -> DataContext loading state:", loading);
+
   return (
     <div className="min-h-screen bg-background">
       <ScrollToTop />

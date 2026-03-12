@@ -5,6 +5,11 @@ interface PageTransitionProps {
   children: ReactNode;
 }
 
+// ✅ No changes needed — this file is architecturally correct.
+//
+// Single <motion.div> root element — no fragments, no siblings.
+// Framer Motion can correctly track enter/exit states on this element.
+// The blur + slide transition is intentional premium UX — kept intact.
 const PageTransition = ({ children }: PageTransitionProps) => {
   return (
     <motion.div

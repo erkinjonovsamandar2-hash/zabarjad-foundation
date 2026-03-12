@@ -1,9 +1,15 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { DEFAULT_QUIZ_CONFIG, DEFAULT_SITE_SETTINGS } from "@/lib/mockData";
 import type { Book, Article } from "@/types/database";
 
-// Re-export so all consumers can import from DataContext as before
 export type { Book, Article };
 
 // ── Review type ───────────────────────────────────────────────────────────────
@@ -18,7 +24,7 @@ export interface Review {
   created_at: string;
 }
 
-// ── Types not yet in the DB ───────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 export interface QuizStep {
   question: string;
   options: { label: string; value: string }[];
@@ -61,9 +67,7 @@ interface DataContextType {
   updateSiteSettings: (settings: SiteSettings) => Promise<void>;
   refreshBooks: () => Promise<void>;
   refreshArticles: () => Promise<void>;
-  submitReview: (
-    payload: Omit<Review, "id" | "status" | "created_at">
-  ) => Promise<{ error: string | null }>;
+  submitReview: (payload: Omit<Review, "id" | "status" | "created_at">) => Promise<{ error: string | null }>;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -73,6 +77,12 @@ export const useData = () => {
   if (!ctx) throw new Error("useData must be used within DataProvider");
   return ctx;
 };
+
+// ── Supabase error codes ──────────────────────────────────────────────────────
+// 42P01  = table does not exist (PostgreSQL)
+// PGRST116 = no rows returned (PostgREST)
+const TABLE_NOT_FOUND = "42P01";
+const NO_ROWS = "PGRST116";
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 export const DataProvider = ({ children }: { children: ReactNode }) => {
@@ -85,86 +95,183 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
   // ── Fetchers ──────────────────────────────────────────────────────────────
 
-  const fetchBooks = async () => {
-    const { data, error } = await supabase
-      .from("books")
-      .select("*")
-      .order("created_at", { ascending: false })
-      // Cache-busting: add a dummy query param that changes to avoid stale responses
-      .setHeader("x-client-info", `booktopia-${Date.now()}`);
+  // FIX: Wrapped in try/catch to match all other fetchers.
+  // FIX: Removed .setHeader("x-client-info", ...) — this method does NOT exist
+  //      on the Supabase JS v2 query builder. It was throwing a synchronous
+  //      TypeError before the await resolved, which could propagate outside
+  //      Promise.allSettled and cause the loading state to hang forever.
+  const fetchBooks = useCallback(async () => {
+    try {
+      console.log("[DataContext] Attempting to fetch books...");
+      const { data, error } = await supabase
+        .from("books")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    if (error) { console.error("[DataContext] fetchBooks error:", error.message); return; }
-    if (data) setBooks(data as Book[]);
-  };
+      if (error) {
+        console.error("[DataContext] FAILED to fetch books:", error);
+        if (error.code === TABLE_NOT_FOUND) {
+          console.warn("[DataContext] fetchBooks: books table not found");
+          return;
+        }
+        return;
+      }
 
-  const fetchArticles = async () => {
-    const { data, error } = await supabase
-      .from("articles")
-      .select("*")
-      .order("date", { ascending: false });
-    if (error) { console.error("[DataContext] fetchArticles error:", error.message); return; }
-    if (data) setArticles(data as Article[]);
-  };
-
-  // ── NEW: fetch published reviews only ─────────────────────────────────────
-  const fetchReviews = async () => {
-    const { data, error } = await (supabase as any)
-      .from("reviews")
-      .select("*")
-      .eq("status", "published")
-      .order("created_at", { ascending: false });
-    if (error) { console.error("[DataContext] fetchReviews error:", error.message); return; }
-    if (data) setReviews(data as Review[]);
-  };
-
-  const fetchQuiz = async () => {
-    const { data, error } = await supabase
-      .from("quiz_config")
-      .select("*")
-      .limit(1)
-      .single();
-    if (error && error.code !== "PGRST116") {
-      console.error("[DataContext] fetchQuiz error:", error.message);
-      return;
+      console.log(`[DataContext] Successfully fetched ${data?.length || 0} books.`);
+      if (data) setBooks(data as Book[]);
+    } catch (err) {
+      console.error("[DataContext] fetchBooks threw unexpected error:", err);
     }
-    if (data?.config) setQuizConfig(data.config as unknown as QuizConfig);
-  };
-
-  const fetchSiteSettings = async () => {
-    const { data, error } = await supabase.from("site_settings").select("*");
-    if (error) { console.error("[DataContext] fetchSiteSettings error:", error.message); return; }
-    if (data && data.length > 0) {
-      const settings: Record<string, unknown> = {};
-      data.forEach((row: { key: string; value: unknown }) => {
-        settings[row.key] = row.value;
-      });
-      setSiteSettings({ ...DEFAULT_SITE_SETTINGS, ...settings } as unknown as SiteSettings);
-    }
-  };
-
-  useEffect(() => {
-    Promise.all([
-      fetchBooks(),
-      fetchArticles(),
-      fetchReviews(),       // ← added
-      fetchQuiz(),
-      fetchSiteSettings(),
-    ]).finally(() => setLoading(false));
   }, []);
 
-  // ── NEW: submitReview — inserts pending row ───────────────────────────────
-  const submitReview = async (
+  // fetchArticles — silently handles missing table (42P01)
+  const fetchArticles = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("articles")
+        .select("*")
+        .order("date", { ascending: false });
+
+      if (error) {
+        if (error.code === TABLE_NOT_FOUND) return;
+        console.warn("[DataContext] fetchArticles:", error.message);
+        return;
+      }
+      if (data) setArticles(data as Article[]);
+    } catch (err) {
+      console.warn("[DataContext] fetchArticles unexpected:", err);
+    }
+  }, []);
+
+  // fetchReviews — silently handles missing table (42P01)
+  const fetchReviews = useCallback(async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("reviews")
+        .select("*")
+        .eq("status", "published")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        if (error.code === TABLE_NOT_FOUND) return;
+        console.warn("[DataContext] fetchReviews:", error.message);
+        return;
+      }
+      if (data) setReviews(data as Review[]);
+    } catch (err) {
+      console.warn("[DataContext] fetchReviews unexpected:", err);
+    }
+  }, []);
+
+  // fetchQuiz — silently handles missing table (42P01) and no rows (PGRST116)
+  const fetchQuiz = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("quiz_config")
+        .select("*")
+        .limit(1)
+        .single();
+
+      if (error) {
+        if (error.code === TABLE_NOT_FOUND || error.code === NO_ROWS) return;
+        console.warn("[DataContext] fetchQuiz:", error.message);
+        return;
+      }
+      if (data?.config) setQuizConfig(data.config as unknown as QuizConfig);
+    } catch (err) {
+      console.warn("[DataContext] fetchQuiz unexpected:", err);
+    }
+  }, []);
+
+  // fetchSiteSettings — silently handles missing table (42P01)
+  const fetchSiteSettings = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("*");
+
+      if (error) {
+        if (error.code === TABLE_NOT_FOUND) return;
+        console.warn("[DataContext] fetchSiteSettings:", error.message);
+        return;
+      }
+      if (data && data.length > 0) {
+        const settings: Record<string, unknown> = {};
+        data.forEach((row: { key: string; value: unknown }) => {
+          settings[row.key] = row.value;
+        });
+        setSiteSettings({
+          ...DEFAULT_SITE_SETTINGS,
+          ...settings,
+        } as unknown as SiteSettings);
+      }
+    } catch (err) {
+      console.warn("[DataContext] fetchSiteSettings unexpected:", err);
+    }
+  }, []);
+
+  // ── Initial parallel data load ────────────────────────────────────────────
+  // Promise.allSettled — one failing fetch never blocks others.
+  // Each fetcher has its own try/catch so allSettled never sees a rejection.
+  // The finally block GUARANTEES setLoading(false) runs no matter what.
+  useEffect(() => {
+    const init = async () => {
+      try {
+        console.log("[DataContext] Fetching data...");
+        const fetchAllPromise = Promise.allSettled([
+          fetchBooks(),
+          fetchArticles(),
+          fetchReviews(),
+          fetchQuiz(),
+          fetchSiteSettings(),
+        ]);
+
+        const timeoutPromise = new Promise((resolve) =>
+          setTimeout(() => {
+            console.warn("[DataContext] Fetch loop timed out after 5s! Resolving early to prevent deadlock.");
+            resolve(null);
+          }, 5000)
+        );
+
+        await Promise.race([fetchAllPromise, timeoutPromise]);
+      } catch (err) {
+        // Outermost safety net — Promise.allSettled itself never rejects,
+        // but this catches any synchronous error in the orchestration layer.
+        console.warn("[DataContext] init unexpected:", err);
+      } finally {
+        // CRITICAL: This MUST be in finally — it runs even if catch fires.
+        // This is the single source of truth that resolves the loading splash.
+        console.log("[DataContext] Resolving initial load state... setLoading(false)");
+        setLoading(false);
+      }
+    };
+
+    init();
+  }, [fetchBooks, fetchArticles, fetchReviews, fetchQuiz, fetchSiteSettings]);
+
+  // ── submitReview ──────────────────────────────────────────────────────────
+  const submitReview = useCallback(async (
     payload: Omit<Review, "id" | "status" | "created_at">
   ): Promise<{ error: string | null }> => {
-    const { error } = await (supabase as any)
-      .from("reviews")
-      .insert({ ...payload, status: "pending" });
-    return { error: error?.message ?? null };
-  };
+    try {
+      const { error } = await (supabase as any)
+        .from("reviews")
+        .insert({ ...payload, status: "pending" });
+
+      if (error?.code === TABLE_NOT_FOUND) {
+        return { error: "Sharh xizmati hozircha mavjud emas." };
+      }
+      return { error: error?.message ?? null };
+    } catch (err) {
+      return { error: "Kutilmagan xato yuz berdi." };
+    }
+  }, []);
 
   // ── Mutators — Books ──────────────────────────────────────────────────────
 
-  const addBook = async (book: Omit<Book, "id" | "created_at" | "updated_at">) => {
+  const addBook = useCallback(async (
+    book: Omit<Book, "id" | "created_at" | "updated_at">
+  ) => {
     const { error } = await supabase.from("books").insert({
       title: book.title,
       title_en: book.title_en,
@@ -184,13 +291,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       sort_order: book.sort_order,
     });
     if (error) {
-      console.error("[DataContext] addBook error:", error.message);
+      console.warn("[DataContext] addBook:", error.message);
       throw new Error(error.message);
     }
     await fetchBooks();
-  };
+  }, [fetchBooks]);
 
-  const updateBook = async (id: string, data: Partial<Book>) => {
+  const updateBook = useCallback(async (id: string, data: Partial<Book>) => {
     const payload: Record<string, unknown> = {};
     if (data.title !== undefined) payload.title = data.title;
     if (data.title_en !== undefined) payload.title_en = data.title_en;
@@ -208,31 +315,32 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     if (data.enable_3d_flip !== undefined) payload.enable_3d_flip = data.enable_3d_flip;
     if (data.featured !== undefined) payload.featured = data.featured;
     if (data.sort_order !== undefined) payload.sort_order = data.sort_order;
+
     const { error } = await supabase.from("books").update(payload).eq("id", id);
     if (error) {
-      console.error("[DataContext] updateBook error:", error.message);
+      console.warn("[DataContext] updateBook:", error.message);
       throw new Error(error.message);
     }
-
-    // Optimistically update local state so the UI reflects the change immediately
+    // Optimistic update — reflect immediately
     setBooks((prev) => prev.map((b) => (b.id === id ? { ...b, ...payload } : b)));
-
-    // Then re-fetch to ensure sync with remote
+    // Re-fetch to ensure remote sync
     await fetchBooks();
-  };
+  }, [fetchBooks]);
 
-  const deleteBook = async (id: string) => {
+  const deleteBook = useCallback(async (id: string) => {
     const { error } = await supabase.from("books").delete().eq("id", id);
     if (error) {
-      console.error("[DataContext] deleteBook error:", error.message);
+      console.warn("[DataContext] deleteBook:", error.message);
       throw new Error(error.message);
     }
     await fetchBooks();
-  };
+  }, [fetchBooks]);
 
   // ── Mutators — Articles ───────────────────────────────────────────────────
 
-  const addArticle = async (article: Omit<Article, "id" | "created_at" | "updated_at">) => {
+  const addArticle = useCallback(async (
+    article: Omit<Article, "id" | "created_at" | "updated_at">
+  ) => {
     const { error } = await supabase.from("articles").insert({
       title: article.title,
       title_en: article.title_en,
@@ -248,13 +356,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       published: article.published,
     });
     if (error) {
-      console.error("[DataContext] addArticle error:", error.message);
+      console.warn("[DataContext] addArticle:", error.message);
       throw new Error(error.message);
     }
     await fetchArticles();
-  };
+  }, [fetchArticles]);
 
-  const updateArticle = async (id: string, data: Partial<Article>) => {
+  const updateArticle = useCallback(async (id: string, data: Partial<Article>) => {
     const payload: Record<string, unknown> = {};
     if (data.title !== undefined) payload.title = data.title;
     if (data.title_en !== undefined) payload.title_en = data.title_en;
@@ -268,26 +376,27 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     if (data.cover_url !== undefined) payload.cover_url = data.cover_url;
     if (data.date !== undefined) payload.date = data.date;
     if (data.published !== undefined) payload.published = data.published;
+
     const { error } = await supabase.from("articles").update(payload).eq("id", id);
     if (error) {
-      console.error("[DataContext] updateArticle error:", error.message);
+      console.warn("[DataContext] updateArticle:", error.message);
       throw new Error(error.message);
     }
     await fetchArticles();
-  };
+  }, [fetchArticles]);
 
-  const deleteArticle = async (id: string) => {
+  const deleteArticle = useCallback(async (id: string) => {
     const { error } = await supabase.from("articles").delete().eq("id", id);
     if (error) {
-      console.error("[DataContext] deleteArticle error:", error.message);
+      console.warn("[DataContext] deleteArticle:", error.message);
       throw new Error(error.message);
     }
     await fetchArticles();
-  };
+  }, [fetchArticles]);
 
   // ── Mutators — Quiz & Settings ────────────────────────────────────────────
 
-  const updateQuizConfig = async (config: QuizConfig) => {
+  const updateQuizConfig = useCallback(async (config: QuizConfig) => {
     setQuizConfig(config);
     const { data: existing } = await supabase
       .from("quiz_config")
@@ -296,35 +405,42 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       .single();
     const serialized = JSON.parse(JSON.stringify(config));
     if (existing) {
-      const { error } = await supabase.from("quiz_config").update({ config: serialized }).eq("id", existing.id);
+      const { error } = await supabase
+        .from("quiz_config")
+        .update({ config: serialized })
+        .eq("id", existing.id);
       if (error) {
-        console.error("[DataContext] updateQuizConfig error:", error.message);
+        console.warn("[DataContext] updateQuizConfig:", error.message);
         throw new Error(error.message);
       }
     } else {
-      const { error } = await supabase.from("quiz_config").insert({ config: serialized });
+      const { error } = await supabase
+        .from("quiz_config")
+        .insert({ config: serialized });
       if (error) {
-        console.error("[DataContext] updateQuizConfig error:", error.message);
+        console.warn("[DataContext] updateQuizConfig:", error.message);
         throw new Error(error.message);
       }
     }
-  };
+  }, []);
 
-  const updateSiteSettings = async (settings: SiteSettings) => {
+  const updateSiteSettings = useCallback(async (settings: SiteSettings) => {
     setSiteSettings(settings);
     for (const [key, value] of Object.entries(settings)) {
       const { error } = await supabase
         .from("site_settings")
-        .upsert({ key, value: JSON.parse(JSON.stringify(value)) }, { onConflict: "key" });
+        .upsert(
+          { key, value: JSON.parse(JSON.stringify(value)) },
+          { onConflict: "key" }
+        );
       if (error) {
-        console.error("[DataContext] updateSiteSettings error:", error.message);
+        console.warn("[DataContext] updateSiteSettings:", error.message);
         throw new Error(error.message);
       }
     }
-  };
+  }, []);
 
   // ── Render ────────────────────────────────────────────────────────────────
-
   return (
     <DataContext.Provider
       value={{

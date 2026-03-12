@@ -771,3 +771,26 @@ This file tracks architectural decisions and corrections to ensure the AI does n
 * Ribbon fold effect: Use border triangles (border-t-4 border-l-4 with transparent side).
 * Badge text sizing: text-[9px] font-bold uppercase tracking-wider (small, impactful).
 * When user says "DO NOT touch X", preserve that element exactly (no refactoring or "improvements").
+### [LEARN] 
+content-visibility: auto is incompatible with ;Framer Motion animations (whileHover, animate, layout, whileInView). Never apply [content-visibility:auto] to any element that has Framer Motion props — use bg-muted placeholder + aspect-ratio for CLS prevention instead.
+
+supabase.auth.getSession() + onAuthStateChange together cause duplicate role fetches. onAuthStateChange fires INITIAL_SESSION on mount — getSession() is redundant. Always use only onAuthStateChange with a useRef userId guard.
+
+### [LEARN] 
+
+.setHeader() does NOT exist on the Supabase JS v2 query builder chain. Never use it. It throws a synchronous TypeError that can escape Promise.allSettled and prevent finally from running.
+
+setLoading(false) in AuthContext MUST be inside a finally block wrapping the entire onAuthStateChange callback — not placed after an await call. Any await before it is a loading hang waiting to happen.
+
+Always add a hard timeout safety net (5s) in AuthContext for the case where onAuthStateChange never fires due to Supabase initialization failure or network issues at startup.
+
+### LEARN
+
+AuthContext loading pattern — the only correct architecture:
+
+initializeSession() owns setLoading(false) exclusively in a finally block
+onAuthStateChange skips INITIAL_SESSION and never touches loading
+No setTimeout safety net needed when finally is used correctly
+No loadingResolvedRef needed when there is only one initialization path
+For Vite HMR: only export the component and the hook — all helpers stay internal
+

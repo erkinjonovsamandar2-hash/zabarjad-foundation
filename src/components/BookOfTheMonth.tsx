@@ -23,7 +23,16 @@ const BookOfTheMonth = () => {
     return `${base}/storage/v1/object/public/${url}`;
   };
 
-  if (!spotlightBook) return null;
+  // Keep a skeleton state if loading or timed out without books
+  if (!spotlightBook) {
+    return (
+      <section className="relative flex flex-col justify-center min-h-[50vh] overflow-hidden bg-background py-24 lg:py-32 border-y border-border z-10">
+        <div className="absolute inset-0 flex items-center justify-center opacity-30 text-muted-foreground font-sans text-sm tracking-widest uppercase">
+          [Kitob ma'lumotlari yuklanmoqda...]
+        </div>
+      </section>
+    );
+  }
 
   const coverUrl = getImageUrl(spotlightBook.cover_url);
   const glowColor = `hsl(${spotlightBook.bg_color ?? "40 65% 30%"})`;
@@ -88,10 +97,7 @@ const BookOfTheMonth = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[100px] opacity-15 dark:opacity-20"
           style={{ background: `radial-gradient(circle, ${glowColor} 0%, transparent 70%)` }} />
-        <svg width="0" height="0" className="absolute" aria-hidden>
-          <defs><filter id="botm-grain"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /><feBlend in="SourceGraphic" mode="multiply" /></filter></defs>
-        </svg>
-        <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02]" style={{ filter: "url(#botm-grain)" }} />
+        {/* FIX: Removed SVG <feTurbulence> to prevent full-section paint thrashing on scroll */}
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 sm:px-12">
@@ -147,13 +153,13 @@ const BookOfTheMonth = () => {
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
               className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mt-0 lg:mt-6 mb-6"
             >
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
                 <Award className="w-3.5 h-3.5 text-accent" /> Jahon durdonasi
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
                 <Brain className="w-3.5 h-3.5 text-accent" /> {genre}
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
                 <Clock className="w-3.5 h-3.5 text-accent" /> ~{pages} sahifa
               </div>
             </motion.div>
@@ -164,7 +170,7 @@ const BookOfTheMonth = () => {
               className="relative w-full max-w-xl mb-8 text-left"
             >
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-primary rounded-l-2xl shadow-[0_0_10px_rgba(245,158,11,0.4)]" />
-              <div className="bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 rounded-2xl rounded-l-none p-5 sm:p-6 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+              <div className="bg-white/95 dark:bg-black/60 border border-white/60 dark:border-white/10 rounded-2xl rounded-l-none p-5 sm:p-6 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
                 <div className="flex items-center gap-2 mb-2">
                   <Info className="w-4 h-4 text-primary dark:text-accent" />
                   <h4 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-foreground">
@@ -182,7 +188,7 @@ const BookOfTheMonth = () => {
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }}
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               onClick={() => navigate(`/book/${spotlightBook.id}`)}
-              className="group relative inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-2xl hover:bg-primary hover:border-primary px-8 py-3.5 sm:py-4 transition-all duration-500 ease-out shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] w-full sm:w-auto focus:outline-none hover:text-primary-foreground"
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/60 dark:border-white/10 bg-white dark:bg-black/40 hover:bg-primary hover:border-primary px-8 py-3.5 sm:py-4 transition-all duration-500 ease-out shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] w-full sm:w-auto focus:outline-none hover:text-primary-foreground"
             >
               <BookOpen className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors duration-500 ease-out" />
               <span className="font-sans font-bold text-[11px] tracking-[0.2em] uppercase group-hover:text-primary-foreground transition-colors duration-500 ease-out">Batafsil o'qish</span>
