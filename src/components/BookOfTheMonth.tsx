@@ -45,9 +45,7 @@ const BookOfTheMonth = () => {
   // ── Reusable Book Visual Component (For clever mobile ordering) ─────────────
   const FloatingBookVisual = () => (
     <>
-      <motion.div
-        animate={{ y: [-8, 8, -8] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      <div
         className="relative z-10 perspective-1000"
       >
         <div
@@ -63,15 +61,12 @@ const BookOfTheMonth = () => {
             <div className="w-full h-full bg-neutral-800" />
           )}
           <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.1] via-transparent to-black/40 pointer-events-none" />
         </div>
-      </motion.div>
+      </div>
 
       {/* Floor Shadow */}
-      <motion.div
-        animate={{ scale: [1, 0.85, 1], opacity: [0.4, 0.2, 0.4] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="w-44 sm:w-56 h-6 bg-black/20 dark:bg-black/80 blur-[12px] rounded-[100%] mt-6"
+      <div
+        className="w-44 sm:w-56 h-6 bg-black/20 dark:bg-black/80 blur-[12px] rounded-[100%] mt-6 opacity-30"
       />
     </>
   );
@@ -81,8 +76,8 @@ const BookOfTheMonth = () => {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      viewport={{ once: true, margin: "-100px" }}
-      className="relative flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-background py-24 lg:py-32 border-y border-border z-10"
+      viewport={{ once: true, amount: 0.1 }}
+      className="relative grain-overlay flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-background py-24 lg:py-32 border-y border-border z-10"
     >
 
       {/* ── Background: Van Gogh Feather & Texture ──────────────────────────── */}
@@ -110,7 +105,7 @@ const BookOfTheMonth = () => {
             {/* 1. Premium Badge - MADE BIGGER */}
             <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/30 bg-primary/10 text-primary/90 dark:text-accent font-bold tracking-[0.2em] font-sans text-[11px] uppercase mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/30 bg-gold/10 text-gold font-bold tracking-[0.2em] font-sans text-[11px] uppercase mb-6"
             >
               <span className="text-sm sm:text-base leading-none">✦</span>
               OY KITOBI
@@ -135,7 +130,7 @@ const BookOfTheMonth = () => {
               <h2 className="font-heading leading-[1.05] tracking-wide text-2xl sm:text-3xl font-bold text-foreground">
                 {locField(spotlightBook, "title", lang)}
               </h2>
-              <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-primary dark:text-accent font-bold mt-1.5">
+              <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-gold font-bold mt-1.5">
                 {locField(spotlightBook, "author", lang)}
               </p>
             </motion.div>
@@ -169,10 +164,10 @@ const BookOfTheMonth = () => {
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
               className="relative w-full max-w-xl mb-8 text-left"
             >
-              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-primary rounded-l-2xl shadow-[0_0_10px_rgba(245,158,11,0.4)]" />
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gold rounded-l-2xl shadow-[0_0_10px_rgba(213,173,54,0.4)]" />
               <div className="bg-white/95 dark:bg-black/60 border border-white/60 dark:border-white/10 rounded-2xl rounded-l-none p-5 sm:p-6 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
                 <div className="flex items-center gap-2 mb-2">
-                  <Info className="w-4 h-4 text-primary dark:text-accent" />
+                  <Info className="w-4 h-4 text-gold" />
                   <h4 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Nega o'qish kerak?
                   </h4>
@@ -183,16 +178,15 @@ const BookOfTheMonth = () => {
               </div>
             </motion.div>
 
-            {/* 6. CTA Button */}
             <motion.button
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }}
-              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.985 }}
               onClick={() => navigate(`/book/${spotlightBook.id}`)}
-              className="group relative inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/60 dark:border-white/10 bg-white dark:bg-black/40 hover:bg-primary hover:border-primary px-8 py-3.5 sm:py-4 transition-all duration-500 ease-out shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] w-full sm:w-auto focus:outline-none hover:text-primary-foreground"
+              className="btn-glass"
             >
-              <BookOpen className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors duration-500 ease-out" />
-              <span className="font-sans font-bold text-[11px] tracking-[0.2em] uppercase group-hover:text-primary-foreground transition-colors duration-500 ease-out">Batafsil o'qish</span>
-              <ChevronRight className="h-4 w-4 text-primary group-hover:text-primary-foreground group-hover:translate-x-0.5 transition-transform duration-500 ease-out" />
+              <BookOpen className="h-4 w-4" />
+              <span className="font-sans font-bold text-[11px] tracking-[0.2em] uppercase">Batafsil o'qish</span>
+              <ChevronRight className="h-4 w-4" />
             </motion.button>
 
           </div>

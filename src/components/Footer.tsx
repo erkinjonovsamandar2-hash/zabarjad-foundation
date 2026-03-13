@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="relative isolate bg-background border-t border-border pt-24 md:pt-32 pb-12 overflow-hidden"
+      className="relative isolate grain-overlay bg-background border-t border-border pt-24 md:pt-32 pb-12 overflow-hidden"
     >
       {/* ── Subtle Background Glow ── */}
       <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-amber-500/5 via-background to-background" />
@@ -36,7 +36,7 @@ const Footer = () => {
         </div>
 
         {/* ── Top Section: Catalogue & Newsletter CTA ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 p-8 md:p-10 rounded-3xl bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 p-8 md:p-10 rounded-3xl bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
 
           {/* Catalogue Download */}
           <div className="flex flex-col items-start border-b md:border-b-0 md:border-r border-accent/20 pb-8 md:pb-0 md:pr-8">
@@ -49,7 +49,7 @@ const Footer = () => {
             <a
               href="/katalog.pdf"
               download
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-primary text-primary-foreground font-sans font-bold text-[11px] tracking-[0.2em] uppercase shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)] hover:bg-primary/90 transition-all duration-500 ease-out"
+              className="btn-glass"
             >
               <Download className="w-4 h-4" />
               PDF formatda yuklab olish
@@ -66,8 +66,8 @@ const Footer = () => {
             </p>
             {/* Newsletter Form */}
             <form className="w-full flex items-center gap-2 mb-6" onSubmit={(e) => { e.preventDefault(); }}>
-              <input type="email" placeholder="Email manzilingiz" className="flex-1 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-border rounded-xl px-4 py-3.5 sm:py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary" required />
-              <button type="submit" className="bg-primary text-primary-foreground px-6 py-3.5 sm:py-4 rounded-xl font-sans text-[11px] font-bold tracking-[0.2em] uppercase shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)] hover:bg-primary/90 transition-all duration-500 ease-out">Obuna</button>
+              <input type="email" placeholder="Email manzilingiz" className="flex-1 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-border rounded-xl px-4 py-3.5 sm:py-4 text-sm focus:outline-none z-10" required />
+              <button type="submit" className="btn-glass">Obuna</button>
             </form>
             <div className="flex flex-wrap items-center gap-3">
               <a
@@ -167,21 +167,21 @@ const Footer = () => {
               {/* UPDATED: font-serif on all footer links */}
               <Link
                 to="/library"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Barcha kitoblar</span>
               </Link>
               <Link
                 to="/library?tab=new"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Yangi nashrlar</span>
               </Link>
               <Link
                 to="/authors"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Mualliflar va Tarjimonlar</span>
@@ -216,21 +216,21 @@ const Footer = () => {
             >
               <Link
                 to="/biz-haqimizda"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Biz haqimizda</span>
               </Link>
               <Link
                 to="/blog"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Booktopia Kundaligi</span>
               </Link>
               <Link
                 to="/aloqa"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Aloqa va Hamkorlik</span>
@@ -265,28 +265,28 @@ const Footer = () => {
             >
               <Link
                 to="/oferta"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Ommaviy ofеrta</span>
               </Link>
               <Link
                 to="/maxfiylik"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Maxfiylik siyosati</span>
               </Link>
               <Link
                 to="/shartlar"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Foydalanish shartlari</span>
               </Link>
               <Link
                 to="/yetkazish"
-                className="group/link flex items-center gap-3 text-[13px] font-serif font-bold text-foreground/70 hover:text-primary transition-colors py-1"
+                className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
               >
                 <span className="w-1.5 h-1.5 rounded-full border border-primary/40 group-hover/link:bg-primary group-hover/link:border-primary transition-all duration-300" />
                 <span className="group-hover/link:translate-x-1 transition-transform duration-300">Yetkazib berish</span>

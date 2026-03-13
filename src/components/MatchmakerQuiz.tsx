@@ -163,7 +163,7 @@ const MatchmakerQuiz = () => {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, amount: 0.1 }}
       className="relative overflow-hidden py-24 sm:py-32 border-y border-border z-10 flex items-center justify-center"
     >
 
@@ -232,11 +232,11 @@ const MatchmakerQuiz = () => {
                     <motion.button
                       key={opt.value}
                       onClick={() => handleAnswer(opt.value)}
-                      whileHover={{ y: -3, scale: 1.02 }}
+                      whileHover={{ y: -3 }}
                       whileTap={{ scale: 0.98 }}
                       className="group flex flex-col items-center text-center rounded-2xl p-4 cursor-pointer bg-white/40 dark:bg-black/20 border border-white/60 dark:border-white/10 shadow-[0_4px_20px_rgba(38,89,153,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(38,89,153,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-500 ease-out hover:border-accent"
                     >
-                      <div className="w-14 h-14 mb-3 rounded-full overflow-hidden bg-background flex items-center justify-center shrink-0 border-2 border-border group-hover:scale-110 transition-transform duration-500 ease-out">
+                      <div className="w-14 h-14 mb-3 rounded-full overflow-hidden bg-background flex items-center justify-center shrink-0 border-2 border-border transition-transform duration-500 ease-out">
                         <img src={opt.img} alt={opt.label} className="w-9 h-9 object-contain" draggable={false} />
                       </div>
                       {/* GOLD OPTION LABELS */}
@@ -308,9 +308,9 @@ const MatchmakerQuiz = () => {
                   <div className="flex flex-col sm:flex-row items-center gap-3">
                     {recBook && (
                       <motion.button
-                        whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                        whileTap={{ scale: 0.985 }}
                         onClick={() => navigate(`/book/${recBook.id}`)}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-primary text-primary-foreground px-8 py-3.5 sm:py-4 font-sans font-bold text-[11px] tracking-[0.2em] uppercase shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)] transition-all duration-500 ease-out focus:outline-none"
+                        className="btn-glass"
                       >
                         <BookOpen className="w-4 h-4" />
                         Batafsil

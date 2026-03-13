@@ -31,8 +31,8 @@ const Background = () => (
       style={{ backgroundImage: `url(${heroBg})` }}
     />
 
-    {/* FIXED: removed mix-blend-overlay which was fighting theme colors */}
-    <div className="absolute inset-0 bg-background/40 backdrop-blur-[2px] z-0 transition-colors duration-500" />
+    {/* FIXED: removed mix-blend-overlay which was fighting theme colors. Removed backdrop-blur for scroll perf */}
+    <div className="absolute inset-0 bg-background/50 z-0 transition-colors duration-500" />
 
     {/* FIXED: removed dark:opacity-10 — single opacity value, theme controls the color via --primary */}
     <div
@@ -132,40 +132,39 @@ const CtaStatsBand = ({ onNavigate }: { onNavigate: () => void }) => {
       transition={{ delay: 0.6, duration: 0.6 }}
     >
       {/* $8k UI Glassmorphism */}
-      <div className="flex items-center justify-between sm:justify-center rounded-2xl border border-white/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-2xl py-3.5 px-6 sm:px-10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] w-full max-w-[480px] sm:w-auto transition-colors duration-500 ease-out gap-4 sm:gap-6">
+      <div className="flex items-center justify-between sm:justify-center rounded-2xl border border-white/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md py-3.5 px-6 sm:px-10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] w-full max-w-[480px] sm:w-auto transition-colors duration-500 ease-out gap-4 sm:gap-6">
 
         <div className="flex flex-col items-center text-center">
           <p className="font-heading text-3xl sm:text-4xl text-foreground">
-            <AnimatedNumber target={2} /><span className="text-xl italic"> Yillik</span>
+            2<span className="text-xl italic"> Yillik</span>
           </p>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-primary mt-1 font-bold">Faoliyat</p>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold mt-1 font-bold">Faoliyat</p>
         </div>
 
         <div className="w-px h-12 bg-border mx-2 sm:mx-0" />
 
         <div className="flex flex-col items-center text-center">
           <p className="font-heading text-3xl sm:text-4xl text-foreground">
-            <AnimatedNumber target={20} /><span className="text-xl italic">+</span>
+            20<span className="text-xl italic">+</span>
           </p>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-primary mt-1 font-bold">Sara Kitoblar</p>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold mt-1 font-bold">Sara Kitoblar</p>
         </div>
 
         <div className="w-px h-12 bg-border mx-2 sm:mx-0" />
 
         <div className="flex flex-col items-center text-center">
           <p className="font-heading text-3xl sm:text-4xl text-foreground">
-            <AnimatedNumber target={5000} /><span className="text-xl italic">+</span>
+            5000<span className="text-xl italic">+</span>
           </p>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-primary mt-1 font-bold">Kitobxonlar</p>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold mt-1 font-bold">Kitobxonlar</p>
         </div>
 
       </div>
 
       <motion.button
         onClick={onNavigate}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="group relative inline-flex items-center justify-center gap-3 rounded-2xl bg-primary px-10 py-4 text-primary-foreground transition-all duration-500 ease-out shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)] w-full max-w-[360px] sm:w-auto"
+        whileTap={{ scale: 0.985 }}
+        className="btn-glass text-white dark:text-white w-full max-w-[360px] sm:w-auto px-10 py-4 font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase transition-all duration-500 ease-out z-10 rounded-2xl"
       >
         <Library className="h-4 w-4" />
         <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase">KOLLEKSIYANI KO'RISH</span>
@@ -188,17 +187,13 @@ const ActiveBookShowcase = ({
     <motion.div
       key={book.id}
       className="absolute inset-0 cursor-pointer select-none flex flex-col items-center justify-start pt-2 will-change-transform"
-      initial={{ opacity: 0, scale: 0.7, rotateY: -30, y: 50, filter: "blur(6px)" }}
-      animate={{ opacity: 1, scale: 1, rotateY: 0, y: 0, filter: "blur(0px)" }}
-      exit={{ opacity: 0, scale: 0.8, rotateY: 20, y: -40, filter: "blur(4px)" }}
+      initial={{ opacity: 0, scale: 0.7, rotateY: -30, y: 50 }}
+      animate={{ opacity: 1, scale: 1, rotateY: 0, y: 0 }}
+      exit={{ opacity: 0, scale: 0.8, rotateY: 20, y: -40 }}
       transition={{ type: "spring", stiffness: 90, damping: 18, mass: 1.1 }}
       onClick={onClick}
     >
-      <motion.div
-        className="relative w-full flex items-center justify-center mb-3 sm:mb-4"
-        animate={{ y: [-3, 3, -3] }}
-        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-      >
+      <div className="relative w-full flex items-center justify-center mb-3 sm:mb-4">
         {/* Relative wrapper matches the book's dimensions exactly */}
         <div className="relative w-[150px] sm:w-[200px] lg:w-[240px] aspect-[2/3] z-20">
 
@@ -210,7 +205,6 @@ const ActiveBookShowcase = ({
 
           {/* 3D Cover */}
           <motion.div
-            layoutId={`book-cover-${book.id}`}
             className="relative z-10 w-full h-full rounded-[6px] sm:rounded-[10px] overflow-hidden will-change-transform"
             style={{
               boxShadow: `0 20px 40px -12px ${glow}99, 0 10px 20px -8px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.2)`,
@@ -221,8 +215,7 @@ const ActiveBookShowcase = ({
               ? (
                 <motion.div
                   initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true, amount: 0.1, margin: "50px" }}
+                  animate={{ opacity: 1 }}
                   transition={{ duration: 1.2 }}
                   className="w-full h-full bg-muted aspect-[2/3]"
                 >
@@ -246,7 +239,7 @@ const ActiveBookShowcase = ({
             <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -257,7 +250,7 @@ const ActiveBookShowcase = ({
         <h2 className="font-serif font-bold text-lg sm:text-2xl text-foreground leading-tight tracking-wide line-clamp-2">
           {locField(book, "title", lang)}
         </h2>
-        <p className="mt-0.5 font-sans font-bold text-[10px] sm:text-xs tracking-widest uppercase text-primary line-clamp-1">
+        <p className="mt-1 font-sans font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase text-gold line-clamp-1">
           {locField(book, "author", lang)}
         </p>
       </motion.div>
@@ -281,7 +274,7 @@ const BookInfoPanel = ({
       return (
         <>
           <strong className="font-bold text-foreground">{brand}</strong>
-          <span className="text-accent font-bold mx-1.5">—</span>
+          <span className="text-gold font-bold mx-1.5">—</span>
           <span className="text-foreground/90 font-medium">{rest}</span>
         </>
       );
@@ -300,9 +293,9 @@ const BookInfoPanel = ({
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
       >
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-accent rounded-l-xl shadow-[0_0_10px_rgba(var(--accent),0.5)]" />
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gold rounded-l-xl shadow-[0_0_10px_rgba(213,173,54,0.4)]" />
         <div className="pl-4">
-          <p className="text-sm sm:text-base lg:text-lg leading-relaxed bg-white/40 dark:bg-black/20 backdrop-blur-2xl rounded-r-xl rounded-l-sm py-3 sm:py-4 px-5 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/60 dark:border-white/10 transition-colors duration-500 ease-out">
+          <p className="text-sm sm:text-base lg:text-lg leading-relaxed bg-white/50 dark:bg-black/20 backdrop-blur-md rounded-r-xl rounded-l-sm py-3 sm:py-4 px-5 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/60 dark:border-white/10 transition-colors duration-500 ease-out">
             {formatSubtitle(subtitle)}
           </p>
         </div>
@@ -427,23 +420,16 @@ const ScrollCta = () => {
       transition={{ delay: 2.4, duration: 0.7 }}
     >
       <div className="w-px h-8 sm:h-12 bg-gradient-to-b from-transparent to-primary/50" />
-      <motion.button
+      <button
         onClick={handleClick}
-        className="group flex flex-col items-center justify-center gap-1.5 px-6 py-2.5 rounded-full focus:outline-none backdrop-blur-2xl bg-white/40 dark:bg-black/20 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out"
-        whileHover={{ scale: 1.05, backgroundColor: "hsl(var(--background))" }}
-        whileTap={{ scale: 0.97 }}
+        className="group flex flex-col items-center justify-center gap-1.5 px-6 py-2.5 rounded-full focus:outline-none backdrop-blur-md bg-white/40 dark:bg-black/20 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out"
         aria-label="Safarni boshlash"
       >
-        <span className="font-sans text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em] text-foreground group-hover:text-primary transition-colors">
+        <span className="font-sans text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.4em] text-foreground group-hover:text-gold transition-colors">
           Kashf etish
         </span>
-        <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-        >
-          <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-foreground/70 group-hover:text-primary transition-colors" />
-        </motion.div>
-      </motion.button>
+        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-foreground/70 group-hover:text-gold transition-colors mt-1" />
+      </button>
     </motion.div>
   );
 };

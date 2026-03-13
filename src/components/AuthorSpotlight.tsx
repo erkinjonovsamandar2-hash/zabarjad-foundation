@@ -45,7 +45,7 @@ export default function AuthorSpotlight() {
                         {[...AUTHORS, ...AUTHORS, ...AUTHORS, ...AUTHORS].map((author, index) => (
                             <div
                                 key={index}
-                                className="flex items-center gap-5 hover:scale-105 transition-transform duration-500 ease-out cursor-pointer group/card"
+                                className="flex items-center gap-5 transition-transform duration-500 ease-out cursor-pointer group/card"
                             >
                                 <img
                                     src={author.image}
@@ -53,12 +53,12 @@ export default function AuthorSpotlight() {
                                     className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border border-white/20 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
                                 />
                                 <div className="flex flex-col items-start gap-1">
-                                    <span className="font-heading text-2xl text-foreground group-hover/card:text-primary transition-colors duration-500">{author.name}</span>
-                                    <span className="font-sans font-bold text-[10px] tracking-widest uppercase bg-primary/10 text-primary px-3 py-1 rounded-full">
+                                    <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>
+                                    <span className="font-sans font-bold text-[10px] tracking-[0.2em] uppercase bg-gold/10 text-gold px-3 py-1 rounded-full">
                                         {author.role}
                                     </span>
                                 </div>
-                                <span className="w-2 h-2 rounded-full bg-primary/40 block ml-8 md:ml-16" />
+                                <span className="w-2 h-2 rounded-full bg-gold/40 block ml-8 md:ml-16" />
                             </div>
                         ))}
                     </motion.div>

@@ -12,7 +12,7 @@ const Reveal = ({
   children: React.ReactNode; delay?: number; className?: string; from?: "bottom" | "left" | "right";
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "0px" });
   const initial =
     from === "left" ? { opacity: 0, x: -28 } :
       from === "right" ? { opacity: 0, x: 28 } :
@@ -31,9 +31,9 @@ const Reveal = ({
 // ── Amber diamond divider ─────────────────────────────────────────────────────
 const Divider = () => (
   <div className="flex items-center gap-4 my-4" aria-hidden>
-    <div className="flex-1 h-px bg-gradient-to-r from-transparent to-amber-500/30" />
-    <div className="w-2 h-2 rotate-45 shrink-0 bg-primary/60 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-amber-500/30" />
+    <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/30" />
+    <div className="w-2 h-2 rotate-45 shrink-0 bg-gold shadow-[0_0_8px_rgba(213,173,54,0.4)]" />
+    <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/30" />
   </div>
 );
 
@@ -41,9 +41,9 @@ const Divider = () => (
 const SectionLabel = ({ label, title }: { label: string; title: string }) => (
   <div className="text-center mb-12">
     <div className="inline-flex items-center gap-3 mb-3">
-      <div className="h-px w-8 bg-primary/40" />
-      <span className="font-sans text-[11px] uppercase tracking-[0.45em] text-primary dark:text-accent font-bold">{label}</span>
-      <div className="h-px w-8 bg-primary/40" />
+      <div className="h-px w-8 bg-gold/40" />
+      <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.45em] text-gold font-black">{label}</span>
+      <div className="h-px w-8 bg-gold/40" />
     </div>
     <h2 className="font-heading font-black tracking-tight font-extrabold text-foreground drop-shadow-sm" style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)" }}>
       {title}
@@ -106,13 +106,7 @@ const About = () => (
     initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45 }}
     className="min-h-screen bg-[#faf9f5] dark:bg-[#080808] relative"
   >
-    {/* ── Canvas Grain Texture ── */}
-    <svg width="0" height="0" className="absolute" aria-hidden>
-      <defs>
-        <filter id="about-grain"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /><feBlend in="SourceGraphic" mode="multiply" /></filter>
-      </defs>
-    </svg>
-    <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none" style={{ filter: "url(#about-grain)" }} />
+    <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none grain-overlay" />
 
     <Navbar />
 
@@ -134,15 +128,15 @@ const About = () => (
           >
             {/* Decorative rings */}
             <svg viewBox="0 0 340 440" fill="none" aria-hidden className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-              <circle cx="170" cy="200" r="90" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3 8" />
-              <circle cx="170" cy="200" r="130" stroke="#f59e0b" strokeWidth="0.5" strokeDasharray="2 12" />
-              <circle cx="170" cy="200" r="168" stroke="#f59e0b" strokeWidth="0.3" strokeDasharray="1 16" />
-              <path d="M50 440 Q170 100 290 440" stroke="#f59e0b" strokeWidth="1" fill="none" />
+              <circle cx="170" cy="200" r="90" stroke="hsl(var(--gold))" strokeWidth="1" strokeDasharray="3 8" />
+              <circle cx="170" cy="200" r="130" stroke="hsl(var(--gold))" strokeWidth="0.5" strokeDasharray="2 12" />
+              <circle cx="170" cy="200" r="168" stroke="hsl(var(--gold))" strokeWidth="0.3" strokeDasharray="1 16" />
+              <path d="M50 440 Q170 100 290 440" stroke="hsl(var(--gold))" strokeWidth="1" fill="none" />
             </svg>
 
             {/* Nashriyot label - UPDATED TO 2018 */}
             <div className="relative z-10 pt-8 pb-2 flex justify-center">
-              <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-accent/80 font-bold">
+              <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-gold/80 font-black">
                 Nashriyot · Est. 2018
               </span>
             </div>
@@ -154,7 +148,7 @@ const About = () => (
                 initial={{ scale: 0.82, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.18, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
               >
                 {/* Ambient glow halo */}
-                <div className="absolute inset-[-30px] pointer-events-none bg-primary/25 blur-[35px] rounded-full" />
+                <div className="absolute inset-[-30px] pointer-events-none bg-gold/25 blur-[35px] rounded-full" />
 
                 {/* THE NEW LOGO FRAME: Parchment background blends seamlessly with text */}
                 <div
@@ -163,7 +157,7 @@ const About = () => (
                 >
                   <span className="font-heading font-black tracking-tight text-3xl sm:text-4xl text-foreground text-center px-4">
                     Booktopia<br />
-                    <span className="text-primary text-5xl leading-none">.</span>
+                    <span className="text-gold text-5xl leading-none">.</span>
                   </span>
                 </div>
               </motion.div>
@@ -174,7 +168,7 @@ const About = () => (
                   Booktopia
                 </h2>
                 {/* UPGRADED "MEDIA" TEXT */}
-                <p className="font-sans uppercase mt-4 text-[14px] tracking-[0.55em] text-accent font-black drop-shadow-sm">
+                <p className="font-sans uppercase mt-4 text-[14px] tracking-[0.55em] text-gold font-black drop-shadow-sm">
                   Media
                 </p>
               </div>
@@ -188,8 +182,8 @@ const About = () => (
                 { value: "3", label: "Til" },
               ].map(({ value, label }, i) => (
                 <div key={label} className="flex-1 flex flex-col items-center gap-1.5 py-5" style={{ borderRight: i < 2 ? "1px solid hsl(var(--border) / 0.5)" : undefined }}>
-                  <span className="font-heading font-bold text-2xl text-accent">{value}</span>
-                  <span className="font-sans uppercase text-[8px] tracking-[0.3em] text-accent/70 font-bold">{label}</span>
+                  <span className="font-heading font-bold text-2xl text-gold">{value}</span>
+                  <span className="font-sans uppercase text-[8px] tracking-[0.3em] text-gold/70 font-black">{label}</span>
                 </div>
               ))}
             </div>
@@ -200,8 +194,8 @@ const About = () => (
         <div className="flex flex-col justify-center flex-1 gap-6 sm:gap-8 pt-4 lg:pt-8">
           <Reveal delay={0.1}>
             <div className="inline-flex items-center gap-3">
-              <div className="h-px w-8 bg-primary/50" />
-              <span className="font-sans text-[11px] uppercase tracking-[0.4em] text-primary dark:text-accent font-bold">Bizning hikoya</span>
+              <div className="h-px w-8 bg-gold/50" />
+              <span className="font-sans text-[11px] uppercase tracking-[0.4em] text-gold font-black">Bizning hikoya</span>
             </div>
           </Reveal>
 
@@ -228,11 +222,11 @@ const About = () => (
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-amber-400 via-amber-600 to-amber-400" />
 
               <div className="pl-7 pr-6 py-6">
-                <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-primary dark:text-accent font-black mb-2">
+                <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold font-black mb-2">
                   Nega aynan "Booktopia"?
                 </p>
                 <p className="font-serif text-xl font-bold text-foreground leading-snug mb-3">
-                  Arabcha — <span className="text-primary dark:text-accent">asl, bebaho.</span>
+                  Arabcha — <span className="text-gold">asl, bebaho.</span>
                 </p>
                 <p className="font-sans text-sm text-foreground/70 leading-relaxed">
                   Nashriyot o'z oldiga kitobxonlar uchun asl va bebaho sanalib kelingan

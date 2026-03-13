@@ -101,14 +101,8 @@ export default function Team() {
             <div className="relative z-10 container mx-auto px-6 lg:px-16">
 
                 {/* ── Headline ── */}
-                <motion.div
-                    className="mb-12 md:mb-20 text-center"
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                >
-                    <p className="mb-3 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                <div className="mb-12 md:mb-20 text-center">
+                    <p className="mb-3 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gold">
                         Booktopia
                     </p>
                     <h2 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-[1.05] tracking-wide text-foreground mb-3">
@@ -117,8 +111,8 @@ export default function Team() {
                     <p className="font-serif text-lg md:text-xl italic text-foreground/80 leading-loose">
                         sohaning eng ilg&apos;or mutaxassislari bilan
                     </p>
-                    <div className="mx-auto mt-8 w-16 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-                </motion.div>
+                    <div className="mx-auto mt-8 w-16 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+                </div>
 
                 {/* ── Mobile: single-card auto-slideshow (< md) ── */}
                 <div className="md:hidden flex flex-col items-center gap-6">
@@ -179,7 +173,7 @@ export default function Team() {
                                 setMobileFade(false);
                                 setTimeout(() => { setMobileIdx((prev) => (prev + 1) % N); setMobileFade(true); }, 350);
                             }}
-                            className="p-2 text-primary hover:text-primary/70 hover:scale-110 transition-transform"
+                            className="p-2 text-primary hover:text-primary/70 transition-transform"
                         >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><polyline points="9 18 15 12 9 6" /></svg>
                         </button>
@@ -193,7 +187,7 @@ export default function Team() {
                     <button
                         onClick={() => handleArrow(-1)}
                         aria-label="Previous"
-                        className="group absolute left-0 top-1/2 -translate-y-1/2 -translate-x-8 z-20 w-11 h-11 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all duration-500 ease-out bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)]"
+                        className="group absolute left-0 top-1/2 -translate-y-1/2 -translate-x-8 z-20 w-11 h-11 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all duration-500 ease-out bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)]"
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-foreground/50 group-hover:text-primary transition-colors duration-500 ease-out">
                             <polyline points="15 18 9 12 15 6" />
@@ -204,7 +198,7 @@ export default function Team() {
                     <button
                         onClick={() => handleArrow(1)}
                         aria-label="Next"
-                        className="group absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 z-20 w-11 h-11 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all duration-500 ease-out bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)]"
+                        className="group absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 z-20 w-11 h-11 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all duration-500 ease-out bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)]"
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-foreground/50 group-hover:text-primary transition-colors duration-500 ease-out">
                             <polyline points="9 18 15 12 9 6" />
@@ -259,13 +253,13 @@ export default function Team() {
 function Card({ member }: { member: any }) {
     return (
         <div
-            className="group relative w-full h-full rounded-3xl overflow-hidden bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+            className="group relative w-full h-full rounded-3xl overflow-hidden bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
         >
             <div className="absolute inset-0 z-10 flex items-end justify-center pt-8">
                 <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-contain object-bottom transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    className="w-[85%] h-auto object-contain transition-all duration-500 ease-out drop-shadow-2xl opacity-90 group-hover:opacity-100"
                 />
             </div>
 
@@ -273,7 +267,7 @@ function Card({ member }: { member: any }) {
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-foreground leading-[1.05] tracking-wide mb-1">
                     {member.name}
                 </h3>
-                <p className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                <p className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gold/80">
                     {member.role}
                 </p>
             </div>

@@ -49,20 +49,20 @@ const FEATURED_BOOKS = [
 // ── Helper: Get Category Label ─────────────────────────────────────────────────
 const getCategoryLabel = (key: string, lang: string): string => {
   const labels: Record<string, { uz: string; ru: string; en: string }> = {
-    all:      { uz: "Barchasi",         ru: "Все",               en: "All" },
-    new:      { uz: "Yangi nashrlar",   ru: "Новинки",           en: "New Releases" },
-    featured: { uz: "Tez kunda",        ru: "Скоро",             en: "Coming Soon" },
-    golden:   { uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Golden Collection" },
-    got:      { uz: "Taxtlar O'yini",   ru: "Игра Престолов",    en: "Game of Thrones" },
+    all: { uz: "Barchasi", ru: "Все", en: "All" },
+    new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
+    featured: { uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
+    golden: { uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Golden Collection" },
+    got: { uz: "Taxtlar O'yini", ru: "Игра Престолов", en: "Game of Thrones" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };
 
 const LibraryPage = () => {
   const { books } = useData();
-  const { lang }  = useLang();
+  const { lang } = useLang();
 
-  const [active, setActive]             = useState<string>("all");
+  const [active, setActive] = useState<string>("all");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   // Auto-rotate featured books every 5 seconds
@@ -82,13 +82,13 @@ const LibraryPage = () => {
       if (active === "all") return true;
 
       if (active === GOT_CATEGORY_KEY) {
-        const titleLower   = b.title?.toLowerCase()    || "";
+        const titleLower = b.title?.toLowerCase() || "";
         const titleEnLower = b.title_en?.toLowerCase() || "";
         const titleRuLower = b.title_ru?.toLowerCase() || "";
         return (
-          titleLower.includes("taxtlar")   ||
-          titleLower.includes("qirollar")  ||
-          titleEnLower.includes("game")    ||
+          titleLower.includes("taxtlar") ||
+          titleLower.includes("qirollar") ||
+          titleEnLower.includes("game") ||
           titleEnLower.includes("thrones") ||
           titleRuLower.includes("престол") ||
           titleRuLower.includes("игра")
@@ -103,7 +103,7 @@ const LibraryPage = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="section-padding pt-24 bg-charcoal">
+      <section className="section-padding pt-24 bg-charcoal relative grain-overlay">
         <div className="mx-auto max-w-7xl">
 
           {/* ── FEATURED BOOKS HERO CAROUSEL ─────────────────────────────── */}
@@ -119,7 +119,6 @@ const LibraryPage = () => {
                 src={librarySeal}
                 alt="Library Seal"
                 className="w-full h-full object-contain drop-shadow-2xl"
-                loading="lazy"
               />
             </div>
 
@@ -139,7 +138,6 @@ const LibraryPage = () => {
                   <img
                     src={featuredBook.coverImage}
                     alt={featuredBook.title}
-                    loading="lazy"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -154,7 +152,7 @@ const LibraryPage = () => {
                 transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
                 className="flex-1 flex flex-col justify-center items-start text-left mt-8 md:mt-0 relative z-10"
               >
-                <span className="text-primary font-bold tracking-[0.2em] text-xs uppercase mb-4">
+                <span className="text-gold font-bold tracking-[0.2em] text-[10px] sm:text-xs uppercase mb-4">
                   Hafta Tanlovi
                 </span>
                 <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground mb-4 leading-tight">
@@ -163,7 +161,7 @@ const LibraryPage = () => {
                 <p className="text-muted-foreground text-base md:text-lg mb-8 line-clamp-3 max-w-xl">
                   {featuredBook.description}
                 </p>
-                <button className="px-8 py-3 bg-primary text-primary-foreground font-medium rounded-full hover:scale-105 transition-transform shadow-[0_0_15px_rgba(115,197,238,0.3)]">
+                <button className="btn-glass px-8 py-3.5">
                   Kitob haqida
                 </button>
               </motion.div>
@@ -175,11 +173,10 @@ const LibraryPage = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? "bg-primary w-8"
-                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-2"
-                  }`}
+                  className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                    ? "bg-primary w-8"
+                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-2"
+                    }`}
                   aria-label={`Go to book ${index + 1}`}
                 />
               ))}
@@ -189,10 +186,10 @@ const LibraryPage = () => {
           {/* ── HEADER + FILTERS + PDF BUTTON ────────────────────────────── */}
           <div className="mb-10 mt-16">
             <div className="text-center mb-8">
-              <p className="text-sm font-semibold tracking-[0.2em] text-primary uppercase mb-3">
+              <p className="text-[10px] sm:text-xs font-bold tracking-[0.3em] text-gold uppercase mb-3 text-center">
                 KUTUBXONA
               </p>
-              <h1 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground">
+              <h1 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground text-center">
                 Tanlangan kitoblar
               </h1>
             </div>
@@ -202,7 +199,7 @@ const LibraryPage = () => {
               <div className="flex flex-wrap items-center justify-center gap-3">
                 {CATEGORIES.map((categoryKey) => {
                   const isActive = active === categoryKey;
-                  const isGoT    = categoryKey === GOT_CATEGORY_KEY;
+                  const isGoT = categoryKey === GOT_CATEGORY_KEY;
 
                   return (
                     <button
@@ -215,13 +212,9 @@ const LibraryPage = () => {
                         });
                       }}
                       className={`
-                        px-6 py-2.5 rounded-full text-sm font-medium
-                        transition-all duration-300
                         ${isActive
-                          ? isGoT
-                            ? "bg-primary text-primary-foreground font-got tracking-wider shadow-md scale-105"
-                            : "bg-primary text-primary-foreground shadow-md scale-105"
-                          : "bg-background/50 text-foreground/70 border border-border/60 hover:bg-muted/50 hover:text-foreground hover:border-primary/40"
+                          ? "btn-glass scale-105"
+                          : "btn-glass-ghost opacity-70 hover:opacity-100"
                         }
                       `}
                     >
@@ -236,9 +229,9 @@ const LibraryPage = () => {
                 href="/booktopia-katalog.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-border/50 bg-background/50 backdrop-blur-md text-sm font-medium hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-300"
+                className="btn-glass-ghost px-8 py-3 group"
               >
-                <motion.div className="flex items-center justify-center w-4 h-4">
+                <div className="flex items-center justify-center w-4 h-4 mr-2 group-hover:text-primary transition-colors">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16" height="16"
@@ -253,7 +246,7 @@ const LibraryPage = () => {
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" x2="12" y1="15" y2="3" />
                   </svg>
-                </motion.div>
+                </div>
                 Katalogni yuklab olish
               </a>
             </div>
@@ -301,7 +294,6 @@ const LibraryPage = () => {
                                 src={book.cover_url}
                                 alt={locField(book, "title", lang)}
                                 className="w-full h-full object-cover"
-                                loading="lazy"
                               />
                             ) : (
                               <div className="flex items-center justify-center bg-secondary w-full h-full">

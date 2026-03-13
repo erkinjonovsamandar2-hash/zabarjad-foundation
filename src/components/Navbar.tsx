@@ -91,7 +91,7 @@ const Navbar = () => {
         className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-[1000] will-change-transform transform-gpu"
         style={{ scaleX: scrollYProgress }}
       />
-      <nav className="fixed top-0 left-0 right-0 z-[999] bg-white/40 dark:bg-black/20 backdrop-blur-2xl border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out will-change-transform transform-gpu">
+      <nav className="fixed top-0 left-0 right-0 z-[999] bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
 
           {/* ── Logo ── */}
@@ -104,7 +104,7 @@ const Navbar = () => {
             <img
               src={logoImg}
               alt="Booktopia Logo"
-              className="h-8 md:h-10 w-auto object-contain transition-transform hover:scale-105 duration-300"
+              className="h-8 md:h-10 w-auto object-contain transition-opacity hover:opacity-90 duration-300"
             />
           </Link>
 
@@ -124,7 +124,7 @@ const Navbar = () => {
                       to={link.href}
                       className={`
                         inline-flex items-center gap-1.5 relative
-                        font-serif font-bold text-lg sm:text-xl px-4 py-1.5 rounded-lg transition-colors duration-300
+                        font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
                         ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                       `}
                     >
@@ -141,11 +141,11 @@ const Navbar = () => {
                     to={link.href}
                     className={`
                       group relative inline-flex items-center gap-1.5
-                      font-serif font-bold text-lg sm:text-xl px-4 py-1.5 rounded-lg transition-colors duration-300
+                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
                       ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
-                    <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                    <span className="text-primary hover:text-accent transition-colors">
                       {link.label}
                     </span>
                   </Link>
@@ -156,7 +156,7 @@ const Navbar = () => {
                     href={link.href}
                     className={`
                       relative inline-flex items-center gap-1.5
-                      font-serif font-bold text-lg sm:text-xl px-4 py-1.5 rounded-lg transition-colors duration-300
+                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
                       ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
@@ -169,7 +169,7 @@ const Navbar = () => {
                     to={link.href}
                     className={`
                       relative inline-flex items-center gap-1.5
-                      font-serif font-bold text-lg sm:text-xl px-4 py-1.5 rounded-lg transition-colors duration-300
+                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
                       ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
@@ -236,7 +236,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-[96vw] max-w-4xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl border border-border/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] rounded-2xl p-6 lg:p-8 z-[1000] will-change-transform transform-gpu"
+                className="w-[96vw] max-w-4xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border border-border/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] rounded-2xl p-6 lg:p-8 z-[1000] will-change-transform transform-gpu"
               >
                 <div className="grid grid-cols-3 gap-6 lg:gap-8">
                   {MEGA_MENU_CATEGORIES.map((cat) => (
@@ -282,7 +282,7 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-2xl shadow-xl overflow-hidden"
+              className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md shadow-xl overflow-hidden"
             >
               <ul className="flex flex-col gap-1 px-6 py-6">
                 {navLinks.filter((l) => l.href !== "/spotlight").map((link) => (
@@ -294,11 +294,11 @@ const Navbar = () => {
                         onClick={() => setOpen(false)}
                         className={`
                           block py-2.5 px-4 mb-1 rounded-lg
-                          font-serif font-bold text-lg sm:text-xl transition-colors duration-300 active:bg-primary/10
+                          font-sans font-bold text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 active:bg-primary/10
                           ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                         `}
                       >
-                        <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="text-primary transition-colors">
                           {link.label}
                         </span>
                       </Link>
@@ -308,7 +308,7 @@ const Navbar = () => {
                         onClick={() => setOpen(false)}
                         className={`
                           block py-2.5 px-4 mb-1 rounded-lg
-                          font-serif font-bold text-lg sm:text-xl transition-colors duration-300 active:bg-primary/10
+                          font-sans font-bold text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 active:bg-primary/10
                           ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                         `}
                       >

@@ -148,8 +148,8 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
           delay: Math.min(index * 0.06, 0.36),
         },
       }}
-      viewport={{ once: true, margin: "-40px" }}
-      whileHover={reduced ? {} : { rotate: 0, y: -8, scale: 1.02, zIndex: 30, transition: { duration: 0.2 } }}
+      viewport={{ once: true, margin: "0px" }}
+      whileHover={reduced ? {} : { rotate: 0, y: -8, zIndex: 30, transition: { duration: 0.2 } }}
       className="
         relative w-[85vw] max-w-[400px] shrink-0 snap-center whitespace-normal
         rounded-xl p-6 cursor-default select-none
@@ -190,7 +190,7 @@ const Taassurotlar = () => {
   const { reviews: dbReviews = [] } = useData() as any;
   const sectionRef = useRef<HTMLElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const headerInView = useInView(sectionRef, { once: true, margin: "-60px" });
+  const headerInView = useInView(sectionRef, { once: true, margin: "0px" });
   const reduced = useReducedMotion();
 
   const [isPaused, setIsPaused] = useState(false);
@@ -315,16 +315,14 @@ const Taassurotlar = () => {
           <div className="shrink-0 w-6 sm:w-10" aria-hidden />
         </div>
 
-        {/* Controls row */}
         <div className="flex items-center justify-center gap-5 mt-2">
-          <motion.button
-            whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.90 }}
+          <button
             onClick={handleLeft}
-            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-accent transition-colors focus:outline-none"
+            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-accent hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus:outline-none"
             aria-label="Oldingi sharh"
           >
             <ChevronLeft className="h-5 w-5" />
-          </motion.button>
+          </button>
 
           {/* Auto-play indicator */}
           <div className="flex items-center gap-2 w-8 justify-center">
@@ -334,35 +332,28 @@ const Taassurotlar = () => {
                 <span className="h-1.5 w-1.5 rounded-full bg-neutral-400/50 dark:bg-neutral-600/50" />
               </>
             ) : (
-              <motion.span
-                className="h-2 w-2 rounded-full bg-primary/80"
-                animate={{ scale: [1, 1.4, 1] }}
-                transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-              />
+              <span className="h-2 w-2 rounded-full bg-primary/80 transition-colors duration-300" />
             )}
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.90 }}
+          <button
             onClick={handleRight}
-            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-accent transition-colors focus:outline-none"
+            className="bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-md border border-neutral-200/50 dark:border-white/10 p-3 rounded-full text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-accent hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus:outline-none"
             aria-label="Keyingi sharh"
           >
             <ChevronRight className="h-5 w-5" />
-          </motion.button>
+          </button>
         </div>
 
         {/* Leave feedback toggle - REDUCED MARGIN TOP */}
         <div className="flex justify-center mt-6">
           <motion.button
-            whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => { setShowForm((p) => !p); triggerPause(); }}
             className="
-              inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl
-              bg-primary text-primary-foreground font-sans font-bold text-[11px] tracking-[0.2em] uppercase
-              shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)]
-              hover:bg-primary/90 transition-all duration-500 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
+              btn-glass text-white dark:text-white inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl
+              font-sans font-bold text-[11px] tracking-[0.2em] uppercase
+              transition-all duration-500 ease-out focus:outline-none
             "
           >
             <PenLine className="h-4 w-4" />

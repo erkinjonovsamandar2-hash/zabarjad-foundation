@@ -1,4 +1,5 @@
 // @refresh reset
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -17,6 +18,15 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 const Index = () => {
   const { loading } = useData();
+  const [hasSeenSplash, setHasSeenSplash] = useState(() => sessionStorage.getItem('splashShown') === 'true');
+
+  useEffect(() => {
+    if (!loading) {
+      sessionStorage.setItem('splashShown', 'true');
+      const timer = setTimeout(() => setHasSeenSplash(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   // DEBUG LOG
   console.log("[Index.tsx] Render -> DataContext loading state:", loading);
@@ -26,15 +36,15 @@ const Index = () => {
       <ScrollToTop />
       {/* mode="wait" ensures the splash screen finishes fading out BEFORE the homepage fades in */}
       <AnimatePresence mode="wait">
-        {loading ? (
+        {loading && !hasSeenSplash ? (
           <LoadingSplash key="loader" />
         ) : (
           <motion.div
             key="content"
-            initial={{ opacity: 0 }}
+            initial={{ opacity: hasSeenSplash ? 1 : 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col min-h-screen will-change-transform transform-gpu"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="flex flex-col min-h-screen"
           >
             <Navbar />
             <main className="flex-1">

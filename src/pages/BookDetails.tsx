@@ -18,7 +18,7 @@ function ScrollProgress() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-50 shadow-[0_0_10px_rgba(var(--primary),0.6)]"
+      className="fixed top-0 left-0 right-0 h-[3px] bg-gold origin-left z-50 shadow-[0_0_10px_rgba(213,173,54,0.4)]"
       style={{ scaleX }}
     />
   );
@@ -52,7 +52,7 @@ const BookDetails = () => {
           <Navbar />
           <div className="section-padding pt-32 flex items-center justify-center">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin" />
               <p className="text-muted-foreground font-medium">Yuklanmoqda...</p>
             </div>
           </div>
@@ -72,7 +72,7 @@ const BookDetails = () => {
             <p className="text-muted-foreground">Ushbu kitob mavjud emas yoki o'chirilgan.</p>
             <button
               onClick={() => navigate("/library")}
-              className="px-8 py-3 bg-primary text-primary-foreground font-medium rounded-full hover:scale-105 transition-transform"
+              className="btn-glass px-12 py-4"
             >
               Kutubxonaga qaytish
             </button>
@@ -93,7 +93,7 @@ const BookDetails = () => {
       <ScrollProgress />
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="section-padding pt-32 pb-16 bg-charcoal relative">
+        <div className="section-padding pt-32 pb-16 bg-charcoal relative grain-overlay">
           <div className="mx-auto max-w-7xl">
 
             {/* Back Button */}
@@ -125,14 +125,14 @@ const BookDetails = () => {
 
               {/* Right: Metadata & Actions */}
               <div className="flex flex-col pt-4">
-                <h1 className="font-heading font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-wide text-foreground mb-4 drop-shadow-sm">
+                <h1 className="font-heading font-bold text-4xl md:text-5xl lg:text-8xl leading-[1.05] tracking-tight text-foreground mb-6 drop-shadow-md">
                   {locField(book, "title", lang)}
                 </h1>
-                <p className="font-sans text-[13px] font-bold tracking-[0.2em] uppercase text-primary dark:text-accent mb-8">
+                <p className="font-sans text-[11px] sm:text-[13px] font-bold tracking-[0.3em] uppercase text-gold mb-10">
                   {locField(book, "author", lang)}
                 </p>
 
-                <div className="font-serif text-lg leading-loose text-muted-foreground mb-10 border-l-2 border-primary/30 pl-6">
+                <div className="font-serif text-lg md:text-xl leading-loose text-muted-foreground mb-12 border-l-2 border-gold/30 pl-8">
                   {locField(book, "description", lang) ||
                     "Ushbu kitob haqida to'liq ma'lumot tez orada qo'shiladi. Booktopia kutubxonasini kuzatib boring."}
                 </div>
@@ -165,18 +165,18 @@ const BookDetails = () => {
                     <p className="font-sans text-[10px] tracking-wider uppercase font-bold text-muted-foreground mb-2">
                       Narx
                     </p>
-                    <p className="font-heading font-bold text-xl text-primary">
+                    <p className="font-heading font-bold text-2xl text-gold">
                       {book.price ? `${book.price} so'm` : "Tez kunda"}
                     </p>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 mt-auto">
-                  <button className="px-10 py-5 bg-primary text-primary-foreground font-sans text-[11px] font-bold uppercase tracking-[0.2em] rounded-full shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(0,205,254,0.5)] transform hover:scale-[1.02] transition-all duration-500 ease-out">
+                <div className="flex flex-col sm:flex-row gap-5 mt-auto">
+                  <button className="btn-glass px-12 py-5 text-white dark:text-white">
                     Xarid qilish
                   </button>
-                  <button className="px-10 py-5 bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 text-foreground font-sans text-[11px] font-bold uppercase tracking-[0.2em] rounded-full hover:shadow-[0_8px_30px_rgba(38,89,153,0.12)] hover:text-primary transition-all duration-500 ease-out">
+                  <button className="btn-glass-ghost px-12 py-5">
                     Parchani o'qish
                   </button>
                 </div>

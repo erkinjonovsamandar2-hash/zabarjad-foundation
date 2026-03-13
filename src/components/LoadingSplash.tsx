@@ -64,8 +64,8 @@ const LoadingSplash = () => {
       {/* ── Literary Quote & Progress Bar ── */}
       <div className="text-center px-8 max-w-lg relative z-10">
         <motion.p
-          initial={{ opacity: 0, filter: "blur(4px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 1.2 }}
           className="font-serif italic text-lg sm:text-xl text-neutral-600 dark:text-neutral-400 leading-relaxed"
         >

@@ -2,8 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { BookOpen, ChevronRight } from "lucide-react";
 import { useData } from "@/context/DataContext";
-import type { Book } from "@/types/database";
+import { useLang, locField } from "@/context/LanguageContext";
+import type { Book } from "@/context/DataContext";
 
 import margaritaBg from "../assets/backgrounds/margarita-bg.png";
 import edenBg from "../assets/backgrounds/eden-bg.png";
@@ -53,7 +56,7 @@ const NavControls = ({
       <motion.button
         onClick={onPrev}
         aria-label="Previous book"
-        whileHover={{ scale: 1.1, borderColor: "var(--accent)", background: "rgba(229,193,88,0.15)" }}
+        whileHover={{ borderColor: "var(--accent)", background: "rgba(229,193,88,0.15)" }}
         whileTap={{ scale: 0.92 }}
         className="w-10 h-10 rounded-full border border-accent/40 bg-transparent flex items-center justify-center text-accent cursor-pointer"
       >
@@ -68,7 +71,7 @@ const NavControls = ({
       <motion.button
         onClick={onNext}
         aria-label="Next book"
-        whileHover={{ scale: 1.1, borderColor: "var(--accent)", background: "rgba(229,193,88,0.15)" }}
+        whileHover={{ borderColor: "var(--accent)", background: "rgba(229,193,88,0.15)" }}
         whileTap={{ scale: 0.92 }}
         className="w-10 h-10 rounded-full border border-accent/40 bg-transparent flex items-center justify-center text-accent cursor-pointer"
       >
@@ -104,6 +107,8 @@ const NavControls = ({
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function GlobalClassics() {
   const { books, loading } = useData();
+  const { lang } = useLang();
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -228,12 +233,8 @@ export default function GlobalClassics() {
   }
 
   return (
-    <motion.section
+    <section
       id="library"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      viewport={{ once: true, amount: 0.1, margin: "50px" }}
       className="relative w-full min-h-screen bg-cover bg-center transition-all duration-1000 ease-in-out overflow-hidden transform-gpu"
       style={{ backgroundImage: `url(${BOOK_BACKGROUNDS[displayIndex] || BOOK_BACKGROUNDS[0]})` }}
     >
@@ -284,11 +285,11 @@ export default function GlobalClassics() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex-1 w-full lg:max-w-lg bg-background/50 backdrop-blur-2xl border border-border/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col items-start text-left z-10"
+                  className="flex-1 w-full lg:max-w-lg bg-background/50 backdrop-blur-md border border-border/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col items-start text-left z-10"
                 >
                   {/* Genre + meta */}
                   <div className="flex items-center gap-2.5 mb-3 flex-wrap">
-                    <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase bg-accent text-accent-foreground rounded-[4px] px-[9px] py-[3px]">
+                    <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase bg-gold text-white rounded-[4px] px-[9px] py-[3px]">
                       {activeBook.category}
                     </span>
                     {activeBook.price && (
@@ -321,18 +322,14 @@ export default function GlobalClassics() {
 
                   {/* CTA */}
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase px-8 py-3.5 rounded-full shadow-[0_10px_25px_-5px_rgba(115,197,238,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(115,197,238,0.5)] transition-all duration-500 ease-out border-none"
+                    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }}
+                    whileTap={{ scale: 0.985 }}
+                    onClick={() => navigate(`/book/${activeBook.id}`)}
+                    className="btn-glass"
                   >
-                    Batafsil
-                    <motion.div className="flex items-center justify-center w-[13px] h-[13px] shrink-0">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                        className="w-full h-full">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </motion.div>
+                    <BookOpen className="h-4 w-4" />
+                    <span className="font-sans font-bold text-[11px] tracking-[0.2em] uppercase">Batafsil o'qish</span>
+                    <ChevronRight className="h-4 w-4" />
                   </motion.button>
                 </motion.div>
               )}
@@ -384,7 +381,6 @@ export default function GlobalClassics() {
                   animate={{ opacity: 0.72 - i * 0.18, x: 0 }}
                   whileHover={{
                     opacity: 1,
-                    scale: 1.06,
                     boxShadow: "0 14px 34px rgba(0,0,0,0.65), 0 0 0 1px rgba(229,193,88,0.50)",
                   }}
                   transition={{ duration: 0.5, delay: i * 0.07, ease: "easeOut" }}
@@ -451,7 +447,6 @@ export default function GlobalClassics() {
                     <motion.img
                       src={getImageUrl(book.cover_url)}
                       alt={book.title}
-                      loading="lazy"
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
                       viewport={{ once: true, amount: 0.1, margin: "50px" }}
@@ -462,9 +457,9 @@ export default function GlobalClassics() {
                 </div>
 
                 {/* Info card */}
-                <div className="w-full bg-background/50 backdrop-blur-2xl border border-border/60 rounded-xl p-5 text-center flex flex-col items-center gap-4 shadow-sm">
+                <div className="w-full bg-background/50 backdrop-blur-md border border-border/60 rounded-xl p-5 text-center flex flex-col items-center gap-4 shadow-sm">
                   <div className="flex flex-wrap items-center justify-center gap-2">
-                    <span className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase bg-accent text-accent-foreground rounded px-2 py-1">
+                    <span className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase bg-gold text-white rounded px-2 py-1">
                       {book.category}
                     </span>
                     {book.price && (
@@ -488,15 +483,16 @@ export default function GlobalClassics() {
                     </p>
                   )}
 
-                  <button className="mt-2 inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-5 py-2 font-sans text-[11px] font-bold tracking-[0.2em] uppercase shadow-[0_10px_25px_-5px_rgba(115,197,238,0.4)] transition-all duration-500 ease-out border-none">
+                  <button
+                    onClick={() => navigate(`/book/${book.id}`)}
+                    className="mt-2 btn-glass"
+                  >
                     Batafsil
-                    <motion.div className="flex items-center justify-center w-[12px] h-[12px] shrink-0">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-                        className="w-full h-full">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </motion.div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                      className="w-3 h-3 ml-1">
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -505,6 +501,6 @@ export default function GlobalClassics() {
         </div>
       )}
 
-    </motion.section>
+    </section>
   );
 }

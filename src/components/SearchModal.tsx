@@ -13,7 +13,7 @@ interface SearchModalProps {
 const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const { books } = useData();
   const [query, setQuery] = useState("");
-  
+
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -63,19 +63,19 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
             className="fixed left-1/2 top-[10%] -translate-x-1/2 w-full max-w-2xl z-[10000] px-4"
           >
             <div className="bg-[#fdfbf7] dark:bg-[#1a1a1a] rounded-2xl shadow-2xl overflow-hidden border border-amber-500/20">
-              
+
               {/* Search Header */}
               <div className="relative flex items-center px-4 py-4 border-b border-neutral-200 dark:border-neutral-800">
-                <Search className="w-5 h-5 text-accent mr-3" />
+                <Search className="w-5 h-5 text-gold mr-3" />
                 <input
                   autoFocus
                   type="text"
                   placeholder="Kitob yoki muallif nomini yozing..."
-                  className="w-full bg-transparent border-none outline-none text-lg text-foreground placeholder:text-neutral-400 font-serif"
+                  className="w-full bg-transparent border-none outline-none text-lg text-foreground placeholder:text-neutral-400 font-sans font-medium"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
-                <button 
+                <button
                   onClick={onClose}
                   className="p-2 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-full transition-colors"
                 >
@@ -109,7 +109,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Text Info */}
                         <div className="flex-1 min-w-0">
                           <h4 className="font-heading font-black tracking-tight font-bold text-foreground truncate group-hover:text-primary transition-colors">
@@ -125,9 +125,9 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                 ) : (
                   // Uses your new EmptyState component!
                   <div className="py-8">
-                    <EmptyState 
-                      title="Hech narsa topilmadi" 
-                      description={`"${query}" bo'yicha hech qanday kitob topa olmadik.`} 
+                    <EmptyState
+                      title="Hech narsa topilmadi"
+                      description={`"${query}" bo'yicha hech qanday kitob topa olmadik.`}
                     />
                   </div>
                 )}

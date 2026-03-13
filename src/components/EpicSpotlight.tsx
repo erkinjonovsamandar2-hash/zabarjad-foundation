@@ -21,7 +21,7 @@ const EpicSpotlight = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="mb-3 text-xs font-sans font-semibold uppercase tracking-[0.3em] text-primary">
+          <p className="mb-3 text-xs font-sans font-black uppercase tracking-[0.4em] text-gold">
             {t.spotlight.badge}
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black tracking-tight font-bold text-foreground mb-4">
@@ -42,10 +42,10 @@ const EpicSpotlight = () => {
         >
           <div className="absolute inset-0 bg-secondary">
             <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <path d="M20 0 Q25 20 22 40 Q18 55 25 70 Q30 80 28 100" stroke="hsl(var(--primary))" strokeWidth="0.3" fill="none" />
-              <path d="M45 0 Q50 15 48 30 Q42 50 50 65 Q55 80 52 100" stroke="hsl(var(--primary))" strokeWidth="0.2" fill="none" opacity="0.6" />
-              <path d="M70 10 Q65 30 68 50 Q72 70 65 90" stroke="hsl(var(--primary))" strokeWidth="0.2" fill="none" opacity="0.4" />
-              <path d="M15 5 Q30 8 45 5 Q55 8 60 20 Q55 35 45 40 Q35 38 25 42 Q18 35 15 20 Z" fill="hsl(var(--primary))" opacity="0.06" />
+              <path d="M20 0 Q25 20 22 40 Q18 55 25 70 Q30 80 28 100" stroke="hsl(var(--gold))" strokeWidth="0.3" fill="none" opacity="0.3" />
+              <path d="M45 0 Q50 15 48 30 Q42 50 50 65 Q55 80 52 100" stroke="hsl(var(--gold))" strokeWidth="0.2" fill="none" opacity="0.2" />
+              <path d="M70 10 Q65 30 68 50 Q72 70 65 90" stroke="hsl(var(--gold))" strokeWidth="0.2" fill="none" opacity="0.1" />
+              <path d="M15 5 Q30 8 45 5 Q55 8 60 20 Q55 35 45 40 Q35 38 25 42 Q18 35 15 20 Z" fill="hsl(var(--gold))" opacity="0.04" />
               <path d="M30 55 Q50 50 65 55 Q70 65 65 78 Q50 82 35 78 Q28 70 30 55 Z" fill="hsl(var(--primary))" opacity="0.04" />
             </svg>
             <div className="absolute inset-0 opacity-5"
@@ -75,7 +75,7 @@ const EpicSpotlight = () => {
                   <span className="relative block h-3 w-3 rounded-full bg-primary shadow-[0_0_12px_rgba(247,181,0,0.6)]" />
                 </button>
 
-                <span className="absolute left-5 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs font-sans font-semibold text-primary opacity-80">
+                <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-gold/80">
                   {spotData.label}
                 </span>
 

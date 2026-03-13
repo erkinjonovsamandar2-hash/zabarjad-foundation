@@ -68,20 +68,14 @@ const Blog = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* ── Clean Editorial Header ──────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12 flex flex-col items-center text-center"
-        >
+        <div className="mb-12 flex flex-col items-center text-center">
           {/* Classic Book-Plate Badge */}
           <div className="inline-flex items-center gap-4 mb-5">
-            <span className="w-8 h-[1px] bg-primary/50"></span>
-            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-primary dark:text-accent">
+            <span className="w-8 h-[1px] bg-gold/50"></span>
+            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gold text-center">
               Booktopia Kundaligi
             </p>
-            <span className="w-8 h-[1px] bg-primary/50"></span>
+            <span className="w-8 h-[1px] bg-gold/50"></span>
           </div>
 
           <h2 className="font-heading text-5xl font-bold leading-[1.05] tracking-wide text-foreground mb-4">
@@ -91,29 +85,22 @@ const Blog = () => {
           <p className="font-serif text-foreground/80 text-lg max-w-2xl mx-auto leading-loose">
             Adabiyot olami yangiliklari, eksklyuziv intervyular va nashriyotimizdagi so'nggi jarayonlar bilan tanishing.
           </p>
-        </motion.div>
+        </div>
 
         {/* ── Premium Category Tabs ────────────────────────────────────────── */}
-        <motion.div
-          className="flex flex-wrap items-center justify-center w-full gap-3 mb-10 border-b border-border/50 pb-6"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        >
+        <div className="flex flex-wrap items-center justify-center w-full gap-4 mb-12 border-b border-border/50 pb-8">
           {BLOG_CATEGORIES.map((category) => {
             const isActive = activeTab === category;
-            const isGoT = category === "Taxtlar O'yini";
 
             return (
               <button
                 key={category}
                 onClick={() => setActiveTab(category)}
                 className={`
-                  font-sans text-[11px] font-bold tracking-[0.2em] uppercase px-6 py-2.5 rounded-full transition-all duration-500 ease-out
+                  transition-all duration-300
                   ${isActive
-                    ? "bg-primary text-primary-foreground shadow-[0_10px_25px_-5px_rgba(0,205,254,0.4)] transform scale-105 border-none"
-                    : "bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 text-foreground/70 hover:shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:text-foreground"
+                    ? "btn-glass scale-105"
+                    : "btn-glass-ghost opacity-70 hover:opacity-100"
                   }
                 `}
               >
@@ -121,7 +108,7 @@ const Blog = () => {
               </button>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* ── Tab Content / Article Grid ───────────────────────────────────── */}
         <AnimatePresence mode="wait">
@@ -148,7 +135,7 @@ const Blog = () => {
                     key={article.id}
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut", delay: i * 0.07 } }}
-                    className="group flex flex-col h-full bg-white/40 dark:bg-black/20 backdrop-blur-2xl border border-white/60 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(38,89,153,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(38,89,153,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all duration-500 ease-out"
+                    className="group flex flex-col h-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/60 dark:border-white/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(38,89,153,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(38,89,153,0.12)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] hover:-translate-y-1 transition-all duration-500 ease-out"
                   >
                     <Link to={`/blog/${article.id}`} className="flex flex-col h-full">
                       {/* Image Container with 16/10 Ratio */}
@@ -156,21 +143,21 @@ const Blog = () => {
                         <motion.div
                           initial={{ opacity: 0 }}
                           whileInView={{ opacity: 1 }}
-                          viewport={{ once: true, margin: "-100px" }}
+                          viewport={{ once: true, amount: 0.1 }}
                           transition={{ duration: 1.2 }}
                           className="w-full h-full"
                         >
                           <img
                             src={article.image}
                             alt={article.title}
-                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                            className="w-full h-full object-cover transition-transform duration-500"
                           />
                         </motion.div>
                         {/* Floating Category Badge */}
                         <div className="absolute top-4 left-4 z-10">
                           <span className={`px-3 py-1.5 font-sans text-[10px] font-bold uppercase tracking-[0.2em] rounded-full shadow-md backdrop-blur-md
                             ${article.category === "Taxtlar O'yini"
-                              ? "bg-primary/90 text-foreground shadow-[0_4px_15px_rgba(245,158,11,0.2)] border-none"
+                              ? "bg-gold text-white shadow-[0_4px_15px_rgba(213,173,54,0.3)] border-none"
                               : "bg-white/80 dark:bg-black/60 text-foreground border border-white/60 dark:border-white/10"
                             }`}
                           >
@@ -215,16 +202,14 @@ const Blog = () => {
         <div className="flex justify-center mt-12 mb-8 relative z-10">
           <motion.button
             onClick={() => navigate("/blog")}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="group relative inline-flex items-center gap-2.5 rounded-2xl border border-white/60 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-2xl hover:bg-primary px-8 py-3.5 sm:py-4 transition-all duration-500 ease-out shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            whileTap={{ scale: 0.985 }}
+            className="btn-glass"
           >
-            <span className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out rounded-2xl" />
-            <Feather className="relative z-10 h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors duration-500 ease-out" />
-            <span className="relative z-10 font-sans text-[11px] tracking-[0.2em] font-bold uppercase group-hover:text-primary-foreground transition-colors duration-500 ease-out text-foreground">
+            <Feather className="h-4 w-4" />
+            <span className="font-sans text-[11px] tracking-[0.2em] font-bold uppercase">
               Barcha maqolalarni ko'rish
             </span>
-            <ChevronRight className="relative z-10 h-4 w-4 text-primary group-hover:text-primary-foreground group-hover:translate-x-0.5 transition-all duration-500 ease-out" />
+            <ChevronRight className="h-4 w-4" />
           </motion.button>
         </div>
 
