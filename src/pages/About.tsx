@@ -217,7 +217,7 @@ const About = () => (
 
           {/* "Nega Booktopia?" Glass Box */}
           <Reveal delay={0.3}>
-            <div className="relative rounded-2xl overflow-hidden bg-white/60 dark:bg-neutral-900/50 backdrop-blur-md border border-neutral-200 dark:border-white/10 shadow-lg mt-4">
+            <div className="relative rounded-2xl overflow-hidden bg-background/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg mt-4">
               {/* Left accent bar */}
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-amber-400 via-amber-600 to-amber-400" />
 

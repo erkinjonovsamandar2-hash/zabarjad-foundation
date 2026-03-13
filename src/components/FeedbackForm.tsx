@@ -7,9 +7,9 @@ import { ChevronDown } from "lucide-react";
 
 // ── Category options — match DB category values exactly ──────────────────────
 const CATEGORIES = [
-  { value: "new",  uz: "Yangi nashrlar",    ru: "Новые издания",    en: "New Releases"     },
-  { value: "soon", uz: "Tez kunda",         ru: "Скоро",            en: "Coming Soon"      },
-  { value: "gold", uz: "Oltin kolleksiya",  ru: "Золотая коллекция",en: "Gold Collection"  },
+  { value: "new", uz: "Yangi nashrlar", ru: "Новые издания", en: "New Releases" },
+  { value: "soon", uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
+  { value: "gold", uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Gold Collection" },
 ] as const;
 
 type Category = typeof CATEGORIES[number]["value"];
@@ -17,91 +17,91 @@ type Category = typeof CATEGORIES[number]["value"];
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const TX = {
   uz: {
-    title:            "Fikr qoldiring",
-    warning:          "Diqqat: har bir fikr moderatsiyadan o'tadi — hammasi ham nashr etilmaydi.",
-    typeLabel:        "Fikr turi",
-    typeBook:         "Kitob haqida",
-    typeGeneral:      "Umumiy fikr",
-    categoryLabel:    "Turkum tanlang",
-    categoryPh:       "— Turkumni tanlang —",
-    bookLabel:        "Kitob tanlang",
-    bookPh:           "— Kitobni tanlang —",
-    name:             "Ismingiz *",
-    namePh:           "Masalan: Malika Yusupova",
-    role:             "Kasb / Lavozim",
-    rolePh:           "Masalan: O'qituvchi, Talaba...",
-    city:             "Shahar",
-    cityPh:           "Masalan: Toshkent",
-    review:           "Fikringiz *",
-    reviewPh:         "Kitob yoki nashriyot haqida fikringizni yozing...",
-    stars:            "Baho bering",
-    submit:           "Yuborish",
-    submitting:       "Yuborilmoqda...",
-    successTitle:     "Rahmat!",
-    successSub:       "Fikringiz qabul qilindi va ko'rib chiqiladi.",
-    errorMsg:         "Xatolik yuz berdi. Qayta urinib ko'ring.",
-    charCount:        (n: number) => `${n}/280`,
-    minChars:         "Kamida 20 ta belgi kiriting.",
-    required:         "Bu maydon majburiy.",
-    selectCategory:   "Avval turkumni tanlang.",
+    title: "Fikr qoldiring",
+    warning: "Diqqat: har bir fikr moderatsiyadan o'tadi — hammasi ham nashr etilmaydi.",
+    typeLabel: "Fikr turi",
+    typeBook: "Kitob haqida",
+    typeGeneral: "Umumiy fikr",
+    categoryLabel: "Turkum tanlang",
+    categoryPh: "— Turkumni tanlang —",
+    bookLabel: "Kitob tanlang",
+    bookPh: "— Kitobni tanlang —",
+    name: "Ismingiz *",
+    namePh: "Masalan: Malika Yusupova",
+    role: "Kasb / Lavozim",
+    rolePh: "Masalan: O'qituvchi, Talaba...",
+    city: "Shahar",
+    cityPh: "Masalan: Toshkent",
+    review: "Fikringiz *",
+    reviewPh: "Kitob yoki nashriyot haqida fikringizni yozing...",
+    stars: "Baho bering",
+    submit: "Yuborish",
+    submitting: "Yuborilmoqda...",
+    successTitle: "Rahmat!",
+    successSub: "Fikringiz qabul qilindi va ko'rib chiqiladi.",
+    errorMsg: "Xatolik yuz berdi. Qayta urinib ko'ring.",
+    charCount: (n: number) => `${n}/280`,
+    minChars: "Kamida 20 ta belgi kiriting.",
+    required: "Bu maydon majburiy.",
+    selectCategory: "Avval turkumni tanlang.",
   },
   ru: {
-    title:            "Оставить отзыв",
-    warning:          "Внимание: каждый отзыв проходит модерацию — публикуются не все.",
-    typeLabel:        "Тип отзыва",
-    typeBook:         "О книге",
-    typeGeneral:      "Общий отзыв",
-    categoryLabel:    "Выберите категорию",
-    categoryPh:       "— Выберите категорию —",
-    bookLabel:        "Выберите книгу",
-    bookPh:           "— Выберите книгу —",
-    name:             "Ваше имя *",
-    namePh:           "Например: Jasur Normatov",
-    role:             "Должность / Профессия",
-    rolePh:           "Например: Учитель, Студент...",
-    city:             "Город",
-    cityPh:           "Например: Самарканд",
-    review:           "Ваш отзыв *",
-    reviewPh:         "Напишите о книге или издательстве...",
-    stars:            "Оцените",
-    submit:           "Отправить",
-    submitting:       "Отправка...",
-    successTitle:     "Спасибо!",
-    successSub:       "Ваш отзыв получен и будет рассмотрен.",
-    errorMsg:         "Произошла ошибка. Попробуйте снова.",
-    charCount:        (n: number) => `${n}/280`,
-    minChars:         "Минимум 20 символов.",
-    required:         "Это поле обязательно.",
-    selectCategory:   "Сначала выберите категорию.",
+    title: "Оставить отзыв",
+    warning: "Внимание: каждый отзыв проходит модерацию — публикуются не все.",
+    typeLabel: "Тип отзыва",
+    typeBook: "О книге",
+    typeGeneral: "Общий отзыв",
+    categoryLabel: "Выберите категорию",
+    categoryPh: "— Выберите категорию —",
+    bookLabel: "Выберите книгу",
+    bookPh: "— Выберите книгу —",
+    name: "Ваше имя *",
+    namePh: "Например: Jasur Normatov",
+    role: "Должность / Профессия",
+    rolePh: "Например: Учитель, Студент...",
+    city: "Город",
+    cityPh: "Например: Самарканд",
+    review: "Ваш отзыв *",
+    reviewPh: "Напишите о книге или издательстве...",
+    stars: "Оцените",
+    submit: "Отправить",
+    submitting: "Отправка...",
+    successTitle: "Спасибо!",
+    successSub: "Ваш отзыв получен и будет рассмотрен.",
+    errorMsg: "Произошла ошибка. Попробуйте снова.",
+    charCount: (n: number) => `${n}/280`,
+    minChars: "Минимум 20 символов.",
+    required: "Это поле обязательно.",
+    selectCategory: "Сначала выберите категорию.",
   },
   en: {
-    title:            "Leave a Review",
-    warning:          "Note: every review is moderated — not all will be published.",
-    typeLabel:        "Review type",
-    typeBook:         "About a book",
-    typeGeneral:      "General feedback",
-    categoryLabel:    "Select category",
-    categoryPh:       "— Select a category —",
-    bookLabel:        "Select a book",
-    bookPh:           "— Select a book —",
-    name:             "Your name *",
-    namePh:           "e.g. Dilnoza Rahimova",
-    role:             "Role / Occupation",
-    rolePh:           "e.g. Teacher, Student...",
-    city:             "City",
-    cityPh:           "e.g. Bukhara",
-    review:           "Your review *",
-    reviewPh:         "Write about the book or the publishing house...",
-    stars:            "Rate it",
-    submit:           "Submit",
-    submitting:       "Submitting...",
-    successTitle:     "Thank you!",
-    successSub:       "Your review has been received and will be reviewed.",
-    errorMsg:         "Something went wrong. Please try again.",
-    charCount:        (n: number) => `${n}/280`,
-    minChars:         "Minimum 20 characters.",
-    required:         "This field is required.",
-    selectCategory:   "Please select a category first.",
+    title: "Leave a Review",
+    warning: "Note: every review is moderated — not all will be published.",
+    typeLabel: "Review type",
+    typeBook: "About a book",
+    typeGeneral: "General feedback",
+    categoryLabel: "Select category",
+    categoryPh: "— Select a category —",
+    bookLabel: "Select a book",
+    bookPh: "— Select a book —",
+    name: "Your name *",
+    namePh: "e.g. Dilnoza Rahimova",
+    role: "Role / Occupation",
+    rolePh: "e.g. Teacher, Student...",
+    city: "City",
+    cityPh: "e.g. Bukhara",
+    review: "Your review *",
+    reviewPh: "Write about the book or the publishing house...",
+    stars: "Rate it",
+    submit: "Submit",
+    submitting: "Submitting...",
+    successTitle: "Thank you!",
+    successSub: "Your review has been received and will be reviewed.",
+    errorMsg: "Something went wrong. Please try again.",
+    charCount: (n: number) => `${n}/280`,
+    minChars: "Minimum 20 characters.",
+    required: "This field is required.",
+    selectCategory: "Please select a category first.",
   },
 } as const;
 
@@ -183,24 +183,24 @@ const StarPicker = ({
 
 // ── Main form ─────────────────────────────────────────────────────────────────
 const FeedbackForm = () => {
-  const { lang }         = useLang();
+  const { lang } = useLang();
   const { books, submitReview } = useData();
 
   const tx = TX[(lang as TxLang)] ?? TX.uz;
 
   // ── Form state ──────────────────────────────────────────────────────────
   const [feedbackType, setFeedbackType] = useState<"book" | "general">("general");
-  const [category,     setCategory]     = useState<Category | "">("");
-  const [bookId,       setBookId]       = useState<string>("");
-  const [name,         setName]         = useState("");
-  const [role,         setRole]         = useState("");
-  const [city,         setCity]         = useState("");
-  const [text,         setText]         = useState("");
-  const [stars,        setStars]        = useState(5);
-  const [errors,       setErrors]       = useState<Record<string, string>>({});
-  const [loading,      setLoading]      = useState(false);
-  const [success,      setSuccess]      = useState(false);
-  const [apiError,     setApiError]     = useState("");
+  const [category, setCategory] = useState<Category | "">("");
+  const [bookId, setBookId] = useState<string>("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [city, setCity] = useState("");
+  const [text, setText] = useState("");
+  const [stars, setStars] = useState(5);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   // Books filtered by selected category
   const filteredBooks = useMemo(
@@ -225,8 +225,8 @@ const FeedbackForm = () => {
   // ── Validation ──────────────────────────────────────────────────────────
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!name.trim())              e.name = tx.required;
-    if (!text.trim())              e.text = tx.required;
+    if (!name.trim()) e.name = tx.required;
+    if (!text.trim()) e.text = tx.required;
     else if (text.trim().length < 20) e.text = tx.minChars;
     return e;
   };
@@ -241,16 +241,16 @@ const FeedbackForm = () => {
     setApiError("");
 
     const { error } = await submitReview({
-      name:  name.trim(),
-      role:  role.trim() || null,
-      city:  city.trim() || null,
-      text:  text.trim(),
+      name: name.trim(),
+      role: role.trim() || null,
+      city: city.trim() || null,
+      text: text.trim(),
       stars,
     });
 
     setLoading(false);
     if (error) { setApiError(tx.errorMsg); }
-    else       { setSuccess(true); }
+    else { setSuccess(true); }
   };
 
   // ── Success state ────────────────────────────────────────────────────────
@@ -258,7 +258,7 @@ const FeedbackForm = () => {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1   }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 180, damping: 22 }}
         className="
           flex flex-col items-center justify-center
@@ -279,7 +279,7 @@ const FeedbackForm = () => {
     <motion.form
       onSubmit={handleSubmit}
       initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0  }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
       className="
         rounded-xl p-6 md:p-8 space-y-5
@@ -332,7 +332,7 @@ const FeedbackForm = () => {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            exit={{   opacity: 0, height: 0 }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden space-y-4"
           >
@@ -359,8 +359,8 @@ const FeedbackForm = () => {
               {category && (
                 <motion.div
                   initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1,  y: 0  }}
-                  exit={{   opacity: 0,  y: -8  }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.22 }}
                 >
                   <Field label={tx.bookLabel}>
@@ -464,15 +464,9 @@ const FeedbackForm = () => {
       <motion.button
         type="submit"
         disabled={loading}
-        whileHover={loading ? {} : { scale: 1.02 }}
-        whileTap={loading  ? {} : { scale: 0.98 }}
-        className="
-          w-full rounded-xl py-3 text-sm font-semibold font-sans
-          bg-primary text-primary-foreground
-          hover:opacity-90 disabled:opacity-50
-          transition-opacity
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
-        "
+        whileHover={loading ? {} : { scale: 1.01 }}
+        whileTap={loading ? {} : { scale: 0.985 }}
+        className="btn-glass w-full"
       >
         {loading ? tx.submitting : tx.submit}
       </motion.button>

@@ -13,52 +13,52 @@ import gotStack from "@/assets/design/got-stack.webp";
 // ── Translations ──────────────────────────────────────────────────────────────
 const TRANSLATIONS = {
   uz: {
-    eyebrow:              "Kitob seriyasi",
-    latestNews:           "So'nggi yangiliklar",
-    discoverBtn:          "Dunyoni kashf et",
-    quizLabel:            "Qaysi uy vakilisiz?",
-    quizSub:              "Taxtlar O'yini — Qahramonlar testi",
-    booksLabel:           (n: number) => `${n > 0 ? n : "—"} ta kitob mavjud`,
-    booksSub:             "Barcha seriya kitoblari",
+    eyebrow: "Kitob seriyasi",
+    latestNews: "So'nggi yangiliklar",
+    discoverBtn: "Dunyoni kashf et",
+    quizLabel: "Qaysi uy vakilisiz?",
+    quizSub: "Taxtlar O'yini — Qahramonlar testi",
+    booksLabel: (n: number) => `${n > 0 ? n : "—"} ta kitob mavjud`,
+    booksSub: "Barcha seriya kitoblari",
     articleFallbackLabel: "So'nggi maqola",
-    articleFallbackSub:   "Tez kunda...",
-    newLabel:             "Yangi",
-    description:          "Yetti qirollik. Ming yillik urushlar. Bitta taxt. Jorj R.R. Martin yaratgan dunyoning o'zbek tilidagi to'liq seriyasi.",
-    tagline1:             '"Winter is coming –',
-    tagline2:             'Qish kelayotir."',
-    footnote:             '"Fire and Blood. Hear Me Roar. We Do Not Sow."',
+    articleFallbackSub: "Tez kunda...",
+    newLabel: "Yangi",
+    description: "Yetti qirollik. Ming yillik urushlar. Bitta taxt. Jorj R.R. Martin yaratgan dunyoning o'zbek tilidagi to'liq seriyasi.",
+    tagline1: '"Winter is coming –',
+    tagline2: 'Qish kelayotir."',
+    footnote: '"Fire and Blood. Hear Me Roar. We Do Not Sow."',
   },
   ru: {
-    eyebrow:              "Книжная серия",
-    latestNews:           "Последние новости",
-    discoverBtn:          "Открыть мир",
-    quizLabel:            "Из какого вы Дома?",
-    quizSub:              "Игра Престолов — тест по персонажам",
-    booksLabel:           (n: number) => `${n > 0 ? n : "—"} книг доступно`,
-    booksSub:             "Все книги серии",
+    eyebrow: "Книжная серия",
+    latestNews: "Последние новости",
+    discoverBtn: "Открыть мир",
+    quizLabel: "Из какого вы Дома?",
+    quizSub: "Игра Престолов — тест по персонажам",
+    booksLabel: (n: number) => `${n > 0 ? n : "—"} книг доступно`,
+    booksSub: "Все книги серии",
     articleFallbackLabel: "Последняя статья",
-    articleFallbackSub:   "Скоро...",
-    newLabel:             "Новое",
-    description:          "Семь королевств. Тысячелетние войны. Один трон. Полная серия Джорджа Р.Р. Мартина на узбекском языке.",
-    tagline1:             '"Winter is coming –',
-    tagline2:             'Зима близко."',
-    footnote:             '"Огонь и кровь. Слышишь мой рёв. Мы не сеем."',
+    articleFallbackSub: "Скоро...",
+    newLabel: "Новое",
+    description: "Семь королевств. Тысячелетние войны. Один трон. Полная серия Джорджа Р.Р. Мартина на узбекском языке.",
+    tagline1: '"Winter is coming –',
+    tagline2: 'Зима близко."',
+    footnote: '"Огонь и кровь. Слышишь мой рёв. Мы не сеем."',
   },
   en: {
-    eyebrow:              "Book Series",
-    latestNews:           "Latest Updates",
-    discoverBtn:          "Discover the World",
-    quizLabel:            "Which House are you?",
-    quizSub:              "Game of Thrones — Character Quiz",
-    booksLabel:           (n: number) => `${n > 0 ? n : "—"} books available`,
-    booksSub:             "Full series collection",
+    eyebrow: "Book Series",
+    latestNews: "Latest Updates",
+    discoverBtn: "Discover the World",
+    quizLabel: "Which House are you?",
+    quizSub: "Game of Thrones — Character Quiz",
+    booksLabel: (n: number) => `${n > 0 ? n : "—"} books available`,
+    booksSub: "Full series collection",
     articleFallbackLabel: "Latest article",
-    articleFallbackSub:   "Coming soon...",
-    newLabel:             "New",
-    description:          "Seven Kingdoms. A thousand years of war. One throne. The complete George R.R. Martin series in Uzbek.",
-    tagline1:             '"Winter is coming –',
-    tagline2:             'The cold draws near."',
-    footnote:             '"Fire and Blood. Hear Me Roar. We Do Not Sow."',
+    articleFallbackSub: "Coming soon...",
+    newLabel: "New",
+    description: "Seven Kingdoms. A thousand years of war. One throne. The complete George R.R. Martin series in Uzbek.",
+    tagline1: '"Winter is coming –',
+    tagline2: 'The cold draws near."',
+    footnote: '"Fire and Blood. Hear Me Roar. We Do Not Sow."',
   },
 } as const;
 
@@ -69,11 +69,11 @@ const SIGILS = ["🐺", "🦁", "🐉", "🌹", "🐙"] as const;
 
 // ── Framer Motion variants ────────────────────────────────────────────────────
 const leftContent = {
-  hidden:  { opacity: 0, x: -32 },
+  hidden: { opacity: 0, x: -32 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 };
 const cardItem = {
-  hidden:  { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 20 } },
 };
 
@@ -91,18 +91,7 @@ const InfoCard = ({
     onClick={onClick}
     whileHover={{ y: -2, transition: { duration: 0.2 } }}
     whileTap={{ scale: 0.98 }}
-    className="
-      flex flex-col items-center gap-2
-      p-3 rounded-xl
-      bg-black/40
-      border border-white/10
-      backdrop-blur-md
-      hover:border-amber-500/50
-      transition-all duration-300
-      cursor-pointer
-      group
-      focus:outline-none focus-visible:ring-2 focus-visible:ring-primary
-    "
+    className="btn-glass w-full"
   >
     {/* Icon with enhanced glow */}
     <div className="
@@ -139,10 +128,10 @@ const InfoCard = ({
 // ── Main Component ────────────────────────────────────────────────────────────
 const TaxtlarTeaser = () => {
   const { books, articles } = useData();
-  const { lang }  = useLang();
-  const navigate  = useNavigate();
-  const ref       = useRef<HTMLElement>(null);
-  const inView    = useInView(ref, { once: true, margin: "-80px" });
+  const { lang } = useLang();
+  const navigate = useNavigate();
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const tx = TRANSLATIONS[(lang as TxLang)] ?? TRANSLATIONS.uz;
 
@@ -151,8 +140,8 @@ const TaxtlarTeaser = () => {
       (a) =>
         a.published &&
         (a.title?.toLowerCase().includes("taxtlar") ||
-         a.title?.toLowerCase().includes("game") ||
-         a.title?.toLowerCase().includes("thrones"))
+          a.title?.toLowerCase().includes("game") ||
+          a.title?.toLowerCase().includes("thrones"))
     ) ?? articles.find((a) => a.published) ?? null;
 
   // Filter books specifically for Game of Thrones series
@@ -185,10 +174,10 @@ const TaxtlarTeaser = () => {
     >
       {/* ── High-Fidelity Background Texture ───────────────────────────── */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <img 
-          src={gotBg} 
-          alt="Astrolabe Texture" 
-          className="w-full h-full object-cover opacity-35 mix-blend-overlay contrast-125" 
+        <img
+          src={gotBg}
+          alt="Astrolabe Texture"
+          className="w-full h-full object-cover opacity-35 mix-blend-overlay contrast-125"
         />
         <div className="absolute inset-0 bg-[#0a0806]/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0806] via-transparent to-[#0a0806]" />
@@ -297,10 +286,10 @@ const TaxtlarTeaser = () => {
               className="relative w-full h-80 rounded-xl border border-amber-500/30 overflow-hidden group cursor-pointer"
               onClick={() => navigate("/library?series=got")}
             >
-              <img 
-                src={gotBooks} 
-                alt="Yangi nashrlar" 
-                className="w-full h-full object-cover object-[center_35%] opacity-90 transition-transform duration-700 group-hover:scale-105" 
+              <img
+                src={gotBooks}
+                alt="Yangi nashrlar"
+                className="w-full h-full object-cover object-[center_35%] opacity-90 transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0806] via-[#0a0806]/60 to-transparent" />
 
@@ -340,9 +329,9 @@ const TaxtlarTeaser = () => {
               sub={
                 seriesArticle?.date
                   ? new Date(seriesArticle.date).toLocaleDateString(
-                      lang === "en" ? "en-GB" : lang === "ru" ? "ru-RU" : "uz-UZ",
-                      { day: "numeric", month: "long" }
-                    )
+                    lang === "en" ? "en-GB" : lang === "ru" ? "ru-RU" : "uz-UZ",
+                    { day: "numeric", month: "long" }
+                  )
                   : tx.articleFallbackSub
               }
               onClick={() =>
@@ -373,12 +362,10 @@ const TaxtlarTeaser = () => {
             onClick={() => navigate("/library?series=got")}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            className="
+            className="btn-glass
               inline-flex items-center justify-center gap-2
               px-10 py-4
               rounded-sm
-              bg-gradient-to-r from-[#1a1510] to-[#0a0806]
-              border border-amber-700/50
               text-accent
               font-got tracking-[0.15em] uppercase text-sm
               hover:bg-amber-900/20 hover:border-amber-400 hover:text-accent

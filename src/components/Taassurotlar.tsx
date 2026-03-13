@@ -348,13 +348,9 @@ const Taassurotlar = () => {
         {/* Leave feedback toggle - REDUCED MARGIN TOP */}
         <div className="flex justify-center mt-6">
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: 0.985 }}
             onClick={() => { setShowForm((p) => !p); triggerPause(); }}
-            className="
-              btn-glass text-white dark:text-white inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl
-              font-sans font-bold text-[11px] tracking-[0.2em] uppercase
-              transition-all duration-500 ease-out focus:outline-none
-            "
+            className="btn-glass"
           >
             <PenLine className="h-4 w-4" />
             {showForm ? tx.hideForm : tx.leaveFeedback}

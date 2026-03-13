@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { BookOpen, ChevronRight } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
-import type { Book } from "@/context/DataContext";
+import type { Book } from "@/types/database";
 
 import margaritaBg from "../assets/backgrounds/margarita-bg.png";
 import edenBg from "../assets/backgrounds/eden-bg.png";
