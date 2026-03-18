@@ -12,8 +12,6 @@ const INTERVAL_MS = 5000;
 const CARD_W_DESK = 76;
 const CARD_W_MOB = 60;
 
-import heroBg from "@/assets/hero/hero-bg7.png";
-
 // ── Resolve cover URL ─────────────────────────────────────────────────────────
 const getImageUrl = (url: string | null | undefined): string | null => {
   if (!url) return null;
@@ -22,75 +20,109 @@ const getImageUrl = (url: string | null | undefined): string | null => {
   return `${base}/storage/v1/object/public/${url}`;
 };
 
-// ── Background layer ──────────────────────────────────────────────────────────
+// ── Animated Mesh Background ──────────────────────────────────────────────────
 const Background = () => (
   <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-    {/* Base Background Image */}
-    <div
-      className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
-      style={{ backgroundImage: `url(${heroBg})` }}
-    />
+    {/* Mesh Container — 4 animated orbs */}
+    <div className="absolute inset-0">
+      {/* Orb 1 */}
+      <div
+        className="hero-orb absolute rounded-full pointer-events-none will-change-transform"
+        style={{
+          width: "clamp(50vw, 60vw, 70vw)",
+          height: "clamp(50vw, 60vw, 70vw)",
+          opacity: 0.72,
+          filter: "blur(100px)",
+          background: "radial-gradient(circle, hsl(213,60%,20%), transparent 70%)",
+          top: "-10%",
+          left: "-5%",
+          animation: "heroOrb1 50s ease-in-out infinite alternate",
+        }}
+      />
 
-    {/* FIXED: removed mix-blend-overlay which was fighting theme colors. Removed backdrop-blur for scroll perf */}
-    <div className="absolute inset-0 bg-background/50 z-0 transition-colors duration-500" />
+      {/* Orb 2 */}
+      <div
+        className="hero-orb absolute rounded-full pointer-events-none will-change-transform"
+        style={{
+          width: "clamp(55vw, 65vw, 75vw)",
+          height: "clamp(55vw, 65vw, 75vw)",
+          opacity: 0.75,
+          filter: "blur(110px)",
+          background: "radial-gradient(circle, hsl(192,100%,25%), transparent 70%)",
+          top: "15%",
+          right: "-8%",
+          animation: "heroOrb2 60s ease-in-out infinite alternate",
+        }}
+      />
 
-    {/* FIXED: removed dark:opacity-10 — single opacity value, theme controls the color via --primary */}
-    <div
-      className="absolute -top-[20%] -left-[10%] w-[80vw] h-[80vw] rounded-full opacity-20 blur-[120px] mix-blend-multiply"
-      style={{ background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)" }}
-    />
+      {/* Orb 3 */}
+      <div
+        className="hero-orb absolute rounded-full pointer-events-none will-change-transform"
+        style={{
+          width: "clamp(48vw, 58vw, 68vw)",
+          height: "clamp(48vw, 58vw, 68vw)",
+          opacity: 0.68,
+          filter: "blur(105px)",
+          background: "radial-gradient(circle, hsl(213,80%,12%), transparent 70%)",
+          bottom: "5%",
+          left: "10%",
+          animation: "heroOrb3 45s ease-in-out infinite alternate",
+        }}
+      />
 
-    {/* FIXED: hardcoded #fff → hsl(var(--background)) so it responds to theme */}
-    <div
-      className="absolute top-[20%] -right-[15%] w-[90vw] h-[90vw] rounded-full opacity-30 blur-[140px] mix-blend-overlay"
-      style={{ background: "radial-gradient(circle, hsl(var(--background)) 0%, transparent 60%)" }}
-    />
+      {/* Orb 4 */}
+      <div
+        className="hero-orb absolute rounded-full pointer-events-none will-change-transform"
+        style={{
+          width: "clamp(52vw, 62vw, 72vw)",
+          height: "clamp(52vw, 62vw, 72vw)",
+          opacity: 0.8,
+          filter: "blur(115px)",
+          background: "radial-gradient(circle, hsl(207,48%,18%), transparent 70%)",
+          bottom: "-5%",
+          right: "5%",
+          animation: "heroOrb4 70s ease-in-out infinite alternate",
+        }}
+      />
+    </div>
 
-    {/* Subtle paper-like grain */}
-    <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/felt.png')] mix-blend-multiply" />
+    {/* Base overlay to tint mesh */}
+    <div className="absolute inset-0 bg-background/40 z-0 transition-colors duration-500" />
 
-    {/* FIXED: removed dark: variant — single unified vignette that works for all themes */}
+    {/* Grain overlay provided by section wrapper .grain-overlay */}
+
+    {/* Subtle vignette */}
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.08)_100%)]" />
   </div>
 );
 
-// ── Typewriter Headline ───────────────────────────────────────────────────────
+// ── Word-Wipe Headline ───────────────────────────────────────────────────────
 const TypewriterHeadline = ({ text }: { text: string }) => {
   const reduced = useReducedMotion();
   const words = text.trim().split(" ");
-  const CHAR_STAGGER = reduced ? 0 : 0.04;
-  const CHAR_FADE = reduced ? 0 : 0.03;
 
   return (
-    <div className="relative w-full flex justify-center lg:justify-start">
+    <div className="relative w-full flex justify-center lg:justify-start overflow-hidden">
       <motion.h1
-        className="text-5xl sm:text-6xl lg:text-7xl font-heading leading-[1.05] text-foreground tracking-wide text-center lg:text-left drop-shadow-sm text-balance max-w-2xl mx-auto lg:mx-0 will-change-transform"
-        initial="hidden"
-        animate="visible"
-        variants={{ visible: { transition: { staggerChildren: CHAR_STAGGER } } }}
+        className="text-5xl sm:text-6xl lg:text-7xl font-heading leading-[1.01] text-foreground tracking-wide text-center lg:text-left drop-shadow-sm text-balance max-w-2xl mx-auto lg:mx-0 will-change-transform"
       >
         {words.map((word, wIndex) => {
-          // FIXED: was `wIndex === words.length - 1` (only last word highlighted)
-          // Now highlights the last TWO words ("yangi" and "olam")
           const isHighlighted = wIndex >= words.length - 2;
 
           return (
-            <span key={`w-${wIndex}`} className="block sm:inline-block sm:mr-3 lg:mr-4">
-              {word.split("").map((char, i) => (
-                <motion.span
-                  key={`c-${i}`}
-                  variants={{
-                    hidden: { opacity: 0 },
-                    visible: { opacity: 1, transition: { duration: CHAR_FADE } },
-                  }}
-                  style={{ display: "inline-block" }}
-                  // FIXED: was `isLast ? "text-primary italic" : ""`
-                  // Removed italic — keeps typography strong and uniform
-                  className={isHighlighted ? "text-primary" : ""}
-                >
-                  {char}
-                </motion.span>
-              ))}
+            <span key={`w-${wIndex}`} className="inline-block mr-2 lg:mr-3 overflow-hidden py-1">
+              <motion.span
+                initial={reduced ? { opacity: 0 } : { y: "100%" }}
+                animate={reduced ? { opacity: 1 } : { y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: wIndex * 0.08,
+                  ease: [0.16, 1, 0.3, 1], // easeOutQuint
+                }}
+                className={`inline-block ${isHighlighted ? "text-primary" : ""}`}
+              >
+                {word}
+              </motion.span>
             </span>
           );
         })}
@@ -136,7 +168,7 @@ const CtaStatsBand = ({ onNavigate }: { onNavigate: () => void }) => {
 
         <div className="flex flex-col items-center text-center">
           <p className="font-heading text-3xl sm:text-4xl text-foreground">
-            2<span className="text-xl italic"> Yillik</span>
+            2<span className="text-xl italic">Yillik</span>
           </p>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold mt-1 font-bold">Faoliyat</p>
         </div>
@@ -209,7 +241,7 @@ const ActiveBookShowcase = ({
             style={{
               boxShadow: `0 20px 40px -12px ${glow}99, 0 10px 20px -8px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.2)`,
             }}
-            whileHover={{ scale: 1.05, rotateY: -5, rotateX: 2 }}
+            whileHover={{ rotateY: -5, rotateX: 2 }}
           >
             {imgSrc
               ? (
@@ -339,7 +371,7 @@ const MiniShelf = ({
               onClick={() => onSelect(i)}
               aria-label={locField(book, "title", lang)}
               className="relative overflow-hidden rounded-[5px] focus:outline-none shrink-0 cursor-pointer snap-center group will-change-transform"
-              whileHover={!isActive ? { scale: 1.08, y: -4, filter: "grayscale(0%)" } : {}}
+              whileHover={!isActive ? { y: -4, filter: "grayscale(0%)" } : {}}
               animate={{
                 scale: isActive ? 1.15 : Math.max(0.75, 1 - diff * 0.08),
                 opacity: isActive ? 1 : Math.max(0.5, 1 - diff * 0.15),
@@ -496,10 +528,9 @@ const Hero = () => {
   }
 
   return (
-    // FIXED: removed any hardcoded bg classes — bg-background + text-foreground picks up theme-N
     <section
       id="hero"
-      className="relative min-h-[100svh] flex flex-col justify-between section-padding pt-24 lg:pt-28 pb-6 overflow-hidden bg-background text-foreground transition-colors duration-500"
+      className="relative min-h-[100svh] flex flex-col justify-between section-padding pt-24 lg:pt-28 pb-6 overflow-hidden bg-background text-foreground transition-colors duration-500 grain-overlay"
     >
       <Background />
 

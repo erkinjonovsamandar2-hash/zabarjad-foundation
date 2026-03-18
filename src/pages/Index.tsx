@@ -1,3 +1,4 @@
+// filepath: src/pages/Index.tsx
 // @refresh reset
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,7 +14,6 @@ import { useData } from "@/context/DataContext";
 import BookOfTheMonth from "@/components/BookOfTheMonth";
 import LoadingSplash from "@/components/LoadingSplash";
 import AuthorSpotlight from "@/components/AuthorSpotlight";
-import Team from "@/components/Team";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const Index = () => {
@@ -59,7 +59,6 @@ const Index = () => {
               <Taassurotlar />
               <Blog />
               <AuthorSpotlight />
-              <Team />
             </main>
             <Footer />
           </motion.div>

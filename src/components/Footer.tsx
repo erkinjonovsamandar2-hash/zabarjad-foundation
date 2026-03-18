@@ -17,10 +17,12 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="relative isolate grain-overlay bg-background border-t border-border pt-24 md:pt-32 pb-12 overflow-hidden"
+      className="relative isolate grain-overlay border-t border-border pt-24 md:pt-32 overflow-hidden transition-colors duration-500"
+      style={{ backgroundColor: 'hsl(var(--footer-bg))' }}
     >
       {/* ── Subtle Background Glow ── */}
-      <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-amber-500/5 via-background to-background" />
+      {/* FIXED: Removed via-background to-background which was painting over the footer-bg */}
+      <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-amber-500/5 via-transparent to-transparent" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
@@ -123,15 +125,15 @@ const Footer = () => {
               poligrafiya darajasida o'quvchilarga taqdim etuvchi premium nashriyot.
             </p>
             <div className="flex flex-col gap-4 font-sans font-bold text-[10px] sm:text-[11px] uppercase tracking-wider text-foreground/80 mt-2 border-l-2 border-accent/20 pl-4">
-              <div className="flex items-start gap-3 hover:text-primary transition-colors">
+              <div className="flex items-start gap-3 transition-colors">
                 <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                 <span>{footer.address}</span>
               </div>
-              <div className="flex items-center gap-3 hover:text-primary transition-colors">
+              <div className="flex items-center gap-3 transition-colors">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
                 <span>{footer.phone}</span>
               </div>
-              <div className="flex items-center gap-3 hover:text-primary transition-colors">
+              <div className="flex items-center gap-3 transition-colors">
                 <Mail className="w-4 h-4 text-accent shrink-0" />
                 <span>hello@booktopia.uz</span>
               </div>
@@ -140,7 +142,6 @@ const Footer = () => {
 
           {/* ── Col 2: Faoliyat ── */}
           <div className="flex flex-col group">
-            {/* UPDATED: font-serif on heading button */}
             <button
               type="button"
               onClick={() => toggle("FAOLIYAT")}
@@ -157,14 +158,12 @@ const Footer = () => {
               />
             </button>
 
-            {/* Collapsible list — collapses on mobile, always open on md+ */}
             <div
               className={`flex flex-col gap-4 overflow-hidden transition-all duration-500 ease-in-out ${openSection === "FAOLIYAT"
                 ? "max-h-[500px] opacity-100 mt-4"
                 : "max-h-0 opacity-0 mt-0 md:max-h-[500px] md:opacity-100 md:mt-4"
                 }`}
             >
-              {/* UPDATED: font-serif on all footer links */}
               <Link
                 to="/library"
                 className="group/link flex items-center gap-3 text-[13px] font-sans font-medium text-foreground/70 hover:text-primary transition-colors py-1"
@@ -191,7 +190,6 @@ const Footer = () => {
 
           {/* ── Col 3: Nashriyot ── */}
           <div className="flex flex-col group">
-            {/* UPDATED: font-serif on heading button */}
             <button
               type="button"
               onClick={() => toggle("NASHRIYOT")}
@@ -240,7 +238,6 @@ const Footer = () => {
 
           {/* ── Col 4: Huquqiy ── */}
           <div className="flex flex-col group">
-            {/* UPDATED: font-serif on heading button */}
             <button
               type="button"
               onClick={() => toggle("HUQUQIY")}
@@ -297,7 +294,10 @@ const Footer = () => {
         </div>
 
         {/* ── Bottom Bar ── */}
-        <div className="pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div 
+          className="mt-8 py-8 px-4 sm:px-6 lg:px-8 -mx-4 sm:-mx-6 lg:-mx-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left transition-colors duration-500"
+          style={{ backgroundColor: 'hsl(var(--footer-bar-bg))' }}
+        >
           <p className="font-sans text-[10px] sm:text-[11px] text-foreground/60 font-bold uppercase tracking-[0.1em]">
             &copy; {currentYear} Booktopia.{" "}
             {t.footer.rights || "Barcha huquqlar himoyalangan."}

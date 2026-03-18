@@ -68,8 +68,9 @@ const Navbar = () => {
     { label: t.nav.home, href: "/" },
     { label: t.nav.spotlight, href: "/spotlight" },
     { label: t.nav.library, href: "/library" },
-    { label: t.nav.quiz, href: "/quiz" },
     { label: t.nav.blog, href: "/blog" },
+    { label: "Jamoa", href: "/team" }, // <-- ADDED HERE
+    { label: t.nav.quiz, href: "/quiz" }, // Quiz acts as CTA typically, placed near the end
     { label: t.nav.contact, href: "/#footer" },
   ];
 
@@ -251,10 +252,10 @@ const Navbar = () => {
                           <img
                             src={cat.img}
                             alt={cat.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-cover transition-transform duration-500"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                          <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center transition-transform duration-300">
                             <span className="text-4xl opacity-40 group-hover:opacity-70 transition-opacity">📚</span>
                           </div>
                         )}

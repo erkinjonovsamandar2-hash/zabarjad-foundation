@@ -266,7 +266,7 @@ export default function GlobalClassics() {
         }
         .hero-cover:hover {
           animation: goldPulseHover 1.6s ease-in-out infinite;
-          transform: perspective(900px) rotateY(-4deg) rotateX(1deg) scale(1.025) !important;
+          transform: perspective(900px) rotateY(-4deg) rotateX(1deg) !important;
           filter: brightness(1.08);
         }
       `}</style>
@@ -336,7 +336,7 @@ export default function GlobalClassics() {
             </AnimatePresence>
 
             {/* CENTER — Hero cover */}
-            <div className="shrink-0 relative z-30 flex justify-center w-[260px] sm:w-[300px] lg:w-[340px]">
+            <div className="shrink-0 relative z-30 flex justify-center w-[260px] sm:w-[300px] lg:w-[340px] translate-y-8 lg:translate-y-12">
               <AnimatePresence mode="popLayout" custom={direction}>
                 {activeBook && (
                   <motion.div

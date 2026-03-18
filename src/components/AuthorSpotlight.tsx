@@ -50,7 +50,7 @@ export default function AuthorSpotlight() {
                                 <img
                                     src={author.image}
                                     alt={author.name}
-                                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border border-white/20 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+                                    className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
                                 />
                                 <div className="flex flex-col items-start gap-1">
                                     <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>

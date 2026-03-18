@@ -27,6 +27,7 @@ const QuizPage            = lazy(() => import("./pages/QuizPage"));
 const SpotlightPage       = lazy(() => import("./pages/SpotlightPage"));
 const BookDetails         = lazy(() => import("./pages/BookDetails"));
 const About               = lazy(() => import("./pages/About"));
+const TeamPage            = lazy(() => import("./pages/TeamPage"));
 const LegalPage           = lazy(() => import("./pages/LegalPage"));
 const NotFound            = lazy(() => import("./pages/NotFound"));
 const AdminLayout         = lazy(() => import("./pages/admin/AdminLayout"));
@@ -160,6 +161,7 @@ const AppInner = () => {
           {/* LAZY — public pages */}
           <Route path="/about"     element={<Lazy component={About} />} />
           <Route path="/blog"      element={<Lazy component={BlogPage} />} />
+          <Route path="/team"      element={<Lazy component={TeamPage} />} />
           <Route path="/library"   element={<Lazy component={LibraryPage} />} />
           <Route path="/book/:id"  element={<Lazy component={BookDetails} />} />
           <Route path="/quiz"      element={<Lazy component={QuizPage} />} />
