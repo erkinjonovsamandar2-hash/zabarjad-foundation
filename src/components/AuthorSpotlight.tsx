@@ -50,11 +50,12 @@ export default function AuthorSpotlight() {
                                 <img
                                     src={author.image}
                                     alt={author.name}
+                                    loading="lazy"
                                     className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
                                 />
                                 <div className="flex flex-col items-start gap-1">
                                     <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>
-                                    <span className="font-sans font-bold text-[10px] tracking-[0.2em] uppercase bg-gold/10 text-gold px-3 py-1 rounded-full">
+                                    <span className={`font-sans font-bold text-[0.65rem] tracking-[0.2em] uppercase ${author.role === "MUALLIF" ? "text-primary" : "text-gold"}`}>
                                         {author.role}
                                     </span>
                                 </div>

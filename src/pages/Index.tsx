@@ -2,10 +2,10 @@
 // @refresh reset
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import GlobalClassics from "@/components/GlobalClassics";
 import MatchmakerQuiz from "@/components/MatchmakerQuiz";
+import YangiNashrlar from "@/components/YangiNashrlar";
 import CuratedLibrary from "@/components/CuratedLibrary";
 import Blog from "@/components/Blog";
 import Taassurotlar from "@/components/Taassurotlar";
@@ -28,8 +28,6 @@ const Index = () => {
     }
   }, [loading]);
 
-  // DEBUG LOG
-  console.log("[Index.tsx] Render -> DataContext loading state:", loading);
 
   return (
     <div className="min-h-screen bg-background">
@@ -46,7 +44,6 @@ const Index = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="flex flex-col min-h-screen"
           >
-            <Navbar />
             <main className="flex-1">
               <Hero />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
@@ -55,6 +52,9 @@ const Index = () => {
               <GlobalClassics />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <MatchmakerQuiz />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+              <YangiNashrlar />
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <CuratedLibrary />
               <Taassurotlar />
               <Blog />

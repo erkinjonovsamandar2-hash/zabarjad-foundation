@@ -1,6 +1,6 @@
 // @refresh reset
 import { motion } from "framer-motion";
-import { ChevronRight, Award, Clock, Brain, Quote, Info, BookOpen } from "lucide-react";
+import { ChevronRight, Award, Clock, Brain, Quote, Info, BookOpen, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
@@ -10,11 +10,35 @@ let bgUrl: string | undefined;
 try { bgUrl = new URL("@/assets/design/botm-bg.png", import.meta.url).href; } catch { bgUrl = undefined; }
 
 const BookOfTheMonth = () => {
-  const { books } = useData();
+  const { books, loading, booksError } = useData() as ReturnType<typeof useData> & { booksError?: boolean };
   const { lang } = useLang();
   const navigate = useNavigate();
 
+  // ── Loading / Error State ────────────────────────────────────────────────
+  if (loading || books.length === 0 || booksError) {
+    return (
+      <section className="relative flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-card py-24 lg:py-32 border-y border-border z-10">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 sm:px-12">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Editorial Content Skeleton */}
+            <div className="lg:col-span-7 flex flex-col items-center lg:items-start w-full gap-6" aria-hidden="true">
+              <div className="skeleton-shimmer h-8 w-32 rounded-full" />
+              <div className="skeleton-shimmer h-24 w-full max-w-2xl rounded-md" />
+              <div className="skeleton-shimmer h-12 w-3/4 max-w-xl rounded-md" />
+              <div className="skeleton-shimmer h-4 w-48 rounded-[4px]" />
+            </div>
+            {/* Right Book Cover Skeleton */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end w-full" aria-hidden="true">
+              <div className="skeleton-shimmer w-52 sm:w-64 lg:w-72 aspect-[2/3] rounded-md sm:rounded-lg" />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   const spotlightBook = books.find((b) => b.featured) || books[0];
+  if (!spotlightBook) return null; // Ultimate safety net
 
   const getImageUrl = (url: string | null | undefined): string | null => {
     if (!url) return null;
@@ -22,17 +46,6 @@ const BookOfTheMonth = () => {
     const base = import.meta.env.VITE_SUPABASE_URL as string;
     return `${base}/storage/v1/object/public/${url}`;
   };
-
-  // Keep a skeleton state if loading or timed out without books
-  if (!spotlightBook) {
-    return (
-      <section className="relative flex flex-col justify-center min-h-[50vh] overflow-hidden bg-background py-24 lg:py-32 border-y border-border z-10">
-        <div className="absolute inset-0 flex items-center justify-center opacity-30 text-muted-foreground font-sans text-sm tracking-widest uppercase">
-          [Kitob ma'lumotlari yuklanmoqda...]
-        </div>
-      </section>
-    );
-  }
 
   const coverUrl = getImageUrl(spotlightBook.cover_url);
   const glowColor = `hsl(${spotlightBook.bg_color ?? "40 65% 30%"})`;
@@ -49,14 +62,14 @@ const BookOfTheMonth = () => {
         className="relative z-10 perspective-1000"
       >
         <div
-          className="relative w-52 sm:w-64 lg:w-72 aspect-[2/3] rounded-md sm:rounded-lg overflow-hidden border-l-[3px] border-white/20"
+          className="relative w-48 sm:w-64 lg:w-80 aspect-[2/3] rounded-md sm:rounded-lg overflow-hidden border-l-[3px] border-white/20"
           style={{
             transform: "rotateY(-15deg) rotateX(5deg)",
             boxShadow: `-20px 20px 40px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.15)`
           }}
         >
           {coverUrl ? (
-            <img src={coverUrl} alt={locField(spotlightBook, "title", lang)} className="w-full h-full object-cover" />
+            <img src={coverUrl} alt={locField(spotlightBook, "title", lang)} loading="lazy" className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full bg-neutral-800" />
           )}
@@ -75,9 +88,8 @@ const BookOfTheMonth = () => {
     <motion.section
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      viewport={{ once: true, amount: 0.1 }}
-      className="relative grain-overlay flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-background py-24 lg:py-32 border-y border-border z-10"
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="relative grain-overlay flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-card py-24 lg:py-32 border-y border-border z-10"
     >
 
       {/* ── Background: Van Gogh Feather & Texture ──────────────────────────── */}
@@ -102,14 +114,13 @@ const BookOfTheMonth = () => {
           {/* ── Left Column (Editorial Content) ── */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left w-full">
 
-            {/* 1. Premium Badge - MADE BIGGER */}
-            <motion.div
+            {/* 1. Premium Badge */}
+            <motion.p
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/30 bg-gold/10 text-gold font-bold tracking-[0.2em] font-sans text-[11px] uppercase mb-6"
+              className="font-sans text-[0.65rem] uppercase tracking-[0.25em] text-primary font-bold mb-4 drop-shadow-sm"
             >
-              <span className="text-sm sm:text-base leading-none">✦</span>
               OY KITOBI
-            </motion.div>
+            </motion.p>
 
             {/* 2. Giant Pull Quote */}
             <motion.div
@@ -125,12 +136,12 @@ const BookOfTheMonth = () => {
             {/* 3. Title & Author */}
             <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-              className="w-full flex flex-col items-center lg:items-start"
+              className="w-full flex flex-col items-center lg:items-start mb-6"
             >
-              <h2 className="font-heading leading-[1.05] tracking-wide text-2xl sm:text-3xl font-bold text-foreground">
+              <h2 className="font-heading tracking-tight text-3xl sm:text-4xl font-bold text-foreground">
                 {locField(spotlightBook, "title", lang)}
               </h2>
-              <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-gold font-bold mt-1.5">
+              <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-bold mt-2">
                 {locField(spotlightBook, "author", lang)}
               </p>
             </motion.div>
@@ -143,39 +154,36 @@ const BookOfTheMonth = () => {
               <FloatingBookVisual />
             </motion.div>
 
-            {/* 4. Badges (Added mt-6 on desktop to space from author, mt-0 on mobile because of book) */}
+            {/* 4. Badges */}
             <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mt-0 lg:mt-6 mb-6"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-0 mb-8"
             >
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
-                <Award className="w-3.5 h-3.5 text-accent" /> Jahon durdonasi
+              <div className="flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-muted-foreground">
+                <Award className="w-3.5 h-3.5 text-primary" /> Jahon durdonasi
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
-                <Brain className="w-3.5 h-3.5 text-accent" /> {genre}
+              <div className="flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-muted-foreground">
+                <Brain className="w-3.5 h-3.5 text-primary" /> {genre}
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-black/40 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-foreground/80">
-                <Clock className="w-3.5 h-3.5 text-accent" /> ~{pages} sahifa
+              <div className="flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-muted-foreground">
+                <Clock className="w-3.5 h-3.5 text-primary" /> ~{pages} sahifa
               </div>
             </motion.div>
 
             {/* 5. "Why Read It" Box */}
             <motion.div
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
-              className="relative w-full max-w-xl mb-8 text-left"
+              className="relative w-full max-w-xl mb-10 text-left"
             >
-              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gold rounded-l-2xl shadow-[0_0_10px_rgba(213,173,54,0.4)]" />
-              <div className="bg-white/95 dark:bg-black/60 border border-white/60 dark:border-white/10 rounded-2xl rounded-l-none p-5 sm:p-6 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
-                <div className="flex items-center gap-2 mb-2">
-                  <Info className="w-4 h-4 text-gold" />
-                  <h4 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-foreground">
-                    Nega o'qish kerak?
-                  </h4>
-                </div>
-                <p className="font-serif text-sm sm:text-base text-foreground/90 leading-loose">
-                  {description}
-                </p>
+              <div className="flex items-center gap-2 mb-3">
+                <Info className="w-4 h-4 text-primary" />
+                <h4 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-foreground">
+                  Nega o'qish kerak?
+                </h4>
               </div>
+              <p className="font-serif text-base sm:text-[1.05rem] text-muted-foreground leading-relaxed">
+                {description}
+              </p>
             </motion.div>
 
             <motion.button

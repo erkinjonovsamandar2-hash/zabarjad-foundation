@@ -32,7 +32,6 @@ const Background = () => (
           width: "clamp(50vw, 60vw, 70vw)",
           height: "clamp(50vw, 60vw, 70vw)",
           opacity: 0.72,
-          filter: "blur(100px)",
           background: "radial-gradient(circle, hsl(213,60%,20%), transparent 70%)",
           top: "-10%",
           left: "-5%",
@@ -47,7 +46,6 @@ const Background = () => (
           width: "clamp(55vw, 65vw, 75vw)",
           height: "clamp(55vw, 65vw, 75vw)",
           opacity: 0.75,
-          filter: "blur(110px)",
           background: "radial-gradient(circle, hsl(192,100%,25%), transparent 70%)",
           top: "15%",
           right: "-8%",
@@ -62,7 +60,6 @@ const Background = () => (
           width: "clamp(48vw, 58vw, 68vw)",
           height: "clamp(48vw, 58vw, 68vw)",
           opacity: 0.68,
-          filter: "blur(105px)",
           background: "radial-gradient(circle, hsl(213,80%,12%), transparent 70%)",
           bottom: "5%",
           left: "10%",
@@ -77,7 +74,6 @@ const Background = () => (
           width: "clamp(52vw, 62vw, 72vw)",
           height: "clamp(52vw, 62vw, 72vw)",
           opacity: 0.8,
-          filter: "blur(115px)",
           background: "radial-gradient(circle, hsl(207,48%,18%), transparent 70%)",
           bottom: "-5%",
           right: "5%",
@@ -196,11 +192,11 @@ const CtaStatsBand = ({ onNavigate }: { onNavigate: () => void }) => {
       <motion.button
         onClick={onNavigate}
         whileTap={{ scale: 0.985 }}
-        className="btn-glass text-white dark:text-white w-full max-w-[360px] sm:w-auto px-10 py-4 font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase transition-all duration-500 ease-out z-10 rounded-2xl"
+        className="btn-glass flex flex-row items-center justify-center gap-2 group w-full max-w-[360px] sm:w-auto px-10 py-4 transition-all duration-500 ease-out z-10 rounded-2xl relative overflow-hidden"
       >
-        <Library className="h-4 w-4" />
-        <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase">KOLLEKSIYANI KO'RISH</span>
-        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-500 ease-out" />
+        <Library className="h-4 w-4 relative z-10" />
+        <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase relative z-10">KOLLEKSIYANI KO'RISH</span>
+        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-500 ease-out relative z-10" />
       </motion.button>
     </motion.div>
   );

@@ -616,73 +616,160 @@ COMPONENT MAP (Pre-Flight Audit)
   }
 
   /* ── Hero Mesh Animation ──────────────────────────────────────────────────── */
-@keyframes heroOrb1 {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(15%, 10%); }
-  100% { transform: translate(-8%, 20%); }
-}
+  @keyframes heroOrb1 {
+    0% {
+      transform: translate(0, 0);
+    }
 
-@keyframes heroOrb2 {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(-12%, 15%); }
-  100% { transform: translate(10%, -8%); }
-}
+    50% {
+      transform: translate(15%, 10%);
+    }
 
-@keyframes heroOrb3 {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(20%, -10%); }
-  100% { transform: translate(-5%, 15%); }
-}
-
-@keyframes heroOrb4 {
-  0% { transform: translate(0, 0); }
-  50% { transform: translate(-10%, -15%); }
-  100% { transform: translate(15%, 5%); }
-}
-
-/* Light mode orb colors */
-html.light .hero-orb,
-html.theme-1 .hero-orb,
-html.theme-2 .hero-orb,
-html.theme-3 .hero-orb {
-  --orb-1: hsl(213, 40%, 88%);
-  --orb-2: hsl(192, 60%, 85%);
-  --orb-3: hsl(44, 43%, 92%);
-  --orb-4: hsl(210, 30%, 90%);
-}
-
-html.light .hero-orb:nth-of-type(1),
-html.theme-1 .hero-orb:nth-of-type(1),
-html.theme-2 .hero-orb:nth-of-type(1),
-html.theme-3 .hero-orb:nth-of-type(1) {
-  background: radial-gradient(circle, var(--orb-1), transparent 70%) !important;
-}
-
-html.light .hero-orb:nth-of-type(2),
-html.theme-1 .hero-orb:nth-of-type(2),
-html.theme-2 .hero-orb:nth-of-type(2),
-html.theme-3 .hero-orb:nth-of-type(2) {
-  background: radial-gradient(circle, var(--orb-2), transparent 70%) !important;
-}
-
-html.light .hero-orb:nth-of-type(3),
-html.theme-1 .hero-orb:nth-of-type(3),
-html.theme-2 .hero-orb:nth-of-type(3),
-html.theme-3 .hero-orb:nth-of-type(3) {
-  background: radial-gradient(circle, var(--orb-3), transparent 70%) !important;
-}
-
-html.light .hero-orb:nth-of-type(4),
-html.theme-1 .hero-orb:nth-of-type(4),
-html.theme-2 .hero-orb:nth-of-type(4),
-html.theme-3 .hero-orb:nth-of-type(4) {
-  background: radial-gradient(circle, var(--orb-4), transparent 70%) !important;
-}
-
-/* Respect prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  .hero-orb {
-    animation: none !important;
+    100% {
+      transform: translate(-8%, 20%);
+    }
   }
-}
+
+  @keyframes heroOrb2 {
+    0% {
+      transform: translate(0, 0);
+    }
+
+    50% {
+      transform: translate(-12%, 15%);
+    }
+
+    100% {
+      transform: translate(10%, -8%);
+    }
+  }
+
+  @keyframes heroOrb3 {
+    0% {
+      transform: translate(0, 0);
+    }
+
+    50% {
+      transform: translate(20%, -10%);
+    }
+
+    100% {
+      transform: translate(-5%, 15%);
+    }
+  }
+
+  @keyframes heroOrb4 {
+    0% {
+      transform: translate(0, 0);
+    }
+
+    50% {
+      transform: translate(-10%, -15%);
+    }
+
+    100% {
+      transform: translate(15%, 5%);
+    }
+  }
+
+  /* Light mode orb colors */
+  html.light .hero-orb,
+  html.theme-1 .hero-orb,
+  html.theme-2 .hero-orb,
+  html.theme-3 .hero-orb {
+    --orb-1: hsl(213, 40%, 88%);
+    --orb-2: hsl(192, 60%, 85%);
+    --orb-3: hsl(44, 43%, 92%);
+    --orb-4: hsl(210, 30%, 90%);
+  }
+
+  html.light .hero-orb:nth-of-type(1),
+  html.theme-1 .hero-orb:nth-of-type(1),
+  html.theme-2 .hero-orb:nth-of-type(1),
+  html.theme-3 .hero-orb:nth-of-type(1) {
+    background: radial-gradient(circle, var(--orb-1), transparent 70%) !important;
+  }
+
+  html.light .hero-orb:nth-of-type(2),
+  html.theme-1 .hero-orb:nth-of-type(2),
+  html.theme-2 .hero-orb:nth-of-type(2),
+  html.theme-3 .hero-orb:nth-of-type(2) {
+    background: radial-gradient(circle, var(--orb-2), transparent 70%) !important;
+  }
+
+  html.light .hero-orb:nth-of-type(3),
+  html.theme-1 .hero-orb:nth-of-type(3),
+  html.theme-2 .hero-orb:nth-of-type(3),
+  html.theme-3 .hero-orb:nth-of-type(3) {
+    background: radial-gradient(circle, var(--orb-3), transparent 70%) !important;
+  }
+
+  html.light .hero-orb:nth-of-type(4),
+  html.theme-1 .hero-orb:nth-of-type(4),
+  html.theme-2 .hero-orb:nth-of-type(4),
+  html.theme-3 .hero-orb:nth-of-type(4) {
+    background: radial-gradient(circle, var(--orb-4), transparent 70%) !important;
+  }
+
+  /* Respect prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-orb {
+      animation: none !important;
+    }
+  }
+
+  /* ── Skeleton Shimmer ──────────────────────────────────────────────────────── */
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+
+    to {
+      background-position: 200% 0;
+    }
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(90deg,
+        hsl(var(--muted)) 25%,
+        hsl(var(--muted-foreground) / 0.15) 50%,
+        hsl(var(--muted)) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer {
+      background: hsl(var(--muted));
+      animation: none;
+    }
+  }
+
+  /* ── Marquee (YangiNashrlar) ───────────────────────────────────────────────── */
+  @keyframes marqueeScroll {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .marquee-track {
+    animation: marqueeScroll calc(var(--book-count, 8) * 4s) linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+      overflow-x: auto;
+      width: 100%;
+      flex-wrap: nowrap;
+    }
+  }
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, AlertTriangle } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
 import type { Book } from "@/types/database";
@@ -106,7 +106,7 @@ const NavControls = ({
 
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function GlobalClassics() {
-  const { books, loading } = useData();
+  const { books, loading, booksError } = useData() as ReturnType<typeof useData> & { booksError?: boolean };
   const { lang } = useLang();
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -193,38 +193,34 @@ export default function GlobalClassics() {
     onDot((activeIndex + i + 1) % total);
   }, [activeIndex, total, onDot]);
 
+  // ── Error State ──────────────────────────────────────────────────────────
+  if (booksError) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center justify-center py-12 text-center" role="alert">
+          <AlertTriangle className="w-8 h-8 text-muted-foreground mb-3" />
+          <p className="font-sans text-sm text-muted-foreground">Kitoblarni yuklashda xatolik yuz berdi</p>
+          <p className="font-sans text-xs text-muted-foreground/70 mt-1">Iltimos, sahifani yangilang</p>
+        </div>
+      </div>
+    );
+  }
+
   // ── Skeleton ──────────────────────────────────────────────────────────────
   if (loading || total === 0) {
     return (
-      <div className="w-full min-h-screen flex items-center justify-center gap-6 px-6 pt-24 pb-20 bg-background overflow-hidden relative">
+      <div className="w-full min-h-screen flex items-center justify-center gap-6 px-6 pt-24 pb-20 bg-background overflow-hidden relative" aria-hidden="true">
         <div className="flex items-center gap-8 w-full max-w-7xl mx-auto justify-between">
           <div className="flex-1 flex flex-col gap-6">
-            <motion.div
-              animate={{ opacity: [0.3, 0.7, 0.3] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="w-48 h-10 bg-muted/60 rounded-md"
-            />
-            <motion.div
-              animate={{ opacity: [0.3, 0.7, 0.3] }}
-              transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }}
-              className="w-full h-80 bg-muted/60 rounded-2xl"
-            />
+            <div className="skeleton-shimmer w-48 h-10 rounded-md" />
+            <div className="skeleton-shimmer w-full h-80 rounded-2xl" />
           </div>
           <div className="shrink-0 flex justify-center w-[260px] sm:w-[300px] lg:w-[340px]">
-            <motion.div
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ repeat: Infinity, duration: 1.5, delay: 0.4 }}
-              className="w-full aspect-[2/3] bg-muted/80 rounded-[14px] shadow-2xl"
-            />
+            <div className="skeleton-shimmer w-full aspect-[2/3] rounded-[14px] shadow-2xl" />
           </div>
           <div className="flex-1 hidden lg:flex flex-col items-end gap-4">
             {[1, 2, 3].map((i) => (
-              <motion.div
-                key={i}
-                animate={{ opacity: [0.3, 0.7, 0.3] }}
-                transition={{ repeat: Infinity, duration: 1.5, delay: i * 0.2 }}
-                className="w-[105px] aspect-[2/3] bg-muted/60 rounded-lg"
-              />
+              <div key={i} className="skeleton-shimmer w-[105px] aspect-[2/3] rounded-lg" />
             ))}
           </div>
         </div>
@@ -234,7 +230,7 @@ export default function GlobalClassics() {
 
   return (
     <section
-      id="library"
+      id="global-classics"
       className="relative w-full min-h-screen bg-cover bg-center transition-all duration-1000 ease-in-out overflow-hidden transform-gpu"
       style={{ backgroundImage: `url(${BOOK_BACKGROUNDS[displayIndex] || BOOK_BACKGROUNDS[0]})` }}
     >
@@ -243,7 +239,7 @@ export default function GlobalClassics() {
 
       {/* Section Title */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pt-20 lg:pt-32">
-        <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground tracking-widest text-center lg:text-left w-full relative z-10 mb-2 md:mb-4">
+        <h2 className="font-heading text-5xl sm:text-6xl lg:text-7xl text-foreground tracking-tight text-left w-full relative z-10 mb-2 md:mb-4">
           JAHON KLASSIKLARI
         </h2>
       </div>
@@ -285,7 +281,7 @@ export default function GlobalClassics() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex-1 w-full lg:max-w-lg bg-background/50 backdrop-blur-md border border-border/60 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col items-start text-left z-10"
+                  className="flex-1 w-full lg:max-w-lg bg-card border-[0.5px] border-border rounded-[var(--radius)] p-6 md:p-8 shadow-sm flex flex-col items-start text-left z-10"
                 >
                   {/* Genre + meta */}
                   <div className="flex items-center gap-2.5 mb-3 flex-wrap">
@@ -350,7 +346,7 @@ export default function GlobalClassics() {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 0.75, ease: [0.25, 1, 0.5, 1] }}
+                    transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
                     className="hero-cover relative w-full aspect-[2/3] rounded-[14px] overflow-hidden"
                   >
                     {/* FIX: bg-muted as placeholder prevents layout shift while image loads */}
@@ -378,7 +374,7 @@ export default function GlobalClassics() {
                   key={`thumb-${book.id}-${i}`}
                   onClick={() => onThumb(i)}
                   initial={{ opacity: 0, x: 24 }}
-                  animate={{ opacity: 0.72 - i * 0.18, x: 0 }}
+                  animate={{ opacity: 0.5, x: 0 }}
                   whileHover={{
                     opacity: 1,
                     boxShadow: "0 14px 34px rgba(0,0,0,0.65), 0 0 0 1px rgba(229,193,88,0.50)",
@@ -457,7 +453,7 @@ export default function GlobalClassics() {
                 </div>
 
                 {/* Info card */}
-                <div className="w-full bg-background/50 backdrop-blur-md border border-border/60 rounded-xl p-5 text-center flex flex-col items-center gap-4 shadow-sm">
+                <div className="w-full bg-card border-[0.5px] border-border rounded-[var(--radius)] p-5 text-center flex flex-col items-center gap-4 shadow-sm">
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <span className="text-[11px] font-sans font-bold tracking-[0.2em] uppercase bg-gold text-white rounded px-2 py-1">
                       {book.category}

@@ -38,11 +38,11 @@ const Footer = () => {
         </div>
 
         {/* ── Top Section: Catalogue & Newsletter CTA ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 p-8 md:p-10 rounded-3xl bg-white/40 dark:bg-black/20 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 p-8 md:p-10 rounded-[var(--radius)] bg-card border-[0.5px] border-border shadow-sm">
 
           {/* Catalogue Download */}
-          <div className="flex flex-col items-start border-b md:border-b-0 md:border-r border-accent/20 pb-8 md:pb-0 md:pr-8">
-            <h3 className="text-2xl md:text-3xl font-heading font-bold tracking-wide leading-[1.05] text-foreground mb-3">
+          <div className="flex flex-col items-start border-b md:border-b-0 md:border-r border-border pb-8 md:pb-0 md:pr-8">
+            <h3 className="font-heading text-3xl font-bold tracking-tight text-foreground mb-4">
               Nashriyot Katalogi
             </h3>
             <p className="font-serif text-muted-foreground text-sm sm:text-base mb-6 max-w-sm leading-loose">
@@ -60,7 +60,7 @@ const Footer = () => {
 
           {/* Social / Join Community */}
           <div className="flex flex-col items-start md:pl-8 justify-center">
-            <h3 className="text-2xl font-heading font-bold tracking-wide leading-[1.05] text-foreground mb-3">
+            <h3 className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-3">
               {t.footer.heading || "Booktopia oilasiga qo'shiling"}
             </h3>
             <p className="font-serif text-muted-foreground text-sm sm:text-base mb-6 max-w-sm leading-loose">
@@ -68,25 +68,25 @@ const Footer = () => {
             </p>
             {/* Newsletter Form */}
             <form className="w-full flex items-center gap-2 mb-6" onSubmit={(e) => { e.preventDefault(); }}>
-              <input type="email" placeholder="Email manzilingiz" className="flex-1 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-border rounded-xl px-4 py-3.5 sm:py-4 text-sm focus:outline-none z-10" required />
-              <button type="submit" className="btn-glass">Obuna</button>
+              <input type="email" placeholder="Email manzilingiz" className="flex-1 bg-background border-[0.5px] border-border rounded-[var(--radius)] px-4 h-[44px] text-sm focus:outline-none focus:ring-2 focus:ring-primary z-10" required />
+              <button type="submit" className="btn-glass h-[44px] px-6 py-0 flex items-center justify-center font-sans tracking-[0.18em] text-[10px] uppercase font-bold">Obuna</button>
             </form>
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href={footer.telegram}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#229ED9]/10 text-[#229ED9] hover:bg-[#229ED9] hover:text-white transition-all duration-300 text-sm font-bold tracking-wide"
+                className="flex items-center gap-2 px-4 py-2 rounded-[var(--radius)] bg-[#229ED9] text-white hover:bg-[#229ED9]/90 transition-colors font-sans text-[0.75rem] font-semibold"
               >
-                <Send className="w-4 h-4" /> Telegram
+                <Send className="w-3.5 h-3.5" /> Telegram
               </a>
               <a
                 href={footer.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E1306C]/10 text-[#E1306C] hover:bg-[#E1306C] hover:text-white transition-all duration-300 text-sm font-bold tracking-wide"
+                className="flex items-center gap-2 px-4 py-2 rounded-[var(--radius)] bg-[#E1306C] text-white hover:bg-[#E1306C]/90 transition-colors font-sans text-[0.75rem] font-semibold"
               >
-                <Instagram className="w-4 h-4" /> Instagram
+                <Instagram className="w-3.5 h-3.5" /> Instagram
               </a>
             </div>
           </div>
@@ -294,7 +294,7 @@ const Footer = () => {
         </div>
 
         {/* ── Bottom Bar ── */}
-        <div 
+        <div
           className="mt-8 py-8 px-4 sm:px-6 lg:px-8 -mx-4 sm:-mx-6 lg:-mx-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left transition-colors duration-500"
           style={{ backgroundColor: 'hsl(var(--footer-bar-bg))' }}
         >

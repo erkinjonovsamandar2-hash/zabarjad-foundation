@@ -57,6 +57,7 @@ interface DataContextType {
   quizConfig: QuizConfig;
   siteSettings: SiteSettings;
   loading: boolean;
+  booksError: boolean;
   addBook: (book: Omit<Book, "id" | "created_at" | "updated_at">) => Promise<void>;
   updateBook: (id: string, data: Partial<Book>) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
@@ -92,6 +93,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [quizConfig, setQuizConfig] = useState<QuizConfig>(DEFAULT_QUIZ_CONFIG);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const [loading, setLoading] = useState(true);
+  const [booksError, setBooksError] = useState(false);
 
   // ── Fetchers ──────────────────────────────────────────────────────────────
 
@@ -114,13 +116,18 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           console.warn("[DataContext] fetchBooks: books table not found");
           return;
         }
+        setBooksError(true);
         return;
       }
 
       console.log(`[DataContext] Successfully fetched ${data?.length || 0} books.`);
-      if (data) setBooks(data as Book[]);
+      if (data) {
+        setBooks(data as Book[]);
+        setBooksError(false);
+      }
     } catch (err) {
       console.error("[DataContext] fetchBooks threw unexpected error:", err);
+      setBooksError(true);
     }
   }, []);
 
@@ -444,7 +451,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   return (
     <DataContext.Provider
       value={{
-        books, articles, reviews, quizConfig, siteSettings, loading,
+        books, articles, reviews, quizConfig, siteSettings, loading, booksError,
         addBook, updateBook, deleteBook,
         addArticle, updateArticle, deleteArticle,
         updateQuizConfig, updateSiteSettings,

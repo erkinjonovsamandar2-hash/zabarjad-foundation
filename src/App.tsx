@@ -16,28 +16,29 @@ import PageTransition from "@/components/PageTransition";
 import GlobalEffects from "@/components/GlobalEffects";
 import Navbar from "@/components/Navbar";
 import ScrollToTop from "@/components/ScrollToTop";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 // ── STATIC IMPORTS (critical path — must be instant for FCP) ─────────────────
 import Index from "./pages/Index";
 
 // ── LAZY IMPORTS (non-critical — split into separate JS chunks) ──────────────
-const BlogPage            = lazy(() => import("./pages/BlogPage"));
-const LibraryPage         = lazy(() => import("./pages/LibraryPage"));
-const QuizPage            = lazy(() => import("./pages/QuizPage"));
-const SpotlightPage       = lazy(() => import("./pages/SpotlightPage"));
-const BookDetails         = lazy(() => import("./pages/BookDetails"));
-const About               = lazy(() => import("./pages/About"));
-const TeamPage            = lazy(() => import("./pages/TeamPage"));
-const LegalPage           = lazy(() => import("./pages/LegalPage"));
-const NotFound            = lazy(() => import("./pages/NotFound"));
-const AdminLayout         = lazy(() => import("./pages/admin/AdminLayout"));
-const AdminLogin          = lazy(() => import("./pages/admin/AdminLogin"));
-const BookManager         = lazy(() => import("./pages/admin/BookManager"));
-const BlogManager         = lazy(() => import("./pages/admin/BlogManager"));
-const QuizManager         = lazy(() => import("./pages/admin/QuizManager"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const LibraryPage = lazy(() => import("./pages/LibraryPage"));
+const QuizPage = lazy(() => import("./pages/QuizPage"));
+const SpotlightPage = lazy(() => import("./pages/SpotlightPage"));
+const BookDetails = lazy(() => import("./pages/BookDetails"));
+const About = lazy(() => import("./pages/About"));
+const TeamPage = lazy(() => import("./pages/TeamPage"));
+const LegalPage = lazy(() => import("./pages/LegalPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const BookManager = lazy(() => import("./pages/admin/BookManager"));
+const BlogManager = lazy(() => import("./pages/admin/BlogManager"));
+const QuizManager = lazy(() => import("./pages/admin/QuizManager"));
 const SiteSettingsManager = lazy(() => import("./pages/admin/SiteSettingsManager"));
-const AdminUsersManager   = lazy(() => import("./pages/admin/AdminUsersManager"));
-const AdminReviews        = lazy(() => import("@/pages/AdminReviews"));
+const AdminUsersManager = lazy(() => import("./pages/admin/AdminUsersManager"));
+const AdminReviews = lazy(() => import("@/pages/AdminReviews"));
 
 const queryClient = new QueryClient();
 
@@ -159,12 +160,13 @@ const AppInner = () => {
           />
 
           {/* LAZY — public pages */}
-          <Route path="/about"     element={<Lazy component={About} />} />
-          <Route path="/blog"      element={<Lazy component={BlogPage} />} />
-          <Route path="/team"      element={<Lazy component={TeamPage} />} />
-          <Route path="/library"   element={<Lazy component={LibraryPage} />} />
-          <Route path="/book/:id"  element={<Lazy component={BookDetails} />} />
-          <Route path="/quiz"      element={<Lazy component={QuizPage} />} />
+          <Route path="/about" element={<Lazy component={About} />} />
+          <Route path="/blog" element={<Lazy component={BlogPage} />} />
+          <Route path="/blog/:id" element={<Lazy component={BlogPage} />} />
+          <Route path="/team" element={<Lazy component={TeamPage} />} />
+          <Route path="/library" element={<Lazy component={LibraryPage} />} />
+          <Route path="/book/:id" element={<Lazy component={BookDetails} />} />
+          <Route path="/quiz" element={<Lazy component={QuizPage} />} />
           <Route path="/spotlight" element={<Lazy component={SpotlightPage} />} />
 
           {/* LAZY — legal pages */}
@@ -222,12 +224,12 @@ const AppInner = () => {
               </Suspense>
             }
           >
-            <Route index        element={<Lazy component={BookManager} />} />
-            <Route path="blog"     element={<Lazy component={BlogManager} />} />
-            <Route path="quiz"     element={<Lazy component={QuizManager} />} />
+            <Route index element={<Lazy component={BookManager} />} />
+            <Route path="blog" element={<Lazy component={BlogManager} />} />
+            <Route path="quiz" element={<Lazy component={QuizManager} />} />
             <Route path="settings" element={<Lazy component={SiteSettingsManager} />} />
-            <Route path="users"    element={<Lazy component={AdminUsersManager} />} />
-            <Route path="reviews"  element={<Lazy component={AdminReviews} />} />
+            <Route path="users" element={<Lazy component={AdminUsersManager} />} />
+            <Route path="reviews" element={<Lazy component={AdminReviews} />} />
           </Route>
 
           <Route path="*" element={<Lazy component={NotFound} />} />
@@ -247,24 +249,26 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <DataProvider>
-          <LanguageProvider>
-            <TooltipProvider>
-              <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <AppInner />
-                </BrowserRouter>
-                <Analytics />
-              </div>
-            </TooltipProvider>
-          </LanguageProvider>
-        </DataProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <DataProvider>
+            <LanguageProvider>
+              <TooltipProvider>
+                <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <AppInner />
+                  </BrowserRouter>
+                  <Analytics />
+                </div>
+              </TooltipProvider>
+            </LanguageProvider>
+          </DataProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
