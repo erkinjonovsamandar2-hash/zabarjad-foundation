@@ -103,7 +103,7 @@ const LibraryPage = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="section-padding pt-24 bg-charcoal relative grain-overlay">
+      <section className="section-padding pt-24 bg-charcoal relative">
         <div className="mx-auto max-w-7xl">
 
           {/* ── FEATURED BOOKS HERO CAROUSEL ─────────────────────────────── */}

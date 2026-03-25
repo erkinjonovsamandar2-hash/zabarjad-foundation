@@ -17,7 +17,7 @@ const toCardShape = (a: { id: string; title: string | null; excerpt: string | nu
   image: a.cover_url ?? "",
 });
 
-const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar", "Taxtlar O'yini"];
+const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar"];
 
 // ── Main component ────────────────────────────────────────────────────────────
 const Blog = () => {

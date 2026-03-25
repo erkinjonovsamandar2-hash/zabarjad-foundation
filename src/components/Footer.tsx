@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className="relative isolate grain-overlay border-t border-border pt-24 md:pt-32 overflow-hidden transition-colors duration-500"
+      className="relative isolate border-t border-border pt-24 md:pt-32 overflow-hidden transition-colors duration-500"
       style={{ backgroundColor: 'hsl(var(--footer-bg))' }}
     >
       {/* ── Subtle Background Glow ── */}

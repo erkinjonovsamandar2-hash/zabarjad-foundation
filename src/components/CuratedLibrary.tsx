@@ -125,7 +125,7 @@ const CuratedLibrary = () => {
                 }}
                 className={`
                   font-sans text-[11px] font-bold tracking-[0.2em] uppercase
-                  px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-[180ms]
+                  px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-200
                   ${isActive
                     ? "bg-primary text-primary-foreground"
                     : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"
@@ -230,7 +230,7 @@ const CuratedLibrary = () => {
           <motion.button
             onClick={() => navigate("/library")}
             whileTap={{ scale: 0.985 }}
-            className="btn-glass flex items-center justify-center gap-2.5 w-full max-w-[320px] sm:max-w-md px-8 py-4 transition-all duration-[180ms]"
+            className="btn-glass flex items-center justify-center gap-2.5 w-full max-w-[320px] sm:max-w-md px-8 py-4 transition-all duration-200"
           >
             <Library className="relative z-10 h-4 w-4" />
             <span className="relative z-10 font-sans text-[11px] tracking-[0.2em] font-bold uppercase">

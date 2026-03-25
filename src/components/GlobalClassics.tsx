@@ -235,7 +235,7 @@ export default function GlobalClassics() {
       style={{ backgroundImage: `url(${BOOK_BACKGROUNDS[displayIndex] || BOOK_BACKGROUNDS[0]})` }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-[2px] z-0 transition-colors duration-700" />
+      <div className="absolute inset-0 bg-background/30 z-0 transition-colors duration-700" />
 
       {/* Section Title */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pt-20 lg:pt-32">
@@ -246,23 +246,14 @@ export default function GlobalClassics() {
 
       {/* Gold Pulse Keyframes */}
       <style>{`
-        @keyframes goldPulse {
-          0%   { box-shadow: 8px 28px 70px rgba(0,0,0,0.80), -2px 0 18px rgba(0,0,0,0.40), 0 0 28px rgba(229,193,88,0.18), 0 0 0px rgba(229,193,88,0); }
-          50%  { box-shadow: 8px 28px 70px rgba(0,0,0,0.80), -2px 0 18px rgba(0,0,0,0.40), 0 0 55px rgba(229,193,88,0.52), 0 0 90px rgba(229,193,88,0.18); }
-          100% { box-shadow: 8px 28px 70px rgba(0,0,0,0.80), -2px 0 18px rgba(0,0,0,0.40), 0 0 28px rgba(229,193,88,0.18), 0 0 0px rgba(229,193,88,0); }
-        }
-        @keyframes goldPulseHover {
-          0%   { box-shadow: 8px 28px 70px rgba(0,0,0,0.85), -2px 0 18px rgba(0,0,0,0.40), 0 0 70px rgba(229,193,88,0.70), 0 0 120px rgba(229,193,88,0.30); }
-          50%  { box-shadow: 8px 28px 70px rgba(0,0,0,0.85), -2px 0 18px rgba(0,0,0,0.40), 0 0 90px rgba(229,193,88,0.90), 0 0 160px rgba(229,193,88,0.45); }
-          100% { box-shadow: 8px 28px 70px rgba(0,0,0,0.85), -2px 0 18px rgba(0,0,0,0.40), 0 0 70px rgba(229,193,88,0.70), 0 0 120px rgba(229,193,88,0.30); }
-        }
         .hero-cover {
-          animation: goldPulse 3.2s ease-in-out infinite;
+          box-shadow: 8px 28px 70px rgba(0,0,0,0.80), -2px 0 18px rgba(0,0,0,0.40), 0 0 40px rgba(229,193,88,0.25);
           cursor: pointer;
+          transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s ease;
         }
         .hero-cover:hover {
-          animation: goldPulseHover 1.6s ease-in-out infinite;
           transform: perspective(900px) rotateY(-4deg) rotateX(1deg) !important;
+          box-shadow: 8px 28px 70px rgba(0,0,0,0.85), -2px 0 18px rgba(0,0,0,0.40), 0 0 80px rgba(229,193,88,0.5);
           filter: brightness(1.08);
         }
       `}</style>
@@ -436,7 +427,7 @@ export default function GlobalClassics() {
               >
                 {/* Cover — FIX: bg-muted on wrapper prevents layout shift */}
                 <div className="w-[140px] sm:w-[160px] md:w-[260px] shrink-0 mx-auto mb-6 relative z-10">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-accent/30 blur-[40px] -z-10 rounded-full pointer-events-none" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] -z-10 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(229,193,88,0.3) 0%, transparent 70%)" }} />
                   {/* FIX: aspect-[2/3] + bg-muted on wrapper = stable placeholder
                       before image loads, preventing cumulative layout shift    */}
                   <div className="w-full aspect-[2/3] rounded-md bg-muted overflow-hidden shadow-2xl relative z-10">

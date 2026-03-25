@@ -93,7 +93,7 @@ const BookDetails = () => {
       <ScrollProgress />
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="section-padding pt-32 pb-16 bg-charcoal relative grain-overlay">
+        <div className="section-padding pt-32 pb-16 bg-charcoal relative">
           <div className="mx-auto max-w-7xl">
 
             {/* Back Button */}

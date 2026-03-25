@@ -39,7 +39,7 @@ const MOCK_ARTICLES = [
   }
 ];
 
-const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar", "Taxtlar O'yini"];
+const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar"];
 
 const BlogPage = () => {
   const { t } = useLang();
@@ -56,14 +56,14 @@ const BlogPage = () => {
 
       {/* ── 1. The Physical Canvas Background ── */}
       <div
-        className="absolute inset-0 pointer-events-none -z-20 opacity-20 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen fixed"
+        className="absolute inset-0 pointer-events-none -z-20 opacity-20 dark:opacity-40"
         style={{ backgroundImage: `url(${parchmentTexture})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       />
 
       {/* ── 2. Cinematic Lighting Orbs ── */}
-      <div className="absolute top-0 right-0 w-[500px] md:w-[1000px] h-[500px] md:h-[1000px] bg-primary/15 dark:bg-primary/10 rounded-full blur-[120px] md:blur-[180px] pointer-events-none -z-10 fixed" />
-      <div className="absolute bottom-0 left-0 w-[400px] md:w-[800px] h-[400px] md:h-[800px] bg-amber-700/15 dark:bg-amber-900/20 rounded-full blur-[120px] md:blur-[150px] pointer-events-none -z-10 fixed" />
-      <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_90%)] fixed" />
+      <div className="absolute top-0 right-0 w-[500px] md:w-[1000px] h-[500px] md:h-[1000px] bg-primary/15 dark:bg-primary/10 rounded-full blur-[120px] md:blur-[180px] pointer-events-none -z-10" />
+      <div className="absolute bottom-0 left-0 w-[400px] md:w-[800px] h-[400px] md:h-[800px] bg-amber-700/15 dark:bg-amber-900/20 rounded-full blur-[120px] md:blur-[150px] pointer-events-none -z-10" />
+      <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_90%)]" />
 
       {/* ── Main Content Wrapper ── */}
       <main className="flex-grow pt-32 pb-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl w-full">

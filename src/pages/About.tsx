@@ -106,7 +106,7 @@ const About = () => (
     initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45 }}
     className="min-h-screen bg-[#faf9f5] dark:bg-[#080808] relative"
   >
-    <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none grain-overlay" />
+    <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.02] pointer-events-none" />
 
     <Navbar />
 

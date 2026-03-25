@@ -30,7 +30,7 @@ const SpotlightPage = () => {
   ).slice(0, 8);
 
   return (
-    <div className="min-h-screen bg-[#0a0806] pt-24 pb-16 relative grain-overlay">
+    <div className="min-h-screen bg-[#0a0806] pt-24 pb-16 relative">
       {/* Fixed background texture (very subtle) */}
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <img

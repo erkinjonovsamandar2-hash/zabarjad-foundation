@@ -79,7 +79,8 @@ const BookOfTheMonth = () => {
 
       {/* Floor Shadow */}
       <div
-        className="w-44 sm:w-56 h-6 bg-black/20 dark:bg-black/80 blur-[12px] rounded-[100%] mt-6 opacity-30"
+        className="w-44 sm:w-56 h-6 mt-6 opacity-30"
+        style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)" }}
       />
     </>
   );
@@ -89,7 +90,7 @@ const BookOfTheMonth = () => {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="relative grain-overlay flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-card py-24 lg:py-32 border-y border-border z-10"
+      className="relative flex flex-col justify-center min-h-[auto] lg:min-h-[85vh] overflow-hidden bg-card py-24 lg:py-32 border-y border-border z-10"
     >
 
       {/* ── Background: Van Gogh Feather & Texture ──────────────────────────── */}
@@ -102,7 +103,7 @@ const BookOfTheMonth = () => {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[100px] opacity-15 dark:opacity-20"
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-15 dark:opacity-20"
           style={{ background: `radial-gradient(circle, ${glowColor} 0%, transparent 70%)` }} />
         {/* FIX: Removed SVG <feTurbulence> to prevent full-section paint thrashing on scroll */}
       </div>

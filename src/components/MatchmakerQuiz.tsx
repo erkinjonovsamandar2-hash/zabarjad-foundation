@@ -173,7 +173,7 @@ const MatchmakerQuiz = () => {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${quizBg})` }}
         />
-        <div className="absolute inset-0 bg-background/20 backdrop-blur-[2px] mix-blend-overlay" />
+        <div className="absolute inset-0 bg-background/20" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-3xl px-4 sm:px-6">

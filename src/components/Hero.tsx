@@ -227,7 +227,7 @@ const ActiveBookShowcase = ({
 
           {/* Glow locked to cover boundary */}
           <div
-            className="absolute inset-[-15%] z-0 pointer-events-none rounded-full blur-[25px] sm:blur-[35px]"
+            className="absolute inset-[-15%] z-0 pointer-events-none rounded-full"
             style={{ background: `radial-gradient(circle, ${glow}60 0%, transparent 60%)` }}
           />
 
@@ -526,7 +526,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-[100svh] flex flex-col justify-between section-padding pt-24 lg:pt-28 pb-6 overflow-hidden bg-background text-foreground transition-colors duration-500 grain-overlay"
+      className="relative min-h-[100svh] flex flex-col justify-between section-padding pt-24 lg:pt-28 pb-6 overflow-hidden bg-background text-foreground transition-colors duration-500"
     >
       <Background />
 

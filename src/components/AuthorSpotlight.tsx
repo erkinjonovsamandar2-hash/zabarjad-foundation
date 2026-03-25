@@ -18,8 +18,8 @@ export default function AuthorSpotlight() {
 
             {/* Background: Sora-style painted background with very low opacity (10-15%) */}
             <div className="absolute inset-0 z-0 pointer-events-none opacity-15">
-                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[70%] bg-primary/60 rounded-full blur-[120px] mix-blend-screen" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-accent/30 rounded-full blur-[150px] mix-blend-screen" />
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[70%] -z-10 rounded-full pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at center, hsl(var(--primary) / 0.4) 0%, transparent 60%)" }} />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] -z-10 rounded-full pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at center, hsl(var(--accent) / 0.3) 0%, transparent 60%)" }} />
             </div>
 
             <div className="relative z-10 w-full flex flex-col items-center">

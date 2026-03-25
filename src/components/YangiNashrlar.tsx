@@ -64,7 +64,7 @@ const YangiNashrlar = () => {
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-0 inset-x-0 h-[50vh] bg-gradient-to-b from-black/80 to-transparent" />
-                <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-primary/20 blur-[120px] rounded-full mix-blend-screen opacity-50" />
+                <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full -z-10 opacity-50 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at center, hsl(var(--primary) / 0.3) 0%, transparent 60%)" }} />
             </div>
 
             {/* HEADER */}
@@ -90,7 +90,7 @@ const YangiNashrlar = () => {
                         return (
                             <div
                                 key={`${book.id}-${i}`}
-                                className="group relative w-[220px] sm:w-[280px] lg:w-[340px] shrink-0 aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer will-change-transform"
+                                className="group relative w-[140px] sm:w-[170px] lg:w-[200px] shrink-0 aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer"
                                 style={{
                                     backgroundColor: fallbackColor,
                                     WebkitBoxReflect: "below 4px linear-gradient(transparent 70%, rgba(255,255,255,0.25))",
@@ -102,12 +102,12 @@ const YangiNashrlar = () => {
                                         src={coverSrc}
                                         alt={locField(book, "title", lang)}
                                         loading="lazy"
-                                        className="w-full h-full object-cover block transition-transform duration-700 ease-out group-hover:scale-105"
+                                        className="w-full h-full object-cover block transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                                     />
                                 )}
 
                                 {/* Scrim on hover */}
-                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out flex flex-col items-center justify-center p-6 text-center">
+                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out flex flex-col items-center justify-center p-6 text-center">
                                     <h3 className="text-white font-serif text-xl sm:text-2xl leading-snug drop-shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                                         {locField(book, "title", lang)}
                                     </h3>
