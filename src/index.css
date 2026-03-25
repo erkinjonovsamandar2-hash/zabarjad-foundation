@@ -114,8 +114,8 @@ COMPONENT MAP (Pre-Flight Audit)
     --popover: 216 60% 15%;
     --popover-foreground: 56 62% 87%;
 
-    --primary: 192 100% 50%;
-    --primary-foreground: 216 65% 11%;
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 216 40% 20%;
     --secondary-foreground: 56 62% 87%;
@@ -131,7 +131,7 @@ COMPONENT MAP (Pre-Flight Audit)
 
     --border: 216 30% 25%;
     --input: 216 30% 25%;
-    --ring: 192 100% 50%;
+    --ring: 209 100% 50%;
 
     --radius: 0.75rem;
 
@@ -165,8 +165,8 @@ COMPONENT MAP (Pre-Flight Audit)
     --popover: 56 50% 92%;
     --popover-foreground: 213 60% 37%;
 
-    --primary: 192 100% 50%;
-    --primary-foreground: 216 65% 11%;
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 56 40% 80%;
     --secondary-foreground: 213 60% 37%;
@@ -182,7 +182,7 @@ COMPONENT MAP (Pre-Flight Audit)
 
     --border: 56 40% 75%;
     --input: 56 40% 75%;
-    --ring: 192 100% 50%;
+    --ring: 209 100% 50%;
 
     --gold: 45 66% 52%;
     --gold-dim: 45 50% 35%;
@@ -206,8 +206,8 @@ COMPONENT MAP (Pre-Flight Audit)
     --background: 44 43% 94%;
     --foreground: 34 8% 16%;
 
-    --primary: 192 100% 50%;
-    --primary-foreground: 216 65% 11%;
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 44 30% 82%;
     --secondary-foreground: 34 8% 16%;
@@ -223,7 +223,7 @@ COMPONENT MAP (Pre-Flight Audit)
 
     --border: 44 20% 80%;
     --input: 44 20% 80%;
-    --ring: 192 100% 50%;
+    --ring: 209 100% 50%;
 
     --card: 44 40% 97%;
     --card-foreground: 34 8% 16%;
@@ -254,8 +254,8 @@ COMPONENT MAP (Pre-Flight Audit)
     --background: 210 40% 96%;
     --foreground: 211 62% 16%;
 
-    --primary: 192 100% 50%;
-    --primary-foreground: 216 65% 11%;
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 210 30% 88%;
     --secondary-foreground: 211 62% 16%;
@@ -271,7 +271,7 @@ COMPONENT MAP (Pre-Flight Audit)
 
     --border: 210 20% 85%;
     --input: 210 20% 85%;
-    --ring: 192 100% 50%;
+    --ring: 209 100% 50%;
 
     --card: 210 40% 98%;
     --card-foreground: 211 62% 16%;
@@ -305,7 +305,7 @@ COMPONENT MAP (Pre-Flight Audit)
     /* Deep, soft slate-navy for highly readable text */
 
     /* Primary (Your punchy #00CDFE Cyan for buttons) */
-    --primary: 192 100% 50%;
+    --primary: 209 100% 50%;
     --primary-foreground: 0 0% 100%;
     /* White text on cyan buttons */
 
@@ -336,7 +336,7 @@ COMPONENT MAP (Pre-Flight Audit)
     --border: 204 20% 90%;
     /* Very soft, cool border */
     --input: 204 20% 90%;
-    --ring: 192 100% 50%;
+    --ring: 209 100% 50%;
     /* Cyan focus ring */
 
     /* Custom Brand Tokens */

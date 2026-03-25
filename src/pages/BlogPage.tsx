@@ -1,54 +1,43 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CalendarDays, Feather } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LanguageContext";
+import { useData } from "@/context/DataContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import parchmentTexture from "@/assets/design/parchment-texture.png";
 import blogHeaderArt from "@/assets/design/blog-header-art.png"; // Your newly generated art!
 
-// ── Mock Data for Design Preview ──────────────────────────────────────────────
-const MOCK_ARTICLES = [
-  {
-    id: 1,
-    title: "Jorj R.R. Martin yangi asar ustida ishlamoqda: Vesterosga qaytish",
-    excerpt: "Vesteros olami kengayishda davom etmoqda. Muallif o'zining so'nggi intervyusida 'Qish shamollari' va kelajakdagi rejalar haqida ma'lumot berdi...",
-    category: "Taxtlar O'yini",
-    date: "12 May, 2025",
-    readTime: "5 daqiqa",
-    image: "https://images.squarespace-cdn.com/content/v1/5fbc4a62c2150e62cfcb09aa/1711923533756-RKYMH1UTDE6GRWN9TFA4/maxresdefault.jpg"
-  },
-  {
-    id: 2,
-    title: "Kuzgi xalqaro kitob ko'rgazmasi: Booktopia yangiliklari",
-    excerpt: "Bu yilgi xalqaro kitob ko'rgazmasida nashriyotimiz o'zining eng sara asarlari va yangi tarjimalari bilan ishtirok etadi.",
-    category: "Yangiliklar",
-    date: "05 May, 2025",
-    readTime: "3 daqiqa",
-    image: "https://www.gazeta.uz/media/img/2023/12/0TgTqp17029053661735_l.jpg"
-  },
-  {
-    id: 3,
-    title: "Tarjima san'ati: 'Dorian Greyning portreti' qanday o'zbekchalashtirildi?",
-    excerpt: "Oskar Uayldning mashhur asarini o'zbek tiliga o'girishdagi qiyinchiliklar, badiiy echimlar va yutuqlar haqida mutaxassislar bilan suhbat.",
-    category: "Maqolalar",
-    date: "28 Aprel, 2024",
-    readTime: "8 daqiqa",
-    image: "https://assets.asaxiy.uz/product/items/desktop/c9f0f895fb98ab9159f51fd0297e236d2025031722075875443vyRTNlvRhA.jpg.webp"
-  }
-];
+// ── Normalise a DB article into the same shape ───────────────
+const toCardShape = (a: { id: string; title: string | null; excerpt: string | null; cover_url: string | null; date: string; published: boolean | null }) => ({
+  id: a.id,
+  title: a.title ?? "",
+  excerpt: a.excerpt ?? "",
+  category: "Maqolalar" as string,
+  date: a.date,
+  readTime: null as string | null,
+  image: a.cover_url ?? "",
+});
 
 const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar"];
 
 const BlogPage = () => {
   const { t } = useLang();
+  const { articles, loading } = useData();
   const [activeTab, setActiveTab] = useState("Barchasi");
 
-  // On the main blog page, we DO NOT use .slice(0,3). We show everything!
-  const displayed = activeTab === "Barchasi"
-    ? MOCK_ARTICLES
-    : MOCK_ARTICLES.filter(a => a.category === activeTab);
+  const publishedArticles = useMemo(
+    () => articles.filter((a) => a.published).map(toCardShape),
+    [articles]
+  );
+
+  const displayed = useMemo(
+    () => activeTab === "Barchasi"
+      ? publishedArticles
+      : publishedArticles.filter((a) => a.category === activeTab),
+    [publishedArticles, activeTab]
+  );
 
   return (
     <div className="min-h-screen bg-background relative isolate flex flex-col">
@@ -178,7 +167,22 @@ const BlogPage = () => {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: "easeInOut" }}
           >
-            {displayed.length === 0 ? (
+            {loading ? (
+              // Loading state
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="flex flex-col h-full bg-card/50 border border-border/50 rounded-2xl overflow-hidden" aria-hidden="true">
+                    <div className="skeleton-shimmer w-full aspect-[16/10]" />
+                    <div className="p-6 flex flex-col gap-3">
+                      <div className="skeleton-shimmer h-3 w-1/3 rounded-full" />
+                      <div className="skeleton-shimmer h-6 w-5/6 rounded-md my-2" />
+                      <div className="skeleton-shimmer h-4 w-1/4 rounded-full" />
+                      <div className="skeleton-shimmer h-16 w-full rounded-md mt-4" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : displayed.length === 0 ? (
               // Empty State
               <div className="border border-dashed border-border/60 bg-muted/10 py-32 flex flex-col items-center justify-center rounded-3xl">
                 <Feather className="w-12 h-12 text-accent/30 mb-6" />
@@ -200,7 +204,7 @@ const BlogPage = () => {
                       {/* Image */}
                       <div className="relative w-full aspect-[16/10] overflow-hidden bg-muted">
                         <img
-                          src={article.image}
+                          src={article.image || "https://placehold.co/600x400/121212/262626?text=Image"}
                           alt={article.title}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                         />
@@ -223,8 +227,12 @@ const BlogPage = () => {
                             <CalendarDays className="w-3.5 h-3.5" />
                             <span>{article.date}</span>
                           </div>
-                          <span className="w-1.5 h-1.5 rounded-full bg-gold/50"></span>
-                          <span>{article.readTime}</span>
+                          {article.readTime && (
+                            <>
+                              <span className="w-1.5 h-1.5 rounded-full bg-gold/50"></span>
+                              <span>{article.readTime}</span>
+                            </>
+                          )}
                         </div>
 
                         <h3 className="text-xl font-heading font-black tracking-tight font-bold text-foreground leading-snug mb-3 group-hover:text-primary dark:group-hover:text-accent transition-colors line-clamp-2">

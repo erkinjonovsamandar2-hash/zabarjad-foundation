@@ -447,7 +447,7 @@ const ScrollCta = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 2.4, duration: 0.7 }}
     >
-      <div className="w-px h-8 sm:h-12 bg-gradient-to-b from-transparent to-primary/50" />
+      <div className="w-px h-8 sm:h-12 bg-gradient-to-b from-transparent to-primary/60" />
       <button
         onClick={handleClick}
         className="group flex flex-col items-center justify-center gap-1.5 px-6 py-2.5 rounded-full focus:outline-none backdrop-blur-md bg-white/40 dark:bg-black/20 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out"

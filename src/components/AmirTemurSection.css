@@ -1,0 +1,522 @@
+.at-section {
+    position: relative;
+    width: 100%;
+    background-color: #05070a;
+    box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: white;
+}
+
+/* Background Gradients */
+.at-bg-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    /* Three layered radial gradients */
+    background:
+        radial-gradient(circle at top right, rgba(15, 40, 25, 0.6), transparent 60%),
+        radial-gradient(circle at top left, rgba(15, 25, 60, 0.6), transparent 60%),
+        radial-gradient(circle at bottom center, rgba(15, 35, 45, 0.8), transparent 70%);
+}
+
+.at-bg-image-layer {
+    position: absolute;
+    inset: -30px;
+    /* Slight bleed to prevent blurred edges from showing white */
+    background-size: cover;
+    background-position: center;
+    filter: blur(14px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.at-bg-image-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(5, 7, 10, 0.52);
+    /* Reduced to let the painting breathe */
+    z-index: 0;
+    pointer-events: none;
+}
+
+.at-noise-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+}
+
+/* Grid overlay */
+.at-grid-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background-size: 56px 56px;
+    background-image:
+        linear-gradient(to right, rgba(80, 120, 200, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(200, 146, 34, 0.03) 1px, transparent 1px);
+}
+
+.at-content-wrapper {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 420px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+    .at-content-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Left Column */
+.at-left-col {
+    padding: 64px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 767px) {
+    .at-left-col {
+        padding: 48px 24px;
+    }
+}
+
+.at-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.at-eyebrow-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, #e0a828, transparent);
+}
+
+.at-eyebrow-text {
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #d89f28;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.at-title-1 {
+    font-family: Georgia, serif;
+    font-size: 76px;
+    font-weight: 800;
+    color: #edd270;
+    line-height: 0.95;
+    margin: 0;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    letter-spacing: -0.01em;
+}
+
+@media (max-width: 767px) {
+    .at-title-1 {
+        font-size: 52px;
+    }
+}
+
+.at-subtitle {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(160, 205, 255, 1);
+    margin-top: 16px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.at-gold-divider {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(to right, #b87c18, transparent);
+    margin-bottom: 24px;
+}
+
+.at-desc {
+    font-size: 14.5px;
+    color: rgba(220, 232, 248, 0.95);
+    line-height: 1.85;
+    max-width: 340px;
+    margin-bottom: 36px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Book list inside left column */
+.at-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 48px;
+}
+
+.at-list-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.at-list-roman {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    color: rgba(200, 220, 255, 0.7);
+    width: 18px;
+    text-align: right;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.at-list-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.at-list-text {
+    font-size: 14px;
+    color: rgba(210, 225, 248, 0.88);
+    transition: color 0.3s ease, transform 0.3s ease;
+    font-weight: 500;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.at-list-item:hover .at-list-dot,
+.at-list-item[data-active="true"] .at-list-dot {
+    transform: scale(1.8);
+    box-shadow: 0 0 8px currentColor;
+}
+
+.at-list-item:hover .at-list-text,
+.at-list-item[data-active="true"] .at-list-text {
+    color: rgba(255, 255, 255, 1);
+    transform: translateX(4px);
+}
+
+.at-list-item:hover .at-list-roman,
+.at-list-item[data-active="true"] .at-list-roman {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Buttons */
+.at-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.at-btn-primary {
+    background: linear-gradient(135deg, #d4a338, #b87c18);
+    box-shadow: 0 4px 15px rgba(184, 124, 24, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    color: #07090f;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.at-btn-primary:hover {
+    background: linear-gradient(135deg, #e5b64d, #c89222);
+    box-shadow: 0 6px 20px rgba(184, 124, 24, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.at-btn-secondary {
+    background-color: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(8px);
+    color: rgba(120, 168, 230, 0.9);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: 1px solid rgba(100, 148, 220, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.at-btn-secondary:hover {
+    background-color: rgba(100, 148, 220, 0.08);
+    border-color: rgba(100, 148, 220, 0.5);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Right Column */
+.at-right-col {
+    padding: 64px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+@media (max-width: 767px) {
+    .at-right-col {
+        padding: 32px 24px 64px 24px;
+    }
+}
+
+.at-badge-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    align-self: flex-start;
+}
+
+@media (max-width: 767px) {
+    .at-badge-container {
+        align-self: center;
+    }
+}
+
+.at-badge-gold {
+    background: rgba(200, 146, 34, 0.12);
+    border: 1px solid rgba(200, 146, 34, 0.3);
+    box-shadow: 0 0 10px rgba(200, 146, 34, 0.1);
+    color: #edd270;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.at-badge-faint {
+    font-size: 11.5px;
+    color: rgba(120, 168, 230, 0.6);
+    font-weight: 500;
+}
+
+/* Bookshelf */
+.at-shelf {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    padding-left: 12px;
+    margin-bottom: 40px;
+}
+
+.at-shelf::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 5%;
+    right: 5%;
+    height: 25px;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+    z-index: 0;
+    filter: blur(6px);
+    pointer-events: none;
+}
+
+.at-book-wrapper {
+    margin-left: -20px;
+    perspective: 1200px;
+}
+
+.at-book {
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease, box-shadow 0.4s ease;
+    transform-origin: bottom center;
+    border-radius: 3px 6px 6px 3px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        inset 2px 0 5px rgba(255, 255, 255, 0.15),
+        inset -4px 0 10px rgba(0, 0, 0, 0.6),
+        -8px 0 20px rgba(0, 0, 0, 0.7),
+        15px 15px 35px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Improved spine effect */
+.at-book::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.5) 0%,
+            rgba(255, 255, 255, 0.1) 1px,
+            rgba(0, 0, 0, 0.3) 3px,
+            rgba(0, 0, 0, 0.7) 5px,
+            transparent 6px);
+    z-index: 10;
+}
+
+.at-book-cover-img-real {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    /* Sits behind the spine overlay */
+}
+
+.at-book-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    /* subtle darkening on top of the gradient */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4) 100%);
+}
+
+.at-book-top {
+    padding: 16px 8px;
+    text-align: center;
+}
+
+.at-book-author {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.at-book-center {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.at-book-icon {
+    width: 36px;
+    height: 36px;
+    opacity: 0.12;
+    stroke-width: 1px;
+}
+
+.at-book-band {
+    padding: 10px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.at-book-series-name {
+    font-size: 6px;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+}
+
+.at-book-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.at-book-roman {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-family: Georgia, serif;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.25);
+    font-weight: 800;
+    line-height: 1;
+    z-index: 12;
+    /* Float above the physical image */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Interactions */
+.at-book-wrapper[data-state="hovered"] .at-book {
+    transform: translateY(-28px) scale(1.12);
+    filter: brightness(1.15) saturate(1.2);
+    z-index: 10;
+    border-color: rgba(200, 146, 34, 0.4);
+    box-shadow:
+        inset 2px 0 8px rgba(255, 255, 255, 0.25),
+        0 0 25px rgba(200, 146, 34, 0.2),
+        -10px 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.at-book-wrapper[data-state="dimmed"] .at-book {
+    transform: translateY(12px) scale(0.9);
+    filter: brightness(0.4) saturate(0.6);
+    z-index: 1;
+}
+
+.at-book-wrapper[data-state="default"] .at-book {
+    filter: brightness(0.92);
+    transform: translateY(0) scale(1);
+    z-index: 5;
+}
+
+/* Shelf Footer */
+.at-shelf-footer {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.at-shelf-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(200, 146, 34, 0.3), transparent);
+    margin-bottom: 14px;
+}
+
+.at-shelf-meta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 11px;
+    color: rgba(160, 176, 200, 0.5);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
