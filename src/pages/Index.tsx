@@ -16,6 +16,7 @@ import LoadingSplash from "@/components/LoadingSplash";
 import AuthorSpotlight from "@/components/AuthorSpotlight";
 import ScrollToTop from "@/components/ScrollToTop";
 import AmirTemurSection from "@/components/AmirTemurSection";
+import QuickActions from "@/components/QuickActions";
 const Index = () => {
   const { loading } = useData();
   const [hasSeenSplash, setHasSeenSplash] = useState(() => sessionStorage.getItem('splashShown') === 'true');
@@ -49,18 +50,19 @@ const Index = () => {
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <BookOfTheMonth />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <GlobalClassics />
+              <YangiNashrlar />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <MatchmakerQuiz />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <AmirTemurSection />
+              <GlobalClassics />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <YangiNashrlar />
+              <AmirTemurSection />
               <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
               <CuratedLibrary />
               <Taassurotlar />
               <Blog />
               <AuthorSpotlight />
+              <QuickActions />
             </main>
             <Footer />
           </motion.div>

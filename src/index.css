@@ -733,32 +733,28 @@ COMPONENT MAP (Pre-Flight Audit)
     }
   }
 
-  /* ── Marquee (YangiNashrlar) ───────────────────────────────────────────────── */
-  @keyframes marqueeScroll {
-    from {
-      transform: translate3d(0, 0, 0);
+  /* ── YangiNashrlar Mosaic Grid ────────────────────────────────────────────── */
+  .yangi-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* hero spans all 3; portraits take 1 each */
+    gap: 10px;
+    max-width: 900px;
+    /* prevents cells from becoming absurdly large on wide screens */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Mobile: 2-column grid, all cells portrait with real book-cover 2:3 ratio  */
+  @media (max-width: 639px) {
+    .yangi-mosaic-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  .marquee-track {
-    animation: marqueeScroll calc(var(--book-count, 8) * 6s) linear infinite;
-    will-change: transform;
-  }
-
-  .marquee-track:hover {
-    animation-play-state: paused;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marquee-track {
-      animation: none;
-      overflow-x: auto;
-      width: 100%;
-      flex-wrap: nowrap;
+    .yangi-mosaic-cell {
+      grid-column: auto !important;
+      aspect-ratio: 2 / 3 !important;
+      /* standard paperback proportion */
     }
   }
 }

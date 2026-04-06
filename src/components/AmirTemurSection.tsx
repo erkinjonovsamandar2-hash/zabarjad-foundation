@@ -186,6 +186,11 @@ const AmirTemurSection = () => {
 
                     {/* Shelf Footer */}
                     <div className="at-shelf-footer">
+                        {/* Badge: desktop only — hidden on mobile via CSS */}
+                        <div className="at-shelf-footer-badge">
+                            <div className="at-badge-gold">Yangi nashr</div>
+                            <div className="at-badge-faint">3 ta kitob mavjud</div>
+                        </div>
                         <div className="at-shelf-line" />
                         <div className="at-shelf-meta">
                             <span>Muallif: Sergey Borodin</span>
