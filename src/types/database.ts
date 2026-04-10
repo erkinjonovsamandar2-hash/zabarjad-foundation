@@ -96,6 +96,8 @@ export interface Database {
           cover_url: string | null;
           date: string;
           published: boolean | null;
+          category: string | null;
+          reading_time: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -113,6 +115,8 @@ export interface Database {
           cover_url?: string | null;
           date?: string;
           published?: boolean | null;
+          category?: string | null;
+          reading_time?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -130,6 +134,8 @@ export interface Database {
           cover_url?: string | null;
           date?: string;
           published?: boolean | null;
+          category?: string | null;
+          reading_time?: string | null;
           updated_at?: string;
         };
       };

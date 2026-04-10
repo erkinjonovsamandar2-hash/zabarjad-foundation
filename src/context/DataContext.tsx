@@ -58,6 +58,7 @@ interface DataContextType {
   siteSettings: SiteSettings;
   loading: boolean;
   booksError: boolean;
+  articlesError: boolean;
   addBook: (book: Omit<Book, "id" | "created_at" | "updated_at">) => Promise<void>;
   updateBook: (id: string, data: Partial<Book>) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
@@ -94,6 +95,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const [loading, setLoading] = useState(true);
   const [booksError, setBooksError] = useState(false);
+  const [articlesError, setArticlesError] = useState(false);
 
   // ── Fetchers ──────────────────────────────────────────────────────────────
 
@@ -142,11 +144,16 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       if (error) {
         if (error.code === TABLE_NOT_FOUND) return;
         console.warn("[DataContext] fetchArticles:", error.message);
+        setArticlesError(true);
         return;
       }
-      if (data) setArticles(data as Article[]);
+      if (data) {
+        setArticles(data as Article[]);
+        setArticlesError(false);
+      }
     } catch (err) {
       console.warn("[DataContext] fetchArticles unexpected:", err);
+      setArticlesError(true);
     }
   }, []);
 
@@ -361,6 +368,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       cover_url: article.cover_url,
       date: article.date,
       published: article.published,
+      category: article.category,
+      reading_time: article.reading_time,
     });
     if (error) {
       console.warn("[DataContext] addArticle:", error.message);
@@ -383,6 +392,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     if (data.cover_url !== undefined) payload.cover_url = data.cover_url;
     if (data.date !== undefined) payload.date = data.date;
     if (data.published !== undefined) payload.published = data.published;
+    if (data.category !== undefined) payload.category = data.category;
+    if (data.reading_time !== undefined) payload.reading_time = data.reading_time;
 
     const { error } = await supabase.from("articles").update(payload).eq("id", id);
     if (error) {
@@ -451,7 +462,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   return (
     <DataContext.Provider
       value={{
-        books, articles, reviews, quizConfig, siteSettings, loading, booksError,
+        books, articles, reviews, quizConfig, siteSettings, loading, booksError, articlesError,
         addBook, updateBook, deleteBook,
         addArticle, updateArticle, deleteArticle,
         updateQuizConfig, updateSiteSettings,

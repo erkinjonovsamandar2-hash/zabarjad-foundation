@@ -7,23 +7,23 @@ import { useData } from "@/context/DataContext";
 import parchmentTexture from "@/assets/design/parchment-texture.png";
 
 // ── Normalise a DB article into the same shape ───────────────
-const toCardShape = (a: { id: string; title: string | null; excerpt: string | null; cover_url: string | null; date: string; published: boolean | null }) => ({
+const toCardShape = (a: { id: string; title: string | null; excerpt: string | null; cover_url: string | null; date: string; published: boolean | null; category?: string | null; reading_time?: string | null }) => ({
   id: a.id,
   title: a.title ?? "",
   excerpt: a.excerpt ?? "",
-  category: "Maqolalar" as string,
+  category: a.category ?? "Maqolalar",
   date: a.date,
-  readTime: null as string | null,
+  readTime: a.reading_time ?? null,
   image: a.cover_url ?? "",
 });
 
-const BLOG_CATEGORIES = ["Barchasi", "Yangiliklar", "Maqolalar"];
+const BLOG_CATEGORIES = ["Barchasi", "Tahlil", "Adabiy tahlil", "O'qish madaniyati", "Muallif haqida", "Yangiliklar", "Maqolalar"];
 
 // ── Main component ────────────────────────────────────────────────────────────
 const Blog = () => {
   const { t } = useLang();
   const navigate = useNavigate();
-  const { articles, loading, articlesError } = useData() as ReturnType<typeof useData> & { articlesError?: boolean };
+  const { articles, loading, articlesError } = useData();
   const [activeTab, setActiveTab] = useState("Barchasi");
 
   const publishedArticles = useMemo(

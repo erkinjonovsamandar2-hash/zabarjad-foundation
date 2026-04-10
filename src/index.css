@@ -758,3 +758,27 @@ COMPONENT MAP (Pre-Flight Audit)
     }
   }
 }
+
+/* YangiNashrlar Ticker */
+@keyframes tickerFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ticker-text-enter {
+  animation: tickerFadeIn 0.35s ease-out forwards;
+}
+
+@keyframes tickerCountdown {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+.ticker-countdown {
+  animation: tickerCountdown 4.5s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-text-enter { animation: none; }
+  .ticker-countdown  { animation: none; width: 100%; }
+}

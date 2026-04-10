@@ -4,10 +4,11 @@ import { Plus, Pencil, Trash2, X, Eye, EyeOff, CalendarDays } from "lucide-react
 import ImageCropper from "@/components/admin/ImageCropper";
 
 const emptyArticle: Omit<Article, "id"> = {
-  title: "", title_en: "", title_ru: "",
-  excerpt: "", excerpt_en: "", excerpt_ru: "",
-  content: "", content_en: "", content_ru: "",
+  title: "", title_en: null, title_ru: null,
+  excerpt: "", excerpt_en: null, excerpt_ru: null,
+  content: "", content_en: null, content_ru: null,
   cover_url: "", date: new Date().toISOString().slice(0, 10), published: false,
+  category: null, reading_time: null,
   created_at: "", updated_at: ""
 };
 
@@ -26,6 +27,7 @@ const BlogManager = () => {
       excerpt: a.excerpt, excerpt_en: a.excerpt_en, excerpt_ru: a.excerpt_ru,
       content: a.content, content_en: a.content_en, content_ru: a.content_ru,
       cover_url: a.cover_url, date: a.date, published: a.published,
+      category: a.category ?? null, reading_time: a.reading_time ?? null,
       created_at: a.created_at, updated_at: a.updated_at
     });
     setModalOpen(true);
@@ -36,7 +38,11 @@ const BlogManager = () => {
       if (editId) await updateArticle(editId, form);
       else await addArticle(form);
       setModalOpen(false);
-    } finally { setSaving(false); }
+    } catch (err: any) {
+      alert("Saqlashda xatolik yuz berdi: " + err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -65,7 +71,15 @@ const BlogManager = () => {
                 <span className="flex items-center gap-1 text-xs text-muted-foreground/80"><CalendarDays className="h-3 w-3" />{a.date}</span>
                 <div className="flex gap-1">
                   <button onClick={() => openEdit(a)} className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"><Pencil className="h-3.5 w-3.5" /></button>
-                  <button onClick={() => deleteArticle(a.id)} className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-600 hover:bg-red-50 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <button
+                    onClick={async () => {
+                      if (window.confirm("Haqiqatan ham bu maqolani o'chirmoqchimisiz?")) {
+                        try { await deleteArticle(a.id); }
+                        catch (err: any) { alert("O'chirishda xatolik: " + err.message); }
+                      }
+                    }}
+                    className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-600 hover:bg-red-50 transition-colors"
+                  ><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
               </div>
             </div>
@@ -96,6 +110,26 @@ const BlogManager = () => {
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Qisqacha tavsif</label>
                 <input value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground/80 mb-1">Kategoriya</label>
+                <select
+                  value={form.category ?? ""}
+                  onChange={(e) => setForm({ ...form, category: e.target.value || null })}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white"
+                >
+                  <option value="">— Tanlang —</option>
+                  <option value="Tahlil">Tahlil</option>
+                  <option value="Adabiy tahlil">Adabiy tahlil</option>
+                  <option value="O'qish madaniyati">O'qish madaniyati</option>
+                  <option value="Muallif haqida">Muallif haqida</option>
+                  <option value="Yangiliklar">Yangiliklar</option>
+                  <option value="Maqolalar">Maqolalar</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground/80 mb-1">O'qish vaqti (masalan: 7 daqiqa)</label>
+                <input value={form.reading_time ?? ""} onChange={(e) => setForm({ ...form, reading_time: e.target.value || null })} placeholder="8 daqiqa" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Sana</label>

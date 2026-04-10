@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useLang, locField } from "@/context/LanguageContext";
 import { useData } from "@/context/DataContext";
 import type { Book } from "@/types/database";
@@ -7,7 +9,9 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         id: "upcoming-1",
         title: "Murvatli Apelsin", title_ru: "Заводной апельсин", title_en: "A Clockwork Orange",
         author: "Entoni Byorjess", author_ru: "Энтони Бёрджесс", author_en: "Anthony Burgess",
-        description: null, description_ru: null, description_en: null,
+        description: "37 mamlakatda taqiqlangan. 100 mamlakatda nashr etilgan.",
+        description_ru: "Запрещена в 37 странах. Издана в 100.",
+        description_en: "Banned in 37 countries. Published in 100.",
         cover_url: "/upcoming/apelsin.png",
         bg_color: "25 90% 50%", category: "soon", price: null,
         enable_3d_flip: false, featured: false, sort_order: 1, created_at: "", updated_at: ""
@@ -16,7 +20,9 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         id: "upcoming-3",
         title: "Ijarachi", title_ru: "Квартирантка", title_en: "The Tenant of Wildfell Hall",
         author: "Enn Bronte", author_ru: "Энн Бронте", author_en: "Anne Brontë",
-        description: null, description_ru: null, description_en: null,
+        description: "Singillar qo'lyozmani yoqib yuborishga urinishdi. Lekin baribir nashr ettirildi.",
+        description_ru: "Сёстры пытались сжечь рукопись. Но она всё равно была издана.",
+        description_en: "Her sisters tried to burn the manuscript. It was published anyway.",
         cover_url: "/upcoming/ijarachi.png",
         bg_color: "210 30% 20%", category: "soon", price: null,
         enable_3d_flip: false, featured: false, sort_order: 2, created_at: "", updated_at: ""
@@ -25,7 +31,9 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         id: "upcoming-4",
         title: "Mayoq sari", title_ru: "На маяк", title_en: "To the Lighthouse",
         author: "Virdjiniya Vulf", author_ru: "Вирджиния Вулф", author_en: "Virginia Woolf",
-        description: null, description_ru: null, description_en: null,
+        description: "Bir yoz faslida yozildi. Biroq bir asrdan beri o'qitiladi.",
+        description_ru: "Написана за одно лето. Изучается уже столетие.",
+        description_en: "Written in one summer. Studied for a century.",
         cover_url: "/upcoming/mayoq.png",
         bg_color: "180 40% 25%", category: "soon", price: null,
         enable_3d_flip: false, featured: false, sort_order: 3, created_at: "", updated_at: ""
@@ -34,7 +42,9 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         id: "upcoming-2",
         title: "Askanio", title_ru: "Асканио", title_en: "Ascanio",
         author: "Aleksandr Dyuma", author_ru: "Александр Дюма", author_en: "Alexandre Dumas",
-        description: null, description_ru: null, description_en: null,
+        description: "Renessans davridagi Italiya: bir usta, bir sevgi, bir sir.",
+        description_ru: "Челлини был реальным. Остальное придумал Дюма.",
+        description_en: "Cellini was real. The rest is Dumas.",
         cover_url: "/upcoming/askanio.png",
         bg_color: "120 20% 30%", category: "soon", price: null,
         enable_3d_flip: false, featured: false, sort_order: 4, created_at: "", updated_at: ""
@@ -48,9 +58,36 @@ const resolveImageUrl = (url: string | null | undefined): string | null => {
     return `${base}/storage/v1/object/public/${url}`;
 };
 
+const BOOK_META: Record<string, { objectPositionD: string; objectPositionM: string; tags: string[] }> = {
+    "upcoming-1": {
+        objectPositionD: "center 10%",
+        objectPositionM: "85% top",
+        tags: ["Distopiya", "Falsafa", "18+"],
+    },
+    "upcoming-3": {
+        objectPositionD: "center 15%",
+        objectPositionM: "85% top",
+        tags: ["Gotika", "Drama", "XIX asr"],
+    },
+    "upcoming-4": {
+        objectPositionD: "center 10%",
+        objectPositionM: "85% top",
+        tags: ["Modernizm", "Psixologik", "Klassika"],
+    },
+    "upcoming-2": {
+        objectPositionD: "center 15%",
+        objectPositionM: "85% top",
+        tags: ["Tarixiy", "Sarguzasht", "Renessans"],
+    },
+};
+
 const YangiNashrlar = () => {
     const { lang } = useLang();
     const { books } = useData();
+
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
 
     // FORCING THE MOCK DATA TO SHOW OUR PERFECT PNGs
     const baseBooks = UPCOMING_BOOKS_MOCK;
@@ -65,132 +102,216 @@ const YangiNashrlar = () => {
                     .slice(0, 4 - baseBooks.length),
             ];
 
-    // Explicitly grab our 3 sections
-    const heroBook = displayBooks[0];
-    const middleBooks = [displayBooks[1], displayBooks[2]];
-    const footerBook = displayBooks[3];
-
-    // A clean helper function to render a book card
-    const renderCard = (
-        book: Book,
-        aspectClass: string,
-        objectPosition: string = "center"
-    ) => {
-        const coverSrc = resolveImageUrl(book.cover_url);
-        const fallbackColor = book.bg_color ? `hsl(${book.bg_color})` : "hsl(var(--accent))";
-        const title = locField(book, "title", lang);
-        const author = locField(book, "author", lang);
-
-        return (
-            <div
-                key={book.id}
-                className={`group relative rounded-2xl overflow-hidden cursor-pointer ring-1 ring-transparent hover:ring-white/20 transition-[box-shadow] duration-300 shadow-2xl w-full ${aspectClass}`}
-                style={{ backgroundColor: fallbackColor }}
-            >
-                {coverSrc ? (
-                    <>
-                        <img
-                            src={coverSrc}
-                            alt={title}
-                            loading="lazy"
-                            style={{ objectPosition }}
-                            className="w-full h-full object-cover block transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                        />
-                        {/* Base subtle gradient — always present */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-                        {/* Hover overlay — rich gradient with sliding text */}
-                        <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                            {/* Gradient layer */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-                            {/* Text content */}
-                            <div className="relative z-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                                <p className="font-sans text-[0.65rem] tracking-widest uppercase text-gold mb-1.5">
-                                    {author}
-                                </p>
-                                <h3 className="font-heading text-2xl text-white leading-tight">
-                                    {title}
-                                </h3>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/40 pointer-events-none" />
-                        <div className="absolute top-4 left-4 bg-black/30 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1">
-                            <span className="font-sans text-[0.55rem] tracking-[0.2em] uppercase text-white/80 font-bold">TEZDA</span>
-                        </div>
-                        {/* Hover overlay for fallback cards */}
-                        <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-                            <div className="relative z-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                                <p className="font-sans text-[0.65rem] tracking-widest uppercase text-gold mb-1.5">
-                                    {author}
-                                </p>
-                                <h3 className="font-heading text-2xl text-white leading-tight">
-                                    {title}
-                                </h3>
-                            </div>
-                        </div>
-                    </>
-                )}
-            </div>
-        );
+    const goTo = (index: number) => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+        setActiveIndex(index);
+        setTimeout(() => setIsAnimating(false), 400);
     };
+    const prev = () => goTo((activeIndex - 1 + displayBooks.length) % displayBooks.length);
+    const next = () => goTo((activeIndex + 1) % displayBooks.length);
+
+    // Auto-advance: restart the 4.5s timer whenever activeIndex or isPlaying changes
+    useEffect(() => {
+        if (!isPlaying) return;
+        const timer = setTimeout(() => {
+            setIsAnimating(true);
+            setActiveIndex(prev => (prev + 1) % displayBooks.length);
+            setTimeout(() => setIsAnimating(false), 400);
+        }, 4500);
+        return () => clearTimeout(timer);
+    }, [isPlaying, activeIndex, displayBooks.length]);
+
+    const activeBook = displayBooks[activeIndex];
+    const activeMeta = BOOK_META[activeBook.id] ?? { objectPositionD: "center", objectPositionM: "center", tags: [] };
+    const activeCoverSrc = resolveImageUrl(activeBook.cover_url);
+    const activeFallback = activeBook.bg_color ? `hsl(${activeBook.bg_color})` : "hsl(var(--accent))";
+    const activeTitle = locField(activeBook, "title", lang);
+    const activeAuthor = locField(activeBook, "author", lang);
 
     return (
-        <section className="py-24 lg:py-32 bg-[#0a0a0a] relative overflow-hidden flex flex-col items-center border-y border-white/5">
+        <section className="bg-[#0a0a0a] py-8 lg:py-10 relative overflow-hidden border-y border-white/5 flex flex-col items-center">
             {/* Ambient Background Glows */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-0 inset-x-0 h-[50vh] bg-gradient-to-b from-black/80 to-transparent" />
-                <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full -z-10 opacity-50 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at center, hsl(var(--primary) / 0.3) 0%, transparent 60%)" }} />
+                <div
+                    className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full -z-10 opacity-50 pointer-events-none"
+                    style={{ backgroundImage: "radial-gradient(circle at center, hsl(var(--primary) / 0.3) 0%, transparent 60%)" }}
+                />
             </div>
 
-            {/* HEADER */}
-            <div className="relative z-10 text-center px-6 mb-12 sm:mb-16">
-                <p className="font-sans text-[0.7rem] tracking-[0.35em] uppercase text-gold font-bold mb-4 drop-shadow-sm">
-                    TEZ ORADA
-                </p>
-                <h2 className="font-heading text-6xl sm:text-7xl lg:text-[5.5rem] tracking-tight text-white mb-6 drop-shadow-lg">
-                    Yangi Nashrlar
-                </h2>
-                <p className="font-serif italic text-white/60 text-xl sm:text-2xl max-w-2xl mx-auto drop-shadow">
-                    Kutib turing — eng yaxshi asarlar yo'lda
-                </p>
-            </div>
-
-            {/* CUSTOM COMPACT LAYOUT */}
-            <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto flex flex-col gap-6 sm:gap-8">
-
-                {/* 1. TOP HERO (Apelsin) — responsive aspect ratio */}
-                <div className="aspect-[4/3] md:aspect-[16/9]">
-                    {renderCard(heroBook, "h-full", "center")}
+            {/* TOP BAR */}
+            <div className="relative z-10 w-full flex items-end justify-between px-4 sm:px-8 lg:px-12 mb-6 max-w-[1440px] mx-auto">
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 sm:w-12 h-[1px] bg-[#c8973a]/60" />
+                        <span className="font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-[#c8973a]">
+                            Yangi Nashrlar
+                        </span>
+                    </div>
+                    <h2 className="font-heading text-3xl sm:text-4xl text-white tracking-tight leading-none drop-shadow-lg">
+                        Tez Orada
+                    </h2>
                 </div>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={prev}
+                        className="w-9 h-9 rounded-full border border-white/15 text-white/35 flex items-center justify-center transition-colors duration-200 hover:border-white/30 hover:text-white/60"
+                        aria-label="Previous book"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
+                    <button
+                        onClick={() => setIsPlaying(p => !p)}
+                        className="w-9 h-9 rounded-full border border-white/15 text-white/35 flex items-center justify-center transition-colors duration-200 hover:border-white/30 hover:text-white/60"
+                        aria-label={isPlaying ? "Pause autoplay" : "Resume autoplay"}
+                    >
+                        {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+                    </button>
+                    <button
+                        onClick={next}
+                        className="w-9 h-9 rounded-full border border-[#c8973a]/40 bg-[#c8973a]/[0.08] text-[#c8973a] flex items-center justify-center transition-colors duration-200 hover:bg-[#c8973a]/[0.15]"
+                        aria-label="Next book"
+                    >
+                        <ChevronRight size={16} />
+                    </button>
+                </div>
+            </div>
 
-                {/* 2. MIDDLE BOOKS (Ijarachi & Mayoq) — constrained with max-w to remain visually smaller without breaking alignment */}
-                <div className="max-w-2xl mx-auto w-full">
-                    <div className="grid grid-cols-2 gap-6 sm:gap-10">
-                        {middleBooks.map(book => (
-                            <div key={book.id} className="aspect-[2/3]">
-                                {renderCard(book, "h-full")}
+            {/* MAIN PANEL */}
+            <div className="relative z-10 w-full px-3 sm:px-8 lg:px-12 max-w-[1440px] mx-auto">
+                <style>{`
+                    .adaptive-img-${activeIndex} { object-position: ${activeMeta.objectPositionM} !important; }
+                    @media (min-width: 640px) {
+                        .adaptive-img-${activeIndex} { object-position: ${activeMeta.objectPositionD} !important; }
+                    }
+                `}</style>
+                <div
+                    className="relative rounded-2xl sm:rounded-xl overflow-hidden w-full aspect-[4/5] sm:aspect-[16/9] lg:aspect-[2/1] transition-opacity duration-[400ms] shadow-2xl ring-1 ring-white/10"
+                    style={{
+                        backgroundColor: activeFallback,
+                        opacity: isAnimating ? 0.6 : 1,
+                    }}
+                >
+                    {/* Cover image */}
+                    {activeCoverSrc && (
+                        <img
+                            key={`img-${activeIndex}`}
+                            src={activeCoverSrc}
+                            alt={activeTitle}
+                            loading="lazy"
+                            className={`absolute inset-0 object-cover w-full h-full adaptive-img-${activeIndex}`}
+                        />
+                    )}
+
+                    {/* Desktop/Tablet Left Gradient */}
+                    <div className="absolute inset-0 hidden sm:block pointer-events-none" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.85) 30%, rgba(10,10,10,0.3) 60%, transparent 100%)" }} />
+
+                    {/* Mobile Bottom Gradient */}
+                    <div className="absolute inset-0 sm:hidden pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0.90) 35%, rgba(10,10,10,0.4) 60%, transparent 100%)" }} />
+
+                    {/* Bottom reinforcement */}
+                    <div className="absolute inset-0 hidden sm:block pointer-events-none bg-gradient-to-t from-[#0a0a0a]/60 via-transparent to-transparent" />
+
+                    {/* Editorial text block — key forces remount on change */}
+                    <div
+                        key={activeIndex}
+                        className="ticker-text-enter absolute inset-0 sm:right-auto flex flex-col justify-end sm:justify-center p-6 pb-12 pt-16 sm:p-0 sm:pl-12 lg:pl-16 w-full sm:w-auto sm:max-w-[55%] lg:max-w-[50%]"
+                    >
+                        <p className="font-sans text-[0.65rem] sm:text-[0.7rem] tracking-[0.22em] uppercase text-[#c8973a] mb-2 drop-shadow-md">
+                            {activeAuthor}
+                        </p>
+                        <h2 className="font-heading text-[2rem] sm:text-4xl lg:text-5xl text-white leading-[1.05] tracking-tight mb-3 sm:mb-4 drop-shadow-lg">
+                            {activeTitle}
+                        </h2>
+                        <div className="w-8 h-[2px] bg-[#c8973a] mb-3 sm:mb-4 shadow-[0_0_10px_rgba(200,151,58,0.5)]" />
+
+                        {/* TAG PILLS — genre indicators */}
+                        {activeMeta.tags.length > 0 && (
+                            <div key={`tags-${activeIndex}`} className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
+                                {activeMeta.tags.map((tag, i) => (
+                                    <span
+                                        key={tag}
+                                        className={`font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.14em] uppercase px-2 py-1 rounded-[2px] shadow-sm ${i === 0
+                                            ? "bg-[#c8973a]/90 text-black font-bold"
+                                            : "bg-black/40 text-white/80 border border-white/20 backdrop-blur-md"
+                                            }`}
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
                             </div>
-                        ))}
+                        )}
+
+                        {/* DESCRIPTION — bold claim */}
+                        {locField(activeBook, "description", lang) && (
+                            <p
+                                key={`desc-${activeIndex}`}
+                                className="font-serif text-[0.85rem] sm:text-[1rem] lg:text-[1.1rem] leading-relaxed text-white/95 mb-4 sm:mb-5 max-w-[95%] sm:max-w-[90%] drop-shadow-md"
+                            >
+                                {locField(activeBook, "description", lang)}
+                            </p>
+                        )}
+
+                        <p className="font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.16em] uppercase text-white/50 font-bold">
+                            Tez chiqadi
+                        </p>
+                    </div>
+
+                    {/* TEZDA badge */}
+                    <div className="absolute top-4 left-4 sm:top-6 sm:left-auto sm:right-6 bg-[#c8973a] text-black font-sans text-[0.6rem] sm:text-[0.65rem] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-[2px] shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+                        TEZDA
+                    </div>
+
+                    {/* Progress bar — countdown when playing, static position when paused */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/[0.08]">
+                        {isPlaying ? (
+                            <div
+                                key={`${activeIndex}-playing`}
+                                className="h-full bg-[#c8973a] ticker-countdown shadow-[0_0_10px_rgba(200,151,58,0.8)]"
+                            />
+                        ) : (
+                            <div
+                                className="h-full bg-[#c8973a] transition-all duration-[400ms] ease-out shadow-[0_0_10px_rgba(200,151,58,0.8)]"
+                                style={{ width: `${((activeIndex + 1) / displayBooks.length) * 100}%` }}
+                            />
+                        )}
                     </div>
                 </div>
-
-                {/* 3. BOTTOM FOOTER (Askanio) — responsive aspect ratio */}
-                <div className="aspect-video md:aspect-[3/1]">
-                    {renderCard(footerBook, "h-full", "center")}
-                </div>
-
             </div>
 
-            {/* BELOW LAYOUT */}
-            <div className="relative z-10 mt-16 px-6 text-center">
-                <p className="font-sans text-[0.75rem] tracking-[0.1em] uppercase text-white/40 hover:text-white transition-colors duration-300 cursor-pointer">
-                    Barcha yangi nashrlardan xabardor bo'lish uchun obuna bo'ling <span className="text-gold ml-1">&rarr;</span>
-                </p>
+            {/* THUMBNAIL STRIP */}
+            <div className="relative z-10 w-full px-4 sm:px-8 lg:px-12 mt-2 flex gap-1.5">
+                {displayBooks.map((book, index) => {
+                    const thumbSrc = resolveImageUrl(book.cover_url);
+                    const thumbColor = book.bg_color ? `hsl(${book.bg_color})` : "hsl(var(--accent))";
+                    const isActive = index === activeIndex;
+                    return (
+                        <div
+                            key={book.id}
+                            onClick={() => goTo(index)}
+                            className={`flex-1 h-8 sm:h-10 lg:h-12 rounded-md overflow-hidden cursor-pointer relative transition-all duration-200 ${isActive
+                                ? "ring-1 ring-[#c8973a]/60 opacity-100"
+                                : "opacity-40 hover:opacity-65"
+                                }`}
+                            style={{ backgroundColor: thumbColor }}
+                        >
+                            {thumbSrc && (
+                                <img
+                                    src={thumbSrc}
+                                    alt=""
+                                    className="object-cover w-full h-full"
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             </div>
+
+            {/* CTA */}
+            <p className="relative z-10 mt-8 px-4 text-center font-sans text-[0.7rem] tracking-[0.1em] uppercase text-white/30 hover:text-white/60 transition-colors duration-300 cursor-pointer">
+                Barcha yangi nashrlardan xabardor bo'lish uchun obuna bo'ling →
+            </p>
         </section>
     );
 };
