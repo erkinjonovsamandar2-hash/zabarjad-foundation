@@ -1,123 +1,141 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, Instagram, Send } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { useData } from "@/context/DataContext";
 import { useLang } from "@/context/LanguageContext";
 
 const Footer = () => {
+  const { siteSettings } = useData();
   const { t } = useLang();
+  const { footer } = siteSettings;
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#0A1128] border-t border-[rgba(255,255,255,0.05)] text-white/80 font-sans transition-colors duration-500">
+    <footer className="w-full bg-[#0A1128] border-t border-[rgba(10,17,40,0.15)]">
       <style>{`
         .footer-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 3rem 2rem;
+          gap: 2.5rem 2rem;
         }
         .footer-links-wrapper {
           display: grid;
           grid-template-columns: 1fr;
           gap: 2.5rem 2rem;
         }
-        @media (min-width: 640px) {
+        @media (min-width: 640px) { /* sm */
           .footer-links-wrapper {
             grid-template-columns: 1fr 1fr;
           }
+          .footer-link-col:nth-child(3) {
+            grid-column: 1 / -1;
+          }
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 768px) { /* md */
+          .footer-links-wrapper {
+            grid-template-columns: 1fr 1fr 1fr;
+          }
+          .footer-link-col:nth-child(3) {
+            grid-column: auto;
+          }
+        }
+        @media (min-width: 1024px) { /* lg */
           .footer-grid {
-            grid-template-columns: 1.5fr 2fr;
+            grid-template-columns: 1.6fr 1fr 1fr 1fr;
           }
           .footer-links-wrapper {
-            grid-template-columns: repeat(3, 1fr);
+            display: contents;
           }
         }
       `}</style>
 
       {/* ZONE 1 - Main body */}
-      <div className="w-full max-w-7xl mx-auto pt-16 md:pt-20 px-6 md:px-8 pb-16">
-        <div className="footer-grid">
-          
-          {/* Brand & Contact Info */}
-          <div className="flex flex-col gap-6 md:pr-8">
-            <Link to="/" className="inline-block w-max">
+      <div className="w-full pt-[4rem] px-[2.25rem] pb-0">
+        <div className="footer-grid pb-[3rem] border-b border-[rgba(255,255,255,0.08)]">
+
+          {/* COLUMN 1 - Brand column */}
+          <div className="flex flex-col">
+            <Link to="/" className="inline-block mb-4">
               <img
                 src="/Logo-blue.png"
                 alt="Booktopia Logo"
-                className="h-10 md:h-12 w-auto object-contain hover:opacity-90 transition-opacity"
+                className="h-9 w-auto object-contain"
               />
             </Link>
-            
-            <p className="text-sm text-white/60 leading-relaxed font-serif max-w-sm">
+
+            <p className="font-serif text-[0.95rem] leading-[1.8] text-[rgba(255,255,255,0.6)] max-w-[280px] mb-6">
               Jahon va o'zbek adabiyotining eng sara durdonalarini sifatli tarjima va yuqori
               poligrafiya darajasida o'quvchilarga taqdim etuvchi premium nashriyot.
             </p>
 
-            <div className="flex flex-col gap-4 mt-2">
-              <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="flex items-start gap-3 group">
-                <MapPin className="w-5 h-5 text-[#c8973a] shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">
-                  Uchtepa tumani, G9A-mavze, 20-uy
-                </span>
-              </a>
-              
-              <a href="tel:+998770164455" className="flex items-center gap-3 group">
-                <Phone className="w-5 h-5 text-[#c8973a] shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">
-                  +998770164455
-                </span>
-              </a>
-              
-              <a href="mailto:info@booktopia.uz" className="flex items-center gap-3 group">
-                <Mail className="w-5 h-5 text-[#c8973a] shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">
-                  info@booktopia.uz
-                </span>
-              </a>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-3 font-sans text-[0.8rem] font-medium text-[rgba(255,255,255,0.45)]">
+                <MapPin className="w-4 h-4 text-[#00A3FF] shrink-0" />
+                <span className="truncate">Uchtepa tumani, G9A-mavze, 20-uy</span>
+              </div>
+              <div className="flex items-center gap-3 font-sans text-[0.8rem] font-medium text-[rgba(255,255,255,0.45)]">
+                <Phone className="w-4 h-4 text-[#00A3FF] shrink-0" />
+                <span className="truncate">+998770164455</span>
+              </div>
+              <div className="flex items-center gap-3 font-sans text-[0.8rem] font-medium text-[rgba(255,255,255,0.45)]">
+                <Mail className="w-4 h-4 text-[#00A3FF] shrink-0" />
+                <span className="truncate">info@booktopia.uz</span>
+              </div>
             </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* COLUMNS 2, 3, 4 - Link columns wrapper */}
           <div className="footer-links-wrapper">
-            
+
             {/* Faoliyat */}
-            <div className="flex flex-col gap-5">
-              <h3 className="font-heading text-lg font-semibold text-white tracking-wide">Faoliyat</h3>
-              <div className="flex flex-col gap-3">
-                <Link to="/library" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Barcha kitoblar</Link>
-                <Link to="/library?tab=new" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Yangi nashrlar</Link>
-                <Link to="/team" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Jamoa</Link>
-              </div>
+            <div className="footer-link-col flex flex-col">
+              <h4 className="font-sans text-[0.75rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-5">
+                Faoliyat
+              </h4>
+              <Link to="/library" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Barcha kitoblar
+              </Link>
+              <Link to="/library?tab=new" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Yangi nashrlar
+              </Link>
+              <Link to="/authors" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Mualliflar va Tarjimonlar
+              </Link>
             </div>
 
             {/* Nashriyot */}
-            <div className="flex flex-col gap-5">
-              <h3 className="font-heading text-lg font-semibold text-white tracking-wide">Nashriyot</h3>
-              <div className="flex flex-col gap-3">
-                <Link to="/about" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Biz haqimizda</Link>
-                <Link to="/blog" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Blog</Link>
-                <Link to="/contact" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Aloqa va Hamkorlik</Link>
-              </div>
+            <div className="footer-link-col flex flex-col">
+              <h4 className="font-sans text-[0.75rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-5">
+                Nashriyot
+              </h4>
+              <Link to="/biz-haqimizda" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Biz haqimizda
+              </Link>
+              <Link to="/blog" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Booktopia Kundaligi
+              </Link>
+              <Link to="/aloqa" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Aloqa va Hamkorlik
+              </Link>
             </div>
 
-            {/* Huquqiy & Ijtimoiy */}
-            <div className="flex flex-col gap-5">
-              <h3 className="font-heading text-lg font-semibold text-white tracking-wide">Ma'lumot</h3>
-              <div className="flex flex-col gap-3">
-                <Link to="/oferta" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Ommaviy oferta</Link>
-                <Link to="/privacy" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Maxfiylik siyosati</Link>
-                <Link to="/terms" className="text-sm text-white/60 hover:text-[#c8973a] transition-colors">Foydalanish shartlari</Link>
-              </div>
-              
-              {/* Built-in Socials */}
-              <div className="flex items-center gap-4 mt-2">
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[#E1306C] hover:text-white transition-all duration-300">
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a href="https://t.me" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[#229ED9] hover:text-white transition-all duration-300">
-                  <Send className="w-4 h-4 ml-[-2px] mt-[2px]" />
-                </a>
-              </div>
+            {/* Huquqiy */}
+            <div className="footer-link-col flex flex-col">
+              <h4 className="font-sans text-[0.75rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-5">
+                Huquqiy
+              </h4>
+              <Link to="/oferta" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Ommaviy ofеrta
+              </Link>
+              <Link to="/maxfiylik" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Maxfiylik siyosati
+              </Link>
+              <Link to="/shartlar" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Foydalanish shartlari
+              </Link>
+              <Link to="/yetkazish" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+                Yetkazib berish
+              </Link>
             </div>
 
           </div>
@@ -125,19 +143,15 @@ const Footer = () => {
       </div>
 
       {/* ZONE 2 - Copyright bar */}
-      <div className="w-full bg-[#050B1A] py-5 px-6 md:px-8 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-          <p className="text-[11px] sm:text-xs text-white/50 font-medium tracking-wide uppercase">
-            &copy; {currentYear} Booktopia. {t.footer?.rights || "Barcha huquqlar himoyalangan."}
-          </p>
-          
-          <p className="text-[10px] sm:text-[11px] text-white/40 tracking-wider uppercase flex items-center gap-1.5">
-            Muhabbat bilan yaratildi <span className="text-red-500/80 text-sm">♥</span> 
-            <span className="mx-1">|</span>
-            <a href="https://t.me/white_crow_8" target="_blank" rel="noreferrer" className="hover:text-white/80 transition-colors">
-              Samandar Erkinjonov
-            </a>
-          </p>
+      <div className="w-full bg-[#050B1A] py-[1rem] px-[2.25rem] flex flex-col md:flex-row justify-between items-center gap-3">
+        <div className="font-sans text-[0.7rem] font-semibold tracking-[0.08em] text-[rgba(255,255,255,0.4)] uppercase text-center md:text-left">
+          © {currentYear} BOOKTOPIA. {t?.footer?.rights || "BARCHA HUQUQLAR HIMOYALANGAN."}
+        </div>
+        <div className="font-sans text-[0.7rem] font-semibold tracking-[0.05em] text-[rgba(255,255,255,0.3)] flex items-center justify-center gap-1.5 uppercase">
+          <span>MUHABBAT BILAN YARATILDI</span>
+          <span style={{ color: '#E24B4A' }} className="text-[0.85rem] translate-y-[-1px]">♥</span>
+          <span className="opacity-50">·</span>
+          <span>SAMANDAR ERKINJONOV</span>
         </div>
       </div>
     </footer>
