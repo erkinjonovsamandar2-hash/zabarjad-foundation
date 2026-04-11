@@ -224,20 +224,25 @@ const Blog = () => {
         </div>
 
         {/* Category tabs */}
-        <div className="relative mb-10 border-b border-border/50 pb-5 sm:pb-7">
-          <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-1 sm:flex-wrap sm:overflow-visible">
+        <div className="mb-10 border-b border-border/50 pb-5 sm:pb-7">
+          <div className="flex flex-wrap items-center gap-3">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveTab(cat)}
-                className={`shrink-0 transition-all duration-200 !px-3 !py-1.5 !text-[10px] sm:!px-[1.75rem] sm:!py-3 sm:!text-[0.6875rem] ${activeTab === cat ? "btn-glass" : "btn-glass-ghost opacity-70 hover:opacity-100"}`}
+                className={`
+                  font-sans text-[11px] font-bold tracking-[0.2em] uppercase
+                  px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-200
+                  ${activeTab === cat
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"
+                  }
+                `}
               >
                 {cat}
               </button>
             ))}
           </div>
-          {/* fade hint for scroll on mobile */}
-          <div className="absolute right-0 top-0 h-[calc(100%-1.25rem)] w-8 bg-gradient-to-l from-background to-transparent pointer-events-none sm:hidden" />
         </div>
 
         {/* Content */}

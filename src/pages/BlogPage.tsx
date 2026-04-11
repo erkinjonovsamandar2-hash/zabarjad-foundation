@@ -251,11 +251,23 @@ const BlogPage = () => {
         </div>
 
         {/* ── Category tabs ── */}
-        <motion.div className="flex flex-wrap items-center gap-3 mb-10 border-b border-border/50 pb-6"
-          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
+        <motion.div
+          className="flex flex-wrap items-center gap-3 mb-10 border-b border-border/50 pb-6"
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+        >
           {BLOG_CATEGORIES.map((cat) => (
-            <button key={cat} onClick={() => setActiveTab(cat)}
-              className={`transition-all duration-300 ${activeTab === cat ? "btn-glass scale-105" : "btn-glass-ghost opacity-70 hover:opacity-100"}`}>
+            <button
+              key={cat}
+              onClick={() => setActiveTab(cat)}
+              className={`
+                font-sans text-[11px] font-bold tracking-[0.2em] uppercase
+                px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-200
+                ${activeTab === cat
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"
+                }
+              `}
+            >
               {cat}
             </button>
           ))}
