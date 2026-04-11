@@ -342,8 +342,6 @@ const MiniShelf = ({
   isPaused: boolean; onSelect: (i: number) => void;
   onPrev: () => void; onNext: () => void; lang: Lang;
 }) => {
-  const cardWidth = window.innerWidth < 640 ? CARD_W_MOB : CARD_W_DESK;
-
   return (
     <div className="flex items-center gap-1 sm:gap-3 mt-6 sm:mt-8 w-full max-w-2xl px-1 sm:px-0">
       <motion.button
@@ -366,7 +364,7 @@ const MiniShelf = ({
               key={book.id}
               onClick={() => onSelect(i)}
               aria-label={locField(book, "title", lang)}
-              className="relative overflow-hidden rounded-[5px] focus:outline-none shrink-0 cursor-pointer snap-center group will-change-transform"
+              className="relative overflow-hidden rounded-[5px] focus:outline-none shrink-0 cursor-pointer snap-center group will-change-transform w-[60px] sm:w-[76px] aspect-[2/3]"
               whileHover={!isActive ? { y: -4, filter: "grayscale(0%)" } : {}}
               animate={{
                 scale: isActive ? 1.15 : Math.max(0.75, 1 - diff * 0.08),
@@ -376,8 +374,6 @@ const MiniShelf = ({
               }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
               style={{
-                width: `${cardWidth}px`,
-                aspectRatio: "2/3",
                 boxShadow: isActive
                   ? "0 10px 20px rgba(0,0,0,0.3)"
                   : "0 4px 8px rgba(0,0,0,0.2)",
@@ -470,6 +466,7 @@ const Hero = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [timerKey, setTimerKey] = useState(0); // incremented on manual nav to restart interval
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const displayBooks: Book[] = (
@@ -484,20 +481,22 @@ const Hero = () => {
     [total]
   );
 
+  // timerKey is incremented on manual nav — causes this effect to re-run,
+  // which clears the old interval (via cleanup) and starts a fresh 5s cycle.
   useEffect(() => {
     if (isPaused || total < 2) return;
     timerRef.current = setInterval(() => advance(1), INTERVAL_MS);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [isPaused, advance, total]);
+  }, [isPaused, advance, total, timerKey]);
 
   const manualNav = useCallback((dir: 1 | -1) => {
-    if (timerRef.current) clearInterval(timerRef.current);
     advance(dir);
+    setTimerKey((k) => k + 1);
   }, [advance]);
 
   const selectBook = useCallback((i: number) => {
-    if (timerRef.current) clearInterval(timerRef.current);
     setActiveIndex(i);
+    setTimerKey((k) => k + 1);
   }, []);
 
   const handleBookClick = useCallback(

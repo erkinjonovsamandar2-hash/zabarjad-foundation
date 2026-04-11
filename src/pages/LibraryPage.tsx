@@ -12,8 +12,7 @@ import SpotlightCard from "@/components/SpotlightCard";
 import librarySeal from "@/assets/design/library-seal.png";
 
 // ── Local Categories Configuration ────────────────────────────────────────────
-const CATEGORIES = ["all", "new", "featured", "golden", "got"] as const;
-const GOT_CATEGORY_KEY = "got";
+const CATEGORIES = ["all", "new", "featured", "golden"] as const;
 
 // ── Featured Books for Carousel ───────────────────────────────────────────────
 const FEATURED_BOOKS = [
@@ -53,7 +52,6 @@ const getCategoryLabel = (key: string, lang: string): string => {
     new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
     featured: { uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
     golden: { uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Golden Collection" },
-    got: { uz: "Taxtlar O'yini", ru: "Игра Престолов", en: "Game of Thrones" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };
@@ -80,20 +78,6 @@ const LibraryPage = () => {
   const filtered = useMemo(() => {
     return books.filter((b) => {
       if (active === "all") return true;
-
-      if (active === GOT_CATEGORY_KEY) {
-        const titleLower = b.title?.toLowerCase() || "";
-        const titleEnLower = b.title_en?.toLowerCase() || "";
-        const titleRuLower = b.title_ru?.toLowerCase() || "";
-        return (
-          titleLower.includes("taxtlar") ||
-          titleLower.includes("qirollar") ||
-          titleEnLower.includes("game") ||
-          titleEnLower.includes("thrones") ||
-          titleRuLower.includes("престол") ||
-          titleRuLower.includes("игра")
-        );
-      }
 
       return b.category === active;
     });
@@ -199,7 +183,6 @@ const LibraryPage = () => {
               <div className="flex flex-wrap items-center justify-center gap-3">
                 {CATEGORIES.map((categoryKey) => {
                   const isActive = active === categoryKey;
-                  const isGoT = categoryKey === GOT_CATEGORY_KEY;
 
                   return (
                     <button

@@ -1,17 +1,112 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { toast } from "sonner";
 import { useData, Article } from "@/context/DataContext";
-import { Plus, Pencil, Trash2, X, Eye, EyeOff, CalendarDays } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Eye, EyeOff, CalendarDays, Monitor, Smartphone } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
 
+// ── Focal point picker ────────────────────────────────────────────────────────
+interface FocalPointPickerProps {
+  imageUrl: string | null;
+  x: number;
+  y: number;
+  onChange: (x: number, y: number) => void;
+  aspectRatio: string;   // CSS aspect-ratio value e.g. "16/9"
+  label: string;
+  icon: React.ReactNode;
+}
+
+const FocalPointPicker = ({ imageUrl, x, y, onChange, aspectRatio, label, icon }: FocalPointPickerProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handlePointer = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = Math.round(Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100)));
+    const py = Math.round(Math.min(100, Math.max(0, ((e.clientY - rect.top) / rect.height) * 100)));
+    onChange(px, py);
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground/80">
+        {icon}
+        <span>{label}</span>
+        <span className="ml-auto font-mono text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+          {x}% · {y}%
+        </span>
+      </div>
+
+      <div
+        ref={containerRef}
+        onClick={handlePointer}
+        className="relative overflow-hidden rounded-lg border border-gray-200 bg-muted cursor-crosshair select-none"
+        style={{ aspectRatio }}
+      >
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt=""
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none"
+            style={{ objectPosition: `${x}% ${y}%` }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground/40 text-xs">
+            Avval rasm yuklang
+          </div>
+        )}
+
+        {imageUrl && (
+          <>
+            {/* Horizontal crosshair line */}
+            <div
+              className="absolute left-0 right-0 h-px bg-white/60 pointer-events-none"
+              style={{ top: `${y}%` }}
+            />
+            {/* Vertical crosshair line */}
+            <div
+              className="absolute top-0 bottom-0 w-px bg-white/60 pointer-events-none"
+              style={{ left: `${x}%` }}
+            />
+            {/* Focal dot */}
+            <div
+              className="absolute w-5 h-5 rounded-full border-2 border-white bg-primary/80 shadow-lg pointer-events-none -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${x}%`, top: `${y}%` }}
+            />
+            {/* Outer ring for visibility */}
+            <div
+              className="absolute w-8 h-8 rounded-full border border-white/40 pointer-events-none -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${x}%`, top: `${y}%` }}
+            />
+          </>
+        )}
+      </div>
+
+      <p className="text-[10px] text-muted-foreground/60">
+        Rasmga bosib diqqat markazini belgilang
+      </p>
+    </div>
+  );
+};
+
+// ── Empty form ────────────────────────────────────────────────────────────────
 const emptyArticle: Omit<Article, "id"> = {
   title: "", title_en: null, title_ru: null,
   excerpt: "", excerpt_en: null, excerpt_ru: null,
   content: "", content_en: null, content_ru: null,
-  cover_url: "", date: new Date().toISOString().slice(0, 10), published: false,
-  category: null, reading_time: null,
-  created_at: "", updated_at: ""
+  image_url: "",
+  published_at: new Date().toISOString().slice(0, 10),
+  published: false,
+  category: null,
+  reading_time: null,
+  focus_desktop_x: 50,
+  focus_desktop_y: 50,
+  focus_mobile_x: 50,
+  focus_mobile_y: 50,
+  created_at: "",
+  updated_at: "",
 };
 
+// ── Main component ────────────────────────────────────────────────────────────
 const BlogManager = () => {
   const { articles, addArticle, updateArticle, deleteArticle } = useData();
   const [modalOpen, setModalOpen] = useState(false);
@@ -19,25 +114,40 @@ const BlogManager = () => {
   const [form, setForm] = useState<Omit<Article, "id">>({ ...emptyArticle });
   const [saving, setSaving] = useState(false);
 
-  const openAdd = () => { setEditId(null); setForm({ ...emptyArticle }); setModalOpen(true); };
+  const openAdd = () => {
+    setEditId(null);
+    setForm({ ...emptyArticle });
+    setModalOpen(true);
+  };
+
   const openEdit = (a: Article) => {
     setEditId(a.id);
     setForm({
       title: a.title, title_en: a.title_en, title_ru: a.title_ru,
       excerpt: a.excerpt, excerpt_en: a.excerpt_en, excerpt_ru: a.excerpt_ru,
       content: a.content, content_en: a.content_en, content_ru: a.content_ru,
-      cover_url: a.cover_url, date: a.date, published: a.published,
-      category: a.category ?? null, reading_time: a.reading_time ?? null,
-      created_at: a.created_at, updated_at: a.updated_at
+      image_url: a.image_url,
+      published_at: a.published_at,
+      published: a.published,
+      category: a.category ?? null,
+      reading_time: a.reading_time ?? null,
+      focus_desktop_x: a.focus_desktop_x ?? 50,
+      focus_desktop_y: a.focus_desktop_y ?? 50,
+      focus_mobile_x: a.focus_mobile_x ?? 50,
+      focus_mobile_y: a.focus_mobile_y ?? 50,
+      created_at: a.created_at,
+      updated_at: a.updated_at,
     });
     setModalOpen(true);
   };
+
   const handleSave = async () => {
     setSaving(true);
     try {
       if (editId) await updateArticle(editId, form);
       else await addArticle(form);
       setModalOpen(false);
+      toast.success(editId ? "Maqola yangilandi!" : "Maqola qo'shildi!");
     } catch (err: any) {
       alert("Saqlashda xatolik yuz berdi: " + err.message);
     } finally {
@@ -49,7 +159,10 @@ const BlogManager = () => {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-foreground">Blog Maqolalari</h1>
-        <button onClick={openAdd} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors">
+        <button
+          onClick={openAdd}
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors"
+        >
           <Plus className="h-4 w-4" /> Yangi maqola
         </button>
       </div>
@@ -57,7 +170,14 @@ const BlogManager = () => {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map((a) => (
           <div key={a.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col">
-            {a.cover_url && <img src={a.cover_url} alt={a.title} className="w-full h-32 object-cover" />}
+            {a.image_url && (
+              <img
+                src={a.image_url}
+                alt={a.title}
+                className="w-full h-32 object-cover"
+                style={{ objectPosition: `${a.focus_desktop_x ?? 50}% ${a.focus_desktop_y ?? 50}%` }}
+              />
+            )}
             <div className="p-5 flex flex-col gap-3 flex-1">
               <div className="flex items-start justify-between gap-2">
                 <h3 className="font-semibold text-foreground text-sm leading-snug">{a.title}</h3>
@@ -68,18 +188,27 @@ const BlogManager = () => {
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{a.excerpt}</p>
               <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
-                <span className="flex items-center gap-1 text-xs text-muted-foreground/80"><CalendarDays className="h-3 w-3" />{a.date}</span>
+                <span className="flex items-center gap-1 text-xs text-muted-foreground/80">
+                  <CalendarDays className="h-3 w-3" />{a.published_at}
+                </span>
                 <div className="flex gap-1">
-                  <button onClick={() => openEdit(a)} className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"><Pencil className="h-3.5 w-3.5" /></button>
+                  <button
+                    onClick={() => openEdit(a)}
+                    className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                  </button>
                   <button
                     onClick={async () => {
                       if (window.confirm("Haqiqatan ham bu maqolani o'chirmoqchimisiz?")) {
-                        try { await deleteArticle(a.id); }
+                        try { await deleteArticle(a.id, a.image_url); }
                         catch (err: any) { alert("O'chirishda xatolik: " + err.message); }
                       }
                     }}
                     className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-600 hover:bg-red-50 transition-colors"
-                  ><Trash2 className="h-3.5 w-3.5" /></button>
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -89,27 +218,69 @@ const BlogManager = () => {
 
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-5 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-foreground">{editId ? "Maqolani tahrirlash" : "Yangi maqola"}</h2>
-              <button onClick={() => setModalOpen(false)} className="p-1 rounded-lg hover:bg-gray-100"><X className="h-5 w-5 text-muted-foreground/80" /></button>
+              <h2 className="text-lg font-bold text-foreground">
+                {editId ? "Maqolani tahrirlash" : "Yangi maqola"}
+              </h2>
+              <button onClick={() => setModalOpen(false)} className="p-1 rounded-lg hover:bg-gray-100">
+                <X className="h-5 w-5 text-muted-foreground/80" />
+              </button>
             </div>
-            <div className="p-5 space-y-4">
-              {/* Cover image with crop */}
+
+            <div className="p-5 space-y-6">
+              {/* Cover image */}
               <ImageCropper
-                currentUrl={form.cover_url}
-                onImageSaved={(url) => setForm({ ...form, cover_url: url })}
+                currentUrl={form.image_url}
+                onImageSaved={(url) => setForm({ ...form, image_url: url })}
                 aspectRatio={16 / 9}
                 label="Muqova rasmi (16:9)"
+                bucket="books"
               />
 
+              {/* ── Dual focal-point editors ── */}
+              <div>
+                <p className="text-sm font-semibold text-foreground/80 mb-3">
+                  Diqqat markazi — qurilmaga qarab kadr sozlash
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <FocalPointPicker
+                    imageUrl={form.image_url ?? null}
+                    x={form.focus_desktop_x ?? 50}
+                    y={form.focus_desktop_y ?? 50}
+                    onChange={(x, y) => setForm({ ...form, focus_desktop_x: x, focus_desktop_y: y })}
+                    aspectRatio="16/9"
+                    label="Noutbuk / Desktop (16:9)"
+                    icon={<Monitor className="h-3.5 w-3.5 text-primary" />}
+                  />
+                  <FocalPointPicker
+                    imageUrl={form.image_url ?? null}
+                    x={form.focus_mobile_x ?? 50}
+                    y={form.focus_mobile_y ?? 50}
+                    onChange={(x, y) => setForm({ ...form, focus_mobile_x: x, focus_mobile_y: y })}
+                    aspectRatio="3/4"
+                    label="Telefon / Mobile (3:4)"
+                    icon={<Smartphone className="h-3.5 w-3.5 text-primary" />}
+                  />
+                </div>
+              </div>
+
+              {/* Text fields */}
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Sarlavha</label>
-                <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Qisqacha tavsif</label>
-                <input value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input
+                  value={form.excerpt ?? ""}
+                  onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Kategoriya</label>
@@ -129,31 +300,55 @@ const BlogManager = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">O'qish vaqti (masalan: 7 daqiqa)</label>
-                <input value={form.reading_time ?? ""} onChange={(e) => setForm({ ...form, reading_time: e.target.value || null })} placeholder="8 daqiqa" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input
+                  value={form.reading_time ?? ""}
+                  onChange={(e) => setForm({ ...form, reading_time: e.target.value || null })}
+                  placeholder="8 daqiqa"
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Sana</label>
-                <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
+                <input
+                  type="date"
+                  value={form.published_at}
+                  onChange={(e) => setForm({ ...form, published_at: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                />
               </div>
               <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1">Matn (Rich Text Placeholder)</label>
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 border-b border-gray-200 px-3 py-2 flex gap-2">
-                    {["B", "I", "U", "H1", "H2", "Link", "Img"].map((btn) => (
-                      <button key={btn} className="px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-gray-200 rounded transition-colors">{btn}</button>
-                    ))}
-                  </div>
-                  <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} placeholder="Maqola matnini yozing..." className="w-full px-3 py-3 text-sm text-foreground outline-none resize-none" />
-                </div>
+                <label className="block text-sm font-medium text-foreground/80 mb-1">Matn</label>
+                <textarea
+                  value={form.content ?? ""}
+                  onChange={(e) => setForm({ ...form, content: e.target.value })}
+                  rows={10}
+                  placeholder="Maqola matnini yozing... (har bir paragraf uchun bo'sh qator qoldiring)"
+                  className="w-full rounded-lg border border-gray-200 px-3 py-3 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+                />
               </div>
               <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer">
-                <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="rounded border-gray-300 text-accent focus:ring-amber-200" />
+                <input
+                  type="checkbox"
+                  checked={form.published ?? false}
+                  onChange={(e) => setForm({ ...form, published: e.target.checked })}
+                  className="rounded border-gray-300 text-accent focus:ring-amber-200"
+                />
                 Nashr qilish
               </label>
             </div>
+
             <div className="flex justify-end gap-3 p-5 border-t border-gray-100">
-              <button onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm font-medium text-foreground/70 hover:bg-gray-100 rounded-lg transition-colors">Bekor qilish</button>
-              <button onClick={handleSave} disabled={saving} className="px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 disabled:opacity-50 rounded-lg transition-colors">
+              <button
+                onClick={() => setModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-foreground/70 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                Bekor qilish
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-5 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 disabled:opacity-50 rounded-lg transition-colors"
+              >
                 {saving ? "Saqlanmoqda..." : "Saqlash"}
               </button>
             </div>

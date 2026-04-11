@@ -11,13 +11,13 @@ const CARDS: QuickActionCard[] = [
     {
         title: "Kutubxona",
         bannerImageSrc: "/quick-actions/kutubxona-icon.png",
-        href: "/kutubxona",
+        href: "/library",
         external: false,
     },
     {
         title: "Kitob sovchi",
         bannerImageSrc: "/quick-actions/sovchi-icon.png",
-        href: "/kitob-sovchilari",
+        href: "/quiz",
         external: false,
     },
     {

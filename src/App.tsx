@@ -39,6 +39,7 @@ const BlogManager = lazy(() => import("./pages/admin/BlogManager"));
 const QuizManager = lazy(() => import("./pages/admin/QuizManager"));
 const SiteSettingsManager = lazy(() => import("./pages/admin/SiteSettingsManager"));
 const AdminUsersManager = lazy(() => import("./pages/admin/AdminUsersManager"));
+const NewBookManager = lazy(() => import("./pages/admin/NewBookManager"));
 const AdminReviews = lazy(() => import("@/pages/AdminReviews"));
 
 const queryClient = new QueryClient();
@@ -76,8 +77,9 @@ const SuspenseFallback = () => (
 
 // ── Auth Guard ────────────────────────────────────────────────────────────────
 const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
-  const { user, isAdmin, loading } = useAuth();
-  if (loading)
+  const { user, isAdmin, isAdminLoading, loading } = useAuth();
+  // Show spinner during initial session load OR while role is being fetched
+  if (loading || isAdminLoading)
     return (
       <div className="min-h-screen flex items-center justify-center text-muted-foreground">
         Yuklanmoqda…
@@ -226,6 +228,7 @@ const AppInner = () => {
             }
           >
             <Route index element={<Lazy component={BookManager} />} />
+            <Route path="new-books" element={<Lazy component={NewBookManager} />} />
             <Route path="blog" element={<Lazy component={BlogManager} />} />
             <Route path="quiz" element={<Lazy component={QuizManager} />} />
             <Route path="settings" element={<Lazy component={SiteSettingsManager} />} />

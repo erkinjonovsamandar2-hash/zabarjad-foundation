@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { useData } from "@/context/DataContext";
 import type { Book } from "@/context/DataContext";
 import { Plus, Pencil, Trash2, X, BookOpen } from "lucide-react";
@@ -43,6 +44,8 @@ const emptyBook: Omit<Book, "id" | "created_at" | "updated_at"> = {
   enable_3d_flip: false,
   featured: false,
   sort_order: 0,
+  img_focus_x: 50,
+  img_focus_y: 20,
 };
 
 const BookManager = () => {
@@ -76,6 +79,7 @@ const BookManager = () => {
       if (editId) await updateBook(editId, form);
       else await addBook(form);
       setModalOpen(false);
+      toast.success(editId ? "Kitob yangilandi!" : "Kitob qo'shildi!");
     } catch (err: any) {
       alert("Saqlashda xatolik yuz berdi: " + err.message);
     } finally {
@@ -153,7 +157,7 @@ const BookManager = () => {
                         onClick={async () => {
                           if (window.confirm("Haqiqatan ham bu kitobni o'chirmoqchimisiz?")) {
                             try {
-                              await deleteBook(book.id);
+                              await deleteBook(book.id, book.cover_url);
                             } catch (err: any) {
                               alert("O'chirishda xatolik: " + err.message);
                             }
@@ -191,7 +195,72 @@ const BookManager = () => {
                 onImageSaved={(url) => setForm({ ...form, cover_url: url })}
                 aspectRatio={2 / 3}
                 label="Muqova rasmi (2:3)"
+                bucket="books"
               />
+
+              {/* ── Focal point sliders ── */}
+              {form.cover_url && (
+                <div className="rounded-xl border border-gray-200 p-4 space-y-3 bg-gray-50">
+                  <p className="text-sm font-semibold text-foreground/80">Rasm markazlash nuqtasi</p>
+
+                  {/* Live preview */}
+                  <div
+                    className="relative w-full rounded-lg overflow-hidden bg-gray-200"
+                    style={{ aspectRatio: "16/9" }}
+                  >
+                    <img
+                      src={getImageUrl(form.cover_url)}
+                      alt="preview"
+                      className="w-full h-full object-cover"
+                      style={{
+                        objectPosition: `${form.img_focus_x ?? 50}% ${form.img_focus_y ?? 20}%`,
+                      }}
+                    />
+                    {/* crosshair dot */}
+                    <div
+                      className="absolute w-4 h-4 rounded-full border-2 border-white shadow-md bg-amber-400/80 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                      style={{
+                        left: `${form.img_focus_x ?? 50}%`,
+                        top: `${form.img_focus_y ?? 20}%`,
+                      }}
+                    />
+                  </div>
+
+                  {/* X slider */}
+                  <div>
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                      <span>Gorizontal (X)</span>
+                      <span className="font-mono">{form.img_focus_x ?? 50}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={form.img_focus_x ?? 50}
+                      onChange={(e) => setForm({ ...form, img_focus_x: Number(e.target.value) })}
+                      className="w-full accent-amber-500"
+                    />
+                  </div>
+
+                  {/* Y slider */}
+                  <div>
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                      <span>Vertikal (Y)</span>
+                      <span className="font-mono">{form.img_focus_y ?? 20}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={form.img_focus_y ?? 20}
+                      onChange={(e) => setForm({ ...form, img_focus_y: Number(e.target.value) })}
+                      className="w-full accent-amber-500"
+                    />
+                  </div>
+                </div>
+              )}
 
               <Field label="Nomi (UZ)" value={form.title ?? ""} onChange={(v) => setForm({ ...form, title: v })} />
               <Field label="Nomi (EN)" value={form.title_en ?? ""} onChange={(v) => setForm({ ...form, title_en: v || null })} />

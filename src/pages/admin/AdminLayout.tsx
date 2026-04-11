@@ -2,13 +2,14 @@ import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   BookOpen, FileText, Sparkles, Menu, X,
-  Home, LogOut, Settings, ShieldCheck, MessageSquare,
+  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
-  { label: "Kitoblar",  to: "/admin",          icon: BookOpen,      end: true },
-  { label: "Blog",      to: "/admin/blog",      icon: FileText               },
+  { label: "Kitoblar",       to: "/admin",               icon: BookOpen,   end: true },
+  { label: "Yangi Nashrlar", to: "/admin/new-books",     icon: Newspaper            },
+  { label: "Blog",           to: "/admin/blog",          icon: FileText             },
   { label: "Quiz",      to: "/admin/quiz",      icon: Sparkles               },
   { label: "Sharhlar",  to: "/admin/reviews",   icon: MessageSquare          },
   { label: "Sozlamalar",to: "/admin/settings",  icon: Settings               },

@@ -1,39 +1,50 @@
 // filepath: src/pages/Index.tsx
 // @refresh reset
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Hero from "@/components/Hero";
-import GlobalClassics from "@/components/GlobalClassics";
-import MatchmakerQuiz from "@/components/MatchmakerQuiz";
 import YangiNashrlar from "@/components/YangiNashrlar";
-import CuratedLibrary from "@/components/CuratedLibrary";
+import BookOfTheMonth from "@/components/BookOfTheMonth";
 import Blog from "@/components/Blog";
-import Taassurotlar from "@/components/Taassurotlar";
 import Footer from "@/components/Footer";
 import { useData } from "@/context/DataContext";
-import BookOfTheMonth from "@/components/BookOfTheMonth";
 import LoadingSplash from "@/components/LoadingSplash";
-import AuthorSpotlight from "@/components/AuthorSpotlight";
-import ScrollToTop from "@/components/ScrollToTop";
-import AmirTemurSection from "@/components/AmirTemurSection";
-import QuickActions from "@/components/QuickActions";
+
+// ── Lazy-load every section that sits below the fold ──────────────────────────
+// Keeps the initial JS bundle lean — these chunks download in parallel and are
+// ready before the user scrolls to them on any reasonable connection.
+const MatchmakerQuiz   = lazy(() => import("@/components/MatchmakerQuiz"));
+const GlobalClassics   = lazy(() => import("@/components/GlobalClassics"));
+const AmirTemurSection = lazy(() => import("@/components/AmirTemurSection"));
+const CuratedLibrary   = lazy(() => import("@/components/CuratedLibrary"));
+const Taassurotlar     = lazy(() => import("@/components/Taassurotlar"));
+const AuthorSpotlight  = lazy(() => import("@/components/AuthorSpotlight"));
+const QuickActions     = lazy(() => import("@/components/QuickActions"));
+
+// Minimal height placeholder — prevents CLS while chunk downloads
+const SectionFallback = () => <div className="w-full h-32 bg-transparent" aria-hidden />;
+
+const Divider = () => (
+  <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+);
+
 const Index = () => {
   const { loading } = useData();
-  const [hasSeenSplash, setHasSeenSplash] = useState(() => sessionStorage.getItem('splashShown') === 'true');
+  const [hasSeenSplash, setHasSeenSplash] = useState(
+    () => sessionStorage.getItem("splashShown") === "true"
+  );
 
   useEffect(() => {
     if (!loading) {
-      sessionStorage.setItem('splashShown', 'true');
+      sessionStorage.setItem("splashShown", "true");
       const timer = setTimeout(() => setHasSeenSplash(true), 100);
       return () => clearTimeout(timer);
     }
   }, [loading]);
 
-
   return (
     <div className="min-h-screen bg-background">
-      <ScrollToTop />
-      {/* mode="wait" ensures the splash screen finishes fading out BEFORE the homepage fades in */}
+      {/* mode="wait" ensures splash finishes fading BEFORE homepage fades in */}
       <AnimatePresence mode="wait">
         {loading && !hasSeenSplash ? (
           <LoadingSplash key="loader" />
@@ -46,23 +57,47 @@ const Index = () => {
             className="flex flex-col min-h-screen"
           >
             <main className="flex-1">
+              {/* ── Above the fold — statically bundled ── */}
               <Hero />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+              <Divider />
               <BookOfTheMonth />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+              <Divider />
               <YangiNashrlar />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <MatchmakerQuiz />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <GlobalClassics />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <AmirTemurSection />
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-              <CuratedLibrary />
-              <Taassurotlar />
+              <Divider />
+
+              {/* ── Below the fold — code-split, loaded in parallel ── */}
+              <Suspense fallback={<SectionFallback />}>
+                <MatchmakerQuiz />
+              </Suspense>
+              <Divider />
+
+              <Suspense fallback={<SectionFallback />}>
+                <GlobalClassics />
+              </Suspense>
+              <Divider />
+
+              <Suspense fallback={<SectionFallback />}>
+                <AmirTemurSection />
+              </Suspense>
+              <Divider />
+
+              <Suspense fallback={<SectionFallback />}>
+                <CuratedLibrary />
+              </Suspense>
+
+              <Suspense fallback={<SectionFallback />}>
+                <Taassurotlar />
+              </Suspense>
+
               <Blog />
-              <AuthorSpotlight />
-              <QuickActions />
+
+              <Suspense fallback={<SectionFallback />}>
+                <AuthorSpotlight />
+              </Suspense>
+
+              <Suspense fallback={<SectionFallback />}>
+                <QuickActions />
+              </Suspense>
             </main>
             <Footer />
           </motion.div>

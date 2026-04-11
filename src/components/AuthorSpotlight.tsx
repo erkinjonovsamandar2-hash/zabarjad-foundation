@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 
 const AUTHORS = [
@@ -42,7 +40,7 @@ export default function AuthorSpotlight() {
                             repeat: Infinity,
                         }}
                     >
-                        {[...AUTHORS, ...AUTHORS, ...AUTHORS, ...AUTHORS].map((author, index) => (
+                        {[...AUTHORS, ...AUTHORS, ...AUTHORS].map((author, index) => (
                             <div
                                 key={index}
                                 className="flex items-center gap-5 transition-transform duration-500 ease-out cursor-pointer group/card"

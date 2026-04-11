@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Loader2 } from "lucide-react";
 
 const AdminLogin = () => {
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // Flag set after a successful signIn — navigate once user state propagates
+  const [awaitingRedirect, setAwaitingRedirect] = useState(false);
+
+  useEffect(() => {
+    if (awaitingRedirect && user) {
+      navigate("/admin", { replace: true });
+    }
+  }, [awaitingRedirect, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,10 +30,12 @@ const AdminLogin = () => {
     const { error } = await signIn(email, password);
     if (error) {
       setError(error);
+      setSubmitting(false);
     } else {
-      navigate("/admin", { replace: true });
+      // Don't navigate immediately — wait for onAuthStateChange to update user
+      setAwaitingRedirect(true);
+      // Keep submitting=true so the button stays in loading state until redirect
     }
-    setSubmitting(false);
   };
 
   return (

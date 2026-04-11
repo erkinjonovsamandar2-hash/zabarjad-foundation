@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useLang, locField } from "@/context/LanguageContext";
 import { useData } from "@/context/DataContext";
-import type { Book } from "@/types/database";
+import type { NewBook } from "@/types/database";
 
-const UPCOMING_BOOKS_MOCK: Book[] = [
+const UPCOMING_BOOKS_MOCK: NewBook[] = [
     {
         id: "upcoming-1",
         title: "Murvatli Apelsin", title_ru: "Заводной апельсин", title_en: "A Clockwork Orange",
@@ -14,7 +14,11 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         description_en: "Banned in 37 countries. Published in 100.",
         cover_url: "/upcoming/apelsin.png",
         bg_color: "25 90% 50%", category: "soon", price: null,
-        enable_3d_flip: false, featured: false, sort_order: 1, created_at: "", updated_at: ""
+        enable_3d_flip: false, featured: false, sort_order: 1,
+        img_focus_x: null, img_focus_y: null,
+        focus_desktop_x: null, focus_desktop_y: null,
+        focus_mobile_x: null, focus_mobile_y: null,
+        created_at: "", updated_at: ""
     },
     {
         id: "upcoming-3",
@@ -25,7 +29,11 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         description_en: "Her sisters tried to burn the manuscript. It was published anyway.",
         cover_url: "/upcoming/ijarachi.png",
         bg_color: "210 30% 20%", category: "soon", price: null,
-        enable_3d_flip: false, featured: false, sort_order: 2, created_at: "", updated_at: ""
+        enable_3d_flip: false, featured: false, sort_order: 2,
+        img_focus_x: null, img_focus_y: null,
+        focus_desktop_x: null, focus_desktop_y: null,
+        focus_mobile_x: null, focus_mobile_y: null,
+        created_at: "", updated_at: ""
     },
     {
         id: "upcoming-4",
@@ -36,7 +44,11 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         description_en: "Written in one summer. Studied for a century.",
         cover_url: "/upcoming/mayoq.png",
         bg_color: "180 40% 25%", category: "soon", price: null,
-        enable_3d_flip: false, featured: false, sort_order: 3, created_at: "", updated_at: ""
+        enable_3d_flip: false, featured: false, sort_order: 3,
+        img_focus_x: null, img_focus_y: null,
+        focus_desktop_x: null, focus_desktop_y: null,
+        focus_mobile_x: null, focus_mobile_y: null,
+        created_at: "", updated_at: ""
     },
     {
         id: "upcoming-2",
@@ -47,7 +59,11 @@ const UPCOMING_BOOKS_MOCK: Book[] = [
         description_en: "Cellini was real. The rest is Dumas.",
         cover_url: "/upcoming/askanio.png",
         bg_color: "120 20% 30%", category: "soon", price: null,
-        enable_3d_flip: false, featured: false, sort_order: 4, created_at: "", updated_at: ""
+        enable_3d_flip: false, featured: false, sort_order: 4,
+        img_focus_x: null, img_focus_y: null,
+        focus_desktop_x: null, focus_desktop_y: null,
+        focus_mobile_x: null, focus_mobile_y: null,
+        created_at: "", updated_at: ""
     }
 ];
 
@@ -58,49 +74,69 @@ const resolveImageUrl = (url: string | null | undefined): string | null => {
     return `${base}/storage/v1/object/public/${url}`;
 };
 
+/**
+ * objectPositionD  — desktop/tablet: where to anchor the background image
+ * objectPositionM  — mobile: focal point (image fills portrait card, text overlays bottom)
+ *
+ * For 3:2 Sora images displayed in a 2:1 (desktop) or 4:5 (mobile) container:
+ *   - Desktop: image is wider than container → position horizontally (left/center/right %)
+ *              fine-tune vertically to keep the key subject visible
+ *   - Mobile:  image is taller than container → position vertically to keep subject in upper half
+ *              so the dark gradient + text at the bottom don't cover it
+ */
 const BOOK_META: Record<string, { objectPositionD: string; objectPositionM: string; tags: string[] }> = {
     "upcoming-1": {
-        objectPositionD: "center 10%",
-        objectPositionM: "85% top",
+        // Apelsin: warm city + book — keep book visible on right, city context on left
+        objectPositionD: "60% 30%",
+        objectPositionM: "60% 20%",
         tags: ["Distopiya", "Falsafa", "18+"],
     },
     "upcoming-3": {
-        objectPositionD: "center 15%",
-        objectPositionM: "85% top",
+        // Ijarachi: gothic/dark cover
+        objectPositionD: "center 20%",
+        objectPositionM: "center 15%",
         tags: ["Gotika", "Drama", "XIX asr"],
     },
     "upcoming-4": {
-        objectPositionD: "center 10%",
-        objectPositionM: "85% top",
+        // Mayoq sari: lighthouse scene — anchor right-center to keep lighthouse + book visible
+        // The book cover sits on the right; lighthouse is center-right of the composition
+        objectPositionD: "65% 35%",
+        objectPositionM: "65% 15%",
         tags: ["Modernizm", "Psixologik", "Klassika"],
     },
     "upcoming-2": {
-        objectPositionD: "center 15%",
-        objectPositionM: "85% top",
+        // Askanio: Renaissance Italy
+        objectPositionD: "center 20%",
+        objectPositionM: "center 15%",
         tags: ["Tarixiy", "Sarguzasht", "Renessans"],
     },
 };
 
 const YangiNashrlar = () => {
     const { lang } = useLang();
-    const { books } = useData();
+    const { newBooks } = useData();
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
 
-    // FORCING THE MOCK DATA TO SHOW OUR PERFECT PNGs
-    const baseBooks = UPCOMING_BOOKS_MOCK;
+    const [isMobile, setIsMobile] = useState(() =>
+        typeof window !== "undefined" && window.innerWidth < 640
+    );
+    const handleResize = useCallback(() => setIsMobile(window.innerWidth < 640), []);
+    useEffect(() => {
+        window.addEventListener("resize", handleResize, { passive: true });
+        return () => window.removeEventListener("resize", handleResize);
+    }, [handleResize]);
 
+    // Use dedicated new_books table; fall back to mocks when empty.
+    const missingMocks = UPCOMING_BOOKS_MOCK.filter(
+        m => !newBooks.some(b => b.id === m.id || b.title === m.title)
+    );
     const displayBooks =
-        baseBooks.length >= 4
-            ? baseBooks
-            : [
-                ...baseBooks,
-                ...UPCOMING_BOOKS_MOCK
-                    .filter(m => !baseBooks.some(b => b.id === m.id))
-                    .slice(0, 4 - baseBooks.length),
-            ];
+        newBooks.length >= 4
+            ? newBooks.slice(0, 4)
+            : [...newBooks, ...missingMocks].slice(0, 4);
 
     const goTo = (index: number) => {
         if (isAnimating) return;
@@ -111,7 +147,6 @@ const YangiNashrlar = () => {
     const prev = () => goTo((activeIndex - 1 + displayBooks.length) % displayBooks.length);
     const next = () => goTo((activeIndex + 1) % displayBooks.length);
 
-    // Auto-advance: restart the 4.5s timer whenever activeIndex or isPlaying changes
     useEffect(() => {
         if (!isPlaying) return;
         const timer = setTimeout(() => {
@@ -123,7 +158,15 @@ const YangiNashrlar = () => {
     }, [isPlaying, activeIndex, displayBooks.length]);
 
     const activeBook = displayBooks[activeIndex];
-    const activeMeta = BOOK_META[activeBook.id] ?? { objectPositionD: "center", objectPositionM: "center", tags: [] };
+    const activeMeta = BOOK_META[activeBook.id] ?? { objectPositionD: "center 20%", objectPositionM: "center 15%", tags: [] };
+    // Dual device: prefer explicit DB coords, fall back to BOOK_META strings
+    const activeObjPos = isMobile
+        ? (activeBook.focus_mobile_x != null && activeBook.focus_mobile_y != null
+            ? `${activeBook.focus_mobile_x}% ${activeBook.focus_mobile_y}%`
+            : activeMeta.objectPositionM)
+        : (activeBook.focus_desktop_x != null && activeBook.focus_desktop_y != null
+            ? `${activeBook.focus_desktop_x}% ${activeBook.focus_desktop_y}%`
+            : activeMeta.objectPositionD);
     const activeCoverSrc = resolveImageUrl(activeBook.cover_url);
     const activeFallback = activeBook.bg_color ? `hsl(${activeBook.bg_color})` : "hsl(var(--accent))";
     const activeTitle = locField(activeBook, "title", lang);
@@ -180,12 +223,6 @@ const YangiNashrlar = () => {
 
             {/* MAIN PANEL */}
             <div className="relative z-10 w-full px-3 sm:px-8 lg:px-12 max-w-[1440px] mx-auto">
-                <style>{`
-                    .adaptive-img-${activeIndex} { object-position: ${activeMeta.objectPositionM} !important; }
-                    @media (min-width: 640px) {
-                        .adaptive-img-${activeIndex} { object-position: ${activeMeta.objectPositionD} !important; }
-                    }
-                `}</style>
                 <div
                     className="relative rounded-2xl sm:rounded-xl overflow-hidden w-full aspect-[4/5] sm:aspect-[16/9] lg:aspect-[2/1] transition-opacity duration-[400ms] shadow-2xl ring-1 ring-white/10"
                     style={{
@@ -200,7 +237,8 @@ const YangiNashrlar = () => {
                             src={activeCoverSrc}
                             alt={activeTitle}
                             loading="lazy"
-                            className={`absolute inset-0 object-cover w-full h-full adaptive-img-${activeIndex}`}
+                            className="absolute inset-0 object-cover w-full h-full"
+                            style={{ objectPosition: activeObjPos }}
                         />
                     )}
 
@@ -213,7 +251,7 @@ const YangiNashrlar = () => {
                     {/* Bottom reinforcement */}
                     <div className="absolute inset-0 hidden sm:block pointer-events-none bg-gradient-to-t from-[#0a0a0a]/60 via-transparent to-transparent" />
 
-                    {/* Editorial text block — key forces remount on change */}
+                    {/* Editorial text block */}
                     <div
                         key={activeIndex}
                         className="ticker-text-enter absolute inset-0 sm:right-auto flex flex-col justify-end sm:justify-center p-6 pb-12 pt-16 sm:p-0 sm:pl-12 lg:pl-16 w-full sm:w-auto sm:max-w-[55%] lg:max-w-[50%]"
@@ -226,7 +264,7 @@ const YangiNashrlar = () => {
                         </h2>
                         <div className="w-8 h-[2px] bg-[#c8973a] mb-3 sm:mb-4 shadow-[0_0_10px_rgba(200,151,58,0.5)]" />
 
-                        {/* TAG PILLS — genre indicators */}
+                        {/* TAG PILLS */}
                         {activeMeta.tags.length > 0 && (
                             <div key={`tags-${activeIndex}`} className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
                                 {activeMeta.tags.map((tag, i) => (
@@ -243,7 +281,7 @@ const YangiNashrlar = () => {
                             </div>
                         )}
 
-                        {/* DESCRIPTION — bold claim */}
+                        {/* DESCRIPTION */}
                         {locField(activeBook, "description", lang) && (
                             <p
                                 key={`desc-${activeIndex}`}
@@ -263,7 +301,7 @@ const YangiNashrlar = () => {
                         TEZDA
                     </div>
 
-                    {/* Progress bar — countdown when playing, static position when paused */}
+                    {/* Progress bar */}
                     <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/[0.08]">
                         {isPlaying ? (
                             <div
@@ -285,6 +323,10 @@ const YangiNashrlar = () => {
                 {displayBooks.map((book, index) => {
                     const thumbSrc = resolveImageUrl(book.cover_url);
                     const thumbColor = book.bg_color ? `hsl(${book.bg_color})` : "hsl(var(--accent))";
+                    const thumbMeta = BOOK_META[book.id] ?? { objectPositionD: "center 20%", objectPositionM: "center 15%", tags: [] };
+                    const thumbObjPos = book.focus_desktop_x != null && book.focus_desktop_y != null
+                        ? `${book.focus_desktop_x}% ${book.focus_desktop_y}%`
+                        : thumbMeta.objectPositionD;
                     const isActive = index === activeIndex;
                     return (
                         <div
@@ -301,6 +343,7 @@ const YangiNashrlar = () => {
                                     src={thumbSrc}
                                     alt=""
                                     className="object-cover w-full h-full"
+                                    style={{ objectPosition: thumbObjPos }}
                                 />
                             )}
                         </div>

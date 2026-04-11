@@ -9,9 +9,10 @@ interface ImageCropperProps {
   onImageSaved: (url: string) => void;
   aspectRatio?: number; // e.g. 2/3 for book covers, 16/9 for blog
   label?: string;
+  bucket?: string;
 }
 
-const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "Rasm" }: ImageCropperProps) => {
+const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "Rasm", bucket = "books" }: ImageCropperProps) => {
   const [src, setSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
@@ -69,7 +70,7 @@ const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "
       const fileName = `${Date.now()}-${crypto.randomUUID() || Math.random().toString(36).slice(2)}.webp`;
 
       const { data, error } = await supabase.storage
-        .from("books")
+        .from(bucket)
         .upload(fileName, blob, {
           contentType: "image/webp",
           cacheControl: "3600",
@@ -82,7 +83,7 @@ const ImageCropper = ({ currentUrl, onImageSaved, aspectRatio = 2 / 3, label = "
       }
 
       // Get the full public URL from Supabase
-      const { data: urlData } = supabase.storage.from("books").getPublicUrl(data.path);
+      const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(data.path);
 
       // Save the complete HTTP URL to the database
       onImageSaved(urlData.publicUrl);

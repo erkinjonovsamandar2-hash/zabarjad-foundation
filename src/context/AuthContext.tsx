@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   isAdmin: boolean;
+  isAdminLoading: boolean;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
@@ -69,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Tracks the last userId we fetched a role for.
@@ -89,21 +91,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         console.log("[AuthContext] Fetching session...");
 
-        // Failsafe: If getSession hangs (usually corrupted localStorage token), 
-        // force resolve it after 3s so the app can boot anonymously.
+        // Failsafe: If getSession hangs (slow network on cold start), resolve
+        // anonymously after 8s so the app can boot. We do NOT wipe localStorage
+        // here — a slow response is not the same as a corrupted token, and wiping
+        // it would log the admin out on every sluggish page load.
         const sessionPromise = supabase.auth.getSession();
-        const timeoutPromise = new Promise<{ data: { session: null }, error: null }>((resolve) =>
-          setTimeout(() => {
-            console.warn("[AuthContext] getSession hung for 3s. Wiping corrupted local storage to unblock app.");
-            localStorage.removeItem("supabase.auth.token");
+        let timer: ReturnType<typeof setTimeout>;
+        const timeoutPromise = new Promise<{ data: { session: null }, error: null }>((resolve) => {
+          timer = setTimeout(() => {
+            console.warn("[AuthContext] getSession took >8s — resolving anonymously to unblock app. Token preserved.");
             resolve({ data: { session: null }, error: null });
-          }, 3000)
-        );
+          }, 8000);
+        });
 
         const {
           data: { session },
           error,
         } = await Promise.race([sessionPromise, timeoutPromise]);
+        clearTimeout(timer!);
 
         if (error) throw error;
 
@@ -160,16 +165,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if (session?.user) {
           // New sign-in or token refresh — reset ref so role is re-fetched
-          // for the new user (handles account switching correctly)
+          setIsAdminLoading(true);
           if (lastCheckedUserIdRef.current !== session.user.id) {
             lastCheckedUserIdRef.current = null;
           }
           const admin = await fetchIsAdmin(session.user.id, lastCheckedUserIdRef);
-          if (isMounted) setIsAdmin(admin);
+          if (isMounted) {
+            setIsAdmin(admin);
+            setIsAdminLoading(false);
+          }
         } else {
           // SIGNED_OUT — clear everything
           lastCheckedUserIdRef.current = null;
           setIsAdmin(false);
+          setIsAdminLoading(false);
         }
       } catch (err) {
         console.warn("[AuthContext] onAuthStateChange handler error:", err);
@@ -207,11 +216,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await supabase.auth.signOut();
   };
 
-  console.log("Auth State:", loading);
-
   return (
     <AuthContext.Provider
-      value={{ user, session, isAdmin, loading, signIn, signOut }}
+      value={{ user, session, isAdmin, isAdminLoading, loading, signIn, signOut }}
     >
       {children}
     </AuthContext.Provider>

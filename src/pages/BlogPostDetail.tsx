@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { CalendarDays, Clock, ArrowLeft, Feather } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,10 +7,34 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import parchmentTexture from "@/assets/design/parchment-texture.png";
 
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  return isMobile;
+};
+
+const UZ_MONTHS = ["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"];
+const formatDate = (dateStr: string): string => {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return `${d.getDate()} ${UZ_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  } catch {
+    return dateStr;
+  }
+};
+
 const BlogPostDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { articles, loading } = useData();
+  const isMobile = useIsMobile();
 
   const article = useMemo(
     () => articles.find((a) => a.id === id && a.published),
@@ -110,7 +134,7 @@ const BlogPostDetail = () => {
             <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mb-10 font-medium uppercase tracking-wide border-b border-border/50 pb-6">
               <div className="flex items-center gap-1.5">
                 <CalendarDays className="h-3.5 w-3.5" />
-                <span>{article.date}</span>
+                <span>{formatDate(article.published_at)}</span>
               </div>
               {article.reading_time && (
                 <div className="flex items-center gap-1.5">
@@ -121,40 +145,50 @@ const BlogPostDetail = () => {
             </div>
 
             {/* Cover image */}
-            {article.cover_url && (
+            {article.image_url && (
               <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-10 shadow-2xl shadow-black/20">
                 <img
-                  src={article.cover_url}
+                  src={article.image_url}
                   alt={article.title}
                   className="w-full h-full object-cover"
+                  style={{
+                    objectPosition: isMobile
+                      ? `${article.focus_mobile_x ?? 50}% ${article.focus_mobile_y ?? 50}%`
+                      : `${article.focus_desktop_x ?? 50}% ${article.focus_desktop_y ?? 50}%`,
+                  }}
                 />
               </div>
             )}
 
-            {/* Excerpt / lead */}
-            {article.excerpt && (
-              <p className="text-lg sm:text-xl font-serif text-foreground/80 leading-relaxed border-l-2 border-gold/50 pl-5 mb-10 italic">
-                {article.excerpt}
-              </p>
-            )}
+            {/* ── Reading card ── */}
+            <div className="bg-card/70 dark:bg-card/60 backdrop-blur-md border border-border/50 rounded-2xl px-6 sm:px-10 py-8 sm:py-10 shadow-xl shadow-black/10">
 
-            {/* Body content */}
-            {paragraphs.length > 0 ? (
-              <div className="prose prose-neutral dark:prose-invert max-w-none space-y-5">
-                {paragraphs.map((para, i) => (
-                  <p
-                    key={i}
-                    className="font-serif text-base sm:text-[1.05rem] leading-[1.85] text-foreground/85"
-                  >
-                    {para}
-                  </p>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground italic font-serif">
-                Maqola matni hozircha mavjud emas.
-              </p>
-            )}
+              {/* Excerpt / lead */}
+              {article.excerpt && (
+                <p className="text-lg sm:text-xl font-serif text-foreground/80 leading-relaxed border-l-2 border-gold/50 pl-5 mb-8 italic">
+                  {article.excerpt}
+                </p>
+              )}
+
+              {/* Body content */}
+              {paragraphs.length > 0 ? (
+                <div className="space-y-5">
+                  {paragraphs.map((para, i) => (
+                    <p
+                      key={i}
+                      className="font-serif text-base sm:text-[1.05rem] leading-[1.9] text-foreground/90"
+                    >
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground italic font-serif">
+                  Maqola matni hozircha mavjud emas.
+                </p>
+              )}
+
+            </div>
 
             {/* ── Footer nav ── */}
             <div className="mt-16 pt-8 border-t border-border/50 flex justify-between items-center">

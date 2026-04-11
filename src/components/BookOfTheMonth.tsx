@@ -9,6 +9,34 @@ import { useLang, locField } from "@/context/LanguageContext";
 let bgUrl: string | undefined;
 try { bgUrl = new URL("@/assets/design/botm-bg.png", import.meta.url).href; } catch { bgUrl = undefined; }
 
+// ── Floating book visual — defined at module level so React never sees a new
+//    component type between renders (avoids unnecessary unmount/remount).
+const FloatingBookVisual = ({ coverUrl, title }: { coverUrl: string | null; title: string }) => (
+  <>
+    <div className="relative z-10 perspective-1000">
+      <div
+        className="relative w-48 sm:w-64 lg:w-80 aspect-[2/3] rounded-md sm:rounded-lg overflow-hidden border-l-[3px] border-white/20"
+        style={{
+          transform: "rotateY(-15deg) rotateX(5deg)",
+          boxShadow: `-20px 20px 40px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.15)`,
+        }}
+      >
+        {coverUrl ? (
+          <img src={coverUrl} alt={title} loading="lazy" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full bg-neutral-800" />
+        )}
+        <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
+      </div>
+    </div>
+    {/* Floor shadow */}
+    <div
+      className="w-44 sm:w-56 h-6 mt-6 opacity-30"
+      style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)" }}
+    />
+  </>
+);
+
 const BookOfTheMonth = () => {
   const { books, loading, booksError } = useData() as ReturnType<typeof useData> & { booksError?: boolean };
   const { lang } = useLang();
@@ -49,41 +77,12 @@ const BookOfTheMonth = () => {
 
   const coverUrl = getImageUrl(spotlightBook.cover_url);
   const glowColor = `hsl(${spotlightBook.bg_color ?? "40 65% 30%"})`;
+  const bookTitle = locField(spotlightBook, "title", lang);
 
   const genre = (spotlightBook as any).genre ?? (spotlightBook as any).category ?? "Psixologik roman";
   const pages = (spotlightBook as any).pages ?? (spotlightBook as any).page_count ?? "340";
 
   const description = (spotlightBook as any).description ?? "Shaxmat taxtasi ortidagi daholik, ruhiy inqirozlar va mutlaq g'alabaga bo'lgan mashaqqatli yo'l. Bu asar inson o'z-o'zini qanday qilib qayta yaratishi haqidagi eng kuchli hikoyalardan biridir.";
-
-  // ── Reusable Book Visual Component (For clever mobile ordering) ─────────────
-  const FloatingBookVisual = () => (
-    <>
-      <div
-        className="relative z-10 perspective-1000"
-      >
-        <div
-          className="relative w-48 sm:w-64 lg:w-80 aspect-[2/3] rounded-md sm:rounded-lg overflow-hidden border-l-[3px] border-white/20"
-          style={{
-            transform: "rotateY(-15deg) rotateX(5deg)",
-            boxShadow: `-20px 20px 40px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.15)`
-          }}
-        >
-          {coverUrl ? (
-            <img src={coverUrl} alt={locField(spotlightBook, "title", lang)} loading="lazy" className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full bg-neutral-800" />
-          )}
-          <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
-        </div>
-      </div>
-
-      {/* Floor Shadow */}
-      <div
-        className="w-44 sm:w-56 h-6 mt-6 opacity-30"
-        style={{ background: "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)" }}
-      />
-    </>
-  );
 
   return (
     <motion.section
@@ -152,7 +151,7 @@ const BookOfTheMonth = () => {
               initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
               className="flex lg:hidden flex-col items-center justify-center relative w-full mt-6 mb-0"
             >
-              <FloatingBookVisual />
+              <FloatingBookVisual coverUrl={coverUrl} title={bookTitle} />
             </motion.div>
 
             {/* 4. Badges */}
@@ -202,7 +201,7 @@ const BookOfTheMonth = () => {
 
           {/* ── Right Column (Floating Book) - DESKTOP ONLY ── */}
           <div className="hidden lg:flex lg:col-span-5 flex-col items-center justify-center relative">
-            <FloatingBookVisual />
+            <FloatingBookVisual coverUrl={coverUrl} title={bookTitle} />
           </div>
 
         </div>

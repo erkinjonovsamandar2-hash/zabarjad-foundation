@@ -53,7 +53,7 @@ const CuratedLibrary = () => {
     return books.filter((b) => {
       if (activeTab === "all") return true;
       if (activeTab === "featured") return b.featured === true;
-      if (activeTab === "new") return b.sort_order !== null && b.sort_order <= 5;
+      if (activeTab === "new") return b.category === "new";
       return b.category === activeTab;
     });
   }, [books, activeTab]);

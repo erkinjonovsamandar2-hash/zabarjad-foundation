@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -117,7 +115,10 @@ export default function GlobalClassics() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
-  const displayBooks = useMemo(() => books.slice(0, 4), [books]);
+  const displayBooks = useMemo(() => {
+    const goldBooks = books.filter(b => b.category === "gold");
+    return goldBooks.length > 0 ? goldBooks.slice(0, 4) : books.slice(0, 4);
+  }, [books]);
   const total = displayBooks.length;
   const activeBook = displayBooks[activeIndex];
   const displayIndex = isMobile ? mobileIndex : activeIndex;
