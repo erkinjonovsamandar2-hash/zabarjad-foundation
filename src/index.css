@@ -789,6 +789,25 @@ COMPONENT MAP (Pre-Flight Audit)
     }
   }
 
+  /* ── Progressive image fade-in ───────────────────────────────────────────────
+     Pattern: start at opacity-0, add class "loaded" via onLoad.
+     The bg-muted wrapper acts as the placeholder colour — no layout shift.
+     Users see a smooth bg-muted → image dissolve instead of a hard pop-in.
+     prefers-reduced-motion: skip the animation, show image instantly.        */
+  .img-fade {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .img-fade.loaded {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .img-fade {
+      opacity: 1;
+      transition: none;
+    }
+  }
+
   /* ── YangiNashrlar Mosaic Grid ────────────────────────────────────────────── */
   .yangi-mosaic-grid {
     display: grid;
