@@ -59,26 +59,26 @@ const Footer = () => {
               <img
                 src="/Logo-blue.png"
                 alt="Booktopia Logo"
-                className="h-9 w-auto object-contain"
+                className="h-10 w-auto object-contain"
               />
             </Link>
 
-            <p className="font-serif text-[0.95rem] leading-[1.8] text-[rgba(255,255,255,0.6)] max-w-[280px] mb-6">
+            <p className="font-serif text-[1.05rem] leading-[1.8] text-[rgba(255,255,255,0.6)] max-w-[280px] mb-6">
               Jahon va o'zbek adabiyotining eng sara durdonalarini sifatli tarjima va yuqori
               poligrafiya darajasida o'quvchilarga taqdim etuvchi premium nashriyot.
             </p>
 
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-3 font-sans text-[0.8rem] font-medium text-[rgba(255,255,255,0.45)]">
-                <MapPin className="w-4 h-4 text-[#00A3FF] shrink-0" />
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
+                <MapPin className="w-5 h-5 text-[#00A3FF] shrink-0" />
                 <span className="truncate">Uchtepa tumani, G9A-mavze, 20-uy</span>
               </div>
-              <div className="flex items-center gap-3 font-sans text-[0.8rem] font-medium text-[rgba(255,255,255,0.45)]">
-                <Phone className="w-4 h-4 text-[#00A3FF] shrink-0" />
+              <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
+                <Phone className="w-5 h-5 text-[#00A3FF] shrink-0" />
                 <span className="truncate">+998770164455</span>
               </div>
-              <div className="flex items-center gap-3 font-sans text-[0.8rem] font-medium text-[rgba(255,255,255,0.45)]">
-                <Mail className="w-4 h-4 text-[#00A3FF] shrink-0" />
+              <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
+                <Mail className="w-5 h-5 text-[#00A3FF] shrink-0" />
                 <span className="truncate">info@booktopia.uz</span>
               </div>
             </div>
@@ -89,51 +89,51 @@ const Footer = () => {
 
             {/* Faoliyat */}
             <div className="footer-link-col flex flex-col">
-              <h4 className="font-sans text-[0.75rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-5">
+              <h4 className="font-sans text-[0.9rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-6">
                 Faoliyat
               </h4>
-              <Link to="/library" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/library" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Barcha kitoblar
               </Link>
-              <Link to="/library?tab=new" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/library?tab=new" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Yangi nashrlar
               </Link>
-              <Link to="/authors" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/authors" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Mualliflar va Tarjimonlar
               </Link>
             </div>
 
             {/* Nashriyot */}
             <div className="footer-link-col flex flex-col">
-              <h4 className="font-sans text-[0.75rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-5">
+              <h4 className="font-sans text-[0.9rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-6">
                 Nashriyot
               </h4>
-              <Link to="/biz-haqimizda" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/biz-haqimizda" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Biz haqimizda
               </Link>
-              <Link to="/blog" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/blog" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Booktopia Kundaligi
               </Link>
-              <Link to="/aloqa" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/aloqa" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Aloqa va Hamkorlik
               </Link>
             </div>
 
             {/* Huquqiy */}
             <div className="footer-link-col flex flex-col">
-              <h4 className="font-sans text-[0.75rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-5">
+              <h4 className="font-sans text-[0.9rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-6">
                 Huquqiy
               </h4>
-              <Link to="/oferta" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/oferta" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Ommaviy ofеrta
               </Link>
-              <Link to="/maxfiylik" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/maxfiylik" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Maxfiylik siyosati
               </Link>
-              <Link to="/shartlar" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/shartlar" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Foydalanish shartlari
               </Link>
-              <Link to="/yetkazish" className="block font-sans text-[0.85rem] font-medium text-[rgba(255,255,255,0.55)] mb-3 transition-colors duration-200 hover:text-white outline-none">
+              <Link to="/yetkazish" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Yetkazib berish
               </Link>
             </div>
