@@ -77,9 +77,12 @@ const HeroCard = ({ article, navigate }: { article: Card; navigate: (p: string) 
         <img
           src={article.image}
           alt={article.title}
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           style={{ objectPosition: objPos }}
+          onLoad={(e) => e.currentTarget.classList.add("loaded")}
         />
       ) : (
         <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
@@ -137,8 +140,10 @@ const StandardCard = ({ article, index, navigate }: { article: Card; index: numb
           src={article.image}
           alt={article.title}
           loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
+          decoding="async"
+          className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
           style={{ objectPosition: objPos }}
+          onLoad={(e) => e.currentTarget.classList.add("loaded")}
         />
       ) : (
         <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">

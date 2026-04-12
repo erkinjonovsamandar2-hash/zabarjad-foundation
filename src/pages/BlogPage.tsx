@@ -64,9 +64,12 @@ const HeroCard = ({ article }: { article: Card }) => {
           <img
             src={article.image}
             alt={article.title}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             style={{ objectPosition: objPos }}
+            onLoad={(e) => e.currentTarget.classList.add("loaded")}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
@@ -120,8 +123,10 @@ const MidCard = ({ article, index }: { article: Card; index: number }) => {
       <div className="relative aspect-[16/9] overflow-hidden bg-muted shrink-0">
         {article.image ? (
           <img src={article.image} alt={article.title} loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
-            style={{ objectPosition: objPos }} />
+            decoding="async"
+            className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
+            style={{ objectPosition: objPos }}
+            onLoad={(e) => e.currentTarget.classList.add("loaded")} />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
             <span className="text-4xl opacity-10 select-none">📖</span>
@@ -166,8 +171,10 @@ const SmallCard = ({ article, index }: { article: Card; index: number }) => {
       <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-muted">
         {article.image ? (
           <img src={article.image} alt={article.title} loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            style={{ objectPosition: objPos }} />
+            decoding="async"
+            className="img-fade w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            style={{ objectPosition: objPos }}
+            onLoad={(e) => e.currentTarget.classList.add("loaded")} />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
             <span className="text-xl opacity-20 select-none">📖</span>

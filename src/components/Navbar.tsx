@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon, ChevronDown, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SearchModal from "./SearchModal";
@@ -40,7 +40,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { scrollYProgress } = useScroll();
+
 
   const { t } = useLang();
   const location = useLocation();
@@ -88,10 +88,8 @@ const Navbar = () => {
 
   return (
     <>
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] bg-primary origin-left z-[1000] will-change-transform transform-gpu"
-        style={{ scaleX: scrollYProgress }}
-      />
+      {/* CSS-only scroll progress bar — see index.css .scroll-progress-bar */}
+      <div className="scroll-progress-bar" aria-hidden="true" />
       <nav className="fixed top-0 left-0 right-0 z-[999] bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
 

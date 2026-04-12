@@ -236,9 +236,12 @@ const YangiNashrlar = () => {
                             key={`img-${activeIndex}`}
                             src={activeCoverSrc}
                             alt={activeTitle}
-                            loading="lazy"
-                            className="absolute inset-0 object-cover w-full h-full"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            className="img-fade absolute inset-0 object-cover w-full h-full"
                             style={{ objectPosition: activeObjPos }}
+                            onLoad={(e) => e.currentTarget.classList.add("loaded")}
                         />
                     )}
 
@@ -342,8 +345,11 @@ const YangiNashrlar = () => {
                                 <img
                                     src={thumbSrc}
                                     alt=""
-                                    className="object-cover w-full h-full"
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="img-fade object-cover w-full h-full"
                                     style={{ objectPosition: thumbObjPos }}
+                                    onLoad={(e) => e.currentTarget.classList.add("loaded")}
                                 />
                             )}
                         </div>

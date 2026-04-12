@@ -175,8 +175,10 @@ const CuratedLibrary = () => {
                         <img
                           src={imgSrc}
                           alt={locField(book, "title", lang)}
-                          className="w-full h-full object-cover"
+                          className="img-fade w-full h-full object-cover"
                           loading="lazy"
+                          decoding="async"
+                          onLoad={(e) => e.currentTarget.classList.add("loaded")}
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = "none";
                           }}

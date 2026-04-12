@@ -24,6 +24,8 @@ export default {
         serif:   ["Neuton", "serif"],
         sans:    ["Inter", "sans-serif"],
         got:     ['"GameOfThrones"', "serif"],
+        // font-lora → Lora (readable literary serif for quiz body text)
+        lora:    ["Lora", "Georgia", "serif"],
       },
       colors: {
         // ── FIXED: <alpha-value> injection enables bg-x/50, text-x/80, etc. ──

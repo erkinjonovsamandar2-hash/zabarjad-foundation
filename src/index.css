@@ -46,7 +46,7 @@ COMPONENT MAP (Pre-Flight Audit)
 ================================================================================
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
 /* stylelint-disable at-rule-no-unknown */
 @tailwind base;
@@ -396,7 +396,11 @@ COMPONENT MAP (Pre-Flight Audit)
   }
 
   /* ── Heading refinements ─────────────────────────────────────────────────── */
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     text-wrap: balance;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
@@ -407,31 +411,69 @@ COMPONENT MAP (Pre-Flight Audit)
     outline-offset: 3px;
     border-radius: 4px;
   }
+
   :focus:not(:focus-visible) {
     outline: none;
   }
 
   /* ── Scrollbar ───────────────────────────────────────────────────────────── */
-  ::-webkit-scrollbar       { width: 3px; }
-  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--primary) / 0.25);
     border-radius: 99px;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.5);
+    border-radius: 99px;
   }
+
 
 }
 
 /* ── Component Utilities ──────────────────────────────────────────────────── */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: hsl(var(--primary));
+  transform-origin: left center;
+  z-index: 1000;
+  will-change: transform;
+  pointer-events: none;
+  animation: scrollProgress linear;
+  animation-timeline: scroll();
+  animation-range: 0% 100%;
+}
+
+@keyframes scrollProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 @layer components {
   .glass-card {
     background: hsl(var(--glass-bg));
@@ -628,6 +670,7 @@ COMPONENT MAP (Pre-Flight Audit)
     padding-right: 1rem;
     padding-top: 4rem;
     padding-bottom: 4rem;
+    contain: layout style;
   }
 
   @media (min-width: 768px) {
@@ -798,9 +841,11 @@ COMPONENT MAP (Pre-Flight Audit)
     opacity: 0;
     transition: opacity 0.35s ease;
   }
+
   .img-fade.loaded {
     opacity: 1;
   }
+
   @media (prefers-reduced-motion: reduce) {
     .img-fade {
       opacity: 1;
@@ -836,8 +881,15 @@ COMPONENT MAP (Pre-Flight Audit)
 
 /* YangiNashrlar Ticker */
 @keyframes tickerFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .ticker-text-enter {
@@ -845,8 +897,13 @@ COMPONENT MAP (Pre-Flight Audit)
 }
 
 @keyframes tickerCountdown {
-  from { width: 0%; }
-  to   { width: 100%; }
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 .ticker-countdown {
@@ -854,6 +911,12 @@ COMPONENT MAP (Pre-Flight Audit)
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ticker-text-enter { animation: none; }
-  .ticker-countdown  { animation: none; width: 100%; }
+  .ticker-text-enter {
+    animation: none;
+  }
+
+  .ticker-countdown {
+    animation: none;
+    width: 100%;
+  }
 }

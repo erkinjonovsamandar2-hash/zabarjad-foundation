@@ -14,9 +14,9 @@ const RevealOnScroll = ({ children, className = "", delay = 0 }: RevealProps) =>
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30, clipPath: "inset(10% 0 0 0)" }} // Start slightly hidden/clipped
-      animate={isInView ? { opacity: 1, y: 0, clipPath: "inset(0 0 0 0)" } : {}}
-      transition={{ duration: 0.8, delay: delay, ease: [0.22, 1, 0.36, 1] }} // "Apple-like" smooth ease
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.65, delay: delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}

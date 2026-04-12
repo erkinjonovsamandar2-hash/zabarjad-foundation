@@ -150,12 +150,16 @@ const BlogPostDetail = () => {
                 <img
                   src={article.image_url}
                   alt={article.title}
-                  className="w-full h-full object-cover"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="img-fade w-full h-full object-cover"
                   style={{
                     objectPosition: isMobile
                       ? `${article.focus_mobile_x ?? 50}% ${article.focus_mobile_y ?? 50}%`
                       : `${article.focus_desktop_x ?? 50}% ${article.focus_desktop_y ?? 50}%`,
                   }}
+                  onLoad={(e) => e.currentTarget.classList.add("loaded")}
                 />
               </div>
             )}

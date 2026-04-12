@@ -364,13 +364,12 @@ const MiniShelf = ({
               key={book.id}
               onClick={() => onSelect(i)}
               aria-label={locField(book, "title", lang)}
-              className="relative overflow-hidden rounded-[5px] focus:outline-none shrink-0 cursor-pointer snap-center group will-change-transform w-[60px] sm:w-[76px] aspect-[2/3]"
-              whileHover={!isActive ? { y: -4, filter: "grayscale(0%)" } : {}}
+              className={`relative overflow-hidden rounded-[5px] focus:outline-none shrink-0 cursor-pointer snap-center group will-change-transform w-[60px] sm:w-[76px] aspect-[2/3] transition-[filter] duration-300 ${!isActive ? "grayscale-[40%]" : "grayscale-0"}`}
+              whileHover={!isActive ? { y: -4 } : {}}
               animate={{
                 scale: isActive ? 1.15 : Math.max(0.75, 1 - diff * 0.08),
                 opacity: isActive ? 1 : Math.max(0.5, 1 - diff * 0.15),
                 y: isActive ? -6 : 0,
-                filter: isActive ? "grayscale(0%)" : "grayscale(40%)",
               }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
               style={{
