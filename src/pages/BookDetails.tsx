@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import type { Book } from "@/context/DataContext";
+import { useData } from "@/context/DataContext";
 import { motion, useScroll, useSpring } from "framer-motion";
 
 function ScrollProgress() {
@@ -28,24 +29,34 @@ const BookDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { lang } = useLang();
+  const { books, newBooks } = useData();
 
-  // Fetch book from Supabase
+  // Find book locally to prevent loading flash and enable smooth layout transition
+  const cachedBook = books.find(b => b.id === id) || (newBooks as any[]).find((b: any) => b.id === id);
+
+  // Fetch book from Supabase (runs in background if we have cachedBook)
   const { data: book, isLoading, error } = useQuery<Book>({
     queryKey: ["book", id],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Allow fallback check in new_books if not found in books, just to be safe
+      let { data, error } = await supabase
         .from("books")
         .select("*")
         .eq("id", id)
         .single();
 
-      if (error) throw error;
+      if (error && error.code === "PGRST116") {
+        const { data: newData, error: newErr } = await (supabase as any).from("new_books").select("*").eq("id", id).single();
+        if (!newErr) data = newData;
+      } else if (error) throw error;
+
       return data as Book;
     },
+    initialData: cachedBook ? (cachedBook as Book) : undefined,
     enabled: !!id,
   });
 
-  if (isLoading) {
+  if (isLoading && !book) {
     return (
       <PageTransition>
         <div className="min-h-screen bg-background">

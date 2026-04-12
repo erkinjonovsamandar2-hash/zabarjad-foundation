@@ -63,15 +63,32 @@ const LibraryPage = () => {
   const [active, setActive] = useState<string>("all");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
+  // Derive featured books from the database.
+  // Fallback to the hardcoded constant only if the DB has zero featured books.
+  const carouselBooks = useMemo(() => {
+    const dbFeatured = books.filter((b) => b.featured);
+    if (dbFeatured.length > 0) {
+      return dbFeatured.map((b) => ({
+        id: b.id,
+        title: locField(b, "title", lang) || "Kitob nomi mavjud emas",
+        author: locField(b, "author", lang) || "Noma'lum muallif",
+        description: locField(b, "description", lang) || "Ushbu kitob haqida ma'lumot mavjud emas.",
+        coverImage: b.cover_url || "https://backend.book.uz/user-api/img/img-file-f2a929a2a32d5bb4bb4e05dcd8f8670c.jpg",
+      }));
+    }
+    return FEATURED_BOOKS;
+  }, [books, lang]);
+
   // Auto-rotate featured books every 5 seconds
   useEffect(() => {
+    if (carouselBooks.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % FEATURED_BOOKS.length);
+      setCurrentIndex((prev) => (prev + 1) % carouselBooks.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [carouselBooks.length]);
 
-  const featuredBook = FEATURED_BOOKS[currentIndex];
+  const featuredBook = carouselBooks[currentIndex];
 
   // FIX: Memoized filter — only recomputes when books or active changes.
   // Previously ran inline on every render, blocking the main thread.
@@ -102,8 +119,13 @@ const LibraryPage = () => {
               <img
                 src={librarySeal}
                 alt="Library Seal"
-                className="w-full h-full object-contain drop-shadow-2xl"
+                className="w-full h-full object-contain"
               />
+            </div>
+
+            {/* Static Glow Aura (Moved outside animation to prevent GPU layout trashing) */}
+            <div className="absolute inset-y-0 left-0 w-1/2 flex items-center justify-center pointer-events-none z-0">
+              <div className="w-64 h-64 bg-primary/20 blur-[60px] rounded-full" />
             </div>
 
             <AnimatePresence mode="wait">
@@ -114,11 +136,10 @@ const LibraryPage = () => {
                 animate={{ opacity: 1, y: 0, rotate: 0 }}
                 exit={{ opacity: 0, y: 50, rotate: 5 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="flex-1 flex justify-center items-center relative z-10"
+                className="flex-[1] flex justify-center items-center relative z-10"
               >
-                <div className="absolute inset-0 bg-primary/20 blur-[60px] rounded-full scale-75" />
                 {/* FIX: aspect-[2/3] + bg-muted wrapper prevents layout shift */}
-                <div className="w-48 md:w-64 aspect-[2/3] bg-muted rounded-md shadow-2xl relative z-10 border border-border/20 overflow-hidden">
+                <div className="w-48 md:w-64 aspect-[2/3] bg-muted rounded-md shadow-2xl relative z-10 border border-border/20 overflow-hidden transform-gpu">
                   <img
                     src={featuredBook.coverImage}
                     alt={featuredBook.title}
@@ -139,32 +160,34 @@ const LibraryPage = () => {
                 <span className="text-gold font-bold tracking-[0.2em] text-[10px] sm:text-xs uppercase mb-4">
                   Hafta Tanlovi
                 </span>
-                <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground mb-4 leading-tight">
+                <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground mb-4 leading-tight line-clamp-2">
                   {featuredBook.title}
                 </h2>
                 <p className="text-muted-foreground text-base md:text-lg mb-8 line-clamp-3 max-w-xl">
                   {featuredBook.description}
                 </p>
-                <button className="btn-glass px-8 py-3.5">
+                <Link to={`/book/${featuredBook.id}`} className="btn-glass px-8 py-3.5">
                   Kitob haqida
-                </button>
+                </Link>
               </motion.div>
             </AnimatePresence>
 
             {/* Pagination Dots */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-              {FEATURED_BOOKS.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                    ? "bg-primary w-8"
-                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-2"
-                    }`}
-                  aria-label={`Go to book ${index + 1}`}
-                />
-              ))}
-            </div>
+            {carouselBooks.length > 1 && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {carouselBooks.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                      ? "bg-primary w-8"
+                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-2"
+                      }`}
+                    aria-label={`Go to book ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* ── HEADER + FILTERS + PDF BUTTON ────────────────────────────── */}
