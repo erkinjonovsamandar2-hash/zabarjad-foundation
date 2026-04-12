@@ -1,6 +1,6 @@
 // @refresh reset
 import { useState, useEffect } from "react";
-import { Menu, X, Sun, Moon, ChevronDown, Search } from "lucide-react";
+import { Menu, X, Sun, Moon, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LanguageContext";
@@ -10,35 +10,9 @@ import SearchModal from "./SearchModal";
 // ── Asset Imports ──────────────────────────────────────────────────────────
 // ADDED: logo image import from src/assets
 import logoImg from "@/assets/Logo-blue.png";
-import jahonImg from "@/assets/nav/jahon.png";
-import bolalarImg from "@/assets/nav/bolalar.png";
-import ozbekImg from "@/assets/nav/ozbek.png";
-
-// ── Mega Menu Categories ───────────────────────────────────────────────────
-const MEGA_MENU_CATEGORIES = [
-  {
-    id: "jahon",
-    title: "Jahon Adabiyoti",
-    desc: "Dunyo klassiklari va zamonaviy asarlar",
-    img: jahonImg,
-  },
-  {
-    id: "bolalar",
-    title: "Bolalar Adabiyoti",
-    desc: "Kichik o'quvchilar uchun ajoyib hikoyalar",
-    img: bolalarImg,
-  },
-  {
-    id: "ozbek",
-    title: "O'zbek Adabiyoti",
-    desc: "Milliy adabiyotimizning eng sara asarlari",
-    img: ozbekImg,
-  },
-] as const;
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
 
@@ -112,29 +86,7 @@ const Navbar = () => {
             {navLinks.filter((l) => l.href !== "/spotlight").map((link) => (
               <li key={link.href}>
 
-                {link.href === "/library" ? (
-                  /* Mega Menu Trigger */
-                  <div
-                    onMouseEnter={() => setMegaMenuOpen(true)}
-                    onMouseLeave={() => setMegaMenuOpen(false)}
-                    className="py-2 cursor-pointer group/nav"
-                  >
-                    <Link
-                      to={link.href}
-                      className={`
-                        inline-flex items-center gap-1.5 relative
-                        font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
-                        ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
-                      `}
-                    >
-                      {link.label}
-                      <ChevronDown
-                        className={`h-4 w-4 transition-transform duration-300 ${megaMenuOpen ? "rotate-180" : ""}`}
-                      />
-                    </Link>
-                  </div>
-
-                ) : link.href === "/quiz" ? (
+                {link.href === "/quiz" ? (
                   /* Highlighted gradient link */
                   <Link
                     to={link.href}
@@ -222,59 +174,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ── Desktop Mega Menu ── */}
-        <AnimatePresence>
-          {megaMenuOpen && (
-            <div
-              className="absolute left-0 right-0 top-full hidden md:flex justify-center pt-2"
-              onMouseEnter={() => setMegaMenuOpen(true)}
-              onMouseLeave={() => setMegaMenuOpen(false)}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="w-[96vw] max-w-4xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border border-border/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] rounded-2xl p-6 lg:p-8 z-[1000] will-change-transform transform-gpu"
-              >
-                <div className="grid grid-cols-3 gap-6 lg:gap-8">
-                  {MEGA_MENU_CATEGORIES.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      to={`/library?category=${cat.id}`}
-                      className="group flex flex-col p-3 rounded-xl hover:bg-muted/50 transition-colors"
-                      onClick={() => setMegaMenuOpen(false)}
-                    >
-                      <div className="w-full h-32 bg-primary/10 rounded-xl mb-4 overflow-hidden border border-border/30 shadow-inner relative">
-                        {cat.img ? (
-                          <img
-                            src={cat.img}
-                            alt={cat.title}
-                            className="w-full h-full object-cover transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center transition-transform duration-300">
-                            <span className="text-4xl opacity-40 group-hover:opacity-70 transition-opacity">📚</span>
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
-                      </div>
 
-                      <h3 className="font-heading tracking-wide leading-tight text-base lg:text-lg text-foreground group-hover:text-accent transition-colors mb-1.5">
-                        {cat.title}
-                      </h3>
-                      <p className="text-xs text-foreground/70 leading-relaxed font-serif">
-                        {cat.desc}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Mobile Menu ── */}
         <AnimatePresence>
           {open && (
             <motion.div
