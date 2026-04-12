@@ -4,10 +4,10 @@ import { Save } from "lucide-react";
 
 // Archetype definitions (labels + accent colours for the admin UI)
 const ARCHETYPES = [
-  { key: "faylasuf",     label: "Kechgi Faylasuf",   sub: "The Midnight Philosopher", color: "#C9A227" },
-  { key: "kashfiyotchi", label: "Botir Kashfiyotchi", sub: "The Brave Explorer",       color: "#10B981" },
-  { key: "ovchi",        label: "Sir Ovchisi",        sub: "The Mystery Hunter",       color: "#6366F1" },
-  { key: "doktor",       label: "Qalb Doktori",       sub: "The Heart Healer",         color: "#F43F5E" },
+  { key: "faylasuf", label: "Kechgi Faylasuf", sub: "The Midnight Philosopher", color: "#C9A227" },
+  { key: "kashfiyotchi", label: "Botir Kashfiyotchi", sub: "The Brave Explorer", color: "#10B981" },
+  { key: "ovchi", label: "Sir Ovchisi", sub: "The Mystery Hunter", color: "#6366F1" },
+  { key: "doktor", label: "Qalb Doktori", sub: "The Heart Healer", color: "#F43F5E" },
 ] as const;
 
 // Per-archetype form state: 2 books + 2 hook texts
@@ -29,16 +29,16 @@ function extractRows(paths: QuizConfig["paths"], books: { id: string }[]): Recor
     const p2 = paths.find(p => p.key === `${key}_2`);
     return {
       bookId1: p1?.bookId ?? fallback,
-      hook1:   p1?.reason  ?? "",
+      hook1: p1?.reason ?? "",
       bookId2: p2?.bookId ?? fallback,
-      hook2:   p2?.reason  ?? "",
+      hook2: p2?.reason ?? "",
     };
   };
   return {
-    faylasuf:     row("faylasuf"),
+    faylasuf: row("faylasuf"),
     kashfiyotchi: row("kashfiyotchi"),
-    ovchi:        row("ovchi"),
-    doktor:       row("doktor"),
+    ovchi: row("ovchi"),
+    doktor: row("doktor"),
   };
 }
 
@@ -49,8 +49,8 @@ function buildPaths(rows: Record<ArchKey, ArchRow>, existing: QuizConfig["paths"
   const arch: QuizConfig["paths"] = [];
   for (const a of ARCHETYPES) {
     const r = rows[a.key];
-    if (r.bookId1) arch.push({ key: a.key,          bookId: r.bookId1, reason: r.hook1 });
-    if (r.bookId2) arch.push({ key: `${a.key}_2`,   bookId: r.bookId2, reason: r.hook2 });
+    if (r.bookId1) arch.push({ key: a.key, bookId: r.bookId1, reason: r.hook1 });
+    if (r.bookId2) arch.push({ key: `${a.key}_2`, bookId: r.bookId2, reason: r.hook2 });
   }
   return [...arch, ...other];
 }
@@ -127,7 +127,7 @@ const QuizManager = () => {
                   <input
                     value={r.hook1}
                     onChange={e => update(a.key, "hook1", e.target.value)}
-                    placeholder='Kitobni qiziqtiruvchi ibora — "Bu kitobni o\'qib..."'
+                    placeholder={"Kitobni qiziqtiruvchi ibora — \"Bu kitobni o'qib...\""}
                     className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
                   />
                 </div>
