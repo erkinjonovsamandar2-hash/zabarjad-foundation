@@ -460,7 +460,7 @@ const MatchmakerQuiz = () => {
                               transition-[border-color,box-shadow] duration-200 will-change-transform">
                             <div className="w-14 h-14 mb-3 rounded-full overflow-hidden bg-background/80 flex items-center justify-center shrink-0
                               border-2 border-border/50 group-hover:border-foreground/30 transition-[border-color] duration-200">
-                              <img src={opt.img} alt={opt.label} className="w-9 h-9 object-contain" draggable={false}/>
+                              <img src={opt.img} alt={opt.label} className="w-9 h-9 object-contain" draggable={false} />
                             </div>
                             <p className="font-heading text-[14px] sm:text-[15px] font-bold leading-tight mb-1
                               text-foreground group-hover:text-accent transition-colors duration-300 tracking-wide">
@@ -471,244 +471,244 @@ const MatchmakerQuiz = () => {
                             </p>
                           </motion.button>
                         ))}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </motion.div>
             )}
 
-          {/* ── RESULT ────────────────────────────────────────────────────── */}
-          {phase === "result" && result && arch && resolved && (
-            <motion.div key="result"
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.55, ease: "easeOut" }}>
+            {/* ── RESULT ────────────────────────────────────────────────────── */}
+            {phase === "result" && result && arch && resolved && (
+              <motion.div key="result"
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.55, ease: "easeOut" }}>
 
-              <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/20"
-                style={{ background: arch.certBg }}>
+                <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/20"
+                  style={{ background: arch.certBg }}>
 
-                {/* Archetype identity */}
-                <div className="p-8 sm:p-10 text-center">
-                  <motion.div initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.15, duration: 0.65, type: "spring", stiffness: 180, damping: 18 }}
-                    className="relative inline-block mb-6">
-                    <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto shadow-2xl"
-                      style={{ border: `4px solid ${arch.accentColor}` }}>
-                      <img src={arch.img} alt={arch.name} className="w-full h-full object-cover" />
-                    </div>
-                    <div className="absolute inset-0 rounded-full -z-10 blur-2xl opacity-20"
-                      style={{ background: arch.accentColor, transform: "scale(1.5)" }} />
-                  </motion.div>
-
-                  <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.5 }}>
-                    <p className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] mb-2"
-                      style={{ color: arch.primaryColor }}>Sizning kitobxon turingiz</p>
-                    <h2 className="font-heading text-3xl sm:text-4xl font-black tracking-wide mb-1 leading-tight"
-                      style={{ color: arch.certBorder }}>{arch.name}</h2>
-                    <p className="font-sans text-xs font-bold tracking-[0.18em] mb-4 uppercase opacity-50"
-                      style={{ color: arch.primaryColor }}>{arch.nameEn}</p>
-                    <p className="font-lora italic text-base leading-relaxed max-w-sm mx-auto mb-5"
-                      style={{ color: arch.certBorder, opacity: 0.8 }}>{arch.tagline}</p>
-
-                    {/* Match meter */}
-                    <div className="max-w-xs mx-auto mb-5">
-                      <div className="flex justify-between items-baseline mb-1.5">
-                        <span className="font-sans text-[10px] uppercase tracking-widest font-bold opacity-40"
-                          style={{ color: arch.certBorder }}>Moslik darajasi</span>
-                        <span className="font-heading text-xl font-black" style={{ color: arch.accentColor }}>
-                          {result.matchPct}%
-                        </span>
+                  {/* Archetype identity */}
+                  <div className="p-8 sm:p-10 text-center">
+                    <motion.div initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.15, duration: 0.65, type: "spring", stiffness: 180, damping: 18 }}
+                      className="relative inline-block mb-6">
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto shadow-2xl"
+                        style={{ border: `4px solid ${arch.accentColor}` }}>
+                        <img src={arch.img} alt={arch.name} className="w-full h-full object-cover" />
                       </div>
-                      <div className="h-2 rounded-full overflow-hidden" style={{ background: `${arch.certBorder}18` }}>
-                        <motion.div className="h-full rounded-full"
-                          initial={{ width: "0%" }} animate={{ width: `${result.matchPct}%` }}
-                          transition={{ delay: 0.65, duration: 1, ease: "easeOut" }}
-                          style={{ background: arch.accentColor }} />
-                      </div>
-                    </div>
+                      <div className="absolute inset-0 rounded-full -z-10 blur-2xl opacity-20"
+                        style={{ background: arch.accentColor, transform: "scale(1.5)" }} />
+                    </motion.div>
 
-                    <p className="font-lora text-sm leading-relaxed max-w-sm mx-auto"
-                      style={{ color: arch.certBorder, opacity: 0.65 }}>{arch.desc}</p>
-                  </motion.div>
-                </div>
+                    <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4, duration: 0.5 }}>
+                      <p className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] mb-2"
+                        style={{ color: arch.primaryColor }}>Sizning kitobxon turingiz</p>
+                      <h2 className="font-heading text-3xl sm:text-4xl font-black tracking-wide mb-1 leading-tight"
+                        style={{ color: arch.certBorder }}>{arch.name}</h2>
+                      <p className="font-sans text-xs font-bold tracking-[0.18em] mb-4 uppercase opacity-50"
+                        style={{ color: arch.primaryColor }}>{arch.nameEn}</p>
+                      <p className="font-lora italic text-base leading-relaxed max-w-sm mx-auto mb-5"
+                        style={{ color: arch.certBorder, opacity: 0.8 }}>{arch.tagline}</p>
 
-                <div className="h-px mx-8" style={{ background: `${arch.certBorder}15` }} />
-
-                {/* Two book recommendations */}
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.75, duration: 0.45 }}
-                  className="p-6 sm:p-8 space-y-4">
-
-                  <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em]"
-                    style={{ color: arch.primaryColor }}>Siz uchun tavsiyalar</p>
-
-                  {[
-                    { book: resolved.book1, hook: resolved.hook1, label: "Birinchi tavsiya" },
-                    { book: resolved.book2, hook: resolved.hook2, label: "Ikkinchi tavsiya" },
-                  ].map(({ book, hook, label }, idx) => book ? (
-                    <div key={idx}
-                      className="flex items-start gap-4 rounded-2xl p-4 transition-all duration-200 cursor-pointer group hover:opacity-90"
-                      style={{ background: `${arch.certBorder}08`, border: `1px solid ${arch.certBorder}18` }}
-                      onClick={() => navigate(`/book/${(book as any).id}`)}>
-
-                      {/* Book cover */}
-                      <div className="shrink-0 w-14 sm:w-16">
-                        <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg"
-                          style={{ transform: "rotateY(-10deg)", boxShadow: "-5px 6px 14px rgba(0,0,0,0.18)" }}>
-                          {getImgUrl((book as any).cover_url) ? (
-                            <img src={getImgUrl((book as any).cover_url)!}
-                              alt={locField(book, "title", lang)} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center"
-                              style={{ background: arch.primaryColor }}>
-                              <BookOpen className="w-5 h-5 opacity-25 text-white" />
-                            </div>
-                          )}
-                          <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-r from-black/30 to-transparent" />
+                      {/* Match meter */}
+                      <div className="max-w-xs mx-auto mb-5">
+                        <div className="flex justify-between items-baseline mb-1.5">
+                          <span className="font-sans text-[10px] uppercase tracking-widest font-bold opacity-40"
+                            style={{ color: arch.certBorder }}>Moslik darajasi</span>
+                          <span className="font-heading text-xl font-black" style={{ color: arch.accentColor }}>
+                            {result.matchPct}%
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full overflow-hidden" style={{ background: `${arch.certBorder}18` }}>
+                          <motion.div className="h-full rounded-full"
+                            initial={{ width: "0%" }} animate={{ width: `${result.matchPct}%` }}
+                            transition={{ delay: 0.65, duration: 1, ease: "easeOut" }}
+                            style={{ background: arch.accentColor }} />
                         </div>
                       </div>
 
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <p className="font-sans text-[9px] font-bold uppercase tracking-[0.2em] mb-0.5 opacity-40"
-                          style={{ color: arch.certBorder }}>{label}</p>
-                        <h4 className="font-heading text-base font-black text-foreground leading-tight mb-0.5 tracking-wide line-clamp-2">
-                          {locField(book, "title", lang)}
-                        </h4>
-                        <p className="font-sans text-[11px] uppercase tracking-wider text-muted-foreground font-bold mb-2">
-                          {locField(book, "author", lang)}
-                        </p>
-                        {/* Hook / interesting fact */}
-                        <p className="font-lora italic text-[13px] leading-snug"
-                          style={{ color: arch.certBorder, opacity: 0.72 }}>
-                          "{hook}"
-                        </p>
+                      <p className="font-lora text-sm leading-relaxed max-w-sm mx-auto"
+                        style={{ color: arch.certBorder, opacity: 0.65 }}>{arch.desc}</p>
+                    </motion.div>
+                  </div>
+
+                  <div className="h-px mx-8" style={{ background: `${arch.certBorder}15` }} />
+
+                  {/* Two book recommendations */}
+                  <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.75, duration: 0.45 }}
+                    className="p-6 sm:p-8 space-y-4">
+
+                    <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em]"
+                      style={{ color: arch.primaryColor }}>Siz uchun tavsiyalar</p>
+
+                    {[
+                      { book: resolved.book1, hook: resolved.hook1, label: "Birinchi tavsiya" },
+                      { book: resolved.book2, hook: resolved.hook2, label: "Ikkinchi tavsiya" },
+                    ].map(({ book, hook, label }, idx) => book ? (
+                      <div key={idx}
+                        className="flex items-start gap-4 rounded-2xl p-4 transition-all duration-200 cursor-pointer group hover:opacity-90"
+                        style={{ background: `${arch.certBorder}08`, border: `1px solid ${arch.certBorder}18` }}
+                        onClick={() => navigate(`/book/${(book as any).id}`)}>
+
+                        {/* Book cover */}
+                        <div className="shrink-0 w-14 sm:w-16">
+                          <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg"
+                            style={{ transform: "rotateY(-10deg)", boxShadow: "-5px 6px 14px rgba(0,0,0,0.18)" }}>
+                            {getImgUrl((book as any).cover_url) ? (
+                              <img src={getImgUrl((book as any).cover_url)!}
+                                alt={locField(book, "title", lang)} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center"
+                                style={{ background: arch.primaryColor }}>
+                                <BookOpen className="w-5 h-5 opacity-25 text-white" />
+                              </div>
+                            )}
+                            <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-r from-black/30 to-transparent" />
+                          </div>
+                        </div>
+
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-sans text-[9px] font-bold uppercase tracking-[0.2em] mb-0.5 opacity-40"
+                            style={{ color: arch.certBorder }}>{label}</p>
+                          <h4 className="font-heading text-base font-black text-foreground leading-tight mb-0.5 tracking-wide line-clamp-2">
+                            {locField(book, "title", lang)}
+                          </h4>
+                          <p className="font-sans text-[11px] uppercase tracking-wider text-muted-foreground font-bold mb-2">
+                            {locField(book, "author", lang)}
+                          </p>
+                          {/* Hook / interesting fact */}
+                          <p className="font-lora italic text-[13px] leading-snug"
+                            style={{ color: arch.certBorder, opacity: 0.72 }}>
+                            "{hook}"
+                          </p>
+                        </div>
+
+                        <ArrowRight className="w-4 h-4 shrink-0 opacity-25 group-hover:opacity-60 transition-opacity mt-1"
+                          style={{ color: arch.certBorder }} />
                       </div>
+                    ) : null)}
+                  </motion.div>
 
-                      <ArrowRight className="w-4 h-4 shrink-0 opacity-25 group-hover:opacity-60 transition-opacity mt-1"
-                        style={{ color: arch.certBorder }} />
-                    </div>
-                  ) : null)}
-                </motion.div>
+                  <div className="h-px mx-8" style={{ background: `${arch.certBorder}15` }} />
 
-                <div className="h-px mx-8" style={{ background: `${arch.certBorder}15` }} />
-
-                {/* Actions */}
-                <div className="px-6 sm:px-8 py-6 flex flex-col sm:flex-row items-center gap-3 flex-wrap">
-                  <motion.button onClick={() => setPhase("books")}
-                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl
+                  {/* Actions */}
+                  <div className="px-6 sm:px-8 py-6 flex flex-col sm:flex-row items-center gap-3 flex-wrap">
+                    <motion.button onClick={() => setPhase("books")}
+                      whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl
                         font-heading font-bold text-sm tracking-wide shadow-md transition-all duration-300"
-                    style={{ background: arch.accentColor, color: "#fff" }}>
-                    <Library className="w-4 h-4" />
-                    Ko'proq kitoblar
-                  </motion.button>
+                      style={{ background: arch.accentColor, color: "#fff" }}>
+                      <Library className="w-4 h-4" />
+                      Ko'proq kitoblar
+                    </motion.button>
 
-                  <motion.button onClick={handleDownload} disabled={downloading}
-                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl
+                    <motion.button onClick={handleDownload} disabled={downloading}
+                      whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl
                         font-heading font-bold text-sm tracking-wide border-2 transition-all duration-300 disabled:opacity-60"
-                    style={{ borderColor: arch.certBorder, color: arch.certBorder, background: "transparent" }}>
-                    <Download className="w-4 h-4" />
-                    {downloading ? "Tayyorlanmoqda..." : "Guvohnoma yuklab olish"}
-                  </motion.button>
+                      style={{ borderColor: arch.certBorder, color: arch.certBorder, background: "transparent" }}>
+                      <Download className="w-4 h-4" />
+                      {downloading ? "Tayyorlanmoqda..." : "Guvohnoma yuklab olish"}
+                    </motion.button>
 
-                  <motion.button onClick={handleCopy}
-                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl
+                    <motion.button onClick={handleCopy}
+                      whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl
                         font-heading font-bold text-sm tracking-wide border-2 transition-all duration-300"
-                    style={{ borderColor: `${arch.certBorder}55`, color: arch.primaryColor, background: "transparent" }}>
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {copied ? "Nusxalandi!" : "Telegram uchun nusxalash"}
-                  </motion.button>
+                      style={{ borderColor: `${arch.certBorder}55`, color: arch.primaryColor, background: "transparent" }}>
+                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copied ? "Nusxalandi!" : "Telegram uchun nusxalash"}
+                    </motion.button>
 
-                  <button onClick={handleReset}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground
+                    <button onClick={handleReset}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground
                         hover:text-foreground transition-colors px-3 py-2 opacity-45 hover:opacity-100">
-                    <RotateCcw className="h-3 w-3" /> Qaytadan
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── BOOKS PHASE ───────────────────────────────────────────────── */}
-          {phase === "books" && result && arch && (
-            <motion.div key="books"
-              initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5, ease: "easeOut" }}>
-
-              <div className="text-center mb-8">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 rounded-full overflow-hidden shadow-xl"
-                    style={{ border: `3px solid ${arch.accentColor}` }}>
-                    <img src={arch.img} alt={arch.name} className="w-full h-full object-cover" />
+                      <RotateCcw className="h-3 w-3" /> Qaytadan
+                    </button>
                   </div>
                 </div>
-                <p className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] mb-1"
-                  style={{ color: arch.primaryColor }}>{arch.name} uchun</p>
-                <h2 className="font-heading text-2xl sm:text-3xl font-black text-foreground tracking-wide">
-                  Siz uchun tanlangan kitoblar
-                </h2>
-                <p className="font-lora text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-                  Sizning kitobxon turingizga mos, qiziqarli asarlar
-                </p>
-              </div>
+              </motion.div>
+            )}
 
-              {archetypeBooks.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {archetypeBooks.map((bk, i) => (
-                    <motion.div key={(bk as any).id ?? i}
-                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.08, duration: 0.4 }}
-                      className="group bg-white/40 dark:bg-black/20 backdrop-blur-xl border border-white/50 dark:border-white/10
+            {/* ── BOOKS PHASE ───────────────────────────────────────────────── */}
+            {phase === "books" && result && arch && (
+              <motion.div key="books"
+                initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5, ease: "easeOut" }}>
+
+                <div className="text-center mb-8">
+                  <div className="flex justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full overflow-hidden shadow-xl"
+                      style={{ border: `3px solid ${arch.accentColor}` }}>
+                      <img src={arch.img} alt={arch.name} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                  <p className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] mb-1"
+                    style={{ color: arch.primaryColor }}>{arch.name} uchun</p>
+                  <h2 className="font-heading text-2xl sm:text-3xl font-black text-foreground tracking-wide">
+                    Siz uchun tanlangan kitoblar
+                  </h2>
+                  <p className="font-lora text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
+                    Sizning kitobxon turingizga mos, qiziqarli asarlar
+                  </p>
+                </div>
+
+                {archetypeBooks.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {archetypeBooks.map((bk, i) => (
+                      <motion.div key={(bk as any).id ?? i}
+                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.08, duration: 0.4 }}
+                        className="group bg-white/40 dark:bg-black/20 backdrop-blur-xl border border-white/50 dark:border-white/10
                           rounded-2xl p-3 cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                      onClick={() => navigate(`/book/${(bk as any).id}`)}>
-                      <div className="relative aspect-[2/3] rounded-xl overflow-hidden mb-3 shadow-md group-hover:shadow-xl transition-shadow duration-300">
-                        {getImgUrl((bk as any).cover_url) ? (
-                          <img src={getImgUrl((bk as any).cover_url)!}
-                            alt={locField(bk, "title", lang)} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center"
-                            style={{ background: `${arch.primaryColor}20` }}>
-                            <BookOpen className="w-8 h-8 opacity-30" style={{ color: arch.primaryColor }} />
-                          </div>
-                        )}
-                      </div>
-                      <h4 className="font-heading text-sm font-bold text-foreground leading-tight mb-0.5 line-clamp-2 tracking-wide">
-                        {locField(bk, "title", lang)}
-                      </h4>
-                      <p className="font-sans text-[11px] text-muted-foreground font-bold uppercase tracking-wide truncate">
-                        {locField(bk, "author", lang)}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-16 font-lora text-muted-foreground italic">
-                  Kitoblar yuklanmoqda...
-                </div>
-              )}
+                        onClick={() => navigate(`/book/${(bk as any).id}`)}>
+                        <div className="relative aspect-[2/3] rounded-xl overflow-hidden mb-3 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                          {getImgUrl((bk as any).cover_url) ? (
+                            <img src={getImgUrl((bk as any).cover_url)!}
+                              alt={locField(bk, "title", lang)} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center"
+                              style={{ background: `${arch.primaryColor}20` }}>
+                              <BookOpen className="w-8 h-8 opacity-30" style={{ color: arch.primaryColor }} />
+                            </div>
+                          )}
+                        </div>
+                        <h4 className="font-heading text-sm font-bold text-foreground leading-tight mb-0.5 line-clamp-2 tracking-wide">
+                          {locField(bk, "title", lang)}
+                        </h4>
+                        <p className="font-sans text-[11px] text-muted-foreground font-bold uppercase tracking-wide truncate">
+                          {locField(bk, "author", lang)}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-16 font-lora text-muted-foreground italic">
+                    Kitoblar yuklanmoqda...
+                  </div>
+                )}
 
-              <div className="flex items-center justify-center gap-4 mt-8">
-                <button onClick={() => setPhase("result")}
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-muted-foreground
+                <div className="flex items-center justify-center gap-4 mt-8">
+                  <button onClick={() => setPhase("result")}
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-muted-foreground
                       hover:text-foreground transition-colors opacity-60 hover:opacity-100">
-                  ← Natijaga qaytish
-                </button>
-                <button onClick={handleReset}
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-muted-foreground
+                    ← Natijaga qaytish
+                  </button>
+                  <button onClick={handleReset}
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-muted-foreground
                       hover:text-foreground transition-colors px-3 py-2 opacity-45 hover:opacity-100">
-                  <RotateCcw className="h-3.5 w-3.5" /> Testni qaytadan o'tish
-                </button>
-              </div>
-            </motion.div>
-          )}
+                    <RotateCcw className="h-3.5 w-3.5" /> Testni qaytadan o'tish
+                  </button>
+                </div>
+              </motion.div>
+            )}
 
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
     </section >
   );
 };
