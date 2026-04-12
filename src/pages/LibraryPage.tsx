@@ -108,7 +108,7 @@ const LibraryPage = () => {
         <div className="mx-auto max-w-7xl">
 
           {/* ── FEATURED BOOKS HERO CAROUSEL ─────────────────────────────── */}
-          <div className="relative w-full max-w-6xl mx-auto min-h-[450px] flex flex-col md:flex-row items-center bg-gradient-to-br from-background/80 to-background/60 border border-border/20 rounded-3xl overflow-hidden p-8 md:p-12 shadow-2xl mb-16 backdrop-blur-md">
+          <div className="relative w-full max-w-6xl mx-auto min-h-[450px] flex flex-col md:flex-row items-center bg-gradient-to-br from-background/80 to-background/60 border border-border/20 rounded-3xl overflow-hidden p-8 md:p-12 shadow-2xl mb-16">
 
             {/* Corner Accents */}
             <div className="absolute top-0 left-0 w-32 h-32 border-t border-l border-accent/20 rounded-tl-3xl pointer-events-none" />
@@ -132,29 +132,31 @@ const LibraryPage = () => {
               {/* Left — Book Cover */}
               <motion.div
                 key={`book-${currentIndex}`}
-                initial={{ opacity: 0, y: -50, rotate: -5 }}
+                initial={{ opacity: 0, y: -30, rotate: -3 }}
                 animate={{ opacity: 1, y: 0, rotate: 0 }}
-                exit={{ opacity: 0, y: 50, rotate: 5 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                exit={{ opacity: 0, y: 30, rotate: 3 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
                 className="flex-[1] flex justify-center items-center relative z-10"
               >
                 {/* FIX: aspect-[2/3] + bg-muted wrapper prevents layout shift */}
-                <div className="w-48 md:w-64 aspect-[2/3] bg-muted rounded-md shadow-2xl relative z-10 border border-border/20 overflow-hidden transform-gpu">
+                <motion.div
+                  layoutId={`book-cover-${featuredBook.id}`}
+                  className="w-48 md:w-64 aspect-[2/3] bg-muted rounded-md shadow-2xl relative z-10 border border-border/20 overflow-hidden transform-gpu"
+                >
                   <img
                     src={featuredBook.coverImage}
                     alt={featuredBook.title}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </motion.div>
               </motion.div>
 
               {/* Right — Text */}
               <motion.div
                 key={`text-${currentIndex}`}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0, transition: { delay: 0.1, duration: 0.35, ease: "easeOut" } }}
+                exit={{ opacity: 0, x: -30, transition: { duration: 0.25, ease: "easeIn" } }}
                 className="flex-1 flex flex-col justify-center items-start text-left mt-8 md:mt-0 relative z-10"
               >
                 <span className="text-gold font-bold tracking-[0.2em] text-[10px] sm:text-xs uppercase mb-4">
