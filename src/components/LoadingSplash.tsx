@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import logoImg from "@/assets/Logo-blue.png";
 
 const QUOTES = [
   "Har bir kitob — yangi dunyoga ochilgan eshikdir.",
@@ -53,7 +54,7 @@ const LoadingSplash = () => {
         >
           {/* Brand Logo Image (Replaced Text) */}
           <img
-            src="/Logo-blue.png"
+            src={logoImg}
             alt="Booktopia Logo"
             className="h-16 sm:h-24 w-auto object-contain drop-shadow-md"
             draggable={false}

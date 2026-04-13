@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logoImg from "@/assets/Logo-blue.png";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useLang } from "@/context/LanguageContext";
@@ -57,7 +58,7 @@ const Footer = () => {
           <div className="flex flex-col">
             <Link to="/" className="inline-block mb-4">
               <img
-                src="/Logo-blue.png"
+                src={logoImg}
                 alt="Booktopia Logo"
                 className="h-10 w-auto object-contain"
               />
