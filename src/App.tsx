@@ -1,7 +1,6 @@
 import { useEffect, lazy, Suspense, useState } from "react";
 import { BrowserRouter, Route, Navigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Analytics } from "@vercel/analytics/react";
 import { AnimatePresence } from "framer-motion";
 import LoadingSplash from "@/components/LoadingSplash";
 import { useData } from "@/context/DataContext";
@@ -303,7 +302,6 @@ const App = () => {
                       <AppInner />
                     </AppLoader>
                   </BrowserRouter>
-                  <Analytics />
                 </div>
               </TooltipProvider>
             </LanguageProvider>
