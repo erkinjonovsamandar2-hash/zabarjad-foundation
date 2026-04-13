@@ -335,16 +335,12 @@ export default function TeamPage() {
                                             {glyph}
                                         </div>
 
-                                        {/* Top accent glow */}
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full pointer-events-none"
-                                            style={{ background: `radial-gradient(circle, ${accent}20 0%, transparent 70%)` }} />
-
                                         {/* Photo or premium no-photo fill */}
                                         {member.image_url ? (
                                             <img
                                                 src={member.image_url}
                                                 alt={member.name}
-                                                className="absolute inset-0 w-full h-full object-cover object-top opacity-80 transition-transform duration-700 group-hover:scale-[1.03]"
+                                                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
                                             />
                                         ) : (
                                             <NoPhotoCard name={member.name} role={member.role} />

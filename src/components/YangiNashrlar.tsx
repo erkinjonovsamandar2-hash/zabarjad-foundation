@@ -254,8 +254,8 @@ const YangiNashrlar = () => {
                         {/* Mobile: subtle top vignette only — no bottom overlay */}
                         <div className="sm:hidden absolute inset-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent to-transparent" />
                         {/* Desktop/Tablet: left gradient for text legibility */}
-                        <div className="hidden sm:block absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.85) 30%, rgba(10,10,10,0.3) 60%, transparent 100%)" }} />
-                        <div className="hidden sm:block absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0a0a0a]/60 via-transparent to-transparent" />
+                        <div className="hidden sm:block absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.80) 0%, rgba(10,10,10,0.60) 35%, rgba(10,10,10,0.15) 65%, transparent 100%)" }} />
+                        <div className="hidden sm:block absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0a0a0a]/35 via-transparent to-transparent" />
                     </div>
 
                     {/* ── Text block ─────────────────────────────────────────
@@ -271,7 +271,7 @@ const YangiNashrlar = () => {
                                    sm:px-0 sm:py-0 sm:pl-12 lg:pl-16
                                    sm:max-w-[55%] lg:max-w-[50%]"
                     >
-                        <p className="font-sans text-[0.65rem] sm:text-[0.7rem] tracking-[0.22em] uppercase text-[#c8973a] mb-2">
+                        <p className="font-sans text-[0.65rem] sm:text-[0.7rem] lg:text-[0.85rem] tracking-[0.22em] uppercase text-[#c8973a] mb-2">
                             {activeAuthor}
                         </p>
                         <h2 className="font-heading text-[1.75rem] sm:text-4xl lg:text-5xl text-white leading-[1.05] tracking-tight mb-3 sm:mb-4">
@@ -284,7 +284,7 @@ const YangiNashrlar = () => {
                                 {activeMeta.tags.map((tag, i) => (
                                     <span
                                         key={tag}
-                                        className={`font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.14em] uppercase px-2 py-1 rounded-[2px] shadow-sm ${i === 0
+                                        className={`font-sans text-[0.6rem] sm:text-[0.65rem] lg:text-[0.75rem] tracking-[0.14em] uppercase px-2 py-1 rounded-[2px] shadow-sm ${i === 0
                                             ? "bg-[#c8973a]/90 text-black font-bold"
                                             : "bg-black/40 text-white/80 border border-white/20 backdrop-blur-md"
                                             }`}
@@ -298,7 +298,7 @@ const YangiNashrlar = () => {
                         {locField(activeBook, "description", lang) && (
                             <p
                                 key={`desc-${activeIndex}`}
-                                className="font-serif text-[0.85rem] sm:text-[1rem] lg:text-[1.1rem] leading-relaxed text-white/80 sm:text-white/95 mb-4 sm:mb-5 max-w-[95%] sm:max-w-[90%]"
+                                className="font-serif text-[0.85rem] sm:text-[1rem] lg:text-[1.2rem] leading-relaxed text-white/80 sm:text-white/95 mb-4 sm:mb-5 max-w-[95%] sm:max-w-[90%]"
                             >
                                 {locField(activeBook, "description", lang)}
                             </p>
