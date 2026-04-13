@@ -1,7 +1,8 @@
 // @refresh reset
 import { useState } from "react";
+import BookCover from "@/components/BookCover";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, RotateCcw, BookOpen, Download, Copy, Check, ArrowRight, Library } from "lucide-react";
+import { Sparkles, RotateCcw, Download, Copy, Check, ArrowRight, Library } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
@@ -554,19 +555,13 @@ const MatchmakerQuiz = () => {
 
                         {/* Book cover */}
                         <div className="shrink-0 w-14 sm:w-16">
-                          <div className="relative aspect-[2/3] rounded-l-sm rounded-r-lg overflow-hidden"
-                            style={{ transform: "rotateY(-10deg)", boxShadow: "-5px 6px 14px rgba(0,0,0,0.25), inset -2px 0 4px rgba(255,255,255,0.12)" }}>
-                            {getImgUrl((book as any).cover_url) ? (
-                              <img src={getImgUrl((book as any).cover_url)!}
-                                alt={locField(book, "title", lang)} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center"
-                                style={{ background: arch.primaryColor }}>
-                                <BookOpen className="w-5 h-5 opacity-25 text-white" />
-                              </div>
-                            )}
-                            <div aria-hidden className="absolute inset-y-0 left-0 w-[10px] pointer-events-none" style={{ background: "linear-gradient(to right, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.08) 1px, rgba(0,0,0,0.28) 3px, rgba(0,0,0,0.65) 6px, transparent 10px)" }} />
-                          </div>
+                          <BookCover
+                            src={getImgUrl((book as any).cover_url)}
+                            alt={locField(book, "title", lang)}
+                            className="w-full"
+                            hover={false}
+                            loading="lazy"
+                          />
                         </div>
 
                         {/* Info */}
@@ -665,18 +660,13 @@ const MatchmakerQuiz = () => {
                         className="group bg-white/40 dark:bg-black/20 backdrop-blur-xl border border-white/50 dark:border-white/10
                           rounded-2xl p-3 cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                         onClick={() => navigate(`/book/${(bk as any).id}`)}>
-                        <div className="relative aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden mb-3 shadow-[4px_6px_16px_rgba(0,0,0,0.22),_inset_-3px_0_5px_rgba(255,255,255,0.12)] group-hover:shadow-[8px_12px_24px_rgba(0,0,0,0.3)] transition-shadow duration-300">
-                          {getImgUrl((bk as any).cover_url) ? (
-                            <img src={getImgUrl((bk as any).cover_url)!}
-                              alt={locField(bk, "title", lang)} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center"
-                              style={{ background: `${arch.primaryColor}20` }}>
-                              <BookOpen className="w-8 h-8 opacity-30" style={{ color: arch.primaryColor }} />
-                            </div>
-                          )}
-                          <div aria-hidden className="absolute inset-y-0 left-0 w-[10px] pointer-events-none" style={{ background: "linear-gradient(to right, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.08) 1px, rgba(0,0,0,0.28) 3px, rgba(0,0,0,0.65) 6px, transparent 10px)" }} />
-                        </div>
+                        <BookCover
+                          src={getImgUrl((bk as any).cover_url)}
+                          alt={locField(bk, "title", lang)}
+                          className="w-full mb-3"
+                          hover={true}
+                          loading="lazy"
+                        />
                         <h4 className="font-heading text-sm font-bold text-foreground leading-tight mb-0.5 line-clamp-2 tracking-wide">
                           {locField(bk, "title", lang)}
                         </h4>

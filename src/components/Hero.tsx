@@ -258,7 +258,7 @@ const ActiveBookShowcase = ({
               animate={{ x: "100%" }}
               transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
             />
-            <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
+            <div aria-hidden className="absolute inset-y-0 left-0 w-[10px] pointer-events-none" style={{ background: "linear-gradient(to right, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.08) 1px, rgba(0,0,0,0.28) 3px, rgba(0,0,0,0.65) 6px, transparent 10px)" }} />
             <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.08] via-transparent to-black/25 pointer-events-none" />
           </motion.div>
 

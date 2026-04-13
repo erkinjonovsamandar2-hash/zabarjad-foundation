@@ -347,7 +347,7 @@ export default function GlobalClassics() {
                       style={{ backgroundImage: `url(${getImageUrl(activeBook.cover_url)})` }}
                     />
                     <div aria-hidden="true" className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-br from-white/10 via-transparent to-black/30" />
-                    <div aria-hidden="true" className="absolute top-0 bottom-0 left-0 w-[18px] z-[2] pointer-events-none bg-gradient-to-r from-black/45 to-transparent" />
+                    <div aria-hidden="true" className="absolute top-0 bottom-0 left-0 w-[10px] z-[2] pointer-events-none" style={{ background: "linear-gradient(to right, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.08) 1px, rgba(0,0,0,0.28) 3px, rgba(0,0,0,0.65) 6px, transparent 10px)" }} />
                     <div aria-hidden="true" className="absolute top-0 left-0 right-0 h-px z-[3] bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
                   </motion.div>
                 )}

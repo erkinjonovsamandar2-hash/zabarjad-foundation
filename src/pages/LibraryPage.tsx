@@ -138,15 +138,13 @@ const LibraryPage = () => {
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className="flex-[1] flex justify-center items-center relative z-10"
               >
-                {/* FIX: aspect-[2/3] + bg-muted wrapper prevents layout shift */}
-                <motion.div
-                  layoutId={`book-cover-${featuredBook.id}`}
-                  className="w-48 md:w-64 aspect-[2/3] bg-muted rounded-md shadow-2xl relative z-10 border border-border/20 overflow-hidden transform-gpu"
-                >
-                  <img
+                <motion.div layoutId={`book-cover-${featuredBook.id}`}>
+                  <BookCover
                     src={featuredBook.coverImage}
                     alt={featuredBook.title}
-                    className="w-full h-full object-cover"
+                    className="w-48 md:w-64"
+                    hover={false}
+                    loading="eager"
                   />
                 </motion.div>
               </motion.div>

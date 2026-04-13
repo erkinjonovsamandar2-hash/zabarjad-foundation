@@ -8,6 +8,7 @@ import PageTransition from "@/components/PageTransition";
 import type { Book } from "@/context/DataContext";
 import { useData } from "@/context/DataContext";
 import { motion, useScroll, useSpring } from "framer-motion";
+import BookCover from "@/components/BookCover";
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -120,18 +121,15 @@ const BookDetails = () => {
               {/* Left: Book Cover Showcase */}
               <motion.div
                 layoutId={`book-cover-${book.id}`}
-                className="w-full max-w-md mx-auto aspect-[2/3] rounded-r-3xl rounded-l-sm border-l-8 border-[#2a2118] relative overflow-hidden transform md:hover:scale-105 transition-all duration-700"
-                style={{ boxShadow: dynamicShadow }}
+                className="w-full max-w-md mx-auto"
               >
-                {book.cover_url && (
-                  <img
-                    src={book.cover_url}
-                    alt={locField(book, "title", lang)}
-                    className="w-full h-full object-cover"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent pointer-events-none" />
-                <div className="absolute inset-y-0 left-0 w-5 bg-gradient-to-r from-black/60 via-white/20 to-transparent pointer-events-none" />
+                <BookCover
+                  src={book.cover_url}
+                  alt={locField(book, "title", lang)}
+                  className="w-full"
+                  hover={false}
+                  loading="eager"
+                />
               </motion.div>
 
               {/* Right: Metadata & Actions */}

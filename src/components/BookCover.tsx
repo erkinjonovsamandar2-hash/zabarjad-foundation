@@ -66,11 +66,6 @@ const BookCover = ({ src, alt, className = "", hover = true, loading = "lazy" }:
         }}
       />
 
-      {/* Top gloss */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-0 h-1/5 pointer-events-none bg-gradient-to-b from-white/8 to-transparent"
-      />
     </div>
   );
 };
