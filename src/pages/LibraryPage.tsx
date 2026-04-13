@@ -68,7 +68,7 @@ const LibraryPage = () => {
   // Derive featured books from the database.
   // Fallback to the hardcoded constant only if the DB has zero featured books.
   const carouselBooks = useMemo(() => {
-    const dbFeatured = books.filter((b) => b.featured);
+    const dbFeatured = books.filter((b) => b.enable_3d_flip);
     if (dbFeatured.length > 0) {
       return dbFeatured.map((b) => ({
         id: b.id,
@@ -203,15 +203,14 @@ const LibraryPage = () => {
               </h1>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              {/* Category Pills */}
-              {/* Relative wrapper for right-fade scroll hint on mobile */}
-              <div className="relative w-full md:w-auto">
+            <div className="flex flex-col items-center gap-4">
+              {/* Category Pills — full-width scrollable, never wraps */}
+              <div className="relative w-full">
                 <div
-                  className="absolute right-0 top-0 bottom-1 w-16 pointer-events-none z-10 md:hidden"
+                  className="absolute right-0 top-0 bottom-1 w-16 pointer-events-none z-10"
                   style={{ background: "linear-gradient(to right, transparent, hsl(var(--charcoal)))" }}
                 />
-              <div className="flex overflow-x-auto flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 md:pb-0 pr-10 md:pr-0">
+              <div className="flex overflow-x-auto flex-nowrap items-center justify-start gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 pr-10">
                 {CATEGORIES.map((categoryKey) => {
                   const isActive = active === categoryKey;
 
