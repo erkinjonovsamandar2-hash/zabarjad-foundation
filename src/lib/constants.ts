@@ -6,14 +6,16 @@
  */
 
 // ── Library category filter mapping ───────────────────────────────────────────
-export const LIBRARY_FILTER_KEYS = ["new", "soon", "gold"] as const;
+export const LIBRARY_FILTER_KEYS = ["jahon", "ilmiy", "new", "amir-temur", "erkin-millat"] as const;
 
 export type LibraryFilterKey = (typeof LIBRARY_FILTER_KEYS)[number];
 
 export const LIBRARY_FILTER_MAP: Record<LibraryFilterKey, string> = {
-  new:  "Yangi Nashrlar",
-  soon: "Tez Kunda",
-  gold: "Oltin Kolleksiya",
+  "jahon":        "Jahon adabiyoti durdonalari",
+  "ilmiy":        "Ilmiy-ommabop nashrlar",
+  "new":          "Yangi nashrlar",
+  "amir-temur":   "Amir Temur",
+  "erkin-millat": "Erkin millat poydevori",
 };
 
 // ── EpicSpotlight – map hotspot positions ─────────────────────────────────────

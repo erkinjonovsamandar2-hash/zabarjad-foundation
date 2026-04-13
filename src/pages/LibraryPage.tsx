@@ -12,7 +12,7 @@ import EmptyState from "@/components/EmptyState";
 import librarySeal from "@/assets/design/library-seal.png";
 
 // ── Local Categories Configuration ────────────────────────────────────────────
-const CATEGORIES = ["all", "new", "featured"] as const;
+const CATEGORIES = ["all", "jahon", "ilmiy", "new", "amir-temur", "erkin-millat"] as const;
 
 // ── Featured Books for Carousel ───────────────────────────────────────────────
 const FEATURED_BOOKS = [
@@ -48,9 +48,12 @@ const FEATURED_BOOKS = [
 // ── Helper: Get Category Label ─────────────────────────────────────────────────
 const getCategoryLabel = (key: string, lang: string): string => {
   const labels: Record<string, { uz: string; ru: string; en: string }> = {
-    all: { uz: "Barchasi", ru: "Все", en: "All" },
-    new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
-    featured: { uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
+    all:            { uz: "Barchasi",                      ru: "Все",                    en: "All" },
+    jahon:          { uz: "Jahon adabiyoti durdonalari",   ru: "Мировая классика",       en: "World Classics" },
+    ilmiy:          { uz: "Ilmiy-ommabop nashrlar",        ru: "Научно-популярные",      en: "Popular Science" },
+    new:            { uz: "Yangi nashrlar",                 ru: "Новинки",                en: "New Releases" },
+    "amir-temur":   { uz: "Amir Temur",                    ru: "Амир Темур",             en: "Amir Temur" },
+    "erkin-millat": { uz: "Erkin millat poydevori",        ru: "Основы свободной нации", en: "Free Nation Foundation" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };

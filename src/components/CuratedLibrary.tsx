@@ -8,15 +8,17 @@ import { useLang, locField } from "@/context/LanguageContext";
 import parchmentTexture from "@/assets/design/parchment-texture.png";
 
 // ── Local Categories Configuration ───────────────────────────────────────────
-// FIX: Removed "got" and "featured" (Tez Kunda) so it doesn't overlap with YangiNashrlar
-const CATEGORIES = ["all", "new", "golden"] as const;
+const CATEGORIES = ["all", "jahon", "ilmiy", "new", "amir-temur", "erkin-millat"] as const;
 
 // ── Helper: Get Category Label (Multilingual) ─────────────────────────────────
 const getCategoryLabel = (key: string, lang: string): string => {
   const labels: Record<string, { uz: string; ru: string; en: string }> = {
-    all: { uz: "Barchasi", ru: "Все", en: "All" },
-    new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
-    golden: { uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Golden Collection" },
+    all:            { uz: "Barchasi",                      ru: "Все",                    en: "All" },
+    jahon:          { uz: "Jahon adabiyoti durdonalari",   ru: "Мировая классика",       en: "World Classics" },
+    ilmiy:          { uz: "Ilmiy-ommabop nashrlar",        ru: "Научно-популярные",      en: "Popular Science" },
+    new:            { uz: "Yangi nashrlar",                 ru: "Новинки",                en: "New Releases" },
+    "amir-temur":   { uz: "Amir Temur",                    ru: "Амир Темур",             en: "Amir Temur" },
+    "erkin-millat": { uz: "Erkin millat poydevori",        ru: "Основы свободной нации", en: "Free Nation Foundation" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };
@@ -53,8 +55,6 @@ const CuratedLibrary = () => {
   const filtered = useMemo(() => {
     return books.filter((b) => {
       if (activeTab === "all") return true;
-      if (activeTab === "featured") return b.featured === true;
-      if (activeTab === "new") return b.category === "new";
       return b.category === activeTab;
     });
   }, [books, activeTab]);
