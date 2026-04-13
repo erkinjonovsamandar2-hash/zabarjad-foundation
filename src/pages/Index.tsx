@@ -13,7 +13,6 @@ import LoadingSplash from "@/components/LoadingSplash";
 // ── Lazy-load every section that sits below the fold ──────────────────────────
 // Keeps the initial JS bundle lean — these chunks download in parallel and are
 // ready before the user scrolls to them on any reasonable connection.
-const GlobalClassics = lazy(() => import("@/components/GlobalClassics"));
 const AmirTemurSection = lazy(() => import("@/components/AmirTemurSection"));
 const CuratedLibrary = lazy(() => import("@/components/CuratedLibrary"));
 const Taassurotlar = lazy(() => import("@/components/Taassurotlar"));
@@ -65,12 +64,7 @@ const Index = () => {
 
               {/* ── Below the fold — code-split, loaded in parallel ── */}
 
-              <Suspense fallback={<SectionFallback />}>
-                <GlobalClassics />
-              </Suspense>
-              <Divider />
-
-              <Suspense fallback={<SectionFallback />}>
+<Suspense fallback={<SectionFallback />}>
                 <AmirTemurSection />
               </Suspense>
               <Divider />

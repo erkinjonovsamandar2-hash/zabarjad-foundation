@@ -12,7 +12,7 @@ import EmptyState from "@/components/EmptyState";
 import librarySeal from "@/assets/design/library-seal.png";
 
 // ── Local Categories Configuration ────────────────────────────────────────────
-const CATEGORIES = ["all", "new", "featured", "golden"] as const;
+const CATEGORIES = ["all", "new", "featured"] as const;
 
 // ── Featured Books for Carousel ───────────────────────────────────────────────
 const FEATURED_BOOKS = [
@@ -51,7 +51,6 @@ const getCategoryLabel = (key: string, lang: string): string => {
     all: { uz: "Barchasi", ru: "Все", en: "All" },
     new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
     featured: { uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
-    golden: { uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Golden Collection" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };
