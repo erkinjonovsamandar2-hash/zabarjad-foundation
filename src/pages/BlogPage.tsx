@@ -43,7 +43,7 @@ const toCardShape = (a: {
 
 type Card = ReturnType<typeof toCardShape>;
 
-const BLOG_CATEGORIES = ["Barchasi", "Tahlil", "Yangiliklar", "Muallif haqida", "O'qish madaniyati"];
+const BLOG_CATEGORIES = ["Barchasi", "Tahlil", "Yangiliklar", "Muallif haqida"];
 
 // ── Full-width hero card ──────────────────────────────────────────────────────
 const HeroCard = ({ article }: { article: Card }) => {
@@ -259,25 +259,27 @@ const BlogPage = () => {
 
         {/* ── Category tabs ── */}
         <motion.div
-          className="flex flex-wrap items-center gap-3 mb-10 border-b border-border/50 pb-6"
+          className="mb-10 border-b border-border/50 pb-6"
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
         >
-          {BLOG_CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveTab(cat)}
-              className={`
-                font-sans text-[11px] font-bold tracking-[0.2em] uppercase
-                px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-200
-                ${activeTab === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"
-                }
-              `}
-            >
-              {cat}
-            </button>
-          ))}
+          <div className="flex overflow-x-auto gap-2 sm:gap-3 sm:flex-wrap scrollbar-none">
+            {BLOG_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className={`
+                  shrink-0 font-sans text-[10px] sm:text-[11px] font-bold tracking-[0.18em] uppercase
+                  px-3.5 py-1.5 sm:px-6 sm:py-2.5 rounded-[var(--radius)] transition-colors duration-200
+                  ${activeTab === cat
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"
+                  }
+                `}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
         {/* ── Article grid ── */}

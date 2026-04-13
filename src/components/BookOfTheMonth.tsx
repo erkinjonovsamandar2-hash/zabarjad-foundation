@@ -108,13 +108,13 @@ const BookOfTheMonth = () => {
           {/* ── Left Column (Editorial Content) ── */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left w-full">
 
-            {/* 1. Premium Badge */}
-            <motion.p
+            {/* 1. Section heading */}
+            <motion.h2
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="font-sans text-[0.65rem] uppercase tracking-[0.25em] text-primary font-bold mb-4 drop-shadow-sm"
+              className="font-heading text-5xl sm:text-6xl text-foreground tracking-tight leading-none mb-6"
             >
-              OY KITOBI
-            </motion.p>
+              Oy Kitobi
+            </motion.h2>
 
             {/* 2. Giant Pull Quote */}
             <motion.div

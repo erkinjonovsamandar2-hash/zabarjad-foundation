@@ -188,7 +188,8 @@ const Blog = () => {
   );
 
   const categories = useMemo(() => {
-    const cats = Array.from(new Set(publishedArticles.map((a) => a.category).filter(Boolean)));
+    const cats = Array.from(new Set(publishedArticles.map((a) => a.category).filter(Boolean)))
+      .filter((c) => c !== "O'qish madaniyati");
     return ["Barchasi", ...cats];
   }, [publishedArticles]);
 
@@ -230,14 +231,14 @@ const Blog = () => {
 
         {/* Category tabs */}
         <div className="mb-10 border-b border-border/50 pb-5 sm:pb-7">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex overflow-x-auto gap-2 sm:gap-3 sm:flex-wrap scrollbar-none">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveTab(cat)}
                 className={`
-                  font-sans text-[11px] font-bold tracking-[0.2em] uppercase
-                  px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-200
+                  shrink-0 font-sans text-[10px] sm:text-[11px] font-bold tracking-[0.18em] uppercase
+                  px-3.5 py-1.5 sm:px-6 sm:py-2.5 rounded-[var(--radius)] transition-colors duration-200
                   ${activeTab === cat
                     ? "bg-primary text-primary-foreground"
                     : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"

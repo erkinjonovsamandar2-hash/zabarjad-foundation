@@ -23,6 +23,7 @@ const ROLE_BG: Record<string, string> = {
     "Tarjimon": "#f0edf5",
 };
 
+
 const getAccent = (role: string) => ROLE_ACCENT[role] ?? "#c8973a";
 const getBg = (role: string) => ROLE_BG[role] ?? "#f5efe2";
 const getGlyph = (role: string) => {
@@ -189,7 +190,15 @@ export default function TeamPage() {
             <ScrollToTop />
             <Navbar />
 
-            <main className="flex-1 pt-28 pb-24 px-4 sm:px-6 lg:px-10 relative overflow-hidden">
+            <main className="flex-1 pt-28 pb-10 px-4 sm:px-6 lg:px-10 relative overflow-hidden">
+
+                {/* ── Grain texture ── */}
+                <div className="pointer-events-none absolute inset-0 opacity-[0.03] dark:opacity-[0.07] z-0"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+                        backgroundSize: "200px",
+                    }}
+                />
 
                 {/* ── Ambient glows ── */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -221,9 +230,9 @@ export default function TeamPage() {
                                 style={{ fontSize: "clamp(3.5rem, 9vw, 7rem)" }}>
                                 Bizning
                                 <br />
-                                <em className="not-italic font-normal text-foreground/40">Jamoa</em>
+                                <em className="not-italic font-normal" style={{ color: "hsl(45 66% 52%)" }}>Jamoa</em>
                             </h1>
-                            <p className="font-serif italic text-foreground/55 text-base md:text-lg leading-relaxed max-w-sm border-l border-border/40 pl-4">
+                            <p className="font-serif text-foreground/80 text-base md:text-lg leading-relaxed max-w-sm border-l border-border/40 pl-4">
                                 Orqamizda turgan ijodkorlar va mutaxassislar.
                                 Har bir sahifa ularning mehnatidan tug'iladi.
                             </p>
@@ -368,7 +377,7 @@ export default function TeamPage() {
                     </div>
 
                     {/* ── Bottom rule ── */}
-                    <div className="mt-20 flex items-center gap-4">
+                    <div className="mt-10 flex items-center gap-4">
                         <div className="flex-1 h-px bg-border/30" />
                         <span className="font-mono text-[9px] text-foreground/20 tracking-[0.2em] uppercase">
                             {new Date().getFullYear()} &mdash; Booktopia
@@ -380,7 +389,7 @@ export default function TeamPage() {
             </main>
 
             {/* ── Mualliflar va Tarjimonlar marquee ──────────────────────────────── */}
-            <section className="relative w-full py-24 md:py-32 overflow-hidden border-y border-border/50 bg-background">
+            <section className="relative w-full py-16 md:py-20 overflow-hidden border-y border-border/50 bg-background">
 
                 {/* Background glow */}
                 <div className="absolute inset-0 z-0 pointer-events-none opacity-15">
@@ -391,43 +400,67 @@ export default function TeamPage() {
                 </div>
 
                 <div className="relative z-10 w-full flex flex-col items-center">
-                    <h2 className="font-heading font-bold text-4xl md:text-5xl leading-[1.05] tracking-wide text-foreground mb-16 text-center drop-shadow-sm">
-                        Muallif va Tarjimonlarimiz
-                    </h2>
+                    <div className="flex flex-col items-center gap-4 mb-10">
+                        <div className="inline-flex items-center gap-4">
+                            <span className="w-8 h-px" style={{ background: "hsl(45 66% 52% / 0.5)" }} />
+                            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.28em]"
+                                style={{ color: "hsl(45 66% 52% / 0.8)" }}>
+                                Booktopia Hamkorlari
+                            </p>
+                            <span className="w-8 h-px" style={{ background: "hsl(45 66% 52% / 0.5)" }} />
+                        </div>
+                        <h2 className="font-heading font-bold text-4xl md:text-5xl leading-[1.05] tracking-wide text-foreground text-center drop-shadow-sm">
+                            Muallif va Tarjimonlarimiz
+                        </h2>
+                    </div>
 
-                    {/* Marquee row */}
-                    <div className="w-full relative flex overflow-x-hidden group">
-                        {/* Edge fades */}
+                    {/* Marquee row 1 — left */}
+                    <div className="w-full relative flex overflow-x-hidden mb-6">
                         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
                         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-
                         <motion.div
                             className="flex items-center gap-12 sm:gap-16 lg:gap-24 whitespace-nowrap pl-12 sm:pl-16 lg:pl-24 will-change-transform"
                             animate={{ x: ["0%", "-33.333333%"] }}
-                            transition={{ duration: 35, ease: "linear", repeat: Infinity }}
+                            transition={{ duration: 90, ease: "linear", repeat: Infinity }}
                         >
                             {[...authors, ...authors, ...authors].map((author, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center gap-5 transition-transform duration-500 ease-out cursor-pointer group/card"
-                                >
+                                <div key={index} className="flex items-center gap-5 cursor-pointer group/card">
                                     {author.image_url ? (
-                                        <img
-                                            src={author.image_url}
-                                            alt={author.name}
-                                            loading="lazy"
-                                            className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
-                                        />
+                                        <img src={author.image_url} alt={author.name} loading="lazy"
+                                            className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]" />
                                     ) : (
                                         <NoPhotoCircle name={author.name} role={author.role as "MUALLIF" | "TARJIMON"} />
                                     )}
                                     <div className="flex flex-col items-start gap-1">
-                                        <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">
-                                            {author.name}
-                                        </span>
-                                        <span className={`font-sans font-bold text-[0.65rem] tracking-[0.2em] uppercase ${author.role === "MUALLIF" ? "text-primary" : "text-gold"}`}>
-                                            {author.role}
-                                        </span>
+                                        <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>
+                                        <span className={`font-sans font-bold text-[0.65rem] tracking-[0.2em] uppercase ${author.role === "MUALLIF" ? "text-primary" : "text-gold"}`}>{author.role}</span>
+                                    </div>
+                                    <span className="w-2 h-2 rounded-full bg-gold/40 block ml-8 md:ml-16" />
+                                </div>
+                            ))}
+                        </motion.div>
+                    </div>
+
+                    {/* Marquee row 2 — right (reversed) */}
+                    <div className="w-full relative flex overflow-x-hidden">
+                        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+                        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+                        <motion.div
+                            className="flex items-center gap-12 sm:gap-16 lg:gap-24 whitespace-nowrap pl-12 sm:pl-16 lg:pl-24 will-change-transform"
+                            animate={{ x: ["-33.333333%", "0%"] }}
+                            transition={{ duration: 90, ease: "linear", repeat: Infinity }}
+                        >
+                            {[...[...authors].reverse(), ...[...authors].reverse(), ...[...authors].reverse()].map((author, index) => (
+                                <div key={index} className="flex items-center gap-5 cursor-pointer group/card">
+                                    {author.image_url ? (
+                                        <img src={author.image_url} alt={author.name} loading="lazy"
+                                            className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]" />
+                                    ) : (
+                                        <NoPhotoCircle name={author.name} role={author.role as "MUALLIF" | "TARJIMON"} />
+                                    )}
+                                    <div className="flex flex-col items-start gap-1">
+                                        <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>
+                                        <span className={`font-sans font-bold text-[0.65rem] tracking-[0.2em] uppercase ${author.role === "MUALLIF" ? "text-primary" : "text-gold"}`}>{author.role}</span>
                                     </div>
                                     <span className="w-2 h-2 rounded-full bg-gold/40 block ml-8 md:ml-16" />
                                 </div>
