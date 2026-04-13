@@ -28,7 +28,19 @@
       "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" status --short)",
       "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" log --oneline -5)",
       "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" diff src/App.tsx)",
-      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" push origin main)"
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" push origin main)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" show ccbb67a --stat)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" diff HEAD src/components/LoadingSplash.tsx src/components/Footer.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" show HEAD:src/components/LoadingSplash.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" show c67faf5 --stat)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/pages/TeamPage.tsx src/components/YangiNashrlar.tsx)",
+      "Bash(git -C c:/Users/user/Documents/GitHub/booktopia-foundation commit -m ':*)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/lib/constants.ts src/components/CuratedLibrary.tsx src/pages/LibraryPage.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" show c67faf5:src/components/LoadingSplash.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" ls-files src/assets/Logo-blue.png)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/App.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/pages/LibraryPage.tsx src/components/CuratedLibrary.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/components/CuratedLibrary.tsx src/pages/LibraryPage.tsx)"
     ]
   }
 }
