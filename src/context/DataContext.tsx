@@ -41,6 +41,8 @@ export interface AuthorSpotlightItem {
   role: "MUALLIF" | "TARJIMON";
   image_url: string | null;
   sort_order: number;
+  description: string | null;
+  books: string | null;
   created_at: string;
 }
 

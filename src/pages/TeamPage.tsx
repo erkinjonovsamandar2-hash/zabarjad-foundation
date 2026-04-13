@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, animate } from "framer-motion";
+import { X, BookOpen } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -35,9 +37,6 @@ const getGlyph = (role: string) => {
 };
 
 // ── Premium no-photo card fill (portrait cards) ───────────────────────────────
-// Fills the entire card area with a role-tinted editorial design:
-// layered radial + halftone-style background, oversized serif initial,
-// concentric rings, and a diagonal stripe sweep identical to the photo cards.
 const NoPhotoCard = ({ name, role, isFounder = false }: { name: string; role: string; isFounder?: boolean }) => {
     const accent = getAccent(role);
     const initial = name.charAt(0).toUpperCase();
@@ -99,20 +98,27 @@ const NoPhotoCard = ({ name, role, isFounder = false }: { name: string; role: st
 };
 
 // ── Premium no-photo circle (marquee) ─────────────────────────────────────────
-// A rich gradient disc with a serif italic initial + inner ring,
-// sized to match real portrait circles in the marquee.
-const NoPhotoCircle = ({ name, role }: { name: string; role: "MUALLIF" | "TARJIMON" }) => {
+const NoPhotoCircle = ({
+    name,
+    role,
+    size = 160,
+}: {
+    name: string;
+    role: "MUALLIF" | "TARJIMON";
+    size?: number;
+}) => {
     const isAuthor = role === "MUALLIF";
     const [from, to] = isAuthor
         ? ["hsl(35 70% 28%)", "hsl(45 80% 48%)"]
         : ["hsl(230 50% 28%)", "hsl(250 60% 52%)"];
     const ringColor = isAuthor ? "rgba(255,220,120,0.35)" : "rgba(160,160,255,0.35)";
     const initial = name.charAt(0).toUpperCase();
+    const fontSize = size * 0.4;
     return (
         <div
             className="relative flex-shrink-0 flex items-center justify-center rounded-full"
             style={{
-                width: "104px", height: "104px",
+                width: size, height: size,
                 background: `radial-gradient(circle at 38% 35%, ${from}, ${to})`,
                 boxShadow: `0 8px 30px rgba(0,0,0,0.18), inset 0 0 0 1.5px ${ringColor}`,
             }}
@@ -127,7 +133,7 @@ const NoPhotoCircle = ({ name, role }: { name: string; role: "MUALLIF" | "TARJIM
                     fontFamily: "Georgia, 'Times New Roman', serif",
                     fontStyle: "italic",
                     fontWeight: 700,
-                    fontSize: "2.6rem",
+                    fontSize,
                     lineHeight: 1,
                     color: "rgba(255,255,255,0.92)",
                     textShadow: "0 2px 12px rgba(0,0,0,0.4)",
@@ -147,17 +153,239 @@ const SkeletonCard = ({ className = "" }: { className?: string }) => (
     />
 );
 
+// ── Author popup ──────────────────────────────────────────────────────────────
+const AuthorPopup = ({
+    author,
+    onClose,
+}: {
+    author: AuthorSpotlightItem;
+    onClose: () => void;
+}) => {
+    const isAuthor = author.role === "MUALLIF";
+    const accentColor = isAuthor ? "hsl(45 66% 52%)" : "hsl(250 60% 65%)";
+    const books = author.books
+        ? author.books.split("\n").map(b => b.trim()).filter(Boolean)
+        : [];
+
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+    }, [onClose]);
+
+    return (
+        <motion.div
+            key="popup-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ background: "rgba(8,6,4,0.78)", backdropFilter: "blur(10px)" }}
+            onClick={onClose}
+        >
+            <motion.div
+                key="popup-panel"
+                initial={{ opacity: 0, scale: 0.92, y: 28 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: 28 }}
+                transition={{ type: "spring", stiffness: 340, damping: 32 }}
+                className="relative w-full max-w-[30rem] max-h-[90vh] flex flex-col overflow-hidden"
+                style={{
+                    background: "hsl(var(--background))",
+                    boxShadow: `0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px ${accentColor}22, inset 0 0 0 1px rgba(255,255,255,0.05)`,
+                    borderRadius: "1.25rem",
+                }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* ── Photo area — fixed height, never shrinks ── */}
+                <div className="relative w-full flex-shrink-0 overflow-hidden" style={{ height: 320 }}>
+                    {/* Diagonal stripe bg */}
+                    <div className="absolute inset-0" style={{
+                        background: isAuthor ? "hsl(35 40% 14%)" : "hsl(240 35% 14%)",
+                        backgroundImage: `repeating-linear-gradient(-45deg, ${accentColor}12 0px, ${accentColor}12 1px, transparent 1px, transparent 22px)`,
+                    }} />
+
+                    {author.image_url ? (
+                        <img
+                            src={author.image_url}
+                            alt={author.name}
+                            className="absolute inset-0 w-full h-full object-cover object-top"
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <NoPhotoCircle name={author.name} role={author.role} size={160} />
+                        </div>
+                    )}
+
+                    {/* Bottom gradient */}
+                    <div className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
+                        style={{ background: "linear-gradient(to top, hsl(var(--background)) 0%, transparent 100%)" }} />
+
+                    {/* Close button */}
+                    <button
+                        onClick={onClose}
+                        className="absolute top-3 right-3 z-20 flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:scale-110"
+                        style={{
+                            background: "rgba(0,0,0,0.5)",
+                            backdropFilter: "blur(6px)",
+                            border: "1px solid rgba(255,255,255,0.15)",
+                        }}
+                    >
+                        <X className="w-4 h-4 text-white/80" />
+                    </button>
+
+                    {/* Role badge */}
+                    <div className="absolute top-3 left-3 z-20">
+                        <span
+                            className="inline-block font-sans font-bold text-[9px] tracking-[0.22em] uppercase px-2.5 py-1 rounded-full"
+                            style={{
+                                background: `${accentColor}22`,
+                                border: `1px solid ${accentColor}55`,
+                                color: accentColor,
+                                backdropFilter: "blur(4px)",
+                            }}
+                        >
+                            {author.role}
+                        </span>
+                    </div>
+                </div>
+
+                {/* ── Text content — scrollable ── */}
+                <div className="px-6 pb-6 pt-1 overflow-y-auto flex-1" style={{ scrollbarWidth: "none" }}>
+                    {/* Gold rule */}
+                    <div className="w-8 h-px mb-3" style={{ background: accentColor }} />
+
+                    {/* Name */}
+                    <h3 className="font-heading font-bold leading-tight text-foreground mb-4"
+                        style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)" }}>
+                        {author.name}
+                    </h3>
+
+                    {/* Description */}
+                    {author.description && (
+                        <p className="font-serif text-sm leading-relaxed text-foreground/70 mb-5">
+                            {author.description}
+                        </p>
+                    )}
+
+                    {/* Books list */}
+                    {books.length > 0 && (
+                        <div>
+                            <div className="flex items-center gap-2 mb-2.5">
+                                <BookOpen className="w-3.5 h-3.5" style={{ color: accentColor }} />
+                                <span className="font-sans font-bold text-[9px] tracking-[0.22em] uppercase"
+                                    style={{ color: accentColor }}>
+                                    {isAuthor ? "Muallif kitoblari" : "Tarjimon kitoblari"}
+                                </span>
+                            </div>
+                            <ul className="space-y-1.5">
+                                {books.map((book, i) => (
+                                    <li key={i} className="flex items-start gap-2">
+                                        <span className="mt-1.5 flex-shrink-0 w-1 h-1 rounded-full" style={{ background: accentColor }} />
+                                        <span className="font-serif text-sm text-foreground/80 leading-snug">{book}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Empty state */}
+                    {!author.description && books.length === 0 && (
+                        <p className="font-serif text-sm text-foreground/40 italic">
+                            Ma'lumot hali qo'shilmagan.
+                        </p>
+                    )}
+                </div>
+
+                {/* Corner decorative marks */}
+                {[
+                    "bottom-4 left-4",
+                    "bottom-4 right-4",
+                ].map((pos, i) => (
+                    <div key={i} className={`absolute ${pos} w-3 h-3 pointer-events-none`}
+                        style={{
+                            borderBottom: `1px solid ${accentColor}40`,
+                            borderLeft: i === 0 ? `1px solid ${accentColor}40` : "none",
+                            borderRight: i === 1 ? `1px solid ${accentColor}40` : "none",
+                        }} />
+                ))}
+            </motion.div>
+        </motion.div>
+    );
+};
+
 export default function TeamPage() {
     const { teamMembers, authorSpotlights, teamLoading, authorsLoading } = useData();
+    const [selectedAuthor, setSelectedAuthor] = useState<AuthorSpotlightItem | null>(null);
+
+    // ── Marquee drag + auto-scroll ─────────────────────────────────────────────
+    const marqueeX        = useMotionValue(0);
+    const marqueeTrackRef = useRef<HTMLDivElement>(null);
+    const marqueeAnimRef  = useRef<ReturnType<typeof animate> | null>(null);
+    const launchRef       = useRef<(() => void) | null>(null);
+    const wasDraggingRef  = useRef(false);
+
+    // Mount: start auto-scroll loop
+    useEffect(() => {
+        let stopped = false;
+
+        function launch() {
+            if (stopped || !marqueeTrackRef.current) return;
+            const oneSet = marqueeTrackRef.current.scrollWidth / 3;
+            if (oneSet < 10) return;
+
+            // Normalize current x into (-oneSet, 0]
+            let cur = marqueeX.get();
+            cur = cur - Math.ceil(cur / oneSet) * oneSet; // wrap to <= 0
+            while (cur <= -oneSet) cur += oneSet;
+            marqueeX.set(cur);
+
+            const fraction = Math.abs(cur) / oneSet;          // 0 = start, 1 = end
+            const duration = Math.max((1 - fraction) * 110, 1);
+
+            marqueeAnimRef.current = animate(marqueeX, -oneSet, {
+                duration,
+                ease: "linear",
+                onComplete: () => {
+                    if (stopped) return;
+                    marqueeX.set(0);
+                    launch();
+                },
+            });
+        }
+
+        launchRef.current = launch;
+        const t = setTimeout(launch, 150);
+
+        return () => {
+            stopped = true;
+            clearTimeout(t);
+            marqueeAnimRef.current?.stop();
+            launchRef.current = null;
+        };
+    }, [marqueeX]);
+
+    // Pause while popup is open, resume on close
+    useEffect(() => {
+        if (selectedAuthor) {
+            marqueeAnimRef.current?.stop();
+        } else {
+            launchRef.current?.();
+        }
+    }, [selectedAuthor]);
+
+    const openPopup = (author: AuthorSpotlightItem) => setSelectedAuthor(author);
+    const closePopup = () => setSelectedAuthor(null);
 
     // Sort by sort_order — lowest sort_order = big featured card.
-    // Never show fallback images: while loading → skeletons, after → real DB data.
     const sorted = [...teamMembers].sort((a, b) => a.sort_order - b.sort_order);
     const founder = sorted[0];
     const rest = sorted.slice(1);
     const authors = authorSpotlights;
 
-    // Wait only for team-specific fetches — not for books/articles/etc.
     if (teamLoading || authorsLoading) {
         return (
             <div className="min-h-screen bg-background flex flex-col">
@@ -243,7 +471,7 @@ export default function TeamPage() {
                     </motion.div>
 
                     {/* ── Asymmetric layout ── */}
-                    <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-6 lg:gap-8 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,300px)_1fr] gap-6 lg:gap-8 items-start">
 
                         {/* ── Founder — dominant left column ── */}
                         {founder && (
@@ -387,6 +615,8 @@ export default function TeamPage() {
             {/* ── Mualliflar va Tarjimonlar marquee ──────────────────────────────── */}
             <section className="relative w-full py-16 md:py-20 overflow-hidden border-y border-border/50 bg-background">
 
+                <style>{`.author-card:active { transform: scale(0.98); }`}</style>
+
                 {/* Background glow */}
                 <div className="absolute inset-0 z-0 pointer-events-none opacity-15">
                     <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[70%] rounded-full pointer-events-none"
@@ -396,7 +626,7 @@ export default function TeamPage() {
                 </div>
 
                 <div className="relative z-10 w-full flex flex-col items-center">
-                    <div className="flex flex-col items-center gap-4 mb-10">
+                    <div className="flex flex-col items-center gap-4 mb-12">
                         <div className="inline-flex items-center gap-4">
                             <span className="w-8 h-px" style={{ background: "hsl(45 66% 52% / 0.5)" }} />
                             <p className="font-sans text-[10px] font-bold uppercase tracking-[0.28em]"
@@ -408,63 +638,132 @@ export default function TeamPage() {
                         <h2 className="font-heading font-bold text-4xl md:text-5xl leading-[1.05] tracking-wide text-foreground text-center drop-shadow-sm">
                             Muallif va Tarjimonlarimiz
                         </h2>
+                        <p className="font-serif text-sm text-foreground/50 text-center">
+                            Batafsil ma'lumot uchun bosing
+                        </p>
                     </div>
 
-                    {/* Marquee row 1 — left */}
-                    <div className="w-full relative flex overflow-x-hidden mb-6">
+                    {/* Single marquee row — drag left/right to browse */}
+                    <div
+                        className="w-full relative flex overflow-x-hidden cursor-grab active:cursor-grabbing select-none"
+                    >
                         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
                         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-                        <motion.div
-                            className="flex items-center gap-12 sm:gap-16 lg:gap-24 whitespace-nowrap pl-12 sm:pl-16 lg:pl-24 will-change-transform"
-                            animate={{ x: ["0%", "-33.333333%"] }}
-                            transition={{ duration: 90, ease: "linear", repeat: Infinity }}
-                        >
-                            {[...authors, ...authors, ...authors].map((author, index) => (
-                                <div key={index} className="flex items-center gap-5 cursor-pointer group/card">
-                                    {author.image_url ? (
-                                        <img src={author.image_url} alt={author.name} loading="lazy"
-                                            className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]" />
-                                    ) : (
-                                        <NoPhotoCircle name={author.name} role={author.role as "MUALLIF" | "TARJIMON"} />
-                                    )}
-                                    <div className="flex flex-col items-start gap-1">
-                                        <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>
-                                        <span className={`font-sans font-bold text-[0.65rem] tracking-[0.2em] uppercase ${author.role === "MUALLIF" ? "text-primary" : "text-gold"}`}>{author.role}</span>
-                                    </div>
-                                    <span className="w-2 h-2 rounded-full bg-gold/40 block ml-8 md:ml-16" />
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
 
-                    {/* Marquee row 2 — right (reversed) */}
-                    <div className="w-full relative flex overflow-x-hidden">
-                        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-                        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
                         <motion.div
-                            className="flex items-center gap-12 sm:gap-16 lg:gap-24 whitespace-nowrap pl-12 sm:pl-16 lg:pl-24 will-change-transform"
-                            animate={{ x: ["-33.333333%", "0%"] }}
-                            transition={{ duration: 90, ease: "linear", repeat: Infinity }}
+                            ref={marqueeTrackRef}
+                            className="flex items-center gap-10 sm:gap-14 lg:gap-20 whitespace-nowrap pl-10 sm:pl-14 lg:pl-20 will-change-transform"
+                            style={{ x: marqueeX }}
+                            drag="x"
+                            dragMomentum={false}
+                            dragElastic={0}
+                            onDragStart={() => {
+                                wasDraggingRef.current = false;
+                                marqueeAnimRef.current?.stop();
+                            }}
+                            onDrag={() => { wasDraggingRef.current = true; }}
+                            onDragEnd={() => {
+                                if (!selectedAuthor) launchRef.current?.();
+                            }}
                         >
-                            {[...[...authors].reverse(), ...[...authors].reverse(), ...[...authors].reverse()].map((author, index) => (
-                                <div key={index} className="flex items-center gap-5 cursor-pointer group/card">
-                                    {author.image_url ? (
-                                        <img src={author.image_url} alt={author.name} loading="lazy"
-                                            className="w-[104px] h-[104px] md:w-[150px] md:h-[150px] rounded-full object-cover border border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]" />
-                                    ) : (
-                                        <NoPhotoCircle name={author.name} role={author.role as "MUALLIF" | "TARJIMON"} />
-                                    )}
-                                    <div className="flex flex-col items-start gap-1">
-                                        <span className="font-heading text-2xl text-foreground group-hover/card:text-gold transition-colors duration-500">{author.name}</span>
-                                        <span className={`font-sans font-bold text-[0.65rem] tracking-[0.2em] uppercase ${author.role === "MUALLIF" ? "text-primary" : "text-gold"}`}>{author.role}</span>
-                                    </div>
-                                    <span className="w-2 h-2 rounded-full bg-gold/40 block ml-8 md:ml-16" />
-                                </div>
-                            ))}
+                            {[...authors, ...authors, ...authors].map((author, index) => {
+                                const isAuthorRole = author.role === "MUALLIF";
+                                const ringColor = isAuthorRole ? "rgba(200,151,58,0.45)" : "rgba(140,120,220,0.45)";
+                                return (
+                                    <button
+                                        key={index}
+                                        className="author-card group/card flex items-center gap-5 cursor-pointer flex-shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                                        style={{ ["--tw-ring-color" as string]: isAuthorRole ? "#c8973a" : "#8b6ab5" }}
+                                        onClick={() => { if (!wasDraggingRef.current) openPopup(author); }}
+                                        title={`${author.name} haqida ko'proq`}
+                                    >
+                                        {/* Circle photo — gold tint on hover, no scale */}
+                                        <div
+                                            className="relative flex-shrink-0 overflow-hidden rounded-full"
+                                            style={{
+                                                width: "clamp(130px, 13vw, 196px)",
+                                                height: "clamp(130px, 13vw, 196px)",
+                                                boxShadow: `0 8px 32px rgba(0,0,0,0.18), 0 0 0 2.5px ${ringColor}`,
+                                                transition: "box-shadow 0.3s ease",
+                                            }}
+                                        >
+                                            {author.image_url ? (
+                                                <img
+                                                    src={author.image_url}
+                                                    alt={author.name}
+                                                    loading="lazy"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <NoPhotoCircle
+                                                    name={author.name}
+                                                    role={author.role as "MUALLIF" | "TARJIMON"}
+                                                    size={196}
+                                                />
+                                            )}
+                                            {/* Gold tint overlay on hover */}
+                                            <div
+                                                className="absolute inset-0 rounded-full opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none"
+                                                style={{
+                                                    background: isAuthorRole
+                                                        ? "radial-gradient(circle, rgba(200,151,58,0.22) 0%, rgba(200,151,58,0.08) 70%, transparent 100%)"
+                                                        : "radial-gradient(circle, rgba(139,106,181,0.22) 0%, rgba(139,106,181,0.08) 70%, transparent 100%)",
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Info */}
+                                        <div className="flex flex-col items-start gap-1.5">
+                                            <span
+                                                className="font-heading leading-tight text-foreground transition-colors duration-300 group-hover/card:text-[#c8973a]"
+                                                style={{ fontSize: "clamp(1.1rem, 2.2vw, 1.65rem)" }}
+                                            >
+                                                {author.name}
+                                            </span>
+                                            <span
+                                                className="font-sans font-bold text-[0.6rem] tracking-[0.22em] uppercase px-2 py-0.5 rounded-full"
+                                                style={isAuthorRole
+                                                    ? { color: "#c8973a", background: "rgba(200,151,58,0.12)", border: "1px solid rgba(200,151,58,0.3)" }
+                                                    : { color: "#8b6ab5", background: "rgba(139,106,181,0.12)", border: "1px solid rgba(139,106,181,0.3)" }
+                                                }
+                                            >
+                                                {author.role}
+                                            </span>
+                                            {/* Batafsil button — always visible, lights up on hover */}
+                                            <span
+                                                className="mt-0.5 inline-flex items-center gap-1 font-sans font-bold text-[9px] tracking-[0.18em] uppercase px-2.5 py-1 rounded-full transition-all duration-250 pointer-events-none"
+                                                style={{
+                                                    color: isAuthorRole ? "#c8973a" : "#8b6ab5",
+                                                    border: `1px solid ${isAuthorRole ? "rgba(200,151,58,0.35)" : "rgba(139,106,181,0.35)"}`,
+                                                    background: "transparent",
+                                                }}
+                                            >
+                                                Batafsil
+                                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ display: "inline", marginLeft: 2 }}>
+                                                    <path d="M1.5 4H6.5M6.5 4L4 1.5M6.5 4L4 6.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </span>
+                                        </div>
+
+                                        {/* Divider dot */}
+                                        <span
+                                            className="flex-shrink-0 w-1.5 h-1.5 rounded-full ml-6 lg:ml-10"
+                                            style={{ background: "hsl(45 66% 52% / 0.3)" }}
+                                        />
+                                    </button>
+                                );
+                            })}
                         </motion.div>
                     </div>
                 </div>
             </section>
+
+            {/* ── Author popup ── */}
+            <AnimatePresence>
+                {selectedAuthor && (
+                    <AuthorPopup author={selectedAuthor} onClose={closePopup} />
+                )}
+            </AnimatePresence>
 
             <Footer />
         </div>

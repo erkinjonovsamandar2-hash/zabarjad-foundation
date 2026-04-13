@@ -380,6 +380,8 @@ const emptyAuthor: Omit<AuthorSpotlightItem, "id" | "created_at"> = {
     role: "MUALLIF",
     image_url: null,
     sort_order: 0,
+    description: null,
+    books: null,
 };
 
 function AuthorsTab() {
@@ -592,6 +594,31 @@ function AuthorsTab() {
                                     <option value="MUALLIF">MUALLIF</option>
                                     <option value="TARJIMON">TARJIMON</option>
                                 </select>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-foreground/80 mb-1">Tavsif</label>
+                                <textarea
+                                    value={form.description ?? ""}
+                                    onChange={(e) => setForm({ ...form, description: e.target.value || null })}
+                                    placeholder="Muallif / tarjimon haqida qisqacha ma'lumot..."
+                                    rows={3}
+                                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-foreground/80 mb-1">
+                                    Kitoblar
+                                    <span className="ml-1.5 text-xs text-muted-foreground font-normal">(har bir qator — alohida kitob)</span>
+                                </label>
+                                <textarea
+                                    value={form.books ?? ""}
+                                    onChange={(e) => setForm({ ...form, books: e.target.value || null })}
+                                    placeholder={"Kitob nomi 1\nKitob nomi 2\nKitob nomi 3"}
+                                    rows={4}
+                                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none font-mono"
+                                />
                             </div>
 
                             <div>
