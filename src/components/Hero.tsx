@@ -342,6 +342,20 @@ const MiniShelf = ({
   isPaused: boolean; onSelect: (i: number) => void;
   onPrev: () => void; onNext: () => void; lang: Lang;
 }) => {
+  const stripRef = useRef<HTMLDivElement>(null);
+
+  // Scroll strip so active thumb stays centered
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const thumb = strip.children[activeIndex] as HTMLElement | undefined;
+    if (!thumb) return;
+    strip.scrollTo({
+      left: thumb.offsetLeft - strip.offsetWidth / 2 + thumb.offsetWidth / 2,
+      behavior: "smooth",
+    });
+  }, [activeIndex]);
+
   return (
     <div className="flex items-center gap-1 sm:gap-3 mt-6 sm:mt-8 w-full max-w-2xl px-1 sm:px-0">
       <motion.button
@@ -353,7 +367,7 @@ const MiniShelf = ({
         <ChevronLeft className="h-6 w-6" />
       </motion.button>
 
-      <div className="flex items-end gap-2.5 sm:gap-3 overflow-x-auto flex-1 justify-start sm:justify-center py-4 px-2 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div ref={stripRef} className="flex items-end gap-2.5 sm:gap-3 overflow-x-auto flex-1 justify-start py-4 px-2 snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {books.map((book, i) => {
           const isActive = i === activeIndex;
           const imgSrc = getImageUrl(book.cover_url);
