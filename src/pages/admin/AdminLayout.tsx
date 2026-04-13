@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   BookOpen, FileText, Sparkles, Menu, X,
-  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper, Users,
+  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper, Users, GalleryHorizontal,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -12,6 +12,7 @@ const navItems = [
   { label: "Blog", to: "/admin/blog", icon: FileText },
   { label: "Quiz", to: "/admin/quiz", icon: Sparkles },
   { label: "Jamoa", to: "/admin/team", icon: Users },
+  { label: "Hero Tartibi", to: "/admin/hero-order", icon: GalleryHorizontal },
   { label: "Sharhlar", to: "/admin/reviews", icon: MessageSquare },
   { label: "Sozlamalar", to: "/admin/settings", icon: Settings },
   { label: "Adminlar", to: "/admin/users", icon: ShieldCheck },
