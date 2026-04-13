@@ -182,26 +182,31 @@ const AuthorPopup = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ background: "rgba(8,6,4,0.78)", backdropFilter: "blur(10px)" }}
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6"
+            style={{ background: "rgba(8,6,4,0.8)", backdropFilter: "blur(10px)" }}
             onClick={onClose}
         >
             <motion.div
                 key="popup-panel"
-                initial={{ opacity: 0, scale: 0.92, y: 28 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 28 }}
-                transition={{ type: "spring", stiffness: 340, damping: 32 }}
-                className="relative w-full max-w-[30rem] max-h-[90vh] flex flex-col overflow-hidden"
+                initial={{ opacity: 0, y: "100%" }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: "100%" }}
+                transition={{ type: "spring", stiffness: 320, damping: 36 }}
+                className="relative w-full sm:max-w-[32rem] max-h-[92vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl"
                 style={{
                     background: "hsl(var(--background))",
-                    boxShadow: `0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px ${accentColor}22, inset 0 0 0 1px rgba(255,255,255,0.05)`,
-                    borderRadius: "1.25rem",
+                    boxShadow: `0 -8px 60px rgba(0,0,0,0.45), 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px ${accentColor}22`,
                 }}
+
                 onClick={(e) => e.stopPropagation()}
             >
+                {/* Drag handle pill */}
+                <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+                    <div className="w-10 h-1 rounded-full" style={{ background: `${accentColor}40` }} />
+                </div>
+
                 {/* ── Photo area — fixed height, never shrinks ── */}
-                <div className="relative w-full flex-shrink-0 overflow-hidden" style={{ height: 320 }}>
+                <div className="relative w-full flex-shrink-0 overflow-hidden" style={{ height: 380 }}>
                     {/* Diagonal stripe bg */}
                     <div className="absolute inset-0" style={{
                         background: isAuthor ? "hsl(35 40% 14%)" : "hsl(240 35% 14%)",
