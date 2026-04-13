@@ -193,9 +193,9 @@ const CuratedLibrary = () => {
                         </div>
                       )}
 
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-[3px_8px_8px_3px]">
-                        <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-5 py-2.5 bg-primary text-primary-foreground rounded-full shadow-[0_10px_25px_-5px_rgba(115,197,238,0.4)] scale-90 group-hover:scale-100 transition-transform duration-500 ease-out">
+                      {/* Hover Overlay — mouse only, no touch glitch */}
+                      <div className="absolute inset-0 bg-black/45 opacity-0 [@media(hover:hover)]:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-[3px_8px_8px_3px]">
+                        <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-5 py-2.5 bg-primary text-primary-foreground rounded-full shadow-[0_10px_25px_-5px_rgba(115,197,238,0.4)] scale-90 [@media(hover:hover)]:group-hover:scale-100 transition-transform duration-500 ease-out">
                           Batafsil
                         </span>
                       </div>

@@ -23,7 +23,7 @@ const BookCover = ({ src, alt, className = "", hover = true, loading = "lazy" }:
         "relative aspect-[2/3] overflow-hidden bg-muted",
         "rounded-[3px_8px_8px_3px]",
         hover
-          ? "transition-all duration-500 group-hover:-translate-y-3 group-hover:-rotate-1"
+          ? "transition-all duration-500 [@media(hover:hover)]:group-hover:-translate-y-3 [@media(hover:hover)]:group-hover:-rotate-1"
           : "",
         className,
       ]
