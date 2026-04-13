@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Navigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import LoadingSplash from "@/components/LoadingSplash";
+import logoImg from "@/assets/Logo-blue.png";
 import { useData } from "@/context/DataContext";
 
 import { DataProvider } from "@/context/DataContext";
@@ -60,9 +61,9 @@ const SuspenseFallback = () => (
         style={{ animationDuration: "1.4s" }}
       />
       <img
-        src="/Element-blue.png"
+        src={logoImg}
         alt="Booktopia"
-        className="relative h-12 w-12 object-contain opacity-90"
+        className="relative h-12 w-auto object-contain opacity-90"
       />
     </div>
     <div className="w-32 h-[2px] rounded-full bg-border overflow-hidden">
