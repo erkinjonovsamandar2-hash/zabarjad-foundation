@@ -185,7 +185,7 @@ const CuratedLibrary = () => {
 
                       {/* Ribbon Badge (first book only) — outside BookCover so it isn't clipped */}
                       {i === 0 && (
-                        <div className="absolute top-4 right-0 z-20 translate-x-1">
+                        <div className="absolute top-4 right-0 z-20 translate-x-1 transition-all duration-500 [@media(hover:hover)]:group-hover:-translate-y-3 [@media(hover:hover)]:group-hover:-rotate-1">
                           <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-foreground text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-l-sm shadow-[0_4px_10px_rgba(245,158,11,0.4)]">
                             Yangi nashr
                           </div>
