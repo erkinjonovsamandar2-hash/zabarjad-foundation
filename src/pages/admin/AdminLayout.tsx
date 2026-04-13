@@ -2,18 +2,19 @@ import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   BookOpen, FileText, Sparkles, Menu, X,
-  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper,
+  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper, Users,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const navItems = [
-  { label: "Kitoblar",       to: "/admin",               icon: BookOpen,   end: true },
-  { label: "Yangi Nashrlar", to: "/admin/new-books",     icon: Newspaper            },
-  { label: "Blog",           to: "/admin/blog",          icon: FileText             },
-  { label: "Quiz",      to: "/admin/quiz",      icon: Sparkles               },
-  { label: "Sharhlar",  to: "/admin/reviews",   icon: MessageSquare          },
-  { label: "Sozlamalar",to: "/admin/settings",  icon: Settings               },
-  { label: "Adminlar",  to: "/admin/users",     icon: ShieldCheck            },
+  { label: "Kitoblar", to: "/admin", icon: BookOpen, end: true },
+  { label: "Yangi Nashrlar", to: "/admin/new-books", icon: Newspaper },
+  { label: "Blog", to: "/admin/blog", icon: FileText },
+  { label: "Quiz", to: "/admin/quiz", icon: Sparkles },
+  { label: "Jamoa", to: "/admin/team", icon: Users },
+  { label: "Sharhlar", to: "/admin/reviews", icon: MessageSquare },
+  { label: "Sozlamalar", to: "/admin/settings", icon: Settings },
+  { label: "Adminlar", to: "/admin/users", icon: ShieldCheck },
 ];
 
 const AdminLayout = () => {
@@ -57,10 +58,9 @@ const AdminLayout = () => {
               end={item.end}
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-primary/5 text-primary/90"
-                    : "text-foreground/70 hover:bg-gray-100 hover:text-foreground"
+                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
+                  ? "bg-primary/5 text-primary/90"
+                  : "text-foreground/70 hover:bg-gray-100 hover:text-foreground"
                 }`
               }
             >

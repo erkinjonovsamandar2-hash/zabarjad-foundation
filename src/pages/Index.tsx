@@ -13,12 +13,11 @@ import LoadingSplash from "@/components/LoadingSplash";
 // ── Lazy-load every section that sits below the fold ──────────────────────────
 // Keeps the initial JS bundle lean — these chunks download in parallel and are
 // ready before the user scrolls to them on any reasonable connection.
-const GlobalClassics   = lazy(() => import("@/components/GlobalClassics"));
+const GlobalClassics = lazy(() => import("@/components/GlobalClassics"));
 const AmirTemurSection = lazy(() => import("@/components/AmirTemurSection"));
-const CuratedLibrary   = lazy(() => import("@/components/CuratedLibrary"));
-const Taassurotlar     = lazy(() => import("@/components/Taassurotlar"));
-const AuthorSpotlight  = lazy(() => import("@/components/AuthorSpotlight"));
-const QuickActions     = lazy(() => import("@/components/QuickActions"));
+const CuratedLibrary = lazy(() => import("@/components/CuratedLibrary"));
+const Taassurotlar = lazy(() => import("@/components/Taassurotlar"));
+const QuickActions = lazy(() => import("@/components/QuickActions"));
 
 // Minimal height placeholder — prevents CLS while chunk downloads
 const SectionFallback = () => <div className="w-full h-32 bg-transparent" aria-hidden />;
@@ -85,10 +84,6 @@ const Index = () => {
               </Suspense>
 
               <Blog />
-
-              <Suspense fallback={<SectionFallback />}>
-                <AuthorSpotlight />
-              </Suspense>
 
               <Suspense fallback={<SectionFallback />}>
                 <QuickActions />

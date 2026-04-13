@@ -7,6 +7,7 @@ import gotBooks from "@/assets/design/got-books.jpg";
 import { ChevronRight } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
+import BookCover from "@/components/BookCover";
 
 const SpotlightPage = () => {
   const { books } = useData();
@@ -153,28 +154,18 @@ const SpotlightPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className="bg-black/40 border border-white/10 backdrop-blur-md rounded-xl overflow-hidden group hover:border-amber-500/50 transition-all duration-300"
+                  className="bg-black/40 border border-white/10 backdrop-blur-md rounded-xl overflow-visible group hover:border-amber-500/50 transition-all duration-300"
                 >
-                  {book.cover_url ? (
-                    <div className="aspect-[2/3] overflow-hidden">
-                      <img
-                        src={book.cover_url}
-                        alt={locField(book, "title", lang)}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      className="aspect-[2/3] flex items-center justify-center"
-                      style={{ background: `hsl(${book.bg_color ?? "210 60% 15%"})` }}
-                    >
-                      <span className="font-serif text-xs text-white/60 text-center px-2">
-                        {locField(book, "title", lang)}
-                      </span>
-                    </div>
-                  )}
-                  <div className="p-4">
+                  <div className="p-3">
+                    <BookCover
+                      src={book.cover_url}
+                      alt={locField(book, "title", lang)}
+                      className="w-full"
+                      hover={true}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-4 pt-2">
                     <h3 className="font-heading font-bold text-foreground text-sm line-clamp-2 leading-tight mb-2 group-hover:text-gold transition-colors">
                       {locField(book, "title", lang)}
                     </h3>

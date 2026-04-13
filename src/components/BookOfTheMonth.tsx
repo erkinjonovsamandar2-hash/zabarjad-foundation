@@ -1,5 +1,6 @@
 // @refresh reset
 import { motion } from "framer-motion";
+import BookCover from "@/components/BookCover";
 import { ChevronRight, Award, Clock, Brain, Quote, Info, BookOpen, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "@/context/DataContext";
@@ -13,21 +14,14 @@ try { bgUrl = new URL("@/assets/design/botm-bg.png", import.meta.url).href; } ca
 //    component type between renders (avoids unnecessary unmount/remount).
 const FloatingBookVisual = ({ coverUrl, title }: { coverUrl: string | null; title: string }) => (
   <>
-    <div className="relative z-10 perspective-1000">
-      <div
-        className="relative w-48 sm:w-64 lg:w-80 aspect-[2/3] rounded-md sm:rounded-lg overflow-hidden border-l-[3px] border-white/20"
-        style={{
-          transform: "rotateY(-15deg) rotateX(5deg)",
-          boxShadow: `-20px 20px 40px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.15)`,
-        }}
-      >
-        {coverUrl ? (
-          <img src={coverUrl} alt={title} loading="lazy" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full bg-neutral-800" />
-        )}
-        <div className="absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/50 via-white/10 to-transparent pointer-events-none" />
-      </div>
+    <div className="relative z-10">
+      <BookCover
+        src={coverUrl}
+        alt={title}
+        className="w-48 sm:w-64 lg:w-80"
+        hover={false}
+        loading="eager"
+      />
     </div>
     {/* Floor shadow */}
     <div

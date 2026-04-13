@@ -65,7 +65,7 @@ const HeroCard = ({ article }: { article: Card }) => {
             src={article.image}
             alt={article.title}
             loading="eager"
-            fetchPriority="high"
+            fetchpriority="high"
             decoding="async"
             className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             style={{ objectPosition: objPos }}

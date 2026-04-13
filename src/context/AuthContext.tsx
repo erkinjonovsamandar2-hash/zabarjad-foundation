@@ -28,6 +28,37 @@ const AuthContext = createContext<AuthContextType | null>(null);
 // Supabase error code for missing table — silently ignored
 const TABLE_NOT_FOUND = "42P01";
 
+// ── Admin role cache ──────────────────────────────────────────────────────────
+// Stores the result of the user_roles DB query in localStorage so subsequent
+// page loads are instant instead of waiting for a slow DB round-trip.
+// TTL: 60 minutes. Cleared on sign-out.
+const ADMIN_CACHE_KEY = "bt_admin_cache";
+const ADMIN_CACHE_TTL = 60 * 60 * 1000;
+
+const readAdminCache = (userId: string): boolean | null => {
+  try {
+    const raw = localStorage.getItem(ADMIN_CACHE_KEY);
+    if (!raw) return null;
+    const { uid, value, expires } = JSON.parse(raw) as { uid: string; value: boolean; expires: number };
+    if (uid !== userId || Date.now() > expires) return null;
+    return value;
+  } catch {
+    return null;
+  }
+};
+
+const writeAdminCache = (userId: string, value: boolean) => {
+  try {
+    localStorage.setItem(ADMIN_CACHE_KEY, JSON.stringify({
+      uid: userId, value, expires: Date.now() + ADMIN_CACHE_TTL,
+    }));
+  } catch { /* storage full — silently skip */ }
+};
+
+const clearAdminCache = () => {
+  try { localStorage.removeItem(ADMIN_CACHE_KEY); } catch { /* ignore */ }
+};
+
 // Fetches the admin role for a given userId from user_roles.
 // Has its own try/catch — auth flow must never crash over a role check.
 // Uses a ref guard to prevent duplicate fetches for the same userId.
@@ -35,30 +66,49 @@ const fetchIsAdmin = async (
   userId: string,
   lastCheckedRef: React.MutableRefObject<string | null>
 ): Promise<boolean> => {
+  // Return cached result instantly — avoids the slow user_roles query on every load
+  const cached = readAdminCache(userId);
+  if (cached !== null) return cached;
+
   // Skip if we already fetched for this exact userId this session
   if (lastCheckedRef.current === userId) return false;
 
   // Mark as in-flight BEFORE the await — prevents concurrent duplicate calls
-  // even if fetchIsAdmin is called twice in quick succession
   lastCheckedRef.current = userId;
 
   try {
-    const { data, error } = await supabase
+    // Use .limit(1) instead of .maybeSingle() — avoids the 406 "Not Acceptable"
+    // error that .maybeSingle() returns when zero rows exist, which was causing
+    // a slow 10s round-trip before the error resolved.
+    const queryPromise = supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", userId)
       .eq("role", "admin")
-      .maybeSingle();
+      .limit(1)
+      .then((res) => res);
+
+    let timer: ReturnType<typeof setTimeout>;
+    const timeoutPromise = new Promise<{ data: null; error: { code: string; message: string } }>((resolve) => {
+      timer = setTimeout(() => {
+        console.warn("[AuthContext] fetchIsAdmin timed out after 20s — treating as non-admin.");
+        resolve({ data: null, error: { code: "TIMEOUT", message: "timeout" } });
+      }, 20000);
+    });
+
+    const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+    clearTimeout(timer!);
 
     if (error) {
-      if (error.code !== TABLE_NOT_FOUND) {
+      if (error.code !== TABLE_NOT_FOUND && error.code !== "TIMEOUT") {
         console.warn("[AuthContext] fetchIsAdmin:", error.message);
       }
-      // TABLE_NOT_FOUND is silently swallowed — expected in early setup
       return false;
     }
 
-    return !!data;
+    const isAdmin = Array.isArray(data) && data.length > 0;
+    writeAdminCache(userId, isAdmin);
+    return isAdmin;
   } catch (err) {
     console.warn("[AuthContext] fetchIsAdmin unexpected:", err);
     return false;
@@ -99,9 +149,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         let timer: ReturnType<typeof setTimeout>;
         const timeoutPromise = new Promise<{ data: { session: null }, error: null }>((resolve) => {
           timer = setTimeout(() => {
-            console.warn("[AuthContext] getSession took >8s — resolving anonymously to unblock app. Token preserved.");
+            console.warn("[AuthContext] getSession took >15s — resolving anonymously to unblock app. Token preserved.");
             resolve({ data: { session: null }, error: null });
-          }, 8000);
+          }, 15000);
         });
 
         const {
@@ -175,8 +225,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setIsAdminLoading(false);
           }
         } else {
-          // SIGNED_OUT — clear everything
+          // SIGNED_OUT — clear everything including cached admin status
           lastCheckedUserIdRef.current = null;
+          clearAdminCache();
           setIsAdmin(false);
           setIsAdminLoading(false);
         }
@@ -210,6 +261,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // We also eagerly clear local state for instant UI response.
   const signOut = async (): Promise<void> => {
     lastCheckedUserIdRef.current = null;
+    clearAdminCache();
     setUser(null);
     setSession(null);
     setIsAdmin(false);

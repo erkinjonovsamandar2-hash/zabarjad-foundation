@@ -151,7 +151,7 @@ const BlogPostDetail = () => {
                   src={article.image_url}
                   alt={article.title}
                   loading="eager"
-                  fetchPriority="high"
+                  fetchpriority="high"
                   decoding="async"
                   className="img-fade w-full h-full object-cover"
                   style={{

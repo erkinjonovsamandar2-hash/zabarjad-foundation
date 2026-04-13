@@ -6,7 +6,21 @@
       "Bash(echo \"EXIT:$?\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://ovlqfgjdmbvstqibrqrl.supabase.co/rest/v1/\" -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs\")",
       "Bash(curl -s -w '\\\\nHTTP_STATUS:%{http_code}' 'https://ovlqfgjdmbvstqibrqrl.supabase.co/rest/v1/books?select=id,title&limit=1' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs')",
-      "Bash(curl -s -w '\\\\nHTTP_STATUS:%{http_code}' 'https://ovlqfgjdmbvstqibrqrl.supabase.co/rest/v1/new_books?select=id&limit=1' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs')"
+      "Bash(curl -s -w '\\\\nHTTP_STATUS:%{http_code}' 'https://ovlqfgjdmbvstqibrqrl.supabase.co/rest/v1/new_books?select=id&limit=1' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs')",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s -w '\\\\nHTTP_STATUS:%{http_code}\\\\nTIME:%{time_total}s' 'https://ovlqfgjdmbvstqibrqrl.supabase.co/auth/v1/token?grant_type=password' -X POST -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92bHFmZ2pkbWJ2c3RxaWJycXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NTMxMDMsImV4cCI6MjA4NzEyOTEwM30.1uN1tvS3oWaGLCJr8fVJqEAEr7HdarS3aD-6RKMV7gs' -H 'Content-Type: application/json' -d '{\"email\":\"test\",\"password\":\"test\"}')",
+      "Bash(npm uninstall:*)",
+      "Bash(taskkill /F /PID 432)",
+      "Bash(taskkill //F //PID 432)",
+      "Bash(netstat -ano)",
+      "Bash(npx vite:*)",
+      "Bash(xargs grep:*)",
+      "Bash(curl -s -I http://localhost:8080/)",
+      "Bash(node node_modules/.bin/tsc --noEmit)",
+      "Bash(cmd /c \"cd c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && npx tsc --noEmit 2>&1\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && npx tsc --noEmit\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && npx tsc --noEmit 2>&1\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git checkout HEAD -- src/pages/LibraryPage.tsx\")"
     ]
   }
 }

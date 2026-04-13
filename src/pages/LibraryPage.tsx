@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, startTransition } from "react";
-import { BookOpen } from "lucide-react";
+import BookCover from "@/components/BookCover";
+import SpotlightCard from "@/components/SpotlightCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useData } from "@/context/DataContext";
@@ -8,7 +9,6 @@ import { useLang, locField } from "@/context/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EmptyState from "@/components/EmptyState";
-import SpotlightCard from "@/components/SpotlightCard";
 import librarySeal from "@/assets/design/library-seal.png";
 
 // ── Local Categories Configuration ────────────────────────────────────────────
@@ -293,32 +293,13 @@ const LibraryPage = () => {
                       <SpotlightCard className="h-full p-4 md:p-6 group cursor-pointer">
                         <div className="flex flex-col gap-4 h-full">
 
-                          {/* Hardcover Book */}
-                          {/* FIX: aspect-[2/3] + bg-muted = stable placeholder
-                              before image loads — zero layout shift            */}
-                          <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-md group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-500 border border-border/10 mx-auto bg-muted">
-                            {book.cover_url ? (
-                              <img
-                                src={book.cover_url}
-                                alt={locField(book, "title", lang)}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="flex items-center justify-center bg-secondary w-full h-full">
-                                <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
-                              </div>
-                            )}
-
-                            {/* Spine Hinge */}
-                            <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/40 via-white/20 to-transparent pointer-events-none border-l border-white/20" />
-
-                            {/* Hover Overlay */}
-                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                              <span className="px-4 py-2 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg scale-90 group-hover:scale-100 transition-transform duration-300">
-                                Ko'rish
-                              </span>
-                            </div>
-                          </div>
+                          <BookCover
+                            src={book.cover_url}
+                            alt={locField(book, "title", lang)}
+                            className="w-full mx-auto"
+                            hover={true}
+                            loading="lazy"
+                          />
 
                           {/* Book Info */}
                           <div className="flex flex-col items-center text-center mt-auto">

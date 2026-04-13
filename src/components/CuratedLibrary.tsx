@@ -1,4 +1,5 @@
 import { useState, useMemo, startTransition } from "react";
+import BookCover from "@/components/BookCover";
 import { BookOpen, Library, ChevronRight, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -170,29 +171,16 @@ const CuratedLibrary = () => {
                     className="group flex flex-col gap-2 max-w-[220px] mx-auto w-full cursor-pointer"
                   >
                     {/* 3D Hardcover Cover */}
-                    <div className="relative w-full aspect-[2/3] rounded-l-sm rounded-r-xl overflow-hidden shadow-[4px_4px_10px_rgba(0,0,0,0.15),_inset_-4px_0_4px_rgba(255,255,255,0.4)] group-hover:-translate-y-3 group-hover:-rotate-1 group-hover:shadow-[15px_20px_30px_rgba(0,0,0,0.2)] transition-all duration-500 bg-muted">
-                      {imgSrc ? (
-                        <img
-                          src={imgSrc}
-                          alt={locField(book, "title", lang)}
-                          className="img-fade w-full h-full object-cover"
-                          loading="lazy"
-                          decoding="async"
-                          onLoad={(e) => e.currentTarget.classList.add("loaded")}
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = "none";
-                          }}
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center bg-secondary w-full h-full">
-                          <BookOpen className="h-10 w-10 text-primary/30 group-hover:text-primary/50 transition-colors" />
-                        </div>
-                      )}
+                    <div className="relative overflow-visible">
+                      <BookCover
+                        src={imgSrc}
+                        alt={locField(book, "title", lang)}
+                        className="w-full"
+                        hover={true}
+                        loading="lazy"
+                      />
 
-                      {/* Spine Hinge */}
-                      <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/40 via-white/20 to-transparent pointer-events-none border-l border-white/20" />
-
-                      {/* Ribbon Badge (first book only) */}
+                      {/* Ribbon Badge (first book only) — outside BookCover so it isn't clipped */}
                       {i === 0 && (
                         <div className="absolute top-4 right-0 z-20 translate-x-1">
                           <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-foreground text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-l-sm shadow-[0_4px_10px_rgba(245,158,11,0.4)]">
@@ -203,7 +191,7 @@ const CuratedLibrary = () => {
                       )}
 
                       {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-[3px_8px_8px_3px]">
                         <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] px-5 py-2.5 bg-primary text-primary-foreground rounded-full shadow-[0_10px_25px_-5px_rgba(115,197,238,0.4)] scale-90 group-hover:scale-100 transition-transform duration-500 ease-out">
                           Batafsil
                         </span>

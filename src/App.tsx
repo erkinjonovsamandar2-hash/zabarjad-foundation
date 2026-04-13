@@ -1,8 +1,10 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense, useState } from "react";
 import { BrowserRouter, Route, Navigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
 import { AnimatePresence } from "framer-motion";
+import LoadingSplash from "@/components/LoadingSplash";
+import { useData } from "@/context/DataContext";
 
 import { DataProvider } from "@/context/DataContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -41,6 +43,7 @@ const SiteSettingsManager = lazy(() => import("./pages/admin/SiteSettingsManager
 const AdminUsersManager = lazy(() => import("./pages/admin/AdminUsersManager"));
 const NewBookManager = lazy(() => import("./pages/admin/NewBookManager"));
 const AdminReviews = lazy(() => import("@/pages/AdminReviews"));
+const TeamManager = lazy(() => import("./pages/admin/TeamManager"));
 
 const queryClient = new QueryClient();
 
@@ -77,7 +80,7 @@ const SuspenseFallback = () => (
 
 // ── Auth Guard ────────────────────────────────────────────────────────────────
 const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
-  const { user, isAdmin, isAdminLoading, loading } = useAuth();
+  const { user, isAdmin, isAdminLoading, loading, signOut } = useAuth();
   // Show spinner during initial session load OR while role is being fetched
   if (loading || isAdminLoading)
     return (
@@ -88,8 +91,17 @@ const RequireAdmin = ({ children }: { children: React.ReactNode }) => {
   if (!user) return <Navigate to="/admin/login" replace />;
   if (!isAdmin)
     return (
-      <div className="min-h-screen flex items-center justify-center text-destructive">
-        Ruxsat yo'q. Admin huquqi talab qilinadi.
+      <div className="min-h-screen flex flex-col items-center justify-center text-center gap-4">
+        <p className="text-destructive font-medium">Ruxsat yo'q. Admin huquqi talab qilinadi.</p>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          Agar bu xato bo'lsa, tizimga qayta kirib ko'ring (server javob bermay qolgan bo'lishi mumkin).
+        </p>
+        <button
+          onClick={() => signOut()}
+          className="mt-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors"
+        >
+          Tizimdan chiqish
+        </button>
       </div>
     );
   return <>{children}</>;
@@ -135,6 +147,29 @@ const Lazy = ({
     </PageTransition>
   </Suspense>
 );
+
+// ── Global app-level loading splash ─────────────────────────────────────────
+// Shows LoadingSplash on first load of ANY page, fades out when data is ready.
+// sessionStorage ensures it only shows once per browser session.
+const AppLoader = ({ children }: { children: React.ReactNode }) => {
+  const { loading } = useData();
+  const [shown, setShown] = useState(
+    () => sessionStorage.getItem("splashShown") === "true"
+  );
+
+  useEffect(() => {
+    if (!loading && !shown) {
+      const t = setTimeout(() => {
+        sessionStorage.setItem("splashShown", "true");
+        setShown(true);
+      }, 80);
+      return () => clearTimeout(t);
+    }
+  }, [loading, shown]);
+
+  if (loading && !shown) return <LoadingSplash />;
+  return <>{children}</>;
+};
 
 // ── Inner app — needs useLocation which requires BrowserRouter context ────────
 const AppInner = () => {
@@ -234,6 +269,7 @@ const AppInner = () => {
             <Route path="settings" element={<Lazy component={SiteSettingsManager} />} />
             <Route path="users" element={<Lazy component={AdminUsersManager} />} />
             <Route path="reviews" element={<Lazy component={AdminReviews} />} />
+            <Route path="team" element={<Lazy component={TeamManager} />} />
           </Route>
 
           <Route path="*" element={<Lazy component={NotFound} />} />
@@ -263,7 +299,9 @@ const App = () => {
                   <Toaster />
                   <Sonner />
                   <BrowserRouter>
-                    <AppInner />
+                    <AppLoader>
+                      <AppInner />
+                    </AppLoader>
                   </BrowserRouter>
                   <Analytics />
                 </div>

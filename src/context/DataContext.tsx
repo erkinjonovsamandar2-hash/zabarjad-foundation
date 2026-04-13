@@ -24,6 +24,26 @@ export interface Review {
   created_at: string;
 }
 
+// ── Team & Author types ──────────────────────────────────────────────────────
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  image_url: string | null;
+  is_founder: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface AuthorSpotlightItem {
+  id: string;
+  name: string;
+  role: "MUALLIF" | "TARJIMON";
+  image_url: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 export interface QuizStep {
   question: string;
@@ -55,9 +75,13 @@ interface DataContextType {
   newBooks: NewBook[];
   articles: Article[];
   reviews: Review[];
+  teamMembers: TeamMember[];
+  authorSpotlights: AuthorSpotlightItem[];
   quizConfig: QuizConfig;
   siteSettings: SiteSettings;
   loading: boolean;
+  teamLoading: boolean;
+  authorsLoading: boolean;
   booksError: boolean;
   articlesError: boolean;
   addBook: (book: Omit<Book, "id" | "created_at" | "updated_at">) => Promise<void>;
@@ -75,6 +99,12 @@ interface DataContextType {
   refreshNewBooks: () => Promise<void>;
   refreshArticles: () => Promise<void>;
   submitReview: (payload: Omit<Review, "id" | "status" | "created_at">) => Promise<{ error: string | null }>;
+  addTeamMember: (m: Omit<TeamMember, "id" | "created_at">) => Promise<void>;
+  updateTeamMember: (id: string, data: Partial<TeamMember>) => Promise<void>;
+  deleteTeamMember: (id: string) => Promise<void>;
+  addAuthorSpotlight: (a: Omit<AuthorSpotlightItem, "id" | "created_at">) => Promise<void>;
+  updateAuthorSpotlight: (id: string, data: Partial<AuthorSpotlightItem>) => Promise<void>;
+  deleteAuthorSpotlight: (id: string) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -108,9 +138,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [newBooks, setNewBooks] = useState<NewBook[]>([]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [authorSpotlights, setAuthorSpotlights] = useState<AuthorSpotlightItem[]>([]);
   const [quizConfig, setQuizConfig] = useState<QuizConfig>(DEFAULT_QUIZ_CONFIG);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const [loading, setLoading] = useState(true);
+  const [teamLoading, setTeamLoading] = useState(true);
+  const [authorsLoading, setAuthorsLoading] = useState(true);
   const [booksError, setBooksError] = useState(false);
   const [articlesError, setArticlesError] = useState(false);
 
@@ -217,21 +251,47 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // fetchQuiz — silently handles missing table (42P01) and no rows (PGRST116)
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("team_members")
+        .select("*")
+        .order("sort_order", { ascending: true });
+      if (error) { if (error.code === TABLE_NOT_FOUND) return; console.warn("[DataContext] fetchTeamMembers:", error.message); return; }
+      if (data) setTeamMembers(data as TeamMember[]);
+    } catch (err) { console.warn("[DataContext] fetchTeamMembers unexpected:", err); }
+    finally { setTeamLoading(false); }
+  }, []);
+
+  const fetchAuthorSpotlights = useCallback(async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("author_spotlights")
+        .select("*")
+        .order("sort_order", { ascending: true });
+      if (error) { if (error.code === TABLE_NOT_FOUND) return; console.warn("[DataContext] fetchAuthorSpotlights:", error.message); return; }
+      if (data) setAuthorSpotlights(data as AuthorSpotlightItem[]);
+    } catch (err) { console.warn("[DataContext] fetchAuthorSpotlights unexpected:", err); }
+    finally { setAuthorsLoading(false); }
+  }, []);
+
+  // fetchQuiz — silently handles missing table (42P01) and empty table.
+  // Uses .limit(1) without .single() — .single() returns 406 when zero rows
+  // exist, which causes a noisy console error and a slow request cycle.
   const fetchQuiz = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("quiz_config")
         .select("*")
-        .limit(1)
-        .single();
+        .limit(1);
 
       if (error) {
-        if (error.code === TABLE_NOT_FOUND || error.code === NO_ROWS) return;
+        if (error.code === TABLE_NOT_FOUND) return;
         console.warn("[DataContext] fetchQuiz:", error.message);
         return;
       }
-      if (data?.config) setQuizConfig(data.config as unknown as QuizConfig);
+      const row = Array.isArray(data) ? data[0] : null;
+      if (row?.config) setQuizConfig(row.config as unknown as QuizConfig);
     } catch (err) {
       console.warn("[DataContext] fetchQuiz unexpected:", err);
     }
@@ -271,6 +331,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const init = async () => {
       try {
+        // Quick raw-fetch diagnostic — tells us whether it's a Supabase JS client
+        // issue or a plain network/CORS issue in this browser environment.
         console.log("[DataContext] Fetching data...");
         const fetchAllPromise = Promise.allSettled([
           fetchBooks(),
@@ -279,14 +341,16 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           fetchReviews(),
           fetchQuiz(),
           fetchSiteSettings(),
+          fetchTeamMembers(),
+          fetchAuthorSpotlights(),
         ]);
 
         let timer: ReturnType<typeof setTimeout>;
         const timeoutPromise = new Promise((resolve) => {
           timer = setTimeout(() => {
-            console.warn("[DataContext] Fetch loop timed out after 5s! Resolving early to prevent deadlock.");
+            console.warn("[DataContext] Fetch loop timed out after 15s! Resolving early to prevent deadlock.");
             resolve(null);
-          }, 5000);
+          }, 15000);
         });
 
         await Promise.race([fetchAllPromise, timeoutPromise]);
@@ -304,7 +368,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     };
 
     init();
-  }, [fetchBooks, fetchNewBooks, fetchBlogPosts, fetchReviews, fetchQuiz, fetchSiteSettings]);
+  }, [fetchBooks, fetchNewBooks, fetchBlogPosts, fetchReviews, fetchQuiz, fetchSiteSettings, fetchTeamMembers, fetchAuthorSpotlights]);
 
   // ── Realtime subscription — new_books ────────────────────────────────────
   // Any INSERT / UPDATE / DELETE on new_books triggers a re-fetch so the live
@@ -449,11 +513,11 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const updateNewBook = useCallback(async (id: string, data: Partial<NewBook>) => {
     const p: Record<string, unknown> = {};
     const fields: (keyof NewBook)[] = [
-      "title","title_en","title_ru","author","author_en","author_ru",
-      "description","description_en","description_ru","cover_url","bg_color",
-      "category","price","enable_3d_flip","featured","sort_order",
-      "img_focus_x","img_focus_y",
-      "focus_desktop_x","focus_desktop_y","focus_mobile_x","focus_mobile_y",
+      "title", "title_en", "title_ru", "author", "author_en", "author_ru",
+      "description", "description_en", "description_ru", "cover_url", "bg_color",
+      "category", "price", "enable_3d_flip", "featured", "sort_order",
+      "img_focus_x", "img_focus_y",
+      "focus_desktop_x", "focus_desktop_y", "focus_mobile_x", "focus_mobile_y",
     ];
     for (const f of fields) if (data[f] !== undefined) p[f] = data[f];
     // Sanitize cover_url: "" → null to prevent falsy cover rendering
@@ -555,15 +619,57 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     await fetchBlogPosts();
   }, [fetchBlogPosts]);
 
+  // ── Mutators — Team Members ──────────────────────────────────────────────
+
+  const addTeamMember = useCallback(async (m: Omit<TeamMember, "id" | "created_at">) => {
+    const { error } = await (supabase as any).from("team_members").insert(m);
+    if (error) { throw new Error(error.message); }
+    await fetchTeamMembers();
+  }, [fetchTeamMembers]);
+
+  const updateTeamMember = useCallback(async (id: string, data: Partial<TeamMember>) => {
+    const { error } = await (supabase as any).from("team_members").update(data).eq("id", id);
+    if (error) { throw new Error(error.message); }
+    setTeamMembers((prev) => prev.map((m) => (m.id === id ? { ...m, ...data } : m)));
+    await fetchTeamMembers();
+  }, [fetchTeamMembers]);
+
+  const deleteTeamMember = useCallback(async (id: string) => {
+    const { error } = await (supabase as any).from("team_members").delete().eq("id", id);
+    if (error) { throw new Error(error.message); }
+    await fetchTeamMembers();
+  }, [fetchTeamMembers]);
+
+  // ── Mutators — Author Spotlights ─────────────────────────────────────────
+
+  const addAuthorSpotlight = useCallback(async (a: Omit<AuthorSpotlightItem, "id" | "created_at">) => {
+    const { error } = await (supabase as any).from("author_spotlights").insert(a);
+    if (error) { throw new Error(error.message); }
+    await fetchAuthorSpotlights();
+  }, [fetchAuthorSpotlights]);
+
+  const updateAuthorSpotlight = useCallback(async (id: string, data: Partial<AuthorSpotlightItem>) => {
+    const { error } = await (supabase as any).from("author_spotlights").update(data).eq("id", id);
+    if (error) { throw new Error(error.message); }
+    setAuthorSpotlights((prev) => prev.map((a) => (a.id === id ? { ...a, ...data } : a)));
+    await fetchAuthorSpotlights();
+  }, [fetchAuthorSpotlights]);
+
+  const deleteAuthorSpotlight = useCallback(async (id: string) => {
+    const { error } = await (supabase as any).from("author_spotlights").delete().eq("id", id);
+    if (error) { throw new Error(error.message); }
+    await fetchAuthorSpotlights();
+  }, [fetchAuthorSpotlights]);
+
   // ── Mutators — Quiz & Settings ────────────────────────────────────────────
 
   const updateQuizConfig = useCallback(async (config: QuizConfig) => {
     setQuizConfig(config);
-    const { data: existing } = await supabase
+    const { data: existingRows } = await supabase
       .from("quiz_config")
       .select("id")
-      .limit(1)
-      .single();
+      .limit(1);
+    const existing = Array.isArray(existingRows) ? existingRows[0] : null;
     const serialized = JSON.parse(JSON.stringify(config));
     if (existing) {
       const { error } = await supabase
@@ -605,7 +711,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   return (
     <DataContext.Provider
       value={{
-        books, newBooks, articles, reviews, quizConfig, siteSettings, loading, booksError, articlesError,
+        books, newBooks, articles, reviews, teamMembers, authorSpotlights,
+        quizConfig, siteSettings, loading, teamLoading, authorsLoading, booksError, articlesError,
         addBook, updateBook, deleteBook,
         addNewBook, updateNewBook, deleteNewBook,
         addArticle, updateArticle, deleteArticle,
@@ -614,6 +721,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         refreshNewBooks: fetchNewBooks,
         refreshArticles: fetchBlogPosts,
         submitReview,
+        addTeamMember, updateTeamMember, deleteTeamMember,
+        addAuthorSpotlight, updateAuthorSpotlight, deleteAuthorSpotlight,
       }}
     >
       {children}

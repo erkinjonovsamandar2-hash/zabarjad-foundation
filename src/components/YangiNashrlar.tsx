@@ -223,51 +223,62 @@ const YangiNashrlar = () => {
 
             {/* MAIN PANEL */}
             <div className="relative z-10 w-full px-3 sm:px-8 lg:px-12 max-w-[1440px] mx-auto">
+                {/*
+                  Mobile:  flex-col — image on top (fixed height), text below on dark bg.
+                           No text overlays the cover.
+                  Desktop: single aspect-ratio block, text absolutely overlaid on left.
+                */}
                 <div
-                    className="relative rounded-2xl sm:rounded-xl overflow-hidden w-full aspect-[4/5] sm:aspect-[16/9] lg:aspect-[2/1] transition-opacity duration-[400ms] shadow-2xl ring-1 ring-white/10"
-                    style={{
-                        backgroundColor: activeFallback,
-                        opacity: isAnimating ? 0.6 : 1,
-                    }}
+                    className="relative rounded-2xl sm:rounded-xl overflow-hidden w-full transition-opacity duration-[400ms] shadow-2xl ring-1 ring-white/10
+                               flex flex-col sm:block sm:aspect-[16/9] lg:aspect-[2/1]"
+                    style={{ opacity: isAnimating ? 0.6 : 1 }}
                 >
-                    {/* Cover image */}
-                    {activeCoverSrc && (
-                        <img
-                            key={`img-${activeIndex}`}
-                            src={activeCoverSrc}
-                            alt={activeTitle}
-                            loading="eager"
-                            fetchPriority="high"
-                            decoding="async"
-                            className="img-fade absolute inset-0 object-cover w-full h-full"
-                            style={{ objectPosition: activeObjPos }}
-                            onLoad={(e) => e.currentTarget.classList.add("loaded")}
-                        />
-                    )}
+                    {/* ── Image ─────────────────────────────────────────────── */}
+                    <div
+                        className="relative h-64 shrink-0 sm:h-auto sm:absolute sm:inset-0"
+                        style={{ backgroundColor: activeFallback }}
+                    >
+                        {activeCoverSrc && (
+                            <img
+                                key={`img-${activeIndex}`}
+                                src={activeCoverSrc}
+                                alt={activeTitle}
+                                loading="eager"
+                                fetchpriority="high"
+                                decoding="async"
+                                className="img-fade absolute inset-0 object-cover w-full h-full"
+                                style={{ objectPosition: activeObjPos }}
+                                onLoad={(e) => e.currentTarget.classList.add("loaded")}
+                            />
+                        )}
+                        {/* Mobile: subtle top vignette only — no bottom overlay */}
+                        <div className="sm:hidden absolute inset-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+                        {/* Desktop/Tablet: left gradient for text legibility */}
+                        <div className="hidden sm:block absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.85) 30%, rgba(10,10,10,0.3) 60%, transparent 100%)" }} />
+                        <div className="hidden sm:block absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0a0a0a]/60 via-transparent to-transparent" />
+                    </div>
 
-                    {/* Desktop/Tablet Left Gradient */}
-                    <div className="absolute inset-0 hidden sm:block pointer-events-none" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.85) 30%, rgba(10,10,10,0.3) 60%, transparent 100%)" }} />
-
-                    {/* Mobile Bottom Gradient */}
-                    <div className="absolute inset-0 sm:hidden pointer-events-none" style={{ background: "linear-gradient(to top, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0.90) 35%, rgba(10,10,10,0.4) 60%, transparent 100%)" }} />
-
-                    {/* Bottom reinforcement */}
-                    <div className="absolute inset-0 hidden sm:block pointer-events-none bg-gradient-to-t from-[#0a0a0a]/60 via-transparent to-transparent" />
-
-                    {/* Editorial text block */}
+                    {/* ── Text block ─────────────────────────────────────────
+                        Mobile:  static, below the image, dark background.
+                        Desktop: absolute overlay on the left half.
+                    ─────────────────────────────────────────────────────── */}
                     <div
                         key={activeIndex}
-                        className="ticker-text-enter absolute inset-0 sm:right-auto flex flex-col justify-end sm:justify-center p-6 pb-12 pt-16 sm:p-0 sm:pl-12 lg:pl-16 w-full sm:w-auto sm:max-w-[55%] lg:max-w-[50%]"
+                        className="ticker-text-enter
+                                   bg-[#111] px-5 py-5 pb-7
+                                   sm:bg-transparent sm:absolute sm:inset-0 sm:right-auto
+                                   sm:flex sm:flex-col sm:justify-center
+                                   sm:px-0 sm:py-0 sm:pl-12 lg:pl-16
+                                   sm:max-w-[55%] lg:max-w-[50%]"
                     >
-                        <p className="font-sans text-[0.65rem] sm:text-[0.7rem] tracking-[0.22em] uppercase text-[#c8973a] mb-2 drop-shadow-md">
+                        <p className="font-sans text-[0.65rem] sm:text-[0.7rem] tracking-[0.22em] uppercase text-[#c8973a] mb-2">
                             {activeAuthor}
                         </p>
-                        <h2 className="font-heading text-[2rem] sm:text-4xl lg:text-5xl text-white leading-[1.05] tracking-tight mb-3 sm:mb-4 drop-shadow-lg">
+                        <h2 className="font-heading text-[1.75rem] sm:text-4xl lg:text-5xl text-white leading-[1.05] tracking-tight mb-3 sm:mb-4">
                             {activeTitle}
                         </h2>
                         <div className="w-8 h-[2px] bg-[#c8973a] mb-3 sm:mb-4 shadow-[0_0_10px_rgba(200,151,58,0.5)]" />
 
-                        {/* TAG PILLS */}
                         {activeMeta.tags.length > 0 && (
                             <div key={`tags-${activeIndex}`} className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
                                 {activeMeta.tags.map((tag, i) => (
@@ -284,22 +295,21 @@ const YangiNashrlar = () => {
                             </div>
                         )}
 
-                        {/* DESCRIPTION */}
                         {locField(activeBook, "description", lang) && (
                             <p
                                 key={`desc-${activeIndex}`}
-                                className="font-serif text-[0.85rem] sm:text-[1rem] lg:text-[1.1rem] leading-relaxed text-white/95 mb-4 sm:mb-5 max-w-[95%] sm:max-w-[90%] drop-shadow-md"
+                                className="font-serif text-[0.85rem] sm:text-[1rem] lg:text-[1.1rem] leading-relaxed text-white/80 sm:text-white/95 mb-4 sm:mb-5 max-w-[95%] sm:max-w-[90%]"
                             >
                                 {locField(activeBook, "description", lang)}
                             </p>
                         )}
 
-                        <p className="font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.16em] uppercase text-white/50 font-bold">
+                        <p className="font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.16em] uppercase text-white/40 sm:text-white/50 font-bold">
                             Tez chiqadi
                         </p>
                     </div>
 
-                    {/* TEZDA badge */}
+                    {/* TEZDA badge — absolute over image on both breakpoints */}
                     <div className="absolute top-4 left-4 sm:top-6 sm:left-auto sm:right-6 bg-[#c8973a] text-black font-sans text-[0.6rem] sm:text-[0.65rem] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-[2px] shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
                         TEZDA
                     </div>
