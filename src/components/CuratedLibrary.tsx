@@ -110,7 +110,14 @@ const CuratedLibrary = () => {
         </motion.div>
 
         {/* ── Category Pill Tabs ── */}
-        <div className="flex overflow-x-auto flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 mb-12 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 sm:pb-0">
+        {/* Wrapper: on mobile adds right-fade to signal horizontal scroll */}
+        <div className="relative mb-12 sm:mb-12">
+          {/* Right-edge fade — mobile only, signals "swipe to see more" */}
+          <div
+            className="absolute right-0 top-0 bottom-1 w-16 pointer-events-none z-10 sm:hidden"
+            style={{ background: "linear-gradient(to right, transparent, hsl(var(--charcoal)))" }}
+          />
+        <div className="flex overflow-x-auto flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 sm:pb-0 pr-10 sm:pr-0">
           {CATEGORIES.map((categoryKey) => {
             const isActive = activeTab === categoryKey;
 
@@ -132,6 +139,7 @@ const CuratedLibrary = () => {
               </button>
             );
           })}
+        </div>
         </div>
 
         {/* ── 3D Book Grid ── */}

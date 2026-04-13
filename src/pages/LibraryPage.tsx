@@ -205,7 +205,13 @@ const LibraryPage = () => {
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               {/* Category Pills */}
-              <div className="flex overflow-x-auto flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 md:pb-0 w-full md:w-auto">
+              {/* Relative wrapper for right-fade scroll hint on mobile */}
+              <div className="relative w-full md:w-auto">
+                <div
+                  className="absolute right-0 top-0 bottom-1 w-16 pointer-events-none z-10 md:hidden"
+                  style={{ background: "linear-gradient(to right, transparent, hsl(var(--charcoal)))" }}
+                />
+              <div className="flex overflow-x-auto flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 md:pb-0 pr-10 md:pr-0">
                 {CATEGORIES.map((categoryKey) => {
                   const isActive = active === categoryKey;
 
@@ -227,6 +233,7 @@ const LibraryPage = () => {
                     </button>
                   );
                 })}
+              </div>
               </div>
 
               {/* PDF Catalog */}
