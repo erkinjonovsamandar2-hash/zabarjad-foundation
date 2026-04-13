@@ -20,7 +20,11 @@
       "Bash(cmd /c \"cd c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && npx tsc --noEmit 2>&1\")",
       "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && npx tsc --noEmit\")",
       "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && npx tsc --noEmit 2>&1\")",
-      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git checkout HEAD -- src/pages/LibraryPage.tsx\")"
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git checkout HEAD -- src/pages/LibraryPage.tsx\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git diff --name-only\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git status --short\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git log --oneline -5 && git status\")",
+      "Bash(cmd /c \"cd /d c:\\\\Users\\\\user\\\\Documents\\\\GitHub\\\\booktopia-foundation && git log --oneline -5\")"
     ]
   }
 }
