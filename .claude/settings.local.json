@@ -40,7 +40,9 @@
       "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" ls-files src/assets/Logo-blue.png)",
       "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/App.tsx)",
       "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/pages/LibraryPage.tsx src/components/CuratedLibrary.tsx)",
-      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/components/CuratedLibrary.tsx src/pages/LibraryPage.tsx)"
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/components/CuratedLibrary.tsx src/pages/LibraryPage.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/components/CuratedLibrary.tsx src/components/BookCover.tsx)",
+      "Bash(git -C \"c:/Users/user/Documents/GitHub/booktopia-foundation\" add src/components/CuratedLibrary.tsx)"
     ]
   }
 }
