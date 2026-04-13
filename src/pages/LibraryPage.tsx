@@ -205,7 +205,7 @@ const LibraryPage = () => {
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               {/* Category Pills */}
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex overflow-x-auto flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 md:pb-0 w-full md:w-auto">
                 {CATEGORIES.map((categoryKey) => {
                   const isActive = active === categoryKey;
 
@@ -213,18 +213,15 @@ const LibraryPage = () => {
                     <button
                       key={categoryKey}
                       onClick={() => {
-                        // FIX: startTransition keeps UI responsive while React
-                        // recomputes the filtered grid in the background
                         startTransition(() => {
                           setActive(categoryKey);
                         });
                       }}
-                      className={`
-                        ${isActive
-                          ? "btn-glass scale-105"
-                          : "btn-glass-ghost opacity-70 hover:opacity-100"
-                        }
-                      `}
+                      className={`flex-shrink-0 font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.1em] sm:tracking-[0.13em] uppercase px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors duration-200 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-transparent text-muted-foreground border border-border hover:bg-muted hover:text-foreground"
+                      }`}
                     >
                       {getCategoryLabel(categoryKey, lang)}
                     </button>

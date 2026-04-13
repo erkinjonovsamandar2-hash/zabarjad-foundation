@@ -110,11 +110,9 @@ const CuratedLibrary = () => {
         </motion.div>
 
         {/* ── Category Pill Tabs ── */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
+        <div className="flex overflow-x-auto flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 mb-12 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 sm:pb-0">
           {CATEGORIES.map((categoryKey) => {
             const isActive = activeTab === categoryKey;
-            // FIX: Removed `isGoT` constant and conditional styling.
-            // The button now uses a single style path.
 
             return (
               <button
@@ -124,14 +122,11 @@ const CuratedLibrary = () => {
                     setActiveTab(categoryKey);
                   });
                 }}
-                className={`
-                  font-sans text-[11px] font-bold tracking-[0.2em] uppercase
-                  px-6 py-2.5 rounded-[var(--radius)] transition-colors duration-200
-                  ${isActive
+                className={`flex-shrink-0 font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.1em] sm:tracking-[0.13em] uppercase px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors duration-200 ${
+                  isActive
                     ? "bg-primary text-primary-foreground"
-                    : "bg-transparent text-muted-foreground border-[0.5px] border-border hover:bg-muted"
-                  }
-                `}
+                    : "bg-transparent text-muted-foreground border border-border hover:bg-muted hover:text-foreground"
+                }`}
               >
                 {getCategoryLabel(categoryKey, lang)}
               </button>
