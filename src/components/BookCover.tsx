@@ -44,7 +44,7 @@ const BookCover = ({ src, alt, className = "", hover = true, loading = "lazy" }:
           alt={alt}
           loading={loading}
           decoding="async"
-          className="img-fade w-full h-full object-cover"
+          className="img-fade w-full h-full object-contain"
           onLoad={(e) => e.currentTarget.classList.add("loaded")}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = "none";
