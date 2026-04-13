@@ -472,7 +472,7 @@ const Hero = () => {
     books.filter((b) => b.featured === true).length > 0
       ? books.filter((b) => b.featured === true)
       : books
-  ).slice(0, 7);
+  );
 
   const total = displayBooks.length;
   const advance = useCallback(
