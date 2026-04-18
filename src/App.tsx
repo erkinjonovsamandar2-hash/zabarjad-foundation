@@ -45,6 +45,8 @@ const NewBookManager = lazy(() => import("./pages/admin/NewBookManager"));
 const AdminReviews = lazy(() => import("@/pages/AdminReviews"));
 const TeamManager = lazy(() => import("./pages/admin/TeamManager"));
 const HeroOrderManager = lazy(() => import("./pages/admin/HeroOrderManager"));
+const Hamkorlar = lazy(() => import("./pages/Hamkorlar"));
+const PartnerManager = lazy(() => import("./pages/admin/PartnerManager"));
 
 const queryClient = new QueryClient();
 
@@ -207,6 +209,7 @@ const AppInner = () => {
           <Route path="/book/:id" element={<Lazy component={BookDetails} />} />
           <Route path="/quiz" element={<Lazy component={QuizPage} />} />
           <Route path="/spotlight" element={<Lazy component={SpotlightPage} />} />
+          <Route path="/hamkorlar" element={<Lazy component={Hamkorlar} />} />
 
           {/* LAZY — legal pages */}
           <Route
@@ -272,6 +275,7 @@ const AppInner = () => {
             <Route path="reviews" element={<Lazy component={AdminReviews} />} />
             <Route path="team" element={<Lazy component={TeamManager} />} />
             <Route path="hero-order" element={<Lazy component={HeroOrderManager} />} />
+            <Route path="partners" element={<Lazy component={PartnerManager} />} />
           </Route>
 
           <Route path="*" element={<Lazy component={NotFound} />} />
@@ -300,7 +304,7 @@ const App = () => {
                 <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
                   <Toaster />
                   <Sonner />
-                  <BrowserRouter>
+                  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                     <AppLoader>
                       <AppInner />
                     </AppLoader>

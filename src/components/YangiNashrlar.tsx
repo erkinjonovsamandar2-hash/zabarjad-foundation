@@ -229,7 +229,7 @@ const YangiNashrlar = () => {
                   Desktop: single aspect-ratio block, text absolutely overlaid on left.
                 */}
                 <div
-                    className="relative rounded-2xl sm:rounded-xl overflow-hidden w-full transition-opacity duration-[400ms] shadow-2xl ring-1 ring-white/10
+                    className="relative rounded-2xl sm:rounded-xl overflow-hidden w-full transition-opacity duration-400 shadow-2xl ring-1 ring-white/10
                                flex flex-col sm:block sm:aspect-[16/9] lg:aspect-[2/1]"
                     style={{ opacity: isAnimating ? 0.6 : 1 }}
                 >
@@ -323,7 +323,7 @@ const YangiNashrlar = () => {
                             />
                         ) : (
                             <div
-                                className="h-full bg-[#c8973a] transition-all duration-[400ms] ease-out shadow-[0_0_10px_rgba(200,151,58,0.8)]"
+                                className="h-full bg-[#c8973a] transition-all duration-400 ease-out shadow-[0_0_10px_rgba(200,151,58,0.8)]"
                                 style={{ width: `${((activeIndex + 1) / displayBooks.length) * 100}%` }}
                             />
                         )}

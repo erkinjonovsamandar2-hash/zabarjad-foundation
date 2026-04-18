@@ -192,7 +192,7 @@ const AuthorPopup = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: "100%" }}
                 transition={{ type: "spring", stiffness: 320, damping: 36 }}
-                className="relative w-full sm:max-w-[32rem] max-h-[92vh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl"
+                className="relative w-full sm:max-w-[32rem] max-h-[80dvh] sm:max-h-[90dvh] flex flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl"
                 style={{
                     background: "hsl(var(--background))",
                     boxShadow: `0 -8px 60px rgba(0,0,0,0.45), 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px ${accentColor}22`,
@@ -205,29 +205,13 @@ const AuthorPopup = ({
                     <div className="w-10 h-1 rounded-full" style={{ background: `${accentColor}40` }} />
                 </div>
 
-                {/* ── Photo area — fixed height, never shrinks ── */}
-                <div className="relative w-full flex-shrink-0 overflow-hidden" style={{ height: 380 }}>
+                {/* ── Header Backdrop ── */}
+                <div className="relative w-full flex-shrink-0 overflow-hidden h-[120px] sm:h-[140px]">
                     {/* Diagonal stripe bg */}
                     <div className="absolute inset-0" style={{
                         background: isAuthor ? "hsl(35 40% 14%)" : "hsl(240 35% 14%)",
                         backgroundImage: `repeating-linear-gradient(-45deg, ${accentColor}12 0px, ${accentColor}12 1px, transparent 1px, transparent 22px)`,
                     }} />
-
-                    {author.image_url ? (
-                        <img
-                            src={author.image_url}
-                            alt={author.name}
-                            className="absolute inset-0 w-full h-full object-cover object-top"
-                        />
-                    ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <NoPhotoCircle name={author.name} role={author.role} size={160} />
-                        </div>
-                    )}
-
-                    {/* Bottom gradient */}
-                    <div className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
-                        style={{ background: "linear-gradient(to top, hsl(var(--background)) 0%, transparent 100%)" }} />
 
                     {/* Close button */}
                     <button
@@ -258,10 +242,28 @@ const AuthorPopup = ({
                     </div>
                 </div>
 
+                {/* ── Circular Avatar Overlap ── */}
+                <div className="relative flex justify-center -mt-16 sm:-mt-20 z-10 pointer-events-none">
+                    <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-[5px] shadow-xl overflow-hidden pointer-events-auto"
+                        style={{ borderColor: "hsl(var(--background))", backgroundColor: "hsl(var(--background))" }}>
+                        {author.image_url ? (
+                            <img
+                                src={author.image_url}
+                                alt={author.name}
+                                className="w-full h-full object-cover object-top"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <NoPhotoCircle name={author.name} role={author.role} size={150} />
+                            </div>
+                        )}
+                    </div>
+                </div>
+
                 {/* ── Text content — scrollable ── */}
-                <div className="px-6 pb-6 pt-1 overflow-y-auto flex-1" style={{ scrollbarWidth: "none" }}>
+                <div className="min-h-0 px-6 pt-4 overflow-y-auto flex-1 text-center sm:text-left overscroll-contain" style={{ scrollbarWidth: "none" }}>
                     {/* Gold rule */}
-                    <div className="w-8 h-px mb-3" style={{ background: accentColor }} />
+                    <div className="w-8 h-px mb-4 mx-auto sm:mx-0" style={{ background: accentColor }} />
 
                     {/* Name */}
                     <h3 className="font-heading font-bold leading-tight text-foreground mb-4"
@@ -271,15 +273,15 @@ const AuthorPopup = ({
 
                     {/* Description */}
                     {author.description && (
-                        <p className="font-serif text-sm leading-relaxed text-foreground/70 mb-5">
+                        <p className="font-serif text-sm leading-relaxed text-foreground/70 mb-5 whitespace-pre-line">
                             {author.description}
                         </p>
                     )}
 
                     {/* Books list */}
                     {books.length > 0 && (
-                        <div>
-                            <div className="flex items-center gap-2 mb-2.5">
+                        <div className="text-left">
+                            <div className="flex items-center justify-center sm:justify-start gap-2 mb-3 mt-6">
                                 <BookOpen className="w-3.5 h-3.5" style={{ color: accentColor }} />
                                 <span className="font-sans font-bold text-[9px] tracking-[0.22em] uppercase"
                                     style={{ color: accentColor }}>
@@ -303,6 +305,9 @@ const AuthorPopup = ({
                             Ma'lumot hali qo'shilmagan.
                         </p>
                     )}
+
+                    {/* Bulletproof scroll spacer for Safari/Mobile navbars */}
+                    <div className="w-full h-16 sm:h-10 shrink-0" style={{ paddingBottom: "env(safe-area-inset-bottom)" }} />
                 </div>
 
                 {/* Corner decorative marks */}
@@ -327,11 +332,11 @@ export default function TeamPage() {
     const [selectedAuthor, setSelectedAuthor] = useState<AuthorSpotlightItem | null>(null);
 
     // ── Marquee drag + auto-scroll ─────────────────────────────────────────────
-    const marqueeX        = useMotionValue(0);
+    const marqueeX = useMotionValue(0);
     const marqueeTrackRef = useRef<HTMLDivElement>(null);
-    const marqueeAnimRef  = useRef<ReturnType<typeof animate> | null>(null);
-    const launchRef       = useRef<(() => void) | null>(null);
-    const wasDraggingRef  = useRef(false);
+    const marqueeAnimRef = useRef<ReturnType<typeof animate> | null>(null);
+    const launchRef = useRef<(() => void) | null>(null);
+    const wasDraggingRef = useRef(false);
 
     // Mount: start auto-scroll loop
     useEffect(() => {
@@ -372,6 +377,31 @@ export default function TeamPage() {
             launchRef.current = null;
         };
     }, [marqueeX]);
+
+    // Handle mouse wheel scrolling for the marquee
+    const wheelTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const handleWheel = (e: React.WheelEvent) => {
+        // Stop any running auto-animation
+        if (marqueeAnimRef.current) {
+            marqueeAnimRef.current.stop();
+        }
+
+        // Prevent default vertical scrolling if we're actively scrolling the marquee
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || Math.abs(e.deltaY) > 5) {
+            e.preventDefault();
+        }
+
+        // Apply scroll delta (prefer X if trackpad sideways, otherwise Y for mousewheel)
+        const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        const currentX = marqueeX.get();
+        marqueeX.set(currentX - delta);
+
+        // Restart auto-scroll after user stops wheeling
+        if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
+        wheelTimeoutRef.current = setTimeout(() => {
+            if (!selectedAuthor) launchRef.current?.();
+        }, 150);
+    };
 
     // Pause while popup is open, resume on close
     useEffect(() => {
@@ -465,9 +495,8 @@ export default function TeamPage() {
                                 <br />
                                 <em className="not-italic font-normal" style={{ color: "hsl(45 66% 52%)" }}>Jamoa</em>
                             </h1>
-                            <p className="font-serif text-foreground/80 text-base md:text-lg leading-relaxed max-w-sm border-l border-border/40 pl-4">
-                                Orqamizda turgan ijodkorlar va mutaxassislar.
-                                Har bir sahifa ularning mehnatidan tug'iladi.
+                            <p className="font-serif text-foreground/80 text-base md:text-lg leading-relaxed max-w-lg border-l border-border/40 pl-4">
+                                <b>Booktopia</b> — dunyo tafakkurining eng muhim asarlarini o‘zbek tilida taqdim etish orqali bilim va mutolaa madaniyatini rivojlantirishni o‘z oldiga maqsad qilgan nashriyotdir. Biz shu g‘oya atrofida birlashgan jamoa sifatida sifatli kitoblar yaratish va ularni kitobxonlarga yetkazish yo‘lida birgalikda ishlaymiz.
                             </p>
                         </div>
 
@@ -643,14 +672,13 @@ export default function TeamPage() {
                         <h2 className="font-heading font-bold text-4xl md:text-5xl leading-[1.05] tracking-wide text-foreground text-center drop-shadow-sm">
                             Muallif va Tarjimonlarimiz
                         </h2>
-                        <p className="font-serif text-sm text-foreground/50 text-center">
-                            Batafsil ma'lumot uchun bosing
-                        </p>
+
                     </div>
 
                     {/* Single marquee row — drag left/right to browse */}
                     <div
                         className="w-full relative flex overflow-x-hidden cursor-grab active:cursor-grabbing select-none"
+                        onWheel={handleWheel}
                     >
                         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
                         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
@@ -668,6 +696,10 @@ export default function TeamPage() {
                             }}
                             onDrag={() => { wasDraggingRef.current = true; }}
                             onDragEnd={() => {
+                                // Small timeout to prevent the immediate subsequent click event from firing right after a drag ends
+                                setTimeout(() => {
+                                    wasDraggingRef.current = false;
+                                }, 50);
                                 if (!selectedAuthor) launchRef.current?.();
                             }}
                         >
@@ -679,7 +711,10 @@ export default function TeamPage() {
                                         key={index}
                                         className="author-card group/card flex items-center gap-5 cursor-pointer flex-shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                                         style={{ ["--tw-ring-color" as string]: isAuthorRole ? "#c8973a" : "#8b6ab5" }}
-                                        onClick={() => { if (!wasDraggingRef.current) openPopup(author); }}
+                                        onClick={(e) => {
+                                            // Only open popup if we didn't drag the marquee
+                                            if (!wasDraggingRef.current) openPopup(author);
+                                        }}
                                         title={`${author.name} haqida ko'proq`}
                                     >
                                         {/* Circle photo — gold tint on hover, no scale */}
@@ -745,7 +780,7 @@ export default function TeamPage() {
                                             >
                                                 Batafsil
                                                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{ display: "inline", marginLeft: 2 }}>
-                                                    <path d="M1.5 4H6.5M6.5 4L4 1.5M6.5 4L4 6.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    <path d="M1.5 4H6.5M6.5 4L4 1.5M6.5 4L4 6.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                                                 </svg>
                                             </span>
                                         </div>

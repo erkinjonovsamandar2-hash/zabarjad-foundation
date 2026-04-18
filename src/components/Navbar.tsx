@@ -44,8 +44,9 @@ const Navbar = () => {
     { label: t.nav.library, href: "/library" },
     { label: t.nav.blog, href: "/blog" },
     { label: "Jamoa", href: "/team" }, // <-- ADDED HERE
+    { label: "Hamkorlar", href: "/hamkorlar" },
     { label: t.nav.quiz, href: "/quiz" }, // Quiz acts as CTA typically, placed near the end
-    { label: t.nav.contact, href: "/#footer" },
+    { label: t.nav.contact, href: "#contact" },
   ];
 
   const isActive = (href: string) => {
@@ -68,11 +69,9 @@ const Navbar = () => {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
 
           {/* ── Logo ── */}
-          {/* FIXED: replaced text span with <img> from src/assets/Logo-blue.png */}
-          {/* Removed gap-2.5 (no sibling elements), kept drop-shadow-sm        */}
           <Link
             to="/"
-            className="flex items-center drop-shadow-sm"
+            className="flex items-center drop-shadow-sm flex-shrink-0"
           >
             <img
               src={logoImg}
@@ -81,18 +80,17 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* ── Desktop Links ── */}
-          <ul className="hidden md:flex items-center gap-7">
+          {/* ── Desktop Links (centered) ── */}
+          <ul className="hidden md:flex items-center gap-5 flex-1 justify-center">
             {navLinks.filter((l) => l.href !== "/spotlight").map((link) => (
               <li key={link.href}>
 
                 {link.href === "/quiz" ? (
-                  /* Highlighted gradient link */
                   <Link
                     to={link.href}
                     className={`
                       group relative inline-flex items-center gap-1.5
-                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
+                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg transition-colors duration-300
                       ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
@@ -101,26 +99,24 @@ const Navbar = () => {
                     </span>
                   </Link>
 
-                ) : link.href.startsWith("/#") ? (
-                  /* Hash link */
-                  <a
-                    href={link.href}
+                ) : link.href === "#contact" ? (
+                  <button
+                    onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}
                     className={`
                       relative inline-flex items-center gap-1.5
-                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
-                      ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
+                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg transition-colors duration-300
+                      text-foreground/80 hover:text-foreground
                     `}
                   >
                     {link.label}
-                  </a>
+                  </button>
 
                 ) : (
-                  /* Regular link */
                   <Link
                     to={link.href}
                     className={`
                       relative inline-flex items-center gap-1.5
-                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-lg transition-colors duration-300
+                      font-sans font-bold text-[11px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg transition-colors duration-300
                       ${isActive(link.href) ? "bg-primary/10 text-primary" : "text-foreground/80 hover:text-foreground"}
                     `}
                   >
@@ -129,28 +125,28 @@ const Navbar = () => {
                 )}
               </li>
             ))}
-
-            {/* ── Desktop Controls ── */}
-            <li className="flex items-center gap-3 pl-4 border-l border-border">
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-2 text-foreground/70 hover:text-accent hover:bg-primary/5 rounded-full transition-all"
-                aria-label="Qidiruv"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
-              <LanguageSwitcher />
-
-              <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="p-2 text-foreground transition-colors hover:text-accent focus:outline-none drop-shadow-sm"
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
-            </li>
           </ul>
+
+          {/* ── Desktop Controls (right, flex-shrink-0) ── */}
+          <div className="hidden md:flex items-center gap-3 flex-shrink-0 pl-4 border-l border-border">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="p-2 text-foreground/70 hover:text-accent hover:bg-primary/5 rounded-full transition-all"
+              aria-label="Qidiruv"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+
+            <LanguageSwitcher />
+
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 text-foreground transition-colors hover:text-accent focus:outline-none drop-shadow-sm"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+          </div>
 
           {/* ── Mobile Controls ── */}
           <div className="flex items-center gap-3 md:hidden">
@@ -201,6 +197,20 @@ const Navbar = () => {
                           {link.label}
                         </span>
                       </Link>
+                    ) : link.href === "#contact" ? (
+                      <button
+                        onClick={() => {
+                          setOpen(false);
+                          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                        }}
+                        className={`
+                          block py-2.5 px-4 mb-1 rounded-lg w-full text-left
+                          font-sans font-bold text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 active:bg-primary/10
+                          text-foreground/80 hover:text-foreground
+                        `}
+                      >
+                        {link.label}
+                      </button>
                     ) : (
                       <Link
                         to={link.href}

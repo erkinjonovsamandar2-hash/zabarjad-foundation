@@ -327,8 +327,8 @@ const TaxtlarTeaser = () => {
                   : tx.articleFallbackLabel
               }
               sub={
-                seriesArticle?.date
-                  ? new Date(seriesArticle.date).toLocaleDateString(
+                seriesArticle?.published_at
+                  ? new Date(seriesArticle.published_at).toLocaleDateString(
                     lang === "en" ? "en-GB" : lang === "ru" ? "ru-RU" : "uz-UZ",
                     { day: "numeric", month: "long" }
                   )

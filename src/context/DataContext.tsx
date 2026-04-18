@@ -46,6 +46,23 @@ export interface AuthorSpotlightItem {
   created_at: string;
 }
 
+// ── Partner type ──────────────────────────────────────────────────────────────
+export interface Partner {
+  id: string;
+  name: string;
+  type: "Rasmiy hamkor" | "Onlayn hamkor";
+  bio: string | null;
+  location: string | null;
+  branches: number | null;
+  phone: string | null;
+  website: string | null;
+  maps_url: string | null;
+  image_url: string | null;
+  accent_color: string;
+  sort_order: number;
+  created_at: string;
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 export interface QuizStep {
   question: string;
@@ -79,6 +96,9 @@ interface DataContextType {
   reviews: Review[];
   teamMembers: TeamMember[];
   authorSpotlights: AuthorSpotlightItem[];
+  partners: Partner[];
+  partnersLoading: boolean;
+  partnersTableReady: boolean;
   quizConfig: QuizConfig;
   siteSettings: SiteSettings;
   loading: boolean;
@@ -107,6 +127,9 @@ interface DataContextType {
   addAuthorSpotlight: (a: Omit<AuthorSpotlightItem, "id" | "created_at">) => Promise<void>;
   updateAuthorSpotlight: (id: string, data: Partial<AuthorSpotlightItem>) => Promise<void>;
   deleteAuthorSpotlight: (id: string) => Promise<void>;
+  addPartner: (p: Omit<Partner, "id" | "created_at">) => Promise<void>;
+  updatePartner: (id: string, data: Partial<Partner>) => Promise<void>;
+  deletePartner: (id: string, imageUrl?: string | null) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -142,6 +165,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [authorSpotlights, setAuthorSpotlights] = useState<AuthorSpotlightItem[]>([]);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [partnersLoading, setPartnersLoading] = useState(true);
+  const [partnersTableReady, setPartnersTableReady] = useState(false);
   const [quizConfig, setQuizConfig] = useState<QuizConfig>(DEFAULT_QUIZ_CONFIG);
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const [loading, setLoading] = useState(true);
@@ -277,6 +303,19 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     finally { setAuthorsLoading(false); }
   }, []);
 
+  const fetchPartners = useCallback(async () => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from("partners")
+        .select("*")
+        .order("sort_order", { ascending: true });
+      if (error) { if (error.code === TABLE_NOT_FOUND) return; console.warn("[DataContext] fetchPartners:", error.message); return; }
+      setPartnersTableReady(true);
+      if (data) setPartners(data as Partner[]);
+    } catch (err) { console.warn("[DataContext] fetchPartners unexpected:", err); }
+    finally { setPartnersLoading(false); }
+  }, []);
+
   // fetchQuiz — silently handles missing table (42P01) and empty table.
   // Uses .limit(1) without .single() — .single() returns 406 when zero rows
   // exist, which causes a noisy console error and a slow request cycle.
@@ -345,6 +384,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
           fetchSiteSettings(),
           fetchTeamMembers(),
           fetchAuthorSpotlights(),
+          fetchPartners(),
         ]);
 
         let timer: ReturnType<typeof setTimeout>;
@@ -370,7 +410,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     };
 
     init();
-  }, [fetchBooks, fetchNewBooks, fetchBlogPosts, fetchReviews, fetchQuiz, fetchSiteSettings, fetchTeamMembers, fetchAuthorSpotlights]);
+  }, [fetchBooks, fetchNewBooks, fetchBlogPosts, fetchReviews, fetchQuiz, fetchSiteSettings, fetchTeamMembers, fetchAuthorSpotlights, fetchPartners]);
 
   // ── Realtime subscription — new_books ────────────────────────────────────
   // Any INSERT / UPDATE / DELETE on new_books triggers a re-fetch so the live
@@ -663,6 +703,34 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     await fetchAuthorSpotlights();
   }, [fetchAuthorSpotlights]);
 
+  // ── Mutators — Partners ──────────────────────────────────────────────────
+
+  const addPartner = useCallback(async (p: Omit<Partner, "id" | "created_at">) => {
+    const { error } = await (supabase as any).from("partners").insert(p);
+    if (error) { throw new Error(error.message); }
+    await fetchPartners();
+  }, [fetchPartners]);
+
+  const updatePartner = useCallback(async (id: string, data: Partial<Partner>) => {
+    const { error } = await (supabase as any).from("partners").update(data).eq("id", id);
+    if (error) { throw new Error(error.message); }
+    setPartners((prev) => prev.map((p) => (p.id === id ? { ...p, ...data } : p)));
+    await fetchPartners();
+  }, [fetchPartners]);
+
+  const deletePartner = useCallback(async (id: string, imageUrl?: string | null) => {
+    const { error } = await (supabase as any).from("partners").delete().eq("id", id);
+    if (error) { throw new Error(error.message); }
+    if (imageUrl) {
+      const path = extractStoragePath(imageUrl, "books");
+      if (path) {
+        const { error: se } = await supabase.storage.from("books").remove([path]);
+        if (se) console.warn("[DataContext] deletePartner storage:", se.message);
+      }
+    }
+    await fetchPartners();
+  }, [fetchPartners]);
+
   // ── Mutators — Quiz & Settings ────────────────────────────────────────────
 
   const updateQuizConfig = useCallback(async (config: QuizConfig) => {
@@ -713,7 +781,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   return (
     <DataContext.Provider
       value={{
-        books, newBooks, articles, reviews, teamMembers, authorSpotlights,
+        books, newBooks, articles, reviews, teamMembers, authorSpotlights, partners, partnersLoading, partnersTableReady,
         quizConfig, siteSettings, loading, teamLoading, authorsLoading, booksError, articlesError,
         addBook, updateBook, deleteBook,
         addNewBook, updateNewBook, deleteNewBook,
@@ -725,6 +793,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         submitReview,
         addTeamMember, updateTeamMember, deleteTeamMember,
         addAuthorSpotlight, updateAuthorSpotlight, deleteAuthorSpotlight,
+        addPartner, updatePartner, deletePartner,
       }}
     >
       {children}

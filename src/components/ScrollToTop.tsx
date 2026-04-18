@@ -4,14 +4,25 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-
 import { ChevronUp } from "lucide-react";
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
   const { scrollY } = useScroll();
 
   useEffect(() => {
-    // Instantly scroll to the top left corner whenever the route changes
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      const id = hash.slice(1);
+      const tryScroll = () => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+        else window.scrollTo(0, 0);
+      };
+      // Small delay to let the page render before scrolling
+      const t = setTimeout(tryScroll, 120);
+      return () => clearTimeout(t);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 300) {

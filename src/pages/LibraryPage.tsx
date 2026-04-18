@@ -48,12 +48,12 @@ const FEATURED_BOOKS = [
 // ── Helper: Get Category Label ─────────────────────────────────────────────────
 const getCategoryLabel = (key: string, lang: string): string => {
   const labels: Record<string, { uz: string; ru: string; en: string }> = {
-    all:            { uz: "Barchasi",                      ru: "Все",                    en: "All" },
-    jahon:          { uz: "Jahon adabiyoti durdonalari",   ru: "Мировая классика",       en: "World Classics" },
-    ilmiy:          { uz: "Ilmiy-ommabop nashrlar",        ru: "Научно-популярные",      en: "Popular Science" },
-    new:            { uz: "Yangi nashrlar",                 ru: "Новинки",                en: "New Releases" },
-    "amir-temur":   { uz: "Amir Temur",                    ru: "Амир Темур",             en: "Amir Temur" },
-    "erkin-millat": { uz: "Erkin millat poydevori",        ru: "Основы свободной нации", en: "Free Nation Foundation" },
+    all: { uz: "Barchasi", ru: "Все", en: "All" },
+    jahon: { uz: "Jahon adabiyoti durdonalari", ru: "Мировая классика", en: "World Classics" },
+    ilmiy: { uz: "Ilmiy-ommabop nashrlar", ru: "Научно-популярные", en: "Popular Science" },
+    new: { uz: "Yangi nashrlar", ru: "Новинки", en: "New Releases" },
+    "amir-temur": { uz: "Amir Temur", ru: "Амир Темур", en: "Amir Temur" },
+    "erkin-millat": { uz: "Erkin millat poydevori", ru: "Основы свободной нации", en: "Free Nation Foundation" },
   };
   return labels[key]?.[lang as keyof typeof labels.all] ?? key;
 };
@@ -157,7 +157,7 @@ const LibraryPage = () => {
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0, transition: { delay: 0.1, duration: 0.35, ease: "easeOut" } }}
                 exit={{ opacity: 0, x: -30, transition: { duration: 0.25, ease: "easeIn" } }}
-                className="flex-1 flex flex-col justify-center items-start text-left mt-8 md:mt-0 relative z-10"
+                className="flex-1 flex flex-col justify-center items-center md:items-start text-center md:text-left mt-8 md:mt-0 pb-6 md:pb-0 relative z-10 w-full"
               >
                 <span className="text-gold font-bold tracking-[0.2em] text-[10px] sm:text-xs uppercase mb-4">
                   Hafta Tanlovi
@@ -168,7 +168,7 @@ const LibraryPage = () => {
                 <p className="text-muted-foreground text-base md:text-lg mb-8 line-clamp-3 max-w-xl">
                   {featuredBook.description}
                 </p>
-                <Link to={`/book/${featuredBook.id}`} className="btn-glass px-8 py-3.5">
+                <Link to={`/book/${featuredBook.id}`} className="btn-glass px-8 py-3.5 mt-2 mb-6 md:mb-0">
                   Kitob haqida
                 </Link>
               </motion.div>
@@ -210,29 +210,28 @@ const LibraryPage = () => {
                   className="absolute right-0 top-0 bottom-1 w-16 pointer-events-none z-10"
                   style={{ background: "linear-gradient(to right, transparent, hsl(var(--charcoal)))" }}
                 />
-              <div className="flex overflow-x-auto flex-nowrap items-center justify-start gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 pr-10">
-                {CATEGORIES.map((categoryKey) => {
-                  const isActive = active === categoryKey;
+                <div className="flex overflow-x-auto flex-nowrap items-center justify-start gap-2 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] pb-1 pr-10">
+                  {CATEGORIES.map((categoryKey) => {
+                    const isActive = active === categoryKey;
 
-                  return (
-                    <button
-                      key={categoryKey}
-                      onClick={() => {
-                        startTransition(() => {
-                          setActive(categoryKey);
-                        });
-                      }}
-                      className={`flex-shrink-0 font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.1em] sm:tracking-[0.13em] uppercase px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors duration-200 ${
-                        isActive
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-transparent text-muted-foreground border border-border hover:bg-muted hover:text-foreground"
-                      }`}
-                    >
-                      {getCategoryLabel(categoryKey, lang)}
-                    </button>
-                  );
-                })}
-              </div>
+                    return (
+                      <button
+                        key={categoryKey}
+                        onClick={() => {
+                          startTransition(() => {
+                            setActive(categoryKey);
+                          });
+                        }}
+                        className={`flex-shrink-0 font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.1em] sm:tracking-[0.13em] uppercase px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors duration-200 ${isActive
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-transparent text-muted-foreground border border-border hover:bg-muted hover:text-foreground"
+                          }`}
+                      >
+                        {getCategoryLabel(categoryKey, lang)}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* PDF Catalog */}

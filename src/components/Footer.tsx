@@ -12,7 +12,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#0A1128] border-t border-[rgba(10,17,40,0.15)]">
+    <footer id="footer" className="w-full bg-[#0A1128] border-t border-[rgba(10,17,40,0.15)]">
       <style>{`
         .footer-grid {
           display: grid;
@@ -115,9 +115,13 @@ const Footer = () => {
               <Link to="/blog" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 Booktopia Kundaligi
               </Link>
-              <Link to="/aloqa" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
+              <a
+                href="#footer"
+                onClick={(e) => { e.preventDefault(); window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }); }}
+                className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none"
+              >
                 Aloqa va Hamkorlik
-              </Link>
+              </a>
             </div>
 
             {/* Huquqiy */}
