@@ -86,4 +86,9 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     instagram: "https://www.instagram.com/booktopia",
   },
   map: { enabled: true, embed_url: "", title: "Bizning manzil" },
+  bookOfMonth: {
+    quote: "Ba'zan eng yuksakka chiqish uchun eng quyiga tushish kerak, eng toza bo'lish uchun butun tubanliklardan o'tish kerak, hayotni yangidan boshlash uchun xarob ahvolga kelish kerak.",
+    quote_author: "",
+    badge: "Jahon durdonasi",
+  },
 };

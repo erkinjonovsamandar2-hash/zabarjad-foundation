@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logoImg from "@/assets/Logo-blue.png";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Instagram } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useLang } from "@/context/LanguageContext";
 
@@ -70,18 +70,38 @@ const Footer = () => {
             </p>
 
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
-                <MapPin className="w-5 h-5 text-[#00A3FF] shrink-0" />
-                <span className="truncate">Uchtepa tumani, G9A-mavze, 20-uy</span>
-              </div>
-              <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
-                <Phone className="w-5 h-5 text-[#00A3FF] shrink-0" />
-                <span className="truncate">+998770164455</span>
-              </div>
-              <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
-                <Mail className="w-5 h-5 text-[#00A3FF] shrink-0" />
-                <span className="truncate">info@booktopia.uz</span>
-              </div>
+              {footer.address && (
+                <div className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)]">
+                  <MapPin className="w-5 h-5 text-[#00A3FF] shrink-0" />
+                  <span>{footer.address}</span>
+                </div>
+              )}
+              {footer.phone && (
+                <a href={`tel:${footer.phone}`} className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)] hover:text-white transition-colors">
+                  <Phone className="w-5 h-5 text-[#00A3FF] shrink-0" />
+                  <span>{footer.phone}</span>
+                </a>
+              )}
+              {footer.email && (
+                <a href={`mailto:${footer.email}`} className="flex items-center gap-3 font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.45)] hover:text-white transition-colors">
+                  <Mail className="w-5 h-5 text-[#00A3FF] shrink-0" />
+                  <span>{footer.email}</span>
+                </a>
+              )}
+              {(footer.telegram || footer.instagram) && (
+                <div className="flex items-center gap-3 mt-1">
+                  {footer.telegram && (
+                    <a href={footer.telegram} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-[#00A3FF]/20 transition-colors" aria-label="Telegram">
+                      <Send className="w-4 h-4 text-[#00A3FF]" />
+                    </a>
+                  )}
+                  {footer.instagram && (
+                    <a href={footer.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-pink-500/20 transition-colors" aria-label="Instagram">
+                      <Instagram className="w-4 h-4 text-pink-400" />
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

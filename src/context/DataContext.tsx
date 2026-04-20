@@ -86,6 +86,7 @@ export interface SiteSettings {
   hero: { motto: string; subtitle: string; cta_text: string };
   footer: { phone: string; email: string; address: string; telegram: string; instagram: string };
   map: { enabled: boolean; embed_url: string; title: string };
+  bookOfMonth: { quote: string; quote_author: string; badge: string };
 }
 
 // ── Context shape ─────────────────────────────────────────────────────────────
@@ -351,14 +352,16 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
       if (data && data.length > 0) {
-        const settings: Record<string, unknown> = {};
+        const merged: Record<string, unknown> = { ...DEFAULT_SITE_SETTINGS };
         data.forEach((row: { key: string; value: unknown }) => {
-          settings[row.key] = row.value;
+          const def = (DEFAULT_SITE_SETTINGS as Record<string, unknown>)[row.key];
+          if (def && typeof def === "object" && typeof row.value === "object" && row.value !== null) {
+            merged[row.key] = { ...def as object, ...row.value as object };
+          } else {
+            merged[row.key] = row.value;
+          }
         });
-        setSiteSettings({
-          ...DEFAULT_SITE_SETTINGS,
-          ...settings,
-        } as unknown as SiteSettings);
+        setSiteSettings(merged as unknown as SiteSettings);
       }
     } catch (err) {
       console.warn("[DataContext] fetchSiteSettings unexpected:", err);

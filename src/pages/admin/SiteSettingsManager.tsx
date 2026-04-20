@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { useData, SiteSettings } from "@/context/DataContext";
-import { Save, Globe, MapPin, MessageSquare } from "lucide-react";
+import { Save, Globe, MapPin, MessageSquare, BookMarked } from "lucide-react";
 
 const SiteSettingsManager = () => {
   const { siteSettings, updateSiteSettings } = useData();
   const [settings, setSettings] = useState<SiteSettings>(siteSettings);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
-    await updateSiteSettings(settings);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setError(null);
+    try {
+      await updateSiteSettings(settings);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Saqlashda xato yuz berdi.");
+    }
   };
 
   return (
@@ -21,6 +27,11 @@ const SiteSettingsManager = () => {
           <Save className="h-4 w-4" /> {saved ? "Saqlandi ✓" : "Saqlash"}
         </button>
       </div>
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       {/* Hero */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
@@ -71,6 +82,45 @@ const SiteSettingsManager = () => {
             <label className="block text-sm font-medium text-foreground/80 mb-1">Instagram link</label>
             <input value={settings.footer.instagram} onChange={(e) => setSettings({ ...settings, footer: { ...settings.footer, instagram: e.target.value } })} className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none" />
           </div>
+        </div>
+      </div>
+
+      {/* Book of the Month */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <BookMarked className="h-5 w-5 text-accent" />
+          <h2 className="text-lg font-semibold text-foreground/90">Oy Kitobi — Iqtibos va nishon</h2>
+        </div>
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1">Iqtibos (katta matn)</label>
+            <textarea
+              value={settings.bookOfMonth.quote}
+              onChange={(e) => setSettings({ ...settings, bookOfMonth: { ...settings.bookOfMonth, quote: e.target.value } })}
+              rows={4}
+              placeholder="Kitobdan yoki muallif haqidagi iqtibos..."
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1">Iqtibos muallifi (ixtiyoriy)</label>
+            <input
+              value={settings.bookOfMonth.quote_author}
+              onChange={(e) => setSettings({ ...settings, bookOfMonth: { ...settings.bookOfMonth, quote_author: e.target.value } })}
+              placeholder="Masalan: Dostoevsky"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-1">Nishon matni</label>
+            <input
+              value={settings.bookOfMonth.badge}
+              onChange={(e) => setSettings({ ...settings, bookOfMonth: { ...settings.bookOfMonth, badge: e.target.value } })}
+              placeholder="Masalan: Jahon durdonasi"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground/70">Kitob nomi, muallif va muqova — Kitoblar bo'limida "Featured" belgisi qo'yilgan kitobdan olinadi.</p>
         </div>
       </div>
 

@@ -151,7 +151,7 @@ const AnimatedNumber = ({ target }: { target: number }) => {
 };
 
 // ── Unified Horizontal Stats & CTA Band ──────────────────────────────────────
-const CtaStatsBand = ({ onNavigate }: { onNavigate: () => void }) => {
+const CtaStatsBand = ({ onNavigate, ctaText }: { onNavigate: () => void; ctaText?: string }) => {
   return (
     <motion.div
       className="flex flex-col sm:flex-row items-center sm:items-stretch gap-5 mt-8 w-full xl:w-auto"
@@ -195,7 +195,7 @@ const CtaStatsBand = ({ onNavigate }: { onNavigate: () => void }) => {
         className="btn-glass flex flex-row items-center justify-center gap-2 group w-full max-w-[360px] sm:w-auto px-10 py-4 transition-all duration-500 ease-out z-10 rounded-2xl relative overflow-hidden"
       >
         <Library className="h-4 w-4 relative z-10" />
-        <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase relative z-10">KOLLEKSIYANI KO'RISH</span>
+        <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase relative z-10">{ctaText || "KOLLEKSIYANI KO'RISH"}</span>
         <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-500 ease-out relative z-10" />
       </motion.button>
     </motion.div>
@@ -288,9 +288,9 @@ const ActiveBookShowcase = ({
 
 // ── Book Info Panel ───────────────────────────────────────────────────────────
 const BookInfoPanel = ({
-  motto, subtitle, onNavigate,
+  motto, subtitle, ctaText, onNavigate,
 }: {
-  motto: string; subtitle: string; onNavigate: () => void;
+  motto: string; subtitle: string; ctaText?: string; onNavigate: () => void;
 }) => {
   const formatSubtitle = (text?: string) => {
     if (!text) return null;
@@ -329,7 +329,7 @@ const BookInfoPanel = ({
         </div>
       </motion.div>
 
-      <CtaStatsBand onNavigate={onNavigate} />
+      <CtaStatsBand onNavigate={onNavigate} ctaText={ctaText} />
     </div>
   );
 };
@@ -568,6 +568,7 @@ const Hero = () => {
           <BookInfoPanel
             motto={siteSettings.hero.motto || "Kitobsevarlar uchun yangi olam"}
             subtitle={siteSettings.hero.subtitle}
+            ctaText={siteSettings.hero.cta_text}
             onNavigate={() => navigate("/library")}
           />
 

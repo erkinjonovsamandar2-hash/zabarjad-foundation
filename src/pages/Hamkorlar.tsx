@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { MapPin, Building2, Globe, Phone, ArrowUpRight, Navigation, ExternalLink } from "lucide-react";
+import { Globe, Phone, ArrowUpRight, Navigation } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -117,36 +117,106 @@ function PartnerPhoto({
   );
 }
 
-// ── Location cell — clickable if maps_url present ────────────────────────────
-function LocationCell({ location, mapsUrl }: { location: string | null; mapsUrl: string | null }) {
-  if (!location) return null;
-  const inner = (
-    <span className="font-sans text-[0.7rem] leading-relaxed text-foreground/52">
-      {location}
-    </span>
-  );
-  if (mapsUrl) {
-    return (
-      <a
-        href={mapsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-start gap-2.5 group/loc"
-        title="Google Maps-da ko'rish"
-      >
-        <MapPin size={11} className="text-primary/55 flex-shrink-0 mt-[1px] group-hover/loc:text-primary transition-colors duration-200" />
-        <span className="font-sans text-[0.7rem] leading-relaxed text-foreground/52 group-hover/loc:text-primary group-hover/loc:underline transition-colors duration-200">
-          {location}
-        </span>
-        <ExternalLink size={9} className="flex-shrink-0 mt-[2px] text-primary/30 group-hover/loc:text-primary transition-colors duration-200" />
-      </a>
-    );
+// ── Smart website label parser ────────────────────────────────────────────────
+function parseWebsite(raw: string): { href: string; label: string } {
+  const href = raw.startsWith("http") ? raw : `https://${raw}`;
+  try {
+    const host = new URL(href).hostname.replace("www.", "");
+    if (host.includes("instagram.com")) return { href, label: "Instagram" };
+    if (host.includes("t.me") || host.includes("telegram")) return { href, label: "Telegram" };
+    if (host.includes("facebook.com")) return { href, label: "Facebook" };
+    if (host.includes("youtube.com")) return { href, label: "YouTube" };
+    return { href, label: host };
+  } catch {
+    return { href, label: raw };
   }
+}
+
+// ── Shared meta column content ────────────────────────────────────────────────
+function MetaItems({
+  partner,
+  accent,
+}: {
+  partner: Pick<Partner, "location" | "maps_url" | "branches" | "website" | "phone">;
+  accent: string;
+}) {
   return (
-    <div className="flex items-start gap-2.5">
-      <MapPin size={11} className="text-primary/55 flex-shrink-0 mt-[1px]" />
-      {inner}
-    </div>
+    <>
+      {/* Location */}
+      {partner.location && (
+        <div>
+          <p className="font-sans text-[0.55rem] tracking-[0.2em] uppercase text-foreground/30 mb-1">
+            Manzil
+          </p>
+          <p className="font-sans text-sm font-medium text-foreground/75 leading-snug mb-1.5">
+            {partner.location}
+          </p>
+          {partner.maps_url && (
+            <a
+              href={partner.maps_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-sans text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-primary/60 hover:text-primary transition-colors duration-200 group/map"
+            >
+              <Navigation size={10} className="group-hover/map:translate-x-0.5 group-hover/map:-translate-y-0.5 transition-transform duration-200" />
+              Xaritada ko'rish
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* Branches — editorial stat */}
+      {partner.branches !== null && (
+        <div>
+          <span
+            className="font-heading block leading-none"
+            style={{ fontSize: "2rem", color: accent }}
+          >
+            {partner.branches}
+          </span>
+          <span className="font-sans text-[0.55rem] tracking-[0.2em] uppercase text-foreground/30 mt-1 block">
+            Ta filial
+          </span>
+        </div>
+      )}
+
+      {/* Website — smart label */}
+      {partner.website && (() => {
+        const { href, label } = parseWebsite(partner.website);
+        return (
+          <div>
+            <p className="font-sans text-[0.55rem] tracking-[0.2em] uppercase text-foreground/30 mb-1.5">
+              Ijtimoiy tarmoq
+            </p>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-sans text-xs font-semibold text-primary border border-primary/20 px-3 py-1.5 rounded-lg hover:bg-primary/8 transition-colors duration-200"
+            >
+              <Globe size={11} />
+              {label}
+            </a>
+          </div>
+        );
+      })()}
+
+      {/* Phone */}
+      {partner.phone && (
+        <div>
+          <p className="font-sans text-[0.55rem] tracking-[0.2em] uppercase text-foreground/30 mb-1.5">
+            Telefon
+          </p>
+          <a
+            href={`tel:${partner.phone}`}
+            className="inline-flex items-center gap-2 font-sans text-sm font-medium text-foreground/70 hover:text-foreground transition-colors duration-200"
+          >
+            <Phone size={12} className="text-primary/50" />
+            {partner.phone}
+          </a>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -214,38 +284,13 @@ function PartnerEntry({
         </p>
 
         {/* Meta */}
-        <div className="flex flex-col gap-2">
-          <LocationCell location={partner.location} mapsUrl={partner.maps_url} />
-          {partner.branches !== null && (
-            <div className="flex items-center gap-2.5">
-              <Building2 size={11} className="text-primary/55 flex-shrink-0" />
-              <span className="font-sans text-[0.7rem] text-foreground/52">{partner.branches} ta filial</span>
-            </div>
-          )}
-          {partner.website && (
-            <div className="flex items-center gap-2.5">
-              <Globe size={11} className="text-primary/55 flex-shrink-0" />
-              <a
-                href={`https://${partner.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans text-[0.7rem] text-primary hover:underline transition-colors duration-200"
-              >
-                {partner.website}
-              </a>
-            </div>
-          )}
-          {partner.phone && (
-            <div className="flex items-center gap-2.5">
-              <Phone size={11} className="text-primary/55 flex-shrink-0" />
-              <span className="font-sans text-[0.7rem] text-foreground/52">{partner.phone}</span>
-            </div>
-          )}
+        <div className="flex flex-col gap-5 pt-2 border-t border-border/30 mt-2">
+          <MetaItems partner={partner} accent={accent} />
         </div>
       </div>
 
       {/* ── DESKTOP layout ── */}
-      <div className="hidden lg:grid grid-cols-[68px_88px_1fr_200px] gap-10 py-14">
+      <div className="hidden lg:grid grid-cols-[68px_88px_1fr_230px] gap-10 py-14">
 
         {/* Ghost ordinal */}
         <div className="select-none pointer-events-none">
@@ -294,33 +339,8 @@ function PartnerEntry({
         </div>
 
         {/* Meta */}
-        <div className="flex flex-col gap-3 pt-[4.75rem]">
-          <LocationCell location={partner.location} mapsUrl={partner.maps_url} />
-          {partner.branches !== null && (
-            <div className="flex items-center gap-2.5">
-              <Building2 size={11} className="text-primary/55 flex-shrink-0" />
-              <span className="font-sans text-[0.7rem] text-foreground/52">{partner.branches} ta filial</span>
-            </div>
-          )}
-          {partner.website && (
-            <div className="flex items-center gap-2.5">
-              <Globe size={11} className="text-primary/55 flex-shrink-0" />
-              <a
-                href={`https://${partner.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans text-[0.7rem] text-primary hover:underline transition-colors duration-200"
-              >
-                {partner.website}
-              </a>
-            </div>
-          )}
-          {partner.phone && (
-            <div className="flex items-center gap-2.5">
-              <Phone size={11} className="text-primary/55 flex-shrink-0" />
-              <span className="font-sans text-[0.7rem] text-foreground/52">{partner.phone}</span>
-            </div>
-          )}
+        <div className="flex flex-col gap-5 self-end">
+          <MetaItems partner={partner} accent={accent} />
         </div>
       </div>
 

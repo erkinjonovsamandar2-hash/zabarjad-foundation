@@ -12,10 +12,10 @@ export type LibraryFilterKey = (typeof LIBRARY_FILTER_KEYS)[number];
 
 export const LIBRARY_FILTER_MAP: Record<LibraryFilterKey, string> = {
   "jahon":        "Jahon adabiyoti durdonalari",
-  "ilmiy":        "Ilmiy-ommabop nashrlar",
+  "ilmiy":        "Ilmiy-ommabop",
   "new":          "Yangi nashrlar",
-  "amir-temur":   "Amir Temur",
-  "erkin-millat": "Erkin millat poydevori",
+  "amir-temur":   "Tarixiy",
+  "erkin-millat": "Ijtimoiy-siyosiy",
 };
 
 // ── EpicSpotlight – map hotspot positions ─────────────────────────────────────

@@ -435,7 +435,7 @@ export default function TeamPage() {
                         </div>
                         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
                             <SkeletonCard className="w-full lg:w-[340px] flex-shrink-0" />
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 flex-1">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 flex-1">
                                 {Array.from({ length: 5 }).map((_, i) => (
                                     <SkeletonCard key={i} />
                                 ))}
@@ -568,7 +568,7 @@ export default function TeamPage() {
                         )}
 
                         {/* ── Team grid — right column ── */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
                             {rest.map((member, i) => {
                                 const accent = getAccent(member.role);
                                 const bg = getBg(member.role);
@@ -582,7 +582,7 @@ export default function TeamPage() {
                                         transition={{ duration: 0.5, delay: 0.15 + i * 0.07, ease: "easeOut" }}
                                         className="group relative overflow-hidden"
                                         style={{
-                                            aspectRatio: "3/4",
+                                            aspectRatio: "4/5",
                                             background: bg,
                                             boxShadow: "0 2px 12px rgba(0,0,0,0.07), 0 8px 32px rgba(0,0,0,0.05)",
                                         }}

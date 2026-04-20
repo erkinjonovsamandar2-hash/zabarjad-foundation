@@ -32,7 +32,7 @@ const FloatingBookVisual = ({ coverUrl, title }: { coverUrl: string | null; titl
 );
 
 const BookOfTheMonth = () => {
-  const { books, loading, booksError } = useData() as ReturnType<typeof useData> & { booksError?: boolean };
+  const { books, loading, booksError, siteSettings } = useData() as ReturnType<typeof useData> & { booksError?: boolean };
   const { lang } = useLang();
   const navigate = useNavigate();
 
@@ -75,8 +75,12 @@ const BookOfTheMonth = () => {
 
   const genre = (spotlightBook as any).genre ?? (spotlightBook as any).category ?? "Psixologik roman";
   const pages = (spotlightBook as any).pages ?? (spotlightBook as any).page_count ?? "340";
+  const description = (spotlightBook as any).description ?? "";
 
-  const description = (spotlightBook as any).description ?? "Shaxmat taxtasi ortidagi daholik, ruhiy inqirozlar va mutlaq g'alabaga bo'lgan mashaqqatli yo'l. Bu asar inson o'z-o'zini qanday qilib qayta yaratishi haqidagi eng kuchli hikoyalardan biridir.";
+  const botm = siteSettings.bookOfMonth;
+  const quote = botm?.quote || "";
+  const quoteAuthor = botm?.quote_author || "";
+  const badge = botm?.badge || "Jahon durdonasi";
 
   return (
     <motion.section
@@ -123,8 +127,13 @@ const BookOfTheMonth = () => {
             >
               <Quote className="absolute -top-3 -left-5 w-8 h-8 lg:w-10 lg:h-10 text-accent/20 dark:text-accent/10 rotate-180" />
               <blockquote className="text-xl sm:text-2xl lg:text-[1.75rem] leading-loose font-serif italic text-foreground drop-shadow-sm max-w-2xl">
-                "Ba'zan eng yuksakka chiqish uchun eng quyiga tushish kerak, eng toza bo'lish uchun butun tubanliklardan o'tish kerak, hayotni yangidan boshlash uchun xarob ahvolga kelish kerak."
+                {quote ? `"${quote}"` : null}
               </blockquote>
+              {quoteAuthor && (
+                <p className="mt-3 font-sans text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
+                  — {quoteAuthor}
+                </p>
+              )}
             </motion.div>
 
             {/* 3. Title & Author */}
@@ -153,9 +162,11 @@ const BookOfTheMonth = () => {
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
               className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-0 mb-8"
             >
-              <div className="flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-muted-foreground">
-                <Award className="w-3.5 h-3.5 text-primary" /> Jahon durdonasi
-              </div>
+              {badge && (
+                <div className="flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-muted-foreground">
+                  <Award className="w-3.5 h-3.5 text-primary" /> {badge}
+                </div>
+              )}
               <div className="flex items-center gap-1.5 text-[11px] font-sans font-bold tracking-[0.2em] uppercase text-muted-foreground">
                 <Brain className="w-3.5 h-3.5 text-primary" /> {genre}
               </div>
