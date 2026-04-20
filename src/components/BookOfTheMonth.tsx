@@ -5,6 +5,7 @@ import { ChevronRight, Award, Clock, Brain, Quote, Info, BookOpen, AlertTriangle
 import { useNavigate } from "react-router-dom";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
+import { LIBRARY_FILTER_MAP } from "@/lib/constants";
 
 // ── Background image import ───────────────────────────────────────────────────
 let bgUrl: string | undefined;
@@ -73,7 +74,8 @@ const BookOfTheMonth = () => {
   const glowColor = `hsl(${spotlightBook.bg_color ?? "40 65% 30%"})`;
   const bookTitle = locField(spotlightBook, "title", lang);
 
-  const genre = (spotlightBook as any).genre ?? (spotlightBook as any).category ?? "Psixologik roman";
+  const rawGenre = (spotlightBook as any).genre ?? (spotlightBook as any).category ?? "Psixologik roman";
+  const genre = LIBRARY_FILTER_MAP[rawGenre as keyof typeof LIBRARY_FILTER_MAP] ?? rawGenre;
   const pages = (spotlightBook as any).pages ?? (spotlightBook as any).page_count ?? "340";
   const description = (spotlightBook as any).description ?? "";
 

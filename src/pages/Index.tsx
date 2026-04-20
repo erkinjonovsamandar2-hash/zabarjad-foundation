@@ -64,14 +64,15 @@ const Index = () => {
 
               {/* ── Below the fold — code-split, loaded in parallel ── */}
 
-<Suspense fallback={<SectionFallback />}>
-                <AmirTemurSection />
+              <Suspense fallback={<SectionFallback />}>
+                <CuratedLibrary />
               </Suspense>
               <Divider />
 
               <Suspense fallback={<SectionFallback />}>
-                <CuratedLibrary />
+                <AmirTemurSection />
               </Suspense>
+              <Divider />
 
               <Suspense fallback={<SectionFallback />}>
                 <Taassurotlar />
