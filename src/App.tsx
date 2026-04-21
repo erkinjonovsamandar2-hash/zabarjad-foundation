@@ -47,6 +47,7 @@ const TeamManager = lazy(() => import("./pages/admin/TeamManager"));
 const HeroOrderManager = lazy(() => import("./pages/admin/HeroOrderManager"));
 const Hamkorlar = lazy(() => import("./pages/Hamkorlar"));
 const PartnerManager = lazy(() => import("./pages/admin/PartnerManager"));
+const CuratedLibraryManager = lazy(() => import("./pages/admin/CuratedLibraryManager"));
 
 const queryClient = new QueryClient();
 
@@ -276,6 +277,7 @@ const AppInner = () => {
             <Route path="team" element={<Lazy component={TeamManager} />} />
             <Route path="hero-order" element={<Lazy component={HeroOrderManager} />} />
             <Route path="partners" element={<Lazy component={PartnerManager} />} />
+            <Route path="curated" element={<Lazy component={CuratedLibraryManager} />} />
           </Route>
 
           <Route path="*" element={<Lazy component={NotFound} />} />

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ChevronRight, Book } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useData } from "@/context/DataContext";
+import { useLang } from "@/context/LanguageContext";
 import EmptyState from "./EmptyState";
 
 interface SearchModalProps {
@@ -12,6 +13,7 @@ interface SearchModalProps {
 
 const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const { books } = useData();
+  const { t } = useLang();
   const [query, setQuery] = useState("");
 
   // Lock body scroll when modal is open
@@ -70,7 +72,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                 <input
                   autoFocus
                   type="text"
-                  placeholder="Kitob yoki muallif nomini yozing..."
+                  placeholder={t.search.placeholder}
                   className="w-full bg-transparent border-none outline-none text-lg text-foreground placeholder:text-neutral-400 font-sans font-medium"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -88,7 +90,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                 {query === "" ? (
                   <div className="py-12 text-center text-neutral-400">
                     <Book className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                    <p className="text-sm font-sans">Qidirishni boshlash uchun yozing...</p>
+                    <p className="text-sm font-sans">{t.search.startTyping}</p>
                   </div>
                 ) : filteredBooks.length > 0 ? (
                   <div className="grid gap-2">
@@ -126,8 +128,8 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                   // Uses your new EmptyState component!
                   <div className="py-8">
                     <EmptyState
-                      title="Hech narsa topilmadi"
-                      description={`"${query}" bo'yicha hech qanday kitob topa olmadik.`}
+                      title={t.search.notFound}
+                      description={`"${query}" ${t.search.notFoundDesc}`}
                     />
                   </div>
                 )}
@@ -135,8 +137,8 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
 
               {/* Footer Tip */}
               <div className="bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center text-[10px] text-neutral-400 font-sans uppercase tracking-wider">
-                <span>Booktopia Qidiruv</span>
-                <span>ESC — Yopish</span>
+                <span>{t.search.label}</span>
+                <span>{t.search.close}</span>
               </div>
             </div>
           </motion.div>

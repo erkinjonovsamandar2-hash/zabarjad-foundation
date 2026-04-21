@@ -65,8 +65,7 @@ const Footer = () => {
             </Link>
 
             <p className="font-serif text-[1.05rem] leading-[1.8] text-[rgba(255,255,255,0.6)] max-w-[280px] mb-6">
-              Jahon va o'zbek adabiyotining eng sara durdonalarini sifatli tarjima va yuqori
-              poligrafiya darajasida o'quvchilarga taqdim etuvchi premium nashriyot.
+              {t.footer.brandDesc}
             </p>
 
             <div className="flex flex-col gap-4">
@@ -108,58 +107,58 @@ const Footer = () => {
           {/* COLUMNS 2, 3, 4 - Link columns wrapper */}
           <div className="footer-links-wrapper">
 
-            {/* Faoliyat */}
+            {/* Activity */}
             <div className="footer-link-col flex flex-col">
               <h4 className="font-sans text-[0.9rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-6">
-                Faoliyat
+                {t.footer.activityHeading}
               </h4>
               <Link to="/library" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Barcha kitoblar
+                {t.footer.allBooks}
               </Link>
               <Link to="/library?tab=new" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Yangi nashrlar
+                {t.footer.newReleases}
               </Link>
               <Link to="/authors" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Mualliflar va Tarjimonlar
+                {t.footer.authorsTranslators}
               </Link>
             </div>
 
-            {/* Nashriyot */}
+            {/* Publisher */}
             <div className="footer-link-col flex flex-col">
               <h4 className="font-sans text-[0.9rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-6">
-                Nashriyot
+                {t.footer.publisherHeading}
               </h4>
               <Link to="/biz-haqimizda" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Biz haqimizda
+                {t.footer.aboutUs}
               </Link>
               <Link to="/blog" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Booktopia Kundaligi
+                {t.footer.diary}
               </Link>
               <a
                 href="#footer"
                 onClick={(e) => { e.preventDefault(); window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }); }}
                 className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none"
               >
-                Aloqa va Hamkorlik
+                {t.footer.contactCollab}
               </a>
             </div>
 
-            {/* Huquqiy */}
+            {/* Legal */}
             <div className="footer-link-col flex flex-col">
               <h4 className="font-sans text-[0.9rem] font-bold tracking-[0.15em] uppercase text-[#00A3FF] mb-6">
-                Huquqiy
+                {t.footer.legalHeading}
               </h4>
               <Link to="/oferta" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Ommaviy ofеrta
+                {t.footer.publicOffer}
               </Link>
               <Link to="/maxfiylik" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Maxfiylik siyosati
+                {t.footer.privacyPolicy}
               </Link>
               <Link to="/shartlar" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Foydalanish shartlari
+                {t.footer.termsOfUse}
               </Link>
               <Link to="/yetkazish" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                Yetkazib berish
+                {t.footer.delivery}
               </Link>
             </div>
 
@@ -173,7 +172,7 @@ const Footer = () => {
           © {currentYear} BOOKTOPIA. {t?.footer?.rights || "BARCHA HUQUQLAR HIMOYALANGAN."}
         </div>
         <div className="font-sans text-[0.7rem] font-semibold tracking-[0.05em] text-[rgba(255,255,255,0.3)] flex items-center justify-center gap-1.5 uppercase">
-          <span>MUHABBAT BILAN YARATILDI</span>
+          <span>{t.footer.madeWithLove}</span>
           <span style={{ color: '#E24B4A' }} className="text-[0.85rem] translate-y-[-1px]">♥</span>
           <span className="opacity-50">·</span>
           <span>SAMANDAR ERKINJONOV</span>

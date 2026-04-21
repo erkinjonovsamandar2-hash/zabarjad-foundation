@@ -42,7 +42,7 @@ const BookSkeleton = () => (
   </div>
 );
 
-const GRID_COUNT = 3;
+const GRID_COUNT = 4;
 
 const CuratedLibrary = () => {
   const { books, loading: dataLoading, booksError } = useData() as ReturnType<typeof useData> & { booksError?: boolean };
@@ -59,7 +59,7 @@ const CuratedLibrary = () => {
     });
   }, [books, activeTab]);
 
-  const displayedBooks = useMemo(() => filtered.slice(0, 3), [filtered]);
+  const displayedBooks = useMemo(() => filtered.slice(0, 4), [filtered]);
 
   return (
     <section id="library" className="relative isolate overflow-hidden section-padding bg-charcoal">
@@ -145,7 +145,7 @@ const CuratedLibrary = () => {
         {/* ── 3D Book Grid ── */}
         {dataLoading ? (
           /* Skeleton: same 3-column grid, same dimensions as real cards */
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-3xl md:max-w-4xl mx-auto px-4" aria-label="Yuklanmoqda...">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-3xl md:max-w-5xl mx-auto px-4" aria-label="Yuklanmoqda...">
             {Array.from({ length: GRID_COUNT }).map((_, i) => (
               <BookSkeleton key={i} />
             ))}
@@ -158,7 +158,7 @@ const CuratedLibrary = () => {
             <p className="font-sans text-xs text-muted-foreground/70 mt-1">Iltimos, sahifani yangilang</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-3xl md:max-w-4xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-3xl md:max-w-5xl mx-auto px-4">
             <AnimatePresence mode="popLayout">
               {displayedBooks.map((book, i) => {
                 const imgSrc = getImageUrl(book.cover_url);

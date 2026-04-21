@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X, Clock, RefreshCw } from "lucide-react";
+import { Check, X, Clock, RefreshCw, Trash2, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Review {
@@ -96,10 +97,10 @@ const AdminReviews = () => {
 
   useEffect(() => { fetchReviews(); }, [filter]);
 
-  // ── Approve / Reject ───────────────────────────────────────────────────────
+  // ── Approve / Reject / Re-open ────────────────────────────────────────────
   const updateStatus = async (
     id: string,
-    status: "published" | "rejected"
+    status: "published" | "rejected" | "pending"
   ) => {
     setActioning(id);
 
@@ -109,14 +110,35 @@ const AdminReviews = () => {
       .eq("id", id);
 
     if (error) {
-      console.error("[AdminReviews] updateStatus error:", error.message);
+      toast.error("Xatolik: " + error.message);
     } else {
-      // Optimistic update — remove from list if it no longer matches filter
+      const labels = { published: "Nashr etildi!", rejected: "Rad etildi", pending: "Kutilmoqdaga qaytarildi" };
+      toast.success(labels[status]);
       setReviews((prev) =>
         filter === "all"
           ? prev.map((r) => r.id === id ? { ...r, status } : r)
           : prev.filter((r) => r.id !== id)
       );
+    }
+
+    setActioning(null);
+  };
+
+  // ── Delete ─────────────────────────────────────────────────────────────────
+  const deleteReview = async (id: string) => {
+    if (!window.confirm("Bu sharhni butunlay o'chirmoqchimisiz?")) return;
+    setActioning(id);
+
+    const { error } = await (supabase as any)
+      .from("reviews")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      toast.error("O'chirishda xatolik: " + error.message);
+    } else {
+      toast.success("Sharh o'chirildi");
+      setReviews((prev) => prev.filter((r) => r.id !== id));
     }
 
     setActioning(null);
@@ -254,42 +276,58 @@ const AdminReviews = () => {
                   })}
                 </p>
 
-                {/* Action buttons — pending only */}
-                {review.status === "pending" && (
-                  <div className="flex gap-2 pt-1">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.97 }}
-                      disabled={actioning === review.id}
-                      onClick={() => updateStatus(review.id, "published")}
-                      className="
-                        flex-1 inline-flex items-center justify-center gap-2
-                        rounded-lg py-2.5 text-sm font-semibold
-                        bg-green-600 hover:bg-green-700 text-white
-                        disabled:opacity-50 transition-colors
-                      "
-                    >
-                      <Check className="h-4 w-4" />
-                      Tasdiqlash
-                    </motion.button>
+                {/* Action buttons */}
+                <div className="flex gap-2 pt-1">
+                  {review.status === "pending" && (
+                    <>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                        disabled={actioning === review.id}
+                        onClick={() => updateStatus(review.id, "published")}
+                        className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white disabled:opacity-50 transition-colors"
+                      >
+                        <Check className="h-4 w-4" />
+                        Tasdiqlash
+                      </motion.button>
 
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                        disabled={actioning === review.id}
+                        onClick={() => updateStatus(review.id, "rejected")}
+                        className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 transition-colors"
+                      >
+                        <X className="h-4 w-4" />
+                        Rad etish
+                      </motion.button>
+                    </>
+                  )}
+
+                  {review.status === "rejected" && (
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.97 }}
                       disabled={actioning === review.id}
-                      onClick={() => updateStatus(review.id, "rejected")}
-                      className="
-                        flex-1 inline-flex items-center justify-center gap-2
-                        rounded-lg py-2.5 text-sm font-semibold
-                        bg-red-600 hover:bg-red-700 text-white
-                        disabled:opacity-50 transition-colors
-                      "
+                      onClick={() => updateStatus(review.id, "pending")}
+                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold bg-amber-500 hover:bg-amber-600 text-white disabled:opacity-50 transition-colors"
                     >
-                      <X className="h-4 w-4" />
-                      Rad etish
+                      <RotateCcw className="h-4 w-4" />
+                      Qayta ko'rib chiqish
                     </motion.button>
-                  </div>
-                )}
+                  )}
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    disabled={actioning === review.id}
+                    onClick={() => deleteReview(review.id)}
+                    className="p-2.5 rounded-lg border border-gray-200 text-muted-foreground hover:text-red-600 hover:border-red-200 hover:bg-red-50 disabled:opacity-50 transition-colors"
+                    title="O'chirish"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </motion.button>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>

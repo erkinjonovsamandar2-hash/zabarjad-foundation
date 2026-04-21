@@ -358,6 +358,48 @@ COMPONENT MAP (Pre-Flight Audit)
     --footer-bg: 204 22% 91%;
     --footer-bar-bg: 204 20% 86%;
   }
+
+  /* ── DARK MODE OVERRIDE ─────────────────────────────────────────────────── */
+  /* CRITICAL: Must come AFTER all theme-N blocks. html.dark and html.theme-2  */
+  /* have identical specificity — source order decides. Last wins.             */
+  html.dark {
+    --background: 216 65% 11%;
+    --foreground: 56 62% 87%;
+
+    --card: 216 60% 15%;
+    --card-foreground: 56 62% 87%;
+
+    --popover: 216 60% 15%;
+    --popover-foreground: 56 62% 87%;
+
+    --primary: 209 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 216 40% 20%;
+    --secondary-foreground: 56 62% 87%;
+
+    --muted: 216 30% 25%;
+    --muted-foreground: 60 20% 75%;
+
+    --accent: 45 66% 52%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 216 30% 25%;
+    --input: 216 30% 25%;
+    --ring: 209 100% 50%;
+
+    --gold: 45 66% 52%;
+    --gold-dim: 45 50% 35%;
+    --obsidian: 216 65% 11%;
+    --charcoal: 216 60% 15%;
+    --silver: 60 20% 75%;
+
+    --footer-bg: 216 68% 8%;
+    --footer-bar-bg: 216 70% 6%;
+  }
 }
 
 /* ── Global Base Resets ───────────────────────────────────────────────────── */

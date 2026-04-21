@@ -113,21 +113,24 @@ const BlogManager = () => {
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<Omit<Article, "id">>({ ...emptyArticle });
   const [saving, setSaving] = useState(false);
+  const [langTab, setLangTab] = useState<"uz" | "en" | "ru">("uz");
 
   const openAdd = () => {
     setEditId(null);
     setForm({ ...emptyArticle });
+    setLangTab("uz");
     setModalOpen(true);
   };
 
   const openEdit = (a: Article) => {
+    setLangTab("uz");
     setEditId(a.id);
     setForm({
       title: a.title, title_en: a.title_en, title_ru: a.title_ru,
       excerpt: a.excerpt, excerpt_en: a.excerpt_en, excerpt_ru: a.excerpt_ru,
       content: a.content, content_en: a.content_en, content_ru: a.content_ru,
       image_url: a.image_url,
-      published_at: a.published_at,
+      published_at: a.published_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
       published: a.published,
       category: a.category ?? null,
       reading_time: a.reading_time ?? null,
@@ -142,16 +145,33 @@ const BlogManager = () => {
   };
 
   const handleSave = async () => {
+    if (!form.title.trim()) {
+      toast.error("Sarlavha majburiy!");
+      return;
+    }
+    const payload = {
+      ...form,
+      image_url: form.image_url?.trim() || null,
+    };
     setSaving(true);
     try {
-      if (editId) await updateArticle(editId, form);
-      else await addArticle(form);
+      if (editId) await updateArticle(editId, payload);
+      else await addArticle(payload);
       setModalOpen(false);
       toast.success(editId ? "Maqola yangilandi!" : "Maqola qo'shildi!");
     } catch (err: any) {
-      alert("Saqlashda xatolik yuz berdi: " + err.message);
+      toast.error("Saqlashda xatolik: " + err.message);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleQuickTogglePublish = async (a: Article) => {
+    try {
+      await updateArticle(a.id, { published: !a.published });
+      toast.success(a.published ? "Qoralamaga o'tkazildi" : "Nashr qilindi!");
+    } catch (err: any) {
+      toast.error("Xatolik: " + err.message);
     }
   };
 
@@ -189,9 +209,16 @@ const BlogManager = () => {
               <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{a.excerpt}</p>
               <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
                 <span className="flex items-center gap-1 text-xs text-muted-foreground/80">
-                  <CalendarDays className="h-3 w-3" />{a.published_at}
+                  <CalendarDays className="h-3 w-3" />{a.published_at?.slice(0, 10)}
                 </span>
                 <div className="flex gap-1">
+                  <button
+                    onClick={() => handleQuickTogglePublish(a)}
+                    title={a.published ? "Qoralamaga o'tkazish" : "Nashr qilish"}
+                    className={`p-1.5 rounded-lg transition-colors ${a.published ? "text-green-600 hover:bg-green-50" : "text-muted-foreground/80 hover:text-green-600 hover:bg-green-50"}`}
+                  >
+                    {a.published ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                  </button>
                   <button
                     onClick={() => openEdit(a)}
                     className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"
@@ -201,8 +228,8 @@ const BlogManager = () => {
                   <button
                     onClick={async () => {
                       if (window.confirm("Haqiqatan ham bu maqolani o'chirmoqchimisiz?")) {
-                        try { await deleteArticle(a.id, a.image_url); }
-                        catch (err: any) { alert("O'chirishda xatolik: " + err.message); }
+                        try { await deleteArticle(a.id, a.image_url); toast.success("Maqola o'chirildi"); }
+                        catch (err: any) { toast.error("O'chirishda xatolik: " + err.message); }
                       }
                     }}
                     className="p-1.5 rounded-lg text-muted-foreground/80 hover:text-red-600 hover:bg-red-50 transition-colors"
@@ -265,23 +292,118 @@ const BlogManager = () => {
                 </div>
               </div>
 
-              {/* Text fields */}
+              {/* Language tabs */}
               <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1">Sarlavha</label>
-                <input
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
-                />
+                <div className="flex gap-1 mb-4 border-b border-gray-100">
+                  {(["uz", "en", "ru"] as const).map((lang) => (
+                    <button
+                      key={lang}
+                      type="button"
+                      onClick={() => setLangTab(lang)}
+                      className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${langTab === lang ? "bg-primary/5 text-primary border-b-2 border-primary" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                      {lang === "uz" ? "O'zbekcha" : lang === "en" ? "English" : "Русский"}
+                    </button>
+                  ))}
+                </div>
+
+                {/* UZ */}
+                {langTab === "uz" && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Sarlavha <span className="text-red-500">*</span></label>
+                      <input
+                        value={form.title}
+                        onChange={(e) => setForm({ ...form, title: e.target.value })}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Qisqacha tavsif</label>
+                      <input
+                        value={form.excerpt ?? ""}
+                        onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Matn</label>
+                      <textarea
+                        value={form.content ?? ""}
+                        onChange={(e) => setForm({ ...form, content: e.target.value })}
+                        rows={10}
+                        placeholder="Maqola matnini yozing..."
+                        className="w-full rounded-lg border border-gray-200 px-3 py-3 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* EN */}
+                {langTab === "en" && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Title</label>
+                      <input
+                        value={form.title_en ?? ""}
+                        onChange={(e) => setForm({ ...form, title_en: e.target.value || null })}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Excerpt</label>
+                      <input
+                        value={form.excerpt_en ?? ""}
+                        onChange={(e) => setForm({ ...form, excerpt_en: e.target.value || null })}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Content</label>
+                      <textarea
+                        value={form.content_en ?? ""}
+                        onChange={(e) => setForm({ ...form, content_en: e.target.value || null })}
+                        rows={10}
+                        placeholder="Article content..."
+                        className="w-full rounded-lg border border-gray-200 px-3 py-3 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* RU */}
+                {langTab === "ru" && (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Заголовок</label>
+                      <input
+                        value={form.title_ru ?? ""}
+                        onChange={(e) => setForm({ ...form, title_ru: e.target.value || null })}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Краткое описание</label>
+                      <input
+                        value={form.excerpt_ru ?? ""}
+                        onChange={(e) => setForm({ ...form, excerpt_ru: e.target.value || null })}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/80 mb-1">Текст статьи</label>
+                      <textarea
+                        value={form.content_ru ?? ""}
+                        onChange={(e) => setForm({ ...form, content_ru: e.target.value || null })}
+                        rows={10}
+                        placeholder="Текст статьи..."
+                        className="w-full rounded-lg border border-gray-200 px-3 py-3 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1">Qisqacha tavsif</label>
-                <input
-                  value={form.excerpt ?? ""}
-                  onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
-                />
-              </div>
+
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1">Kategoriya</label>
                 <select
@@ -314,16 +436,6 @@ const BlogManager = () => {
                   value={form.published_at}
                   onChange={(e) => setForm({ ...form, published_at: e.target.value })}
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1">Matn</label>
-                <textarea
-                  value={form.content ?? ""}
-                  onChange={(e) => setForm({ ...form, content: e.target.value })}
-                  rows={10}
-                  placeholder="Maqola matnini yozing... (har bir paragraf uchun bo'sh qator qoldiring)"
-                  className="w-full rounded-lg border border-gray-200 px-3 py-3 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none resize-none"
                 />
               </div>
               <label className="flex items-center gap-2 text-sm text-foreground/80 cursor-pointer">

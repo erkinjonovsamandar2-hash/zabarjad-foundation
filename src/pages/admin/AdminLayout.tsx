@@ -1,27 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   BookOpen, FileText, Sparkles, Menu, X,
-  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper, Users, GalleryHorizontal, Handshake,
+  Home, LogOut, Settings, ShieldCheck, MessageSquare, Newspaper, Users, GalleryHorizontal, Handshake, Library,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-
-const navItems = [
-  { label: "Kitoblar", to: "/admin", icon: BookOpen, end: true },
-  { label: "Yangi Nashrlar", to: "/admin/new-books", icon: Newspaper },
-  { label: "Blog", to: "/admin/blog", icon: FileText },
-  { label: "Quiz", to: "/admin/quiz", icon: Sparkles },
-  { label: "Jamoa", to: "/admin/team", icon: Users },
-  { label: "Hamkorlar", to: "/admin/partners", icon: Handshake },
-  { label: "Hero Tartibi", to: "/admin/hero-order", icon: GalleryHorizontal },
-  { label: "Sharhlar", to: "/admin/reviews", icon: MessageSquare },
-  { label: "Sozlamalar", to: "/admin/settings", icon: Settings },
-  { label: "Adminlar", to: "/admin/users", icon: ShieldCheck },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
   const { signOut, user } = useAuth();
+
+  useEffect(() => {
+    const fetchPending = async () => {
+      const { count } = await (supabase as any)
+        .from("reviews")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+      if (count != null) setPendingCount(count);
+    };
+    fetchPending();
+
+    const channel = (supabase as any)
+      .channel("reviews_pending_badge")
+      .on("postgres_changes", { event: "*", schema: "public", table: "reviews" }, fetchPending)
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  const navItems = [
+    { label: "Kitoblar", to: "/admin", icon: BookOpen, end: true },
+    { label: "Tanlangan kitoblar", to: "/admin/curated", icon: Library },
+    { label: "Yangi Nashrlar", to: "/admin/new-books", icon: Newspaper },
+    { label: "Blog", to: "/admin/blog", icon: FileText },
+    { label: "Quiz", to: "/admin/quiz", icon: Sparkles },
+    { label: "Jamoa", to: "/admin/team", icon: Users },
+    { label: "Hamkorlar", to: "/admin/partners", icon: Handshake },
+    { label: "Hero Tartibi", to: "/admin/hero-order", icon: GalleryHorizontal },
+    { label: "Sharhlar", to: "/admin/reviews", icon: MessageSquare, badge: pendingCount },
+    { label: "Sozlamalar", to: "/admin/settings", icon: Settings },
+    { label: "Adminlar", to: "/admin/users", icon: ShieldCheck },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -67,7 +87,12 @@ const AdminLayout = () => {
               }
             >
               <item.icon className="h-4 w-4" />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {"badge" in item && item.badge > 0 && (
+                <span className="ml-auto rounded-full bg-red-500 text-white text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {item.badge > 99 ? "99+" : item.badge}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

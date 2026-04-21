@@ -21,6 +21,15 @@ const useIsMobile = () => {
   return isMobile;
 };
 
+const formatDate = (raw: string): string => {
+  try {
+    const d = new Date(raw.slice(0, 10));
+    if (isNaN(d.getTime())) return raw.slice(0, 10);
+    const months = ["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  } catch { return raw.slice(0, 10); }
+};
+
 const toCardShape = (a: {
   id: string; title: string | null; excerpt: string | null;
   image_url: string | null; published_at: string; published: boolean | null;
@@ -32,7 +41,7 @@ const toCardShape = (a: {
   title: a.title ?? "",
   excerpt: a.excerpt ?? "",
   category: a.category ?? "Maqolalar",
-  date: a.published_at,
+  date: formatDate(a.published_at),
   readTime: a.reading_time ?? null,
   image: a.image_url ?? "",
   focusDesktopX: a.focus_desktop_x ?? 50,
@@ -52,11 +61,11 @@ const HeroCard = ({ article }: { article: Card }) => {
     ? `${article.focusMobileX}% ${article.focusMobileY}%`
     : `${article.focusDesktopX}% ${article.focusDesktopY}%`;
   return (
-  <Link to={`/blog/${article.id}`}>
+  <Link to={`/blog/${article.id}`} className="block">
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
-      className="group grid md:grid-cols-[5fr_7fr] rounded-2xl overflow-hidden border border-border/60 bg-card hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/12 transition-all duration-400"
+      className="group grid md:grid-cols-[5fr_7fr] md:min-h-[320px] rounded-2xl overflow-hidden border border-border/60 bg-card hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/12 transition-all duration-400"
     >
       {/* Image */}
       <div className="relative aspect-[16/10] md:aspect-auto min-h-[260px] overflow-hidden bg-muted">
@@ -330,13 +339,21 @@ const BlogPage = () => {
                   </div>
                 )}
 
-                {/* Small cards — articles 4+ */}
+                {/* Remaining articles 4+ — MidCard for ≤2, SmallCard for 3+ */}
                 {displayed.length > 3 && (
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {displayed.slice(3).map((article, i) => (
-                      <SmallCard key={article.id} article={article} index={i} />
-                    ))}
-                  </div>
+                  displayed.slice(3).length <= 2 ? (
+                    <div className="grid sm:grid-cols-2 gap-8">
+                      {displayed.slice(3).map((article, i) => (
+                        <MidCard key={article.id} article={article} index={i} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {displayed.slice(3).map((article, i) => (
+                        <SmallCard key={article.id} article={article} index={i} />
+                      ))}
+                    </div>
+                  )
                 )}
               </div>
             )}

@@ -640,10 +640,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     if (data.focus_mobile_x !== undefined) payload.focus_mobile_x = data.focus_mobile_x;
     if (data.focus_mobile_y !== undefined) payload.focus_mobile_y = data.focus_mobile_y;
 
-    const { error } = await supabase.from("blog_posts").update(payload).eq("id", id);
+    const { data: updated, error } = await supabase.from("blog_posts").update(payload).eq("id", id).select("id");
     if (error) {
       console.warn("[DataContext] updateArticle:", error.message);
       throw new Error(error.message);
+    }
+    if (!updated || updated.length === 0) {
+      throw new Error("Ruxsat yo'q yoki maqola topilmadi. Admin rolini tekshiring.");
     }
     await fetchBlogPosts();
   }, [fetchBlogPosts]);
