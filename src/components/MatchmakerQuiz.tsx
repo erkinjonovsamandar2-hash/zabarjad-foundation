@@ -38,13 +38,13 @@ interface ArchetypeData {
 const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
   faylasuf: {
     name: "Kechgi Faylasuf", nameEn: "The Midnight Philosopher",
-    tagline: '"Gaplar tugasa ham, fikrlar qoladi..."',
-    desc: "Siz teran fikrlovchi, ichki dunyosi boy kitobxonsiz. Har bir satrda yashirin ma'no izlaysiz — bir jumla sizni soatlab o'yga cho'mtirishi mumkin.",
+    tagline: '"So\'zlar tugasa ham, fikrlar ketmaydi..."',
+    desc: "Siz teran fikrlovchi, ichki dunyosi boy kitobxonsiz. Har bir satrda yashirin ma'no qidirasiz — bitta jumla sizni soatlab sukunatga cho'ktirishi mumkin.",
     certLines: [
-      "Kechasi kitob o'qiysiz, tongda fikr yuritasiz.",
-      "Oddiy satrlar sizga boshqacha gapiradi.",
-      "Bir jumla sizni soatlab o'yga cho'mtiradi.",
-      "Kitobni yopsangiz ham, u sizni tark etmaydi.",
+      "Kechasi o'qiysiz, tongda mulohaza qilasiz.",
+      "Oddiy satrlar sizga ko'pchilik ko'rmagan narsani ko'rsatadi.",
+      "Bir ibora sizni soatlab o'yga toldiradi.",
+      "Kitobni yopsangiz ham, u sizdan ketmaydi.",
     ],
     img: faylasufImg, primaryColor: "#7A5C10", accentColor: "#C9A227",
     certBg: "#FDF6E3", certBorder: "#5C3D0A",
@@ -52,13 +52,13 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
   },
   kashfiyotchi: {
     name: "Botir Kashfiyotchi", nameEn: "The Brave Explorer",
-    tagline: '"Har kitob — yangi bir dunyo eshigi..."',
-    desc: "Siz sarguzasht va kashfiyot izlovchi kitobxonsiz. Bir kitob tugamay turib, keyingisi allaqachon kutib turibdi. To'xtash — sizning lug'atingizda yo'q.",
+    tagline: '"Har kitob — yopiq eshikning kaliti..."',
+    desc: "Siz sarguzasht va kashfiyot izlovchi kitobxonsiz. Bir asar tugamay, keyingisi allaqachon kutib turibdi. 'To'xtash' so'zi sizning lug'atingizda yo'q.",
     certLines: [
-      "Sarguzasht sizning tabiatingizda yashaydi.",
-      "Bir kitob tugamay, keyingisi kutib turadi.",
-      "Yangi dunyo, yangi imkoniyat — bu sizning yo'lingiz.",
-      "Chegaralar siz uchun mo'ljallanmagan.",
+      "Sarguzasht sizning qoningizda oqadi.",
+      "Bir kitob tugamay, keyingisi qo'lingizda.",
+      "Yangi olam — yangi imkoniyat. Bu sizning yo'lingiz.",
+      "Chegaralar siz uchun to'siq emas, taklif xolos.",
     ],
     img: kashfiyotchiImg, primaryColor: "#0B4F3F", accentColor: "#10B981",
     certBg: "#F0FDF8", certBorder: "#0B4F3F",
@@ -66,13 +66,13 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
   },
   ovchi: {
     name: "Sir Ovchisi", nameEn: "The Mystery Hunter",
-    tagline: '"Har sir — hal qilinishi kerak bo\'lgan jumboq..."',
-    desc: "Siz zehn va mantiq egasisiz. Kitobdagi eng mayda tafsilotni ko'zdan qochirmaysiz, qotilni birinchi topasiz, sirni oxirigacha saqlaysiz.",
+    tagline: '"Har jumboq yechimini kutadi — sabr qilmasam ham..."',
+    desc: "Siz zehn va mantiq egasisiz. Kitobdagi eng mayda tafsilotni ko'zdan qochirmaysiz, qotilni boshqalardan oldin topasiz va sirni oxirgi sahifaga qadar ichingizda saqlaysiz.",
     certLines: [
-      "Har bir tafsilot sizga muhim ma'lumot.",
-      "Qotilni boshqalardan oldin topasiz.",
-      "Yechilmagan jumboq sizga tinch yotgizmas.",
-      "Mantiq va zehn — sizning asosiy qurollaringiz.",
+      "Har bir tafsilot sizga muhim ipuç.",
+      "Qotilni boshqalar bilmasdan oldin topasiz.",
+      "Yechilmagan jumboq sizni tinch qo'ymaydi.",
+      "Mantiq — sizning eng ishonchli quroliz.",
     ],
     img: ovchiImg, primaryColor: "#27265C", accentColor: "#6366F1",
     certBg: "#F5F3FF", certBorder: "#1E1D5C",
@@ -80,13 +80,13 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
   },
   doktor: {
     name: "Qalb Doktori", nameEn: "The Heart Healer",
-    tagline: '"Ba\'zi kitoblar yig\'latadi — bu kuchli qalbning belgisi..."',
-    desc: "Siz hissiyotga boy, empatik kitobxonsiz. Kitob qahramonlari sizga haqiqiy do'st bo'lib qoladi — ularning quvonchi ham, dardi ham sizga tegishli.",
+    tagline: '"Ba\'zi kitoblar yig\'latadi — bu zaiflik emas, chuqurlik..."',
+    desc: "Siz hissiyotga boy, empatik kitobxonsiz. Kitob qahramonlari sizga chin do'st bo'lib qoladi — ularning quvonchi va dardi sizning quvonching va dardingizga aylanadi.",
     certLines: [
-      "Kitob qahramonlari sizning haqiqiy do'stlaringiz.",
-      "Ularning quvonchi ham, dardi ham sizga tegadi.",
-      "Ba'zan yig'lab yuborasiz — bu kuchning belgisi.",
-      "Siz dunyoni ko'ngil orqali tushunasiz.",
+      "Kitob qahramonlari sizning chin do'stlaringiz.",
+      "Ularning dardi ham, quvonchi ham sizniki.",
+      "Ba'zan ko'zingiz yoshlanadi — bu kuchning belgisi.",
+      "Siz dunyoni aql bilan emas, yurak bilan his qilasiz.",
     ],
     img: doktorImg, primaryColor: "#6B1A2B", accentColor: "#F43F5E",
     certBg: "#FFF1F2", certBorder: "#6B1A2B",
@@ -97,20 +97,20 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
 // ── Fallback hooks (shown when QuizManager hasn't been configured) ──────────────
 const FALLBACK_HOOKS: Record<ArchetypeKey, [string, string]> = {
   faylasuf: [
-    "Bu kitobning bitta jumласи sizni soatlab o'yga cho'mtiradi.",
-    "Sahifalarni o'qib bo'lgach, uzoq vaqt jimgina o'tirib qolasiz.",
+    "Bu kitobning bitta jumlasi sizni soatlab sukunatga cho'ktiradi.",
+    "Oxirgi sahifani yopsangiz ham, fikrlar sizni tark etmaydi.",
   ],
   kashfiyotchi: [
-    "Birinchi bobdan keyin kitobni qo'yib bo'lmaydi.",
-    "Bu dunyo sizni butunlay o'z ichiga tortadi.",
+    "Birinchi bobdan so'ng kitobni qo'yib bo'lmaydi.",
+    "Bu olam sizni to'liq o'z ichiga tortib ketadi.",
   ],
   ovchi: [
-    "Oxirigacha qotilni topa olmaysiz — kafolat.",
-    "Har jumla yangi ipuç. Zehn sinovi boshlanadi.",
+    "Oxirgi sahifagacha qotilni aniqlay olmaysiz — so'z beramiz.",
+    "Har bir jumla yangi ipuç. Zehn sinovi boshlanadi.",
   ],
   doktor: [
-    "Bu kitobni o'qib, hayotingizda kimnidir eslaysiz.",
-    "Oxirgi sahifada ko'zingiz yoshlanishi mumkin.",
+    "Bu kitobni o'qiyotib, hayotingizda kimnidir ko'z oldingizga keltirasiz.",
+    "Oxirgi sahifada ko'zingiz yoshlanishi tayin.",
   ],
 };
 
@@ -118,62 +118,62 @@ const FALLBACK_HOOKS: Record<ArchetypeKey, [string, string]> = {
 const QUESTIONS: QuizStep[] = [
   {
     question: "Kechqurun bo'sh vaqtingizni qanday o'tkazasiz?",
-    aunt: "Oldin o'zingizni taniylik-chi... ☕",
+    aunt: "Avval o'zingizni taniysizmi?.. ☕",
     options: [
-      { label: "Choy va kitob", sublabel: "Sokin kech, teran fikrlar", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 1 } },
-      { label: "Podcast yoki hujjatli film", sublabel: "Yangi bilim, yangi qarash", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
+      { label: "Choy va kitob", sublabel: "Sokin kech, chuqur fikrlar", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 1 } },
+      { label: "Podcast yoki hujjatli film", sublabel: "Yangi bilim, yangi nuqtai nazar", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
       { label: "Detektiv yoki triller", sublabel: "Sirlar meni o'ziga tortadi", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
-      { label: "Do'stlar bilan suhbat", sublabel: "Insonlardan kuch olaman", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
+      { label: "Do'stlar bilan gap-so'z", sublabel: "Insonlardan kuch olaman", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },
   {
-    question: "Kitobdagi qaysi lahza sizni ko'proq qiziqtiradi?",
-    aunt: "Qalbingiz qayerda qoladi? 📖",
+    question: "Kitobdagi qaysi lahza sizni o'ziga ko'proq tortadi?",
+    aunt: "Ko'nglingiz qayerda to'xtaydi? 📖",
     options: [
       { label: "Chuqur suhbat va falsafa", sublabel: "Hayotning ma'nosi qiziqtiradi", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
-      { label: "Yangi dunyo va sarguzasht", sublabel: "Kashfiyot quvonchi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
-      { label: "Kutilmagan burilish", sublabel: "Sir ochildi — hayrat!", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
-      { label: "Yurakni ezuvchi sahna", sublabel: "Hissiyot to'la, yodda qoluvchi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
+      { label: "Yangi olam va sarguzasht", sublabel: "Kashfiyot zavqi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
+      { label: "Kutilmagan burilish", sublabel: "Sir ochildi — nafas tutiladi!", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
+      { label: "Yuraksizituvchan sahna", sublabel: "Hissiyotga to'la, esdan ketmas", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },
   {
-    question: "Yangi kitob qanday qilib qo'lingizga tushadi?",
-    aunt: "Kitob do'konida nima bo'ladi? 🏛️",
+    question: "Yangi kitob qo'lingizga qanday tushadi?",
+    aunt: "Kitob do'koniga kirsangiz nima bo'ladi? 🏛️",
     options: [
-      { label: "Yozuvchi ismini tanib qolaman", sublabel: "Tanish qalam — ishonch", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
-      { label: "Muqova meni tortadi", sublabel: "Ko'z birinchi eshik", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
-      { label: "Syujet tavsifini o'qiyman", sublabel: "Sir borligini tekshiraman", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
-      { label: "Birov tavsiya qilgan", sublabel: "Ishonchli odam — ishonchli kitob", img: bookImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 0, doktor: 3 } },
+      { label: "Muallif ismini tanib qolaman", sublabel: "Tanish qalam — ishonch uyg'otadi", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
+      { label: "Muqova diqqatimni jalb qiladi", sublabel: "Ko'z — birinchi tanlov", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
+      { label: "Annotatsiyani sinchiklab o'qiyman", sublabel: "Sir bor-yo'qligini tekshiraman", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
+      { label: "Kimdir tavsiya qilgan", sublabel: "Ishonchli odam — ishonchli tavsiya", img: bookImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 0, doktor: 3 } },
     ],
   },
   {
     question: "Kitob tugagach nima qilasiz?",
-    aunt: "Oxirgi sahifa — keyin nima bo'ladi? ✨",
+    aunt: "Oxirgi sahifa yopildi — keyin nima? ✨",
     options: [
-      { label: "O'tirib, his-tuyg'ularni singdiraman", sublabel: "Jimlikda qolaman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 2 } },
-      { label: "Darhol yangisini boshlayman", sublabel: "To'xtashni bilmayman", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
-      { label: "Hamma narsani tahlil qilaman", sublabel: "Sirlarni qayta o'ylayman", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
-      { label: "Kimgadir tavsiya qilaman", sublabel: "Bu hisni ulashmoqchiman", img: bookImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 0, doktor: 3 } },
+      { label: "O'tirib, his-tuyg'ularni hazm qilaman", sublabel: "Sukunatda qolaman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 2 } },
+      { label: "Darhol yangi asar boshlayman", sublabel: "To'xtashni bilmayman", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
+      { label: "Barcha tafsilotlarni qayta tahlil qilaman", sublabel: "Sirni yana bir bor o'ylayman", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
+      { label: "Kimgadir tavsiya qilaman", sublabel: "Bu hisni yolg'iz turolmayman", img: bookImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 0, doktor: 3 } },
     ],
   },
   {
     question: "Qaysi qahramon sizga ko'proq yaqin?",
-    aunt: "Siz o'sha sahifalarda bo'lsangiz... 🤔",
+    aunt: "O'sha sahifalarda siz bo'lganingizda... 🤔",
     options: [
-      { label: "Donishmand, yolg'iz ruh", sublabel: "Chuqur o'ylar, kamgaplik", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
-      { label: "Jasur sarguzashtchi", sublabel: "Hech narsadan qaytmaydi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
-      { label: "Sirli, ziyrak zehn", sublabel: "Hamma narsaning izini topadi", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
-      { label: "Yumshoq, mehr to'la inson", sublabel: "Hamma uchun qayg'uradi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
+      { label: "Donishmand, yolg'iz ruh", sublabel: "Teran o'ylaydi, kamdan-kam so'zlaydi", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
+      { label: "Jasur sarguzashtchi", sublabel: "Ortga qaytishni bilmaydi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
+      { label: "Ziyrak, sirli zehn", sublabel: "Har narsaning izini topadi", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
+      { label: "Yumshoq, mehr-oqibatli inson", sublabel: "Hamma uchun qayg'uradi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },
   {
-    question: "O'qiyotganda ichingizda ko'proq nima bo'ladi?",
+    question: "O'qiyotganda ichingizda nima ko'proq bo'ladi?",
     aunt: "Eng muhim savol — ichingizda nima? 💫",
     options: [
-      { label: "Chuqur o'y va savollar", sublabel: "Dunyo haqida yangicha ko'raman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 0 } },
-      { label: "Qo'zg'alish va ilhom", sublabel: "Harakat qilgim keladi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 0, doktor: 1 } },
-      { label: "Shiddatli kutish", sublabel: "Keyingi nima bo'lishini bilgim keladi", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
-      { label: "Qalb isishi, ba'zan yig'i", sublabel: "His-tuyg'ular meni engib ketadi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
+      { label: "Chuqur o'y va yangi savollar", sublabel: "Dunyoga yangicha qarayman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 0 } },
+      { label: "Qo'zg'alish va ilhom", sublabel: "Harakat qilgim kelib ketadi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 0, doktor: 1 } },
+      { label: "Shiddatli sabrsizlik", sublabel: "Keyinida nima bo'lishini bilgim keladi", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
+      { label: "Qalb isishi va ba'zan yig'i", sublabel: "His-tuyg'ular meni to'ldirib ketadi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },
 ];
@@ -396,7 +396,7 @@ const MatchmakerQuiz = () => {
                 className="text-center">
 
                 <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 mb-6 shadow-[0_4px_15px_rgba(236,72,153,0.12)]">
-                  <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-pink-600 dark:text-pink-400">Kitob Sovchilari</span>
+                  <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-pink-600 dark:text-pink-400">Kitob sovchilari</span>
                 </div>
 
                 <div className="flex justify-center gap-3 mb-8">
@@ -415,7 +415,7 @@ const MatchmakerQuiz = () => {
                   Siz qanday<br />kitobxonsiz?
                 </h1>
                 <p className="font-lora text-base sm:text-lg text-muted-foreground mb-2 max-w-sm mx-auto leading-relaxed">
-                  Oltita savol — hayot haqida, kitoblar haqida, o'zingiz haqida.
+                  Oltita savol — hayot, kitoblar va o'zingiz haqida.
                 </p>
                 <p className="font-sans text-sm text-muted-foreground/55 mb-8 tracking-wide">
                   4 ta noyob kitobxon turi · taxminan 2 daqiqa
@@ -425,7 +425,7 @@ const MatchmakerQuiz = () => {
                   whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                   className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-heading font-bold text-lg tracking-wide bg-foreground text-background shadow-xl hover:shadow-2xl transition-all duration-300">
                   <Sparkles className="w-5 h-5" />
-                  Kashf etishni boshlash
+                  O'zimni kashf etaman
                   <ArrowRight className="w-5 h-5" />
                 </motion.button>
               </motion.div>
@@ -518,7 +518,7 @@ const MatchmakerQuiz = () => {
                     <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.5 }}>
                       <p className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] mb-2"
-                        style={{ color: arch.primaryColor }}>Sizning kitobxon turingiz</p>
+                        style={{ color: arch.primaryColor }}>Sizning kitobxon siymongiz</p>
                       <h2 className="font-heading text-3xl sm:text-4xl font-black tracking-wide mb-1 leading-tight"
                         style={{ color: arch.certBorder }}>{arch.name}</h2>
                       <p className="font-sans text-xs font-bold tracking-[0.18em] mb-4 uppercase opacity-50"
@@ -530,7 +530,7 @@ const MatchmakerQuiz = () => {
                       <div className="max-w-xs mx-auto mb-5">
                         <div className="flex justify-between items-baseline mb-1.5">
                           <span className="font-sans text-[10px] uppercase tracking-widest font-bold opacity-40"
-                            style={{ color: arch.certBorder }}>Moslik darajasi</span>
+                            style={{ color: arch.certBorder }}>Mos kelish darajasi</span>
                           <span className="font-heading text-xl font-black" style={{ color: arch.accentColor }}>
                             {result.matchPct}%
                           </span>
@@ -556,11 +556,11 @@ const MatchmakerQuiz = () => {
                     className="p-6 sm:p-8 space-y-4">
 
                     <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em]"
-                      style={{ color: arch.primaryColor }}>Siz uchun tavsiyalar</p>
+                      style={{ color: arch.primaryColor }}>Sizga maxsus tanlov</p>
 
                     {[
-                      { book: resolved.book1, hook: resolved.hook1, label: "Birinchi tavsiya" },
-                      { book: resolved.book2, hook: resolved.hook2, label: "Ikkinchi tavsiya" },
+                      { book: resolved.book1, hook: resolved.hook1, label: "Birinchi asar" },
+                      { book: resolved.book2, hook: resolved.hook2, label: "Ikkinchi asar" },
                     ].map(({ book, hook, label }, idx) => book ? (
                       <div key={idx}
                         className="flex items-start gap-4 rounded-2xl p-4 transition-all duration-200 cursor-pointer group hover:opacity-90"
@@ -611,7 +611,7 @@ const MatchmakerQuiz = () => {
                         font-heading font-bold text-sm tracking-wide shadow-md transition-all duration-300"
                       style={{ background: arch.accentColor, color: "#fff" }}>
                       <Library className="w-4 h-4" />
-                      Ko'proq kitoblar
+                      Ko'proq asarlar
                     </motion.button>
 
                     <motion.button onClick={handleDownload} disabled={downloading}
@@ -620,7 +620,7 @@ const MatchmakerQuiz = () => {
                         font-heading font-bold text-sm tracking-wide border-2 transition-all duration-300 disabled:opacity-60"
                       style={{ borderColor: arch.certBorder, color: arch.certBorder, background: "transparent" }}>
                       <Download className="w-4 h-4" />
-                      {downloading ? "Tayyorlanmoqda..." : "Guvohnoma yuklab olish"}
+                      {downloading ? "Tayyorlanmoqda..." : "Guvohnomani yuklab olish"}
                     </motion.button>
 
                     <motion.button onClick={handleCopy}
@@ -629,7 +629,7 @@ const MatchmakerQuiz = () => {
                         font-heading font-bold text-sm tracking-wide border-2 transition-all duration-300"
                       style={{ borderColor: `${arch.certBorder}55`, color: arch.primaryColor, background: "transparent" }}>
                       {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copied ? "Nusxalandi!" : "Telegram uchun nusxalash"}
+                      {copied ? "Nusxalandi!" : "Ulashish (Telegram)"}
                     </motion.button>
 
                     <button onClick={handleReset}
@@ -656,12 +656,12 @@ const MatchmakerQuiz = () => {
                     </div>
                   </div>
                   <p className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] mb-1"
-                    style={{ color: arch.primaryColor }}>{arch.name} uchun</p>
+                    style={{ color: arch.primaryColor }}>{arch.name} uchun maxsus</p>
                   <h2 className="font-heading text-2xl sm:text-3xl font-black text-foreground tracking-wide">
-                    Siz uchun tanlangan kitoblar
+                    Sizga mo'ljallangan asarlar
                   </h2>
                   <p className="font-lora text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-                    Sizning kitobxon turingizga mos, qiziqarli asarlar
+                    Kitobxon siymonzingizga mos, tetik va qiziqarli asarlar
                   </p>
                 </div>
 
@@ -711,7 +711,7 @@ const MatchmakerQuiz = () => {
                   <button onClick={handleReset}
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-muted-foreground
                       hover:text-foreground transition-colors px-3 py-2 opacity-45 hover:opacity-100">
-                    <RotateCcw className="h-3.5 w-3.5" /> Testni qaytadan o'tish
+                    <RotateCcw className="h-3.5 w-3.5" /> Testni yangilash
                   </button>
                 </div>
               </motion.div>

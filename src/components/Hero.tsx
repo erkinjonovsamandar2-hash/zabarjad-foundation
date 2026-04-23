@@ -175,7 +175,7 @@ const CtaStatsBand = ({ onNavigate, ctaText }: { onNavigate: () => void; ctaText
           <p className="font-heading text-3xl sm:text-4xl text-foreground">
             20<span className="text-xl italic">+</span>
           </p>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold mt-1 font-bold">Sara Kitoblar</p>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold mt-1 font-bold">Sara asarlar</p>
         </div>
 
         <div className="w-px h-12 bg-border mx-2 sm:mx-0" />
@@ -195,7 +195,7 @@ const CtaStatsBand = ({ onNavigate, ctaText }: { onNavigate: () => void; ctaText
         className="btn-glass flex flex-row items-center justify-center gap-2 group w-full max-w-[360px] sm:w-auto px-10 py-4 transition-all duration-500 ease-out z-10 rounded-2xl relative overflow-hidden"
       >
         <Library className="h-4 w-4 relative z-10" />
-        <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase relative z-10">{ctaText || "KOLLEKSIYANI KO'RISH"}</span>
+        <span className="font-sans font-bold text-[11px] sm:text-[13px] tracking-[0.2em] uppercase relative z-10">{ctaText || "KUTUBXONANI KO'RISH"}</span>
         <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-500 ease-out relative z-10" />
       </motion.button>
     </motion.div>
@@ -462,8 +462,8 @@ const ScrollCta = () => {
         className="group flex flex-col items-center justify-center gap-1.5 px-6 py-2.5 rounded-full focus:outline-none backdrop-blur-md bg-white/40 dark:bg-black/20 border border-white/60 dark:border-white/10 shadow-[0_8px_30px_rgba(38,89,153,0.08)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-colors duration-500 ease-out"
         aria-label="Safarni boshlash"
       >
-        <span className="font-sans text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.4em] text-foreground group-hover:text-gold transition-colors">
-          Kashf etish
+        <span className="font-serif italic text-[14px] sm:text-[15px] text-foreground/85 group-hover:text-gold transition-colors">
+          Sahifalarga sho'ng'ish
         </span>
         <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-foreground/70 group-hover:text-gold transition-colors mt-1" />
       </button>
@@ -566,7 +566,7 @@ const Hero = () => {
         {/* RIGHT — Info + controls column */}
         <div className="flex flex-col justify-start flex-1 min-w-0 w-full z-20">
           <BookInfoPanel
-            motto={siteSettings.hero.motto || "Kitobsevarlar uchun yangi olam"}
+            motto={siteSettings.hero.motto || "Kitobsevarlar uchun yangicha olam"}
             subtitle={siteSettings.hero.subtitle}
             ctaText={siteSettings.hero.cta_text}
             onNavigate={() => navigate("/library")}

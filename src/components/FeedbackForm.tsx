@@ -14,32 +14,32 @@ import {
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const TX = {
   uz: {
-    title: "Fikr qoldiring",
-    warning: "Diqqat: har bir fikr moderatsiyadan o'tadi — hammasi ham nashr etilmaydi.",
-    typeLabel: "Fikr turi",
+    title: "Fikringizni bildiring",
+    warning: "Diqqat: har bir fikr moderatsiyadan o'tadi — barchasi nashr etilmaydi.",
+    typeLabel: "Nima haqida fikr bildirasiz?",
     typeBook: "Kitob haqida",
-    typeGeneral: "Umumiy fikr",
+    typeGeneral: "Umumiy taassurot",
     categoryLabel: "Turkum tanlang",
     bookLabel: "Kitob tanlang",
     bookPh: "— Kitobni tanlang —",
-    noBooksInCategory: "Bu turkumda kitob yo'q",
+    noBooksInCategory: "Bu turkumda hozircha kitob yo'q",
     name: "Ismingiz *",
     namePh: "Masalan: Malika Yusupova",
-    role: "Kasb / Lavozim",
-    rolePh: "Masalan: O'qituvchi, Talaba...",
+    role: "Kasb yoki lavozim",
+    rolePh: "Masalan: o'qituvchi, talaba...",
     city: "Shahar",
     cityPh: "Masalan: Toshkent",
     review: "Fikringiz *",
-    reviewPh: "Kitob yoki nashriyot haqida fikringizni yozing...",
-    stars: "Baho bering",
+    reviewPh: "Kitob yoki nashriyot haqida taassurotingizni yozing...",
+    stars: "Baholang",
     submit: "Yuborish",
     submitting: "Yuborilmoqda...",
     successTitle: "Rahmat!",
-    successSub: "Fikringiz qabul qilindi va ko'rib chiqiladi.",
+    successSub: "Fikringiz qabul qilindi. Ko'rib chiqqandan so'ng nashr etiladi.",
     errorMsg: "Xatolik yuz berdi. Qayta urinib ko'ring.",
     charCount: (n: number) => `${n}/280`,
-    minChars: "Kamida 20 ta belgi kiriting.",
-    required: "Bu maydon majburiy.",
+    minChars: "Kamida 20 ta belgi kiritilishi kerak.",
+    required: "Bu maydon to'ldirilishi shart.",
     selectBookFirst: "Avval kitob tanlang.",
   },
   ru: {
@@ -184,8 +184,8 @@ const CategoryPills = ({
     {LIBRARY_FILTER_KEYS.map((key) => {
       const active = selected === key;
       const labels = LIBRARY_FILTER_LABELS[key];
-      const icon   = LIBRARY_FILTER_ICONS[key];
-      const label  = labels[lang] ?? labels.uz;
+      const icon = LIBRARY_FILTER_ICONS[key];
+      const label = labels[lang] ?? labels.uz;
       return (
         <motion.button
           key={key}
@@ -218,17 +218,17 @@ const FeedbackForm = () => {
   const tx = TX[(lang as TxLang)] ?? TX.uz;
 
   const [feedbackType, setFeedbackType] = useState<"book" | "general">("general");
-  const [category,     setCategory]     = useState<LibraryFilterKey | "">("");
-  const [bookId,       setBookId]       = useState<string>("");
-  const [name,         setName]         = useState("");
-  const [role,         setRole]         = useState("");
-  const [city,         setCity]         = useState("");
-  const [text,         setText]         = useState("");
-  const [stars,        setStars]        = useState(5);
-  const [errors,       setErrors]       = useState<Record<string, string>>({});
-  const [loading,      setLoading]      = useState(false);
-  const [success,      setSuccess]      = useState(false);
-  const [apiError,     setApiError]     = useState("");
+  const [category, setCategory] = useState<LibraryFilterKey | "">("");
+  const [bookId, setBookId] = useState<string>("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [city, setCity] = useState("");
+  const [text, setText] = useState("");
+  const [stars, setStars] = useState(5);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const filteredBooks = useMemo(
     () => category ? books.filter((b) => b.category === category) : [],
@@ -274,18 +274,18 @@ const FeedbackForm = () => {
       : null;
 
     const { error } = await submitReview({
-      name:       name.trim(),
-      role:       role.trim()  || null,
-      city:       city.trim()  || null,
-      text:       text.trim(),
+      name: name.trim(),
+      role: role.trim() || null,
+      city: city.trim() || null,
+      text: text.trim(),
       stars,
-      book_id:    bookId   || null,
+      book_id: bookId || null,
       book_title: bookTitle || null,
     });
 
     setLoading(false);
     if (error) setApiError(tx.errorMsg);
-    else        setSuccess(true);
+    else setSuccess(true);
   };
 
   if (success) {

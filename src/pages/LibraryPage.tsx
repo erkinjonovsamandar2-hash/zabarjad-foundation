@@ -165,7 +165,7 @@ const LibraryPage = () => {
                 <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-foreground mb-4 leading-tight line-clamp-2">
                   {featuredBook.title}
                 </h2>
-                <p className="text-muted-foreground text-base md:text-lg mb-8 line-clamp-3 max-w-xl">
+                <p className="font-serif text-foreground/80 text-lg md:text-xl mb-8 line-clamp-3 max-w-xl">
                   {featuredBook.description}
                 </p>
                 <Link to={`/book/${featuredBook.id}`} className="btn-glass px-8 py-3.5 mt-2 mb-6 md:mb-0">
@@ -223,8 +223,8 @@ const LibraryPage = () => {
                           });
                         }}
                         className={`flex-shrink-0 font-sans text-[9px] sm:text-[10px] font-bold tracking-[0.1em] sm:tracking-[0.13em] uppercase px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors duration-200 ${isActive
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-transparent text-muted-foreground border border-border hover:bg-muted hover:text-foreground"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-transparent text-muted-foreground border border-border hover:bg-muted hover:text-foreground"
                           }`}
                       >
                         {getCategoryLabel(categoryKey, lang)}
@@ -275,7 +275,7 @@ const LibraryPage = () => {
               />
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
               <AnimatePresence mode="popLayout">
                 {filtered.map((book, i) => (
                   // FIX: Removed [content-visibility:auto] — Framer Motion's
@@ -292,13 +292,13 @@ const LibraryPage = () => {
                     transition={{ duration: 0.3, delay: i * 0.05 }}
                   >
                     <Link to={`/book/${book.id}`} className="h-full block">
-                      <SpotlightCard className="h-full p-4 md:p-6 group cursor-pointer">
+                      <SpotlightCard className="h-full p-3 md:p-4 group cursor-pointer">
                         <div className="flex flex-col gap-4 h-full">
 
                           <BookCover
                             src={book.cover_url}
                             alt={locField(book, "title", lang)}
-                            className="w-full mx-auto"
+                            className="w-3/4 mx-auto"
                             hover={true}
                             loading="lazy"
                           />

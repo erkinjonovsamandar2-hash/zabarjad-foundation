@@ -9,7 +9,7 @@ const UPCOMING_BOOKS_MOCK: NewBook[] = [
         id: "upcoming-1",
         title: "Murvatli Apelsin", title_ru: "Заводной апельсин", title_en: "A Clockwork Orange",
         author: "Entoni Byorjess", author_ru: "Энтони Бёрджесс", author_en: "Anthony Burgess",
-        description: "37 mamlakatda taqiqlangan. 100 mamlakatda nashr etilgan.",
+        description: "37 davlatda taqiqlangan. 100 davlatda nashr etilgan.",
         description_ru: "Запрещена в 37 странах. Издана в 100.",
         description_en: "Banned in 37 countries. Published in 100.",
         cover_url: "/upcoming/apelsin.png",
@@ -24,7 +24,7 @@ const UPCOMING_BOOKS_MOCK: NewBook[] = [
         id: "upcoming-3",
         title: "Ijarachi", title_ru: "Квартирантка", title_en: "The Tenant of Wildfell Hall",
         author: "Enn Bronte", author_ru: "Энн Бронте", author_en: "Anne Brontë",
-        description: "Singillar qo'lyozmani yoqib yuborishga urinishdi. Lekin baribir nashr ettirildi.",
+        description: "Opalar qo'lyozmani yoqib yuborishmoqchi bo'ldi. Baribir nashr ettirildi.",
         description_ru: "Сёстры пытались сжечь рукопись. Но она всё равно была издана.",
         description_en: "Her sisters tried to burn the manuscript. It was published anyway.",
         cover_url: "/upcoming/ijarachi.png",
@@ -39,7 +39,7 @@ const UPCOMING_BOOKS_MOCK: NewBook[] = [
         id: "upcoming-4",
         title: "Mayoq sari", title_ru: "На маяк", title_en: "To the Lighthouse",
         author: "Virdjiniya Vulf", author_ru: "Вирджиния Вулф", author_en: "Virginia Woolf",
-        description: "Bir yoz faslida yozildi. Biroq bir asrdan beri o'qitiladi.",
+        description: "Bir yoz faslida yozildi. Bir asrdan beri o'qitilmoqda.",
         description_ru: "Написана за одно лето. Изучается уже столетие.",
         description_en: "Written in one summer. Studied for a century.",
         cover_url: "/upcoming/mayoq.png",
@@ -54,7 +54,7 @@ const UPCOMING_BOOKS_MOCK: NewBook[] = [
         id: "upcoming-2",
         title: "Askanio", title_ru: "Асканио", title_en: "Ascanio",
         author: "Aleksandr Dyuma", author_ru: "Александр Дюма", author_en: "Alexandre Dumas",
-        description: "Renessans davridagi Italiya: bir usta, bir sevgi, bir sir.",
+        description: "Uyg'onish davri Italiyasi: bir usta, bir muhabbat, bir sir.",
         description_ru: "Челлини был реальным. Остальное придумал Дюма.",
         description_en: "Cellini was real. The rest is Dumas.",
         cover_url: "/upcoming/askanio.png",
@@ -193,7 +193,7 @@ const YangiNashrlar = () => {
                         </span>
                     </div>
                     <h2 className="font-heading text-3xl sm:text-4xl text-white tracking-tight leading-none drop-shadow-lg">
-                        Tez Orada
+                        Tez Chiqadi
                     </h2>
                 </div>
                 <div className="flex items-center gap-2">
@@ -305,13 +305,13 @@ const YangiNashrlar = () => {
                         )}
 
                         <p className="font-sans text-[0.6rem] sm:text-[0.65rem] tracking-[0.16em] uppercase text-white/40 sm:text-white/50 font-bold">
-                            Tez chiqadi
+                            Yaqinda chiqadi
                         </p>
                     </div>
 
                     {/* TEZDA badge — absolute over image on both breakpoints */}
                     <div className="absolute top-4 left-4 sm:top-6 sm:left-auto sm:right-6 bg-[#c8973a] text-black font-sans text-[0.6rem] sm:text-[0.65rem] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-[2px] shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
-                        TEZDA
+                        BRONDA
                     </div>
 
                     {/* Progress bar */}
@@ -369,7 +369,7 @@ const YangiNashrlar = () => {
 
             {/* CTA */}
             <p className="relative z-10 mt-8 px-4 text-center font-sans text-[0.7rem] tracking-[0.1em] uppercase text-white/30 hover:text-white/60 transition-colors duration-300 cursor-pointer">
-                Barcha yangi nashrlardan xabardor bo'lish uchun obuna bo'ling →
+                Yangi nashrlardan birinchi bo'lib xabardor bo'lish uchun obuna bo'ling →
             </p>
         </section>
     );

@@ -236,7 +236,7 @@ const Navbar = () => {
                     className="flex items-center gap-3 w-full py-3 px-2 text-base font-bold text-foreground transition-colors active:bg-primary/10 rounded-lg"
                   >
                     {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                    {theme === "dark" ? "Kunduzgi rejim" : "Tungi rejim"}
+                    {theme === "dark" ? "Yorug' ko'rinish" : "Tungi ko'rinish"}
                   </button>
                 </li>
               </ul>

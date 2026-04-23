@@ -30,7 +30,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Malika Yusupova",
     role: "Adabiyot o'qituvchisi",
     city: "Toshkent",
-    text: "Tarjima shunchalik ravonki, asar ichiga sho'ng'ib ketdim. Har bir so'z o'z joyida — go'yo kitob dastlab o'zbek tilida yozilgandek. Bu — haqiqiy san'at.",
+    text: "Tarjima shunchalik ravon va tabiiy ediki, qachon o'zbek tiliga o'tib ketganimni sezmay qoldim. Har bir so'z o'z joyida — go'yo asar dastlab shu tilda yozilgandek. Bu haqiqiy san'at.",
     stars: 5,
   },
   {
@@ -38,7 +38,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Jasur Normatov",
     role: "Yozuvchi va bloger",
     city: "Samarqand",
-    text: "Booktopia tarjimalarida tilning ruhi saqlanib qolgan. Xarakterlarning nutqi, his-tuyg'ulari — hammasi juda tabiiy. Bolalarimga katta faxr bilan tavsiya etaman.",
+    text: "Booktopia tarjimalarida eng muhimi — tilning ruhi yo'qolmagan. Qahramonlarning nutqi, ichki kechinmalari — hammasi juda tirik, juda ishonarli. Farzandlarimga katta ishonch bilan tavsiya etaman.",
     stars: 5,
   },
   {
@@ -46,7 +46,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Dilnoza Rahimova",
     role: "Universitet talabasi",
     city: "Buxoro",
-    text: "Avval rus tilidagi versiyasini o'qigandim. O'zbek tarjimasini o'qib, yangi kitob kashf etgandek his qildim — bu qadar boy va ifodali. Rahmat, Booktopia!",
+    text: "Oldin rus tilidagi nusxasini o'qigandim. O'zbek tarjimasini o'qib, go'yo yangi kitob ochgandek his qildim — bu qadar boy, bu qadar jonli. Rahmat, Booktopia!",
     stars: 5,
   },
   {
@@ -54,7 +54,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Sherzod Karimov",
     role: "Muhandis, kitob ixlosmandi",
     city: "Namangan",
-    text: "Texnik odam bo'lsam ham, Booktopia kitoblarini qo'yib yuborolmayapman. Uslub shunchalik o'tkir va aniqki, har bir jumla ichingda qoladi. G'oyat professional ish.",
+    text: "Texnik soha odami bo'lsam-da, Booktopia kitoblarini qo'yib yuborolmayapman. Uslub o'tkir, fikr aniq — har bir jumla ichingda qolib ketadi. Bu darajadagi sifatni kutmagan edim.",
     stars: 5,
   },
   {
@@ -62,7 +62,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Feruza Mirzayeva",
     role: "Psixolog",
     city: "Farg'ona",
-    text: "Insonning ichki dunyosini tasvirlashda tarjimonlar juda nozik yondashgan. Hissiyotlar bir tomchi ham yo'qolmagan. Bunday sifatli tarjimani uzoq kutgan edik.",
+    text: "Insonning ichki dunyosini ifodalashda tarjimonlar nihoyatda nozik ish qilgan. Bir zarra ham his-tuyg'u yo'qolmagan. Ana shu darajadagi tarjimani uzoq kutgan edik.",
     stars: 5,
   },
   {
@@ -70,7 +70,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Otabek Xolmatov",
     role: "Jurnalist",
     city: "Qarshi",
-    text: "Booktopia — shunchaki nashriyot emas, bu — madaniy missiya. Har bir kitob o'zbek tiliga yangi nafas olib kirmoqda. Tahririyat jamoasiga katta rahmat!",
+    text: "Booktopia — shunchaki nashriyot emas, bu madaniy missiya. Har bir kitob o'zbek tiliga yangi nafas olib kirmoqda. Tahririyat jamoasiga chin yurakdan rahmat!",
     stars: 5,
   },
   {
@@ -78,7 +78,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Mohira Sultonova",
     role: "Doktorant, filolog",
     city: "Toshkent",
-    text: "Ilmiy nuqtai nazardan ham tarjima sifati yuqori darajada. Leksika, sintaksis, uslub — hamma jihat puxta o'ylangan. O'zbek adabiyotiga qo'shilgan munosib hissa.",
+    text: "Ilmiy nuqtai nazardan ham tarjima sifati a'lo. Leksika, sintaksis, uslub — har bir jihat puxta o'ylangan. O'zbek adabiyotiga munosib va ulkan hissa.",
     stars: 5,
   },
   {
@@ -86,7 +86,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Bahodir Toshmatov",
     role: "Maktab o'quvchisi",
     city: "Andijon",
-    text: "O'qishni yoqtirmas edim, lekin Booktopia kitobini olganimdan keyin tunlari yashirincha o'qidim! Endi navbatdagi kitobni kutib o'tiraman. Juda zo'r!",
+    text: "O'qishni yoqtirmas edim, ammo Booktopia kitobini qo'limga olgach tunlari yashirincha o'qidim! Endi navbatdagi kitobni intiqlik bilan kutib o'tiraman.",
     stars: 5,
   },
 ];
@@ -101,7 +101,7 @@ const SECTION_TEXT = {
     badge: "Kitobxonlar fikri",
     title: "Taassurotlar",
     subtitle: "Kitob sahifalaridan ko'ngilga ko'chgan so'zlar.",
-    leaveFeedback: "Fikr qoldiring",
+    leaveFeedback: "Fikr bildirish",
     hideForm: "Yopish",
   },
   ru: {

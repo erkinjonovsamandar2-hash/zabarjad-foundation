@@ -621,26 +621,26 @@ COMPONENT MAP (Pre-Flight Audit)
     transition: transform 0.1s ease, background 0.1s ease;
   }
 
-  /* Light mode adjustment */
+  /* Light mode — solid, dark, premium (same character as dark mode) */
   html.light .btn-glass,
   html.theme-1 .btn-glass,
   html.theme-2 .btn-glass,
   html.theme-3 .btn-glass {
-    background: rgba(255, 252, 248, 0.52);
-    backdrop-filter: blur(12px) saturate(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    background: rgba(10, 17, 40, 0.88);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.85),
-      inset 0 -1px 0 rgba(10, 17, 40, 0.06),
-      0 1px 4px rgba(10, 17, 40, 0.1);
-    color: #0A1128;
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 2px 8px rgba(10, 17, 40, 0.22),
+      0 1px 3px rgba(10, 17, 40, 0.18);
+    color: rgba(255, 255, 255, 0.92);
   }
 
   html.light .btn-glass::after,
   html.theme-1 .btn-glass::after,
   html.theme-2 .btn-glass::after,
   html.theme-3 .btn-glass::after {
-    outline: 1px solid rgba(10, 17, 40, 0.12);
+    outline: 1px solid rgba(255, 255, 255, 0.10);
   }
 
   html.light .btn-glass::before,
@@ -652,12 +652,16 @@ COMPONENT MAP (Pre-Flight Audit)
         transparent 70%);
   }
 
-  html.light .btn-glass:hover {
-    background: rgba(255, 252, 248, 0.78);
+  html.light .btn-glass:hover,
+  html.theme-1 .btn-glass:hover,
+  html.theme-2 .btn-glass:hover,
+  html.theme-3 .btn-glass:hover {
+    background: rgba(10, 17, 40, 0.96);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 1),
-      0 4px 16px rgba(10, 17, 40, 0.08),
-      0 1px 3px rgba(10, 17, 40, 0.12);
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 4px 18px rgba(10, 17, 40, 0.28),
+      0 1px 4px rgba(10, 17, 40, 0.2);
+    color: #ffffff;
   }
 
   /* Variants */

@@ -495,7 +495,7 @@ export default function TeamPage() {
                                 <br />
                                 <em className="not-italic font-normal" style={{ color: "hsl(45 66% 52%)" }}>Jamoa</em>
                             </h1>
-                            <p className="font-serif text-foreground/80 text-base md:text-lg leading-relaxed max-w-lg border-l border-border/40 pl-4">
+                            <p className="font-serif text-foreground/80 text-lg md:text-xl leading-relaxed max-w-lg border-l border-border/40 pl-4">
                                 <b>Booktopia</b> — dunyo tafakkurining eng muhim asarlarini o‘zbek tilida taqdim etish orqali bilim va mutolaa madaniyatini rivojlantirishni o‘z oldiga maqsad qilgan nashriyotdir. Biz shu g‘oya atrofida birlashgan jamoa sifatida sifatli kitoblar yaratish va ularni kitobxonlarga yetkazish yo‘lida birgalikda ishlaymiz.
                             </p>
                         </div>

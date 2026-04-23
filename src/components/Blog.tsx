@@ -18,7 +18,7 @@ const useIsMobile = () => {
   return isMobile;
 };
 
-const UZ_MONTHS = ["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"];
+const UZ_MONTHS = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
 
 const formatDate = (dateStr: string): string => {
   try {
@@ -33,6 +33,7 @@ const formatDate = (dateStr: string): string => {
 const normalizeCategory = (cat: string | null | undefined): string => {
   if (!cat) return "Maqolalar";
   if (cat.toLowerCase() === "adabiy tahlil") return "Tahlil";
+  if (cat.toLowerCase() === "yangilik" || cat.toLowerCase() === "news") return "Yangiliklar";
   return cat;
 };
 
@@ -65,59 +66,59 @@ const HeroCard = ({ article, navigate }: { article: Card; navigate: (p: string) 
     ? `${article.focusMobileX}% ${article.focusMobileY}%`
     : `${article.focusDesktopX}% ${article.focusDesktopY}%`;
   return (
-  <motion.article
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0, transition: { duration: 0.45 } }}
-    onClick={() => navigate(`/blog/${article.id}`)}
-    className="group grid md:grid-cols-[5fr_7fr] rounded-2xl overflow-hidden border border-border/60 bg-card hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/10 transition-all duration-400 cursor-pointer"
-  >
-    {/* Image */}
-    <div className="relative aspect-[16/10] md:aspect-auto min-h-[220px] overflow-hidden bg-muted">
-      {article.image ? (
-        <img
-          src={article.image}
-          alt={article.title}
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
-          className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-          style={{ objectPosition: objPos }}
-          onLoad={(e) => e.currentTarget.classList.add("loaded")}
-        />
-      ) : (
-        <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
-          <span className="text-5xl opacity-15 select-none">📖</span>
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10 pointer-events-none" />
-    </div>
-
-    {/* Content */}
-    <div className="p-7 md:p-10 flex flex-col justify-center gap-4">
-      <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
-        {article.category}
-      </p>
-      <h3 className="font-heading text-2xl md:text-[1.75rem] leading-tight text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-3">
-        {article.title}
-      </h3>
-      <p className="font-serif text-sm text-muted-foreground leading-relaxed line-clamp-3">
-        {article.excerpt}
-      </p>
-      <div className="flex items-center gap-3 text-[11px] text-muted-foreground/70 font-medium">
-        <span>{article.date}</span>
-        {article.readTime && (
-          <>
-            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
-            <Clock className="w-3 h-3" />
-            <span>{article.readTime}</span>
-          </>
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0, transition: { duration: 0.45 } }}
+      onClick={() => navigate(`/blog/${article.id}`)}
+      className="group grid md:grid-cols-[5fr_7fr] rounded-2xl overflow-hidden border border-border/60 bg-card hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/10 transition-all duration-400 cursor-pointer no-underline"
+    >
+      {/* Image */}
+      <div className="relative aspect-[16/10] md:aspect-auto min-h-[220px] overflow-hidden bg-muted">
+        {article.image ? (
+          <img
+            src={article.image}
+            alt={article.title}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            style={{ objectPosition: objPos }}
+            onLoad={(e) => e.currentTarget.classList.add("loaded")}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
+            <span className="text-5xl opacity-15 select-none">📖</span>
+          </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10 pointer-events-none" />
       </div>
-      <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-primary group-hover:gap-3 transition-all duration-300 mt-1">
-        Batafsil o'qish <span>&rarr;</span>
-      </span>
-    </div>
-  </motion.article>
+
+      {/* Content */}
+      <div className="p-7 md:p-10 flex flex-col justify-center gap-4">
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
+          {article.category}
+        </p>
+        <h3 className="font-heading text-2xl md:text-[1.75rem] leading-tight text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-3">
+          {article.title}
+        </h3>
+        <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">
+          {article.excerpt}
+        </p>
+        <div className="flex items-center gap-3 text-[11px] text-muted-foreground/70 font-medium">
+          <span>{article.date}</span>
+          {article.readTime && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+              <Clock className="w-3 h-3" />
+              <span>{article.readTime}</span>
+            </>
+          )}
+        </div>
+        <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-primary group-hover:gap-3 transition-all duration-300 mt-1">
+          Batafsil o'qish <span>&rarr;</span>
+        </span>
+      </div>
+    </motion.article>
   );
 };
 
@@ -128,50 +129,50 @@ const StandardCard = ({ article, index, navigate }: { article: Card; index: numb
     ? `${article.focusMobileX}% ${article.focusMobileY}%`
     : `${article.focusDesktopX}% ${article.focusDesktopY}%`;
   return (
-  <motion.article
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0, transition: { duration: 0.4, delay: index * 0.07 } }}
-    onClick={() => navigate(`/blog/${article.id}`)}
-    className="group flex flex-col bg-card border border-border/60 rounded-xl overflow-hidden hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/8 transition-all duration-300 cursor-pointer"
-  >
-    <div className="relative aspect-[16/9] overflow-hidden bg-muted shrink-0">
-      {article.image ? (
-        <img
-          src={article.image}
-          alt={article.title}
-          loading="lazy"
-          decoding="async"
-          className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
-          style={{ objectPosition: objPos }}
-          onLoad={(e) => e.currentTarget.classList.add("loaded")}
-        />
-      ) : (
-        <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
-          <span className="text-3xl opacity-15 select-none">📖</span>
-        </div>
-      )}
-    </div>
-    <div className="p-5 flex flex-col gap-2 flex-1">
-      <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-        {article.category}
-      </p>
-      <h3 className="font-heading text-[1.05rem] leading-snug text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2 flex-1">
-        {article.title}
-      </h3>
-      <p className="font-serif text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-        {article.excerpt}
-      </p>
-      <div className="flex items-center gap-2 text-[10px] text-muted-foreground/60 font-medium pt-1 border-t border-border/40 mt-auto">
-        <span>{article.date}</span>
-        {article.readTime && (
-          <>
-            <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-            <span>{article.readTime}</span>
-          </>
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0, transition: { duration: 0.4, delay: index * 0.07 } }}
+      onClick={() => navigate(`/blog/${article.id}`)}
+      className="group flex flex-col bg-card border border-border/60 rounded-xl overflow-hidden hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/8 transition-all duration-300 cursor-pointer [&_h3]:no-underline"
+    >
+      <div className="relative aspect-[16/9] overflow-hidden bg-muted shrink-0">
+        {article.image ? (
+          <img
+            src={article.image}
+            alt={article.title}
+            loading="lazy"
+            decoding="async"
+            className="img-fade w-full h-full object-cover group-hover:scale-105 transition-transform duration-600"
+            style={{ objectPosition: objPos }}
+            onLoad={(e) => e.currentTarget.classList.add("loaded")}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary/15 via-muted to-accent/15 flex items-center justify-center">
+            <span className="text-3xl opacity-15 select-none">📖</span>
+          </div>
         )}
       </div>
-    </div>
-  </motion.article>
+      <div className="p-5 flex flex-col gap-2 flex-1">
+        <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+          {article.category}
+        </p>
+        <h3 className="font-heading text-[1.05rem] leading-snug text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2 flex-1">
+          {article.title}
+        </h3>
+        <p className="font-serif text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+          {article.excerpt}
+        </p>
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground/60 font-medium pt-1 border-t border-border/40 mt-auto">
+          <span>{article.date}</span>
+          {article.readTime && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+              <span>{article.readTime}</span>
+            </>
+          )}
+        </div>
+      </div>
+    </motion.article>
   );
 };
 
@@ -224,8 +225,8 @@ const Blog = () => {
           <h2 className="font-heading text-5xl sm:text-6xl text-foreground mb-4">
             {t.blog?.title || "So'nggi maqolalar"}
           </h2>
-          <p className="font-serif text-muted-foreground text-lg max-w-2xl leading-loose">
-            Adabiyot olami yangiliklari, eksklyuziv intervyular va nashriyotimizdagi so'nggi jarayonlar.
+          <p className="font-serif text-foreground/80 text-lg md:text-xl leading-relaxed max-w-2xl">
+            Adabiyot yangiliklari, eksklyuziv suhbatlar va nashriyot hayotidagi so'nggi voqealar.
           </p>
         </div>
 
@@ -278,7 +279,7 @@ const Blog = () => {
         ) : articlesError ? (
           <div className="flex flex-col items-center justify-center py-20 text-center" role="alert">
             <AlertTriangle className="w-8 h-8 text-muted-foreground mb-3" />
-            <p className="font-sans text-sm text-muted-foreground">Maqolalarni yuklashda xatolik yuz berdi</p>
+            <p className="font-sans text-sm text-muted-foreground">Maqolalar yuklanmadi. Qayta urinib ko'ring.</p>
           </div>
         ) : (
           <AnimatePresence mode="wait">
@@ -292,7 +293,7 @@ const Blog = () => {
               {displayed.length === 0 ? (
                 <div className="border border-dashed border-border/60 bg-muted/10 py-20 flex flex-col items-center justify-center rounded-2xl">
                   <Feather className="w-10 h-10 text-muted-foreground mb-4" />
-                  <p className="font-serif text-lg text-muted-foreground">Hozircha ushbu ruknda maqolalar yo'q</p>
+                  <p className="font-serif text-lg text-muted-foreground">Bu bo'limda hozircha maqolalar yo'q</p>
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -322,7 +323,7 @@ const Blog = () => {
           >
             <Feather className="h-4 w-4" />
             <span className="font-sans text-[11px] tracking-[0.2em] font-bold uppercase">
-              Barcha maqolalarni ko'rish
+              Barcha maqolalar
             </span>
             <ChevronRight className="h-4 w-4" />
           </motion.button>
