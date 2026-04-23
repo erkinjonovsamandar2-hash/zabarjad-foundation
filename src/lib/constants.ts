@@ -18,6 +18,22 @@ export const LIBRARY_FILTER_MAP: Record<LibraryFilterKey, string> = {
   "erkin-millat": "Ijtimoiy-siyosiy",
 };
 
+export const LIBRARY_FILTER_LABELS: Record<LibraryFilterKey, { uz: string; ru: string; en: string }> = {
+  "jahon":        { uz: "Jahon adabiyoti", ru: "Мировая литература",    en: "World Literature"   },
+  "ilmiy":        { uz: "Ilmiy-ommabop",   ru: "Научно-популярное",     en: "Science & Education"},
+  "new":          { uz: "Yangi nashrlar",  ru: "Новые издания",          en: "New Releases"       },
+  "amir-temur":   { uz: "Tarixiy",         ru: "Историческое",           en: "Historical"         },
+  "erkin-millat": { uz: "Ijtimoiy",        ru: "Социально-политическое", en: "Social & Political" },
+};
+
+export const LIBRARY_FILTER_ICONS: Record<LibraryFilterKey, string> = {
+  "jahon":        "🌍",
+  "ilmiy":        "🔬",
+  "new":          "✨",
+  "amir-temur":   "🏛️",
+  "erkin-millat": "📜",
+};
+
 // ── EpicSpotlight – map hotspot positions ─────────────────────────────────────
 export const HOTSPOT_IDS = ["winterfell", "kings-landing", "wall"] as const;
 

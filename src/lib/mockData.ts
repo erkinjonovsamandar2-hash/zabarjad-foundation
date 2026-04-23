@@ -91,4 +91,5 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     quote_author: "",
     badge: "Jahon durdonasi",
   },
+  theme: { primary_color: "blue" },
 };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useData, QuizConfig } from "@/context/DataContext";
-import { Save } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 // Archetype definitions (labels + accent colours for the admin UI)
 const ARCHETYPES = [
@@ -61,19 +62,28 @@ const QuizManager = () => {
   const [rows, setRows] = useState<Record<ArchKey, ArchRow>>(
     () => extractRows(quizConfig.paths, books)
   );
-  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved,  setSaved]  = useState(false);
 
   const update = (key: ArchKey, field: keyof ArchRow, value: string) =>
     setRows(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
 
-  const handleSave = () => {
-    const newConfig: QuizConfig = {
-      ...quizConfig,
-      paths: buildPaths(rows, quizConfig.paths),
-    };
-    updateQuizConfig(newConfig);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2200);
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const newConfig: QuizConfig = {
+        ...quizConfig,
+        paths: buildPaths(rows, quizConfig.paths),
+      };
+      await updateQuizConfig(newConfig);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2200);
+      toast.success("Quiz sozlamalari saqlandi!");
+    } catch (err) {
+      toast.error("Saqlashda xatolik yuz berdi. Qayta urinib ko'ring.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -88,10 +98,14 @@ const QuizManager = () => {
         </div>
         <button
           onClick={handleSave}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 transition-colors shadow-sm"
+          disabled={saving}
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors shadow-sm"
         >
-          <Save className="h-4 w-4" />
-          {saved ? "Saqlandi ✓" : "Saqlash"}
+          {saving
+            ? <Loader2 className="h-4 w-4 animate-spin" />
+            : <Save className="h-4 w-4" />
+          }
+          {saving ? "Saqlanmoqda..." : saved ? "Saqlandi ✓" : "Saqlash"}
         </button>
       </div>
 

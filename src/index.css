@@ -400,6 +400,23 @@ COMPONENT MAP (Pre-Flight Audit)
     --footer-bg: 216 68% 8%;
     --footer-bar-bg: 216 70% 6%;
   }
+
+  /* ── PRIMARY COLOR OVERRIDES ─────────────────────────────────────────────── */
+  /* !important beats all theme-N + html.dark blocks regardless of load order. */
+  /* "blue" = default (209 100% 50%), no override needed.                      */
+  /* "sky"  = brand Sky Blue #4488BF — same hue family as team-page ambiance.  */
+  /* "gold" = brand Mustard Gold — full editorial gold as CTA color.           */
+  html[data-primary="sky"] {
+    --primary: 211 62% 16% !important;
+    --primary-foreground: 0 0% 100% !important;
+    --ring: 211 62% 16% !important;
+  }
+
+  html[data-primary="gold"] {
+    --primary: 45 66% 52% !important;
+    --primary-foreground: 0 0% 100% !important;
+    --ring: 45 66% 52% !important;
+  }
 }
 
 /* ── Global Base Resets ───────────────────────────────────────────────────── */

@@ -3,16 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LanguageContext";
 import { useData } from "@/context/DataContext";
 import { locField } from "@/context/LanguageContext";
-import { ChevronDown } from "lucide-react";
-
-// ── Category options — match DB category values exactly ──────────────────────
-const CATEGORIES = [
-  { value: "new", uz: "Yangi nashrlar", ru: "Новые издания", en: "New Releases" },
-  { value: "soon", uz: "Tez kunda", ru: "Скоро", en: "Coming Soon" },
-  { value: "gold", uz: "Oltin kolleksiya", ru: "Золотая коллекция", en: "Gold Collection" },
-] as const;
-
-type Category = typeof CATEGORIES[number]["value"];
+import { ChevronDown, BookOpen } from "lucide-react";
+import {
+  LIBRARY_FILTER_KEYS,
+  LIBRARY_FILTER_LABELS,
+  LIBRARY_FILTER_ICONS,
+  type LibraryFilterKey,
+} from "@/lib/constants";
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
 const TX = {
@@ -23,9 +20,9 @@ const TX = {
     typeBook: "Kitob haqida",
     typeGeneral: "Umumiy fikr",
     categoryLabel: "Turkum tanlang",
-    categoryPh: "— Turkumni tanlang —",
     bookLabel: "Kitob tanlang",
     bookPh: "— Kitobni tanlang —",
+    noBooksInCategory: "Bu turkumda kitob yo'q",
     name: "Ismingiz *",
     namePh: "Masalan: Malika Yusupova",
     role: "Kasb / Lavozim",
@@ -43,7 +40,7 @@ const TX = {
     charCount: (n: number) => `${n}/280`,
     minChars: "Kamida 20 ta belgi kiriting.",
     required: "Bu maydon majburiy.",
-    selectCategory: "Avval turkumni tanlang.",
+    selectBookFirst: "Avval kitob tanlang.",
   },
   ru: {
     title: "Оставить отзыв",
@@ -52,9 +49,9 @@ const TX = {
     typeBook: "О книге",
     typeGeneral: "Общий отзыв",
     categoryLabel: "Выберите категорию",
-    categoryPh: "— Выберите категорию —",
     bookLabel: "Выберите книгу",
     bookPh: "— Выберите книгу —",
+    noBooksInCategory: "В этой категории нет книг",
     name: "Ваше имя *",
     namePh: "Например: Jasur Normatov",
     role: "Должность / Профессия",
@@ -72,7 +69,7 @@ const TX = {
     charCount: (n: number) => `${n}/280`,
     minChars: "Минимум 20 символов.",
     required: "Это поле обязательно.",
-    selectCategory: "Сначала выберите категорию.",
+    selectBookFirst: "Сначала выберите книгу.",
   },
   en: {
     title: "Leave a Review",
@@ -81,9 +78,9 @@ const TX = {
     typeBook: "About a book",
     typeGeneral: "General feedback",
     categoryLabel: "Select category",
-    categoryPh: "— Select a category —",
     bookLabel: "Select a book",
     bookPh: "— Select a book —",
+    noBooksInCategory: "No books in this category",
     name: "Your name *",
     namePh: "e.g. Dilnoza Rahimova",
     role: "Role / Occupation",
@@ -101,7 +98,7 @@ const TX = {
     charCount: (n: number) => `${n}/280`,
     minChars: "Minimum 20 characters.",
     required: "This field is required.",
-    selectCategory: "Please select a category first.",
+    selectBookFirst: "Please select a book first.",
   },
 } as const;
 
@@ -109,19 +106,16 @@ type TxLang = keyof typeof TX;
 
 // ── Shared input className ────────────────────────────────────────────────────
 const inputCls = `
-  w-full rounded-lg border px-4 py-2.5 text-sm font-sans
+  w-full rounded-xl border px-4 py-2.5 text-sm font-sans
   bg-white dark:bg-neutral-800
   border-amber-200 dark:border-amber-900/30
   text-neutral-900 dark:text-neutral-100
   placeholder:text-neutral-400 dark:placeholder:text-neutral-600
-  focus:outline-none focus:ring-2 focus:ring-primary/40
+  focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50
   transition-colors
 `;
 
-const selectCls = `
-  ${inputCls}
-  appearance-none cursor-pointer pr-10
-`;
+const selectCls = `${inputCls} appearance-none cursor-pointer pr-10`;
 
 // ── Field wrapper ─────────────────────────────────────────────────────────────
 const Field = ({
@@ -134,13 +128,10 @@ const Field = ({
       {label}
     </label>
     {children}
-    {error && (
-      <p className="text-[11px] text-red-500 font-sans">{error}</p>
-    )}
+    {error && <p className="text-[11px] text-red-500 font-sans">{error}</p>}
   </div>
 );
 
-// ── Select wrapper (adds chevron icon) ────────────────────────────────────────
 const SelectWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="relative">
     {children}
@@ -149,9 +140,7 @@ const SelectWrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 // ── Star picker ───────────────────────────────────────────────────────────────
-const StarPicker = ({
-  value, onChange, label,
-}: {
+const StarPicker = ({ value, onChange, label }: {
   value: number; onChange: (n: number) => void; label: string;
 }) => {
   const [hovered, setHovered] = useState(0);
@@ -181,6 +170,46 @@ const StarPicker = ({
   );
 };
 
+// ── Category pill grid ────────────────────────────────────────────────────────
+const CategoryPills = ({
+  selected,
+  onChange,
+  lang,
+}: {
+  selected: LibraryFilterKey | "";
+  onChange: (v: LibraryFilterKey | "") => void;
+  lang: TxLang;
+}) => (
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+    {LIBRARY_FILTER_KEYS.map((key) => {
+      const active = selected === key;
+      const labels = LIBRARY_FILTER_LABELS[key];
+      const icon   = LIBRARY_FILTER_ICONS[key];
+      const label  = labels[lang] ?? labels.uz;
+      return (
+        <motion.button
+          key={key}
+          type="button"
+          onClick={() => onChange(active ? "" : key)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className={`
+            flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left
+            transition-all duration-150 text-sm font-sans
+            ${active
+              ? "border-primary bg-primary/10 text-primary font-semibold shadow-sm"
+              : "border-amber-200 dark:border-amber-900/30 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-primary/40 hover:bg-primary/5"
+            }
+          `}
+        >
+          <span className="text-base shrink-0">{icon}</span>
+          <span className="truncate leading-tight">{label}</span>
+        </motion.button>
+      );
+    })}
+  </div>
+);
+
 // ── Main form ─────────────────────────────────────────────────────────────────
 const FeedbackForm = () => {
   const { lang } = useLang();
@@ -188,33 +217,34 @@ const FeedbackForm = () => {
 
   const tx = TX[(lang as TxLang)] ?? TX.uz;
 
-  // ── Form state ──────────────────────────────────────────────────────────
   const [feedbackType, setFeedbackType] = useState<"book" | "general">("general");
-  const [category, setCategory] = useState<Category | "">("");
-  const [bookId, setBookId] = useState<string>("");
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("");
-  const [city, setCity] = useState("");
-  const [text, setText] = useState("");
-  const [stars, setStars] = useState(5);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [apiError, setApiError] = useState("");
+  const [category,     setCategory]     = useState<LibraryFilterKey | "">("");
+  const [bookId,       setBookId]       = useState<string>("");
+  const [name,         setName]         = useState("");
+  const [role,         setRole]         = useState("");
+  const [city,         setCity]         = useState("");
+  const [text,         setText]         = useState("");
+  const [stars,        setStars]        = useState(5);
+  const [errors,       setErrors]       = useState<Record<string, string>>({});
+  const [loading,      setLoading]      = useState(false);
+  const [success,      setSuccess]      = useState(false);
+  const [apiError,     setApiError]     = useState("");
 
-  // Books filtered by selected category
   const filteredBooks = useMemo(
     () => category ? books.filter((b) => b.category === category) : [],
     [books, category]
   );
 
-  // Reset book when category changes
-  const handleCategoryChange = (val: Category | "") => {
+  const selectedBook = useMemo(
+    () => books.find((b) => b.id === bookId) ?? null,
+    [books, bookId]
+  );
+
+  const handleCategoryChange = (val: LibraryFilterKey | "") => {
     setCategory(val);
     setBookId("");
   };
 
-  // Reset book+category when type changes
   const handleTypeChange = (type: "book" | "general") => {
     setFeedbackType(type);
     setCategory("");
@@ -222,16 +252,15 @@ const FeedbackForm = () => {
     setErrors({});
   };
 
-  // ── Validation ──────────────────────────────────────────────────────────
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = tx.required;
     if (!text.trim()) e.text = tx.required;
     else if (text.trim().length < 20) e.text = tx.minChars;
+    if (feedbackType === "book" && !bookId) e.book = tx.selectBookFirst;
     return e;
   };
 
-  // ── Submit ──────────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
@@ -240,20 +269,25 @@ const FeedbackForm = () => {
     setLoading(true);
     setApiError("");
 
+    const bookTitle = selectedBook
+      ? locField(selectedBook, "title", lang) as string
+      : null;
+
     const { error } = await submitReview({
-      name: name.trim(),
-      role: role.trim() || null,
-      city: city.trim() || null,
-      text: text.trim(),
+      name:       name.trim(),
+      role:       role.trim()  || null,
+      city:       city.trim()  || null,
+      text:       text.trim(),
       stars,
+      book_id:    bookId   || null,
+      book_title: bookTitle || null,
     });
 
     setLoading(false);
-    if (error) { setApiError(tx.errorMsg); }
-    else { setSuccess(true); }
+    if (error) setApiError(tx.errorMsg);
+    else        setSuccess(true);
   };
 
-  // ── Success state ────────────────────────────────────────────────────────
   if (success) {
     return (
       <motion.div
@@ -262,7 +296,7 @@ const FeedbackForm = () => {
         transition={{ type: "spring", stiffness: 180, damping: 22 }}
         className="
           flex flex-col items-center justify-center
-          gap-3 py-10 text-center rounded-xl
+          gap-3 py-10 text-center rounded-2xl
           bg-[#fdfbf7] dark:bg-[#1a1a1a]
           border border-amber-100/80 dark:border-amber-900/20
           shadow-lg
@@ -282,16 +316,16 @@ const FeedbackForm = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
       className="
-        rounded-xl p-6 md:p-8 space-y-5
+        rounded-2xl p-6 md:p-8 space-y-5
         bg-[#fdfbf7] dark:bg-[#1a1a1a]
         border border-amber-100/80 dark:border-amber-900/20
         shadow-lg
       "
       noValidate
     >
-      {/* ── Moderation warning ────────────────────────────────────────────── */}
+      {/* Moderation warning */}
       <div className="
-        flex items-start gap-3 rounded-lg px-4 py-3
+        flex items-start gap-3 rounded-xl px-4 py-3
         bg-primary/5 dark:bg-amber-900/15
         border border-amber-200 dark:border-amber-800/30
       ">
@@ -301,12 +335,12 @@ const FeedbackForm = () => {
         </p>
       </div>
 
-      {/* ── Feedback type toggle ──────────────────────────────────────────── */}
+      {/* Feedback type toggle */}
       <div>
         <p className="font-sans text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
           {tx.typeLabel}
         </p>
-        <div className="flex rounded-lg overflow-hidden border border-amber-200 dark:border-amber-900/30">
+        <div className="flex rounded-xl overflow-hidden border border-amber-200 dark:border-amber-900/30">
           {(["general", "book"] as const).map((type) => (
             <button
               key={type}
@@ -326,7 +360,7 @@ const FeedbackForm = () => {
         </div>
       </div>
 
-      {/* ── Book selector — only when type === "book" ─────────────────────── */}
+      {/* Book selector — only when type === "book" */}
       <AnimatePresence>
         {feedbackType === "book" && (
           <motion.div
@@ -336,23 +370,17 @@ const FeedbackForm = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden space-y-4"
           >
-            {/* Category dropdown */}
-            <Field label={tx.categoryLabel}>
-              <SelectWrapper>
-                <select
-                  value={category}
-                  onChange={(e) => handleCategoryChange(e.target.value as Category | "")}
-                  className={selectCls}
-                >
-                  <option value="">{tx.categoryPh}</option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat.value} value={cat.value}>
-                      {cat[lang as TxLang] ?? cat.uz}
-                    </option>
-                  ))}
-                </select>
-              </SelectWrapper>
-            </Field>
+            {/* Category pill grid */}
+            <div>
+              <p className="font-sans text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2.5">
+                {tx.categoryLabel}
+              </p>
+              <CategoryPills
+                selected={category}
+                onChange={handleCategoryChange}
+                lang={lang as TxLang}
+              />
+            </div>
 
             {/* Book dropdown — only shown after category is picked */}
             <AnimatePresence>
@@ -363,19 +391,19 @@ const FeedbackForm = () => {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.22 }}
                 >
-                  <Field label={tx.bookLabel}>
+                  <Field label={tx.bookLabel} error={errors.book}>
                     <SelectWrapper>
                       <select
                         value={bookId}
-                        onChange={(e) => setBookId(e.target.value)}
+                        onChange={(e) => {
+                          setBookId(e.target.value);
+                          setErrors((p) => ({ ...p, book: "" }));
+                        }}
                         className={selectCls}
                         disabled={filteredBooks.length === 0}
                       >
                         <option value="">
-                          {filteredBooks.length === 0
-                            ? tx.selectCategory
-                            : tx.bookPh
-                          }
+                          {filteredBooks.length === 0 ? tx.noBooksInCategory : tx.bookPh}
                         </option>
                         {filteredBooks.map((book) => (
                           <option key={book.id} value={book.id}>
@@ -385,6 +413,42 @@ const FeedbackForm = () => {
                       </select>
                     </SelectWrapper>
                   </Field>
+
+                  {/* Selected book preview */}
+                  <AnimatePresence>
+                    {selectedBook && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.18 }}
+                        className="
+                          mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5
+                          bg-primary/5 border border-primary/20
+                        "
+                      >
+                        {selectedBook.cover_url ? (
+                          <img
+                            src={selectedBook.cover_url}
+                            alt=""
+                            className="h-10 w-7 rounded object-cover shrink-0"
+                          />
+                        ) : (
+                          <div className="h-10 w-7 rounded bg-primary/10 flex items-center justify-center shrink-0">
+                            <BookOpen className="h-4 w-4 text-primary/50" />
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold font-sans text-foreground truncate">
+                            {locField(selectedBook, "title", lang)}
+                          </p>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {locField(selectedBook, "author", lang)}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -392,7 +456,7 @@ const FeedbackForm = () => {
         )}
       </AnimatePresence>
 
-      {/* ── Name + Role ───────────────────────────────────────────────────── */}
+      {/* Name + Role */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label={tx.name} error={errors.name}>
           <input
@@ -416,7 +480,7 @@ const FeedbackForm = () => {
         </Field>
       </div>
 
-      {/* ── City + Stars ──────────────────────────────────────────────────── */}
+      {/* City + Stars */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
         <Field label={tx.city}>
           <input
@@ -431,7 +495,7 @@ const FeedbackForm = () => {
         <StarPicker value={stars} onChange={setStars} label={tx.stars} />
       </div>
 
-      {/* ── Review textarea ───────────────────────────────────────────────── */}
+      {/* Review textarea */}
       <Field label={tx.review} error={errors.text}>
         <div className="relative">
           <textarea
@@ -455,12 +519,10 @@ const FeedbackForm = () => {
         </div>
       </Field>
 
-      {/* ── API error ─────────────────────────────────────────────────────── */}
       {apiError && (
         <p className="text-sm text-red-500 font-sans text-center">{apiError}</p>
       )}
 
-      {/* ── Submit ────────────────────────────────────────────────────────── */}
       <motion.button
         type="submit"
         disabled={loading}

@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X, Clock, RefreshCw, Trash2, RotateCcw } from "lucide-react";
+import { Check, X, Clock, RefreshCw, Trash2, RotateCcw, BookOpen } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Review {
-  id:         string;
-  name:       string;
-  role:       string | null;
-  city:       string | null;
-  text:       string;
-  stars:      number;
-  status:     "pending" | "published" | "rejected";
-  created_at: string;
+  id:          string;
+  name:        string;
+  role:        string | null;
+  city:        string | null;
+  text:        string;
+  stars:       number;
+  status:      "pending" | "published" | "rejected";
+  created_at:  string;
+  book_id?:    string | null;
+  book_title?: string | null;
 }
 
 type FilterStatus = "pending" | "published" | "rejected" | "all";
@@ -253,6 +255,12 @@ const AdminReviews = () => {
                     <p className="text-[11px] text-muted-foreground/80 font-sans mt-0.5">
                       {[review.role, review.city].filter(Boolean).join(" · ")}
                     </p>
+                    {review.book_title && (
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/8 border border-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary/80 font-sans">
+                        <BookOpen className="h-2.5 w-2.5" />
+                        {review.book_title}
+                      </span>
+                    )}
                   </div>
                   <StatusBadge status={review.status} />
                 </div>

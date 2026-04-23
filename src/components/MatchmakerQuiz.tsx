@@ -1,5 +1,5 @@
 // @refresh reset
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookCover from "@/components/BookCover";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, RotateCcw, Download, Copy, Check, ArrowRight, Library } from "lucide-react";
@@ -10,13 +10,13 @@ import { useLang, locField } from "@/context/LanguageContext";
 import teaImg from "@/assets/quiz/tea.webp";
 import bookImg from "@/assets/quiz/book.webp";
 import compassImg from "@/assets/quiz/compass.webp";
-import keyImg from "@/assets/quiz/key.png";
-import quizBg from "@/assets/hero/hero-bg8.png";
+import keyImg from "@/assets/quiz/key.webp";
+import quizBg from "@/assets/hero/hero-bg8.webp";
 
-import faylasufImg from "@/assets/quiz/archetypes/faylasuf.png";
-import kashfiyotchiImg from "@/assets/quiz/archetypes/kashfiyotchi.png";
-import ovchiImg from "@/assets/quiz/archetypes/ovchi.png";
-import doktorImg from "@/assets/quiz/archetypes/doktor.png";
+import faylasufImg from "@/assets/quiz/archetypes/faylasuf.webp";
+import kashfiyotchiImg from "@/assets/quiz/archetypes/kashfiyotchi.webp";
+import ovchiImg from "@/assets/quiz/archetypes/ovchi.webp";
+import doktorImg from "@/assets/quiz/archetypes/doktor.webp";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type ArchetypeKey = "faylasuf" | "kashfiyotchi" | "ovchi" | "doktor";
@@ -282,6 +282,14 @@ const MatchmakerQuiz = () => {
   const [result, setResult] = useState<{ key: ArchetypeKey; matchPct: number } | null>(null);
   const [downloading, setDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [bgReady, setBgReady] = useState(false);
+
+  // Lazy-load background after first paint so it never blocks quiz render
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => setBgReady(true);
+    img.src = quizBg;
+  }, []);
 
   const totalSteps = QUESTIONS.length;
   const current = QUESTIONS[step];
@@ -366,7 +374,13 @@ const MatchmakerQuiz = () => {
   return (
     <section className="relative min-h-screen overflow-hidden flex flex-col">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${quizBg})` }} />
+        {/* Instant gradient fallback — shows before bg image loads */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-muted" />
+        {/* Background image fades in once loaded — never blocks first paint */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
+          style={{ backgroundImage: bgReady ? `url(${quizBg})` : "none", opacity: bgReady ? 1 : 0 }}
+        />
         <div className="absolute inset-0 bg-background/65" />
       </div>
 
@@ -391,7 +405,7 @@ const MatchmakerQuiz = () => {
                       transition={{ delay: i * 0.1 + 0.15, duration: 0.5 }}>
                       <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shadow-lg"
                         style={{ border: `3px solid ${a.accentColor}` }}>
-                        <img src={a.img} alt={a.name} className="w-full h-full object-cover" />
+                        <img src={a.img} alt={a.name} width={64} height={64} loading="eager" decoding="async" className="w-full h-full object-cover" />
                       </div>
                     </motion.div>
                   ))}
@@ -461,7 +475,7 @@ const MatchmakerQuiz = () => {
                               transition-[border-color,box-shadow] duration-200 will-change-transform">
                             <div className="w-14 h-14 mb-3 rounded-full overflow-hidden bg-background/80 flex items-center justify-center shrink-0
                               border-2 border-border/50 group-hover:border-foreground/30 transition-[border-color] duration-200">
-                              <img src={opt.img} alt={opt.label} className="w-9 h-9 object-contain" draggable={false} />
+                              <img src={opt.img} alt={opt.label} width={36} height={36} loading="lazy" decoding="async" className="w-9 h-9 object-contain" draggable={false} />
                             </div>
                             <p className="font-heading text-[14px] sm:text-[15px] font-bold leading-tight mb-1
                               text-foreground group-hover:text-accent transition-colors duration-300 tracking-wide">
@@ -495,7 +509,7 @@ const MatchmakerQuiz = () => {
                       className="relative inline-block mb-6">
                       <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mx-auto shadow-2xl"
                         style={{ border: `4px solid ${arch.accentColor}` }}>
-                        <img src={arch.img} alt={arch.name} className="w-full h-full object-cover" />
+                        <img src={arch.img} alt={arch.name} width={160} height={160} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                       </div>
                       <div className="absolute inset-0 rounded-full -z-10 blur-2xl opacity-20"
                         style={{ background: arch.accentColor, transform: "scale(1.5)" }} />
@@ -638,7 +652,7 @@ const MatchmakerQuiz = () => {
                   <div className="flex justify-center mb-4">
                     <div className="w-16 h-16 rounded-full overflow-hidden shadow-xl"
                       style={{ border: `3px solid ${arch.accentColor}` }}>
-                      <img src={arch.img} alt={arch.name} className="w-full h-full object-cover" />
+                      <img src={arch.img} alt={arch.name} width={64} height={64} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     </div>
                   </div>
                   <p className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] mb-1"
@@ -677,8 +691,14 @@ const MatchmakerQuiz = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-16 font-lora text-muted-foreground italic">
-                    Kitoblar yuklanmoqda...
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <div key={i} className="rounded-2xl overflow-hidden bg-white/30 dark:bg-black/15 border border-white/40 dark:border-white/10 p-3">
+                        <div className="skeleton-shimmer w-full aspect-[2/3] rounded-lg mb-3" />
+                        <div className="skeleton-shimmer h-3.5 rounded w-3/4 mb-1.5" />
+                        <div className="skeleton-shimmer h-3 rounded w-1/2" />
+                      </div>
+                    ))}
                   </div>
                 )}
 

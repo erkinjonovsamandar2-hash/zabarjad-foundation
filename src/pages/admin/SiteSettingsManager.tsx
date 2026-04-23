@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { useData, SiteSettings } from "@/context/DataContext";
-import { Save, Globe, MapPin, MessageSquare, BookMarked } from "lucide-react";
+import { Save, Globe, MapPin, MessageSquare, BookMarked, Palette } from "lucide-react";
+
+const PRIMARY_COLORS: { value: "blue" | "sky" | "gold"; label: string; hex: string; desc: string }[] = [
+  { value: "blue", label: "Moviy",       hex: "#007FFF", desc: "Asosiy (hozirgi)" },
+  { value: "sky",  label: "Qorong'u ko'k", hex: "#0F2842", desc: '"Bizning" rangi' },
+  { value: "gold", label: "Oltin",       hex: "#D5AD36", desc: "Brend oltin" },
+];
 
 const SiteSettingsManager = () => {
   const { siteSettings, updateSiteSettings } = useData();
@@ -121,6 +127,46 @@ const SiteSettingsManager = () => {
             />
           </div>
           <p className="text-xs text-muted-foreground/70">Kitob nomi, muallif va muqova — Kitoblar bo'limida "Featured" belgisi qo'yilgan kitobdan olinadi.</p>
+        </div>
+      </div>
+
+      {/* Theme Color */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Palette className="h-5 w-5 text-accent" />
+          <h2 className="text-lg font-semibold text-foreground/90">Asosiy rang (Primary color)</h2>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">
+          Tugmalar, faol havolalar, pill-larning rangi. Saqlash bilan zudlik bilan barcha sahifalarda o'zgaradi.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {PRIMARY_COLORS.map((opt) => {
+            const isActive = (settings.theme?.primary_color ?? "blue") === opt.value;
+            return (
+              <button
+                key={opt.value}
+                onClick={() => {
+                  setSettings({ ...settings, theme: { ...settings.theme, primary_color: opt.value } });
+                  document.documentElement.dataset.primary = opt.value;
+                }}
+                className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 transition-all ${
+                  isActive ? "border-gray-800 shadow-md" : "border-gray-200 hover:border-gray-400"
+                }`}
+              >
+                <span
+                  className="w-6 h-6 rounded-full border border-black/10 shadow-sm flex-shrink-0"
+                  style={{ background: opt.hex }}
+                />
+                <span className="text-left">
+                  <span className="block text-sm font-semibold text-foreground">{opt.label}</span>
+                  <span className="block text-xs text-muted-foreground">{opt.desc}</span>
+                </span>
+                {isActive && (
+                  <span className="ml-auto text-xs font-bold text-gray-600 bg-gray-100 rounded-full px-2 py-0.5">Faol</span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 

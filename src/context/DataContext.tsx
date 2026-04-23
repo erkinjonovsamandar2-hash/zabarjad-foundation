@@ -22,6 +22,8 @@ export interface Review {
   stars: number;
   status: "pending" | "published" | "rejected";
   created_at: string;
+  book_id?: string | null;
+  book_title?: string | null;
 }
 
 // ── Team & Author types ──────────────────────────────────────────────────────
@@ -87,6 +89,7 @@ export interface SiteSettings {
   footer: { phone: string; email: string; address: string; telegram: string; instagram: string };
   map: { enabled: boolean; embed_url: string; title: string };
   bookOfMonth: { quote: string; quote_author: string; badge: string };
+  theme: { primary_color: "blue" | "sky" | "gold" };
 }
 
 // ── Context shape ─────────────────────────────────────────────────────────────
@@ -440,9 +443,20 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     payload: Omit<Review, "id" | "status" | "created_at">
   ): Promise<{ error: string | null }> => {
     try {
+      const insert: Record<string, unknown> = {
+        name:   payload.name,
+        role:   payload.role,
+        city:   payload.city,
+        text:   payload.text,
+        stars:  payload.stars,
+        status: "pending",
+      };
+      if (payload.book_id)    insert.book_id    = payload.book_id;
+      if (payload.book_title) insert.book_title = payload.book_title;
+
       const { error } = await (supabase as any)
         .from("reviews")
-        .insert({ ...payload, status: "pending" });
+        .insert(insert);
 
       if (error?.code === TABLE_NOT_FOUND) {
         return { error: "Sharh xizmati hozircha mavjud emas." };
