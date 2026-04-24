@@ -247,7 +247,7 @@ const ActiveBookShowcase = ({
                   transition={{ duration: 1.2 }}
                   className="w-full h-full bg-muted aspect-[2/3]"
                 >
-                  <img src={imgSrc} alt={locField(book, "title", lang)} className="w-full h-full object-cover" draggable={false} />
+                  <img src={imgSrc} alt={locField(book, "title", lang)} width={240} height={360} loading="eager" decoding="async" className="w-full h-full object-cover" draggable={false} />
                 </motion.div>
               )
               : <div className="w-full h-full bg-muted aspect-[2/3]" />
@@ -401,7 +401,7 @@ const MiniShelf = ({
                     transition={{ duration: 1.2 }}
                     className="w-full h-full bg-muted aspect-[2/3] transform-gpu"
                   >
-                    <img src={imgSrc} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-105" draggable={false} />
+                    <img src={imgSrc} alt="" width={76} height={114} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform group-hover:scale-105" draggable={false} />
                   </motion.div>
                 )
                 : <div className="w-full h-full bg-muted aspect-[2/3]" />

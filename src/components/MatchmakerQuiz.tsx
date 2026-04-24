@@ -122,7 +122,7 @@ const QUESTIONS: QuizStep[] = [
     options: [
       { label: "Choy va kitob", sublabel: "Sokin kech, chuqur fikrlar", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 1 } },
       { label: "Podcast yoki hujjatli film", sublabel: "Yangi bilim, yangi nuqtai nazar", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
-      { label: "Detektiv yoki triller", sublabel: "Sirlar meni o'ziga tortadi", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
+      { label: "Detektiv yoki triller", sublabel: "Jumboqni oxirigacha yechmasam tincholmayman", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
       { label: "Do'stlar bilan gap-so'z", sublabel: "Insonlardan kuch olaman", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },
@@ -133,7 +133,7 @@ const QUESTIONS: QuizStep[] = [
       { label: "Chuqur suhbat va falsafa", sublabel: "Hayotning ma'nosi qiziqtiradi", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
       { label: "Yangi olam va sarguzasht", sublabel: "Kashfiyot zavqi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
       { label: "Kutilmagan burilish", sublabel: "Sir ochildi — nafas tutiladi!", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
-      { label: "Yuraksizituvchan sahna", sublabel: "Hissiyotga to'la, esdan ketmas", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
+      { label: "Yurakni siquvchi hissiy sahna", sublabel: "Hissiyotga to'la, esdan ketmaydi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },
   {
@@ -150,7 +150,7 @@ const QUESTIONS: QuizStep[] = [
     question: "Kitob tugagach nima qilasiz?",
     aunt: "Oxirgi sahifa yopildi — keyin nima? ✨",
     options: [
-      { label: "O'tirib, his-tuyg'ularni hazm qilaman", sublabel: "Sukunatda qolaman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 2 } },
+      { label: "Jim o'tirib, his-tuyg'ular bilan qolaman", sublabel: "Bu lahzani shoshmasdan his etaman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 0, doktor: 2 } },
       { label: "Darhol yangi asar boshlayman", sublabel: "To'xtashni bilmayman", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
       { label: "Barcha tafsilotlarni qayta tahlil qilaman", sublabel: "Sirni yana bir bor o'ylayman", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
       { label: "Kimgadir tavsiya qilaman", sublabel: "Bu hisni yolg'iz turolmayman", img: bookImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 0, doktor: 3 } },
@@ -160,7 +160,7 @@ const QUESTIONS: QuizStep[] = [
     question: "Qaysi qahramon sizga ko'proq yaqin?",
     aunt: "O'sha sahifalarda siz bo'lganingizda... 🤔",
     options: [
-      { label: "Donishmand, yolg'iz ruh", sublabel: "Teran o'ylaydi, kamdan-kam so'zlaydi", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
+      { label: "Kamgap, chuqur o'ylovchi", sublabel: "Teran fikrlaydi, so'zini o'lchaб gapiradi", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 1 } },
       { label: "Jasur sarguzashtchi", sublabel: "Ortga qaytishni bilmaydi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 1, doktor: 0 } },
       { label: "Ziyrak, sirli zehn", sublabel: "Har narsaning izini topadi", img: keyImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 3, doktor: 0 } },
       { label: "Yumshoq, mehr-oqibatli inson", sublabel: "Hamma uchun qayg'uradi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
@@ -172,7 +172,7 @@ const QUESTIONS: QuizStep[] = [
     options: [
       { label: "Chuqur o'y va yangi savollar", sublabel: "Dunyoga yangicha qarayman", img: teaImg, scores: { faylasuf: 3, kashfiyotchi: 0, ovchi: 1, doktor: 0 } },
       { label: "Qo'zg'alish va ilhom", sublabel: "Harakat qilgim kelib ketadi", img: compassImg, scores: { faylasuf: 0, kashfiyotchi: 3, ovchi: 0, doktor: 1 } },
-      { label: "Shiddatli sabrsizlik", sublabel: "Keyinida nima bo'lishini bilgim keladi", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
+      { label: "Hayajonli sabrsizlik", sublabel: "Davomini o'qimasdan qo'yolmayman", img: keyImg, scores: { faylasuf: 0, kashfiyotchi: 1, ovchi: 3, doktor: 0 } },
       { label: "Qalb isishi va ba'zan yig'i", sublabel: "His-tuyg'ular meni to'ldirib ketadi", img: bookImg, scores: { faylasuf: 1, kashfiyotchi: 0, ovchi: 0, doktor: 3 } },
     ],
   },

@@ -121,6 +121,10 @@ const LibraryPage = () => {
               <img
                 src={librarySeal}
                 alt="Library Seal"
+                width={384}
+                height={384}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-contain"
               />
             </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useData } from "@/context/DataContext";
-import type { Partner } from "@/context/DataContext";
+import type { Partner, PartnerMapEntry, PartnerWebsiteEntry } from "@/context/DataContext";
 import { Plus, Pencil, Trash2, X, ArrowUp, ArrowDown, Handshake } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
 
@@ -43,7 +43,9 @@ const emptyPartner: Omit<Partner, "id" | "created_at"> = {
     branches: null,
     phone: null,
     website: null,
+    websites: [],
     maps_url: null,
+    maps_urls: [],
     image_url: null,
     accent_color: "#c8973a",
     sort_order: 0,
@@ -58,7 +60,9 @@ type FormState = {
     branches: string;
     phone: string;
     website: string;
+    websites: PartnerWebsiteEntry[];
     maps_url: string;
+    maps_urls: PartnerMapEntry[];
     image_url: string | null;
     accent_color: string;
     sort_order: number;
@@ -73,7 +77,9 @@ function toFormState(p: Omit<Partner, "id" | "created_at">): FormState {
         branches: p.branches !== null ? String(p.branches) : "",
         phone: p.phone ?? "",
         website: p.website ?? "",
+        websites: p.websites ?? [],
         maps_url: p.maps_url ?? "",
+        maps_urls: p.maps_urls ?? [],
         image_url: p.image_url,
         accent_color: p.accent_color,
         sort_order: p.sort_order,
@@ -89,7 +95,9 @@ function fromFormState(f: FormState): Omit<Partner, "id" | "created_at"> {
         branches: f.branches.trim() !== "" ? parseInt(f.branches, 10) : null,
         phone: f.phone.trim() || null,
         website: f.website.trim() || null,
+        websites: f.websites.filter((e) => e.url.trim()),
         maps_url: f.maps_url.trim() || null,
+        maps_urls: f.maps_urls.filter((e) => e.url.trim()),
         image_url: f.image_url || null,
         accent_color: f.accent_color || "#c8973a",
         sort_order: f.sort_order,
@@ -183,12 +191,12 @@ export default function PartnerManager() {
         if (!window.confirm("6 ta boshlang'ich hamkorni bazaga qo'shmoqchimisiz?")) return;
         setSeeding(true);
         const defaults: Omit<Partner, "id" | "created_at">[] = [
-            { name: "Golden Books", type: "Rasmiy hamkor", bio: "Toshkentning eng yirik kitob tarmog'i. Bolalar va kattalar adabiyotining keng assortimenti.", location: "Toshkent shahri", branches: 12, phone: null, website: null, maps_url: null, image_url: null, accent_color: "#c8973a", sort_order: 1 },
-            { name: "Bookmark", type: "Rasmiy hamkor", bio: "Zamonaviy kitobsevarlar uchun maxsus tanlangan kolleksiya. Premium xizmat va atmosfera.", location: "Toshkent shahri", branches: 3, phone: null, website: null, maps_url: null, image_url: null, accent_color: "#3a567a", sort_order: 2 },
-            { name: "Kitob House", type: "Rasmiy hamkor", bio: "Bolalar va yoshlar adabiyotiga ixtisoslashgan do'kon tarmog'i. Sifatli kitob — yorqin kelajak.", location: "Toshkent, Chirchiq", branches: 5, phone: null, website: null, maps_url: null, image_url: null, accent_color: "#1a6fba", sort_order: 3 },
-            { name: "Plato Books", type: "Rasmiy hamkor", bio: "Falsafa, ilm-fan va badiiy adabiyot bo'yicha O'zbekistondagi eng yirik ixtisoslashgan do'kon.", location: "Toshkent shahri", branches: 2, phone: null, website: null, maps_url: null, image_url: null, accent_color: "#4a9a4a", sort_order: 4 },
-            { name: "Asaxiy", type: "Onlayn hamkor", bio: "O'zbekistonning eng yirik onlayn savdo platformasi. Kitoblarimiz butun mamlakat bo'ylab yetkazib beriladi.", location: "Online — butun O'zbekiston", branches: null, phone: null, website: "asaxiy.uz", maps_url: null, image_url: null, accent_color: "#c8973a", sort_order: 5 },
-            { name: "Qamar", type: "Rasmiy hamkor", bio: "Adabiy va badiiy kitoblarga ixtisoslashgan premium do'kon. Kitobsevarlar uchun maxsus muhit.", location: "Toshkent shahri", branches: 1, phone: null, website: null, maps_url: null, image_url: null, accent_color: "#8a3a8a", sort_order: 6 },
+            { name: "Golden Books", type: "Rasmiy hamkor", bio: "Toshkentning eng yirik kitob tarmog'i. Bolalar va kattalar adabiyotining keng assortimenti.", location: "Toshkent shahri", branches: 12, phone: null, website: null, maps_url: null, maps_urls: [], website: null, websites: [], image_url: null, accent_color: "#c8973a", sort_order: 1 },
+            { name: "Bookmark", type: "Rasmiy hamkor", bio: "Zamonaviy kitobsevarlar uchun maxsus tanlangan kolleksiya. Premium xizmat va atmosfera.", location: "Toshkent shahri", branches: 3, phone: null, website: null, websites: [], maps_url: null, maps_urls: [], image_url: null, accent_color: "#3a567a", sort_order: 2 },
+            { name: "Kitob House", type: "Rasmiy hamkor", bio: "Bolalar va yoshlar adabiyotiga ixtisoslashgan do'kon tarmog'i. Sifatli kitob — yorqin kelajak.", location: "Toshkent, Chirchiq", branches: 5, phone: null, website: null, websites: [], maps_url: null, maps_urls: [], image_url: null, accent_color: "#1a6fba", sort_order: 3 },
+            { name: "Plato Books", type: "Rasmiy hamkor", bio: "Falsafa, ilm-fan va badiiy adabiyot bo'yicha O'zbekistondagi eng yirik ixtisoslashgan do'kon.", location: "Toshkent shahri", branches: 2, phone: null, website: null, websites: [], maps_url: null, maps_urls: [], image_url: null, accent_color: "#4a9a4a", sort_order: 4 },
+            { name: "Asaxiy", type: "Onlayn hamkor", bio: "O'zbekistonning eng yirik onlayn savdo platformasi. Kitoblarimiz butun mamlakat bo'ylab yetkazib beriladi.", location: "Online — butun O'zbekiston", branches: null, phone: null, website: "asaxiy.uz", websites: [], maps_url: null, maps_urls: [], image_url: null, accent_color: "#c8973a", sort_order: 5 },
+            { name: "Qamar", type: "Rasmiy hamkor", bio: "Adabiy va badiiy kitoblarga ixtisoslashgan premium do'kon. Kitobsevarlar uchun maxsus muhit.", location: "Toshkent shahri", branches: 1, phone: null, website: null, websites: [], maps_url: null, maps_urls: [], image_url: null, accent_color: "#8a3a8a", sort_order: 6 },
         ];
         try {
             for (const p of defaults) await addPartner(p);
@@ -401,18 +409,108 @@ CREATE POLICY "Admin write" ON partners FOR ALL USING (auth.role() = 'authentica
 
                             <Field label="Tavsif" value={form.bio} onChange={set("bio")} placeholder="Do'kon haqida qisqacha..." multiline />
                             <Field label="Manzil" value={form.location} onChange={set("location")} placeholder="Toshkent shahri" />
-                            <Field
-                                label="Google Maps havolasi"
-                                value={form.maps_url}
-                                onChange={set("maps_url")}
-                                placeholder="https://maps.google.com/..."
-                            />
-                            <div className="text-xs text-muted-foreground/60 -mt-2">
-                                Manzil bosilsa Google Maps-da ochiladi. Bo'sh qolsa oddiy matn bo'ladi.
+                            {/* Multiple map links */}
+                            <div>
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-sm font-medium text-foreground/80">Xarita havolalari</label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setForm((f) => ({ ...f, maps_urls: [...f.maps_urls, { label: "", url: "" }] }))}
+                                        className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium"
+                                    >
+                                        <Plus className="h-3 w-3" /> Filial qo'shish
+                                    </button>
+                                </div>
+                                {form.maps_urls.length === 0 && (
+                                    <p className="text-xs text-muted-foreground/60 mb-1">Hali havola qo'shilmagan.</p>
+                                )}
+                                {form.maps_urls.map((entry, i) => (
+                                    <div key={i} className="flex gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            value={entry.label}
+                                            onChange={(e) => setForm((f) => {
+                                                const updated = [...f.maps_urls];
+                                                updated[i] = { ...updated[i], label: e.target.value };
+                                                return { ...f, maps_urls: updated };
+                                            })}
+                                            placeholder="Filial 1"
+                                            className="w-1/3 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={entry.url}
+                                            onChange={(e) => setForm((f) => {
+                                                const updated = [...f.maps_urls];
+                                                updated[i] = { ...updated[i], url: e.target.value };
+                                                return { ...f, maps_urls: updated };
+                                            })}
+                                            placeholder="https://maps.google.com/..."
+                                            className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setForm((f) => ({ ...f, maps_urls: f.maps_urls.filter((_, j) => j !== i) }))}
+                                            className="p-2 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                <p className="text-xs text-muted-foreground/60">Har bir filial uchun nom va Google Maps havola.</p>
                             </div>
                             <Field label="Filiallar soni" value={form.branches} onChange={set("branches")} type="number" placeholder="12" />
                             <Field label="Telefon" value={form.phone} onChange={set("phone")} placeholder="+998 90 000 00 00" />
-                            <Field label="Veb-sayt" value={form.website} onChange={set("website")} placeholder="golden-books.uz" />
+                            {/* Multiple websites / social links */}
+                            <div>
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-sm font-medium text-foreground/80">Veb-sayt / Ijtimoiy tarmoqlar</label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setForm((f) => ({ ...f, websites: [...f.websites, { label: "", url: "" }] }))}
+                                        className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 font-medium"
+                                    >
+                                        <Plus className="h-3 w-3" /> Qo'shish
+                                    </button>
+                                </div>
+                                {form.websites.length === 0 && (
+                                    <p className="text-xs text-muted-foreground/60 mb-1">Hali havola qo'shilmagan.</p>
+                                )}
+                                {form.websites.map((entry, i) => (
+                                    <div key={i} className="flex gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            value={entry.label}
+                                            onChange={(e) => setForm((f) => {
+                                                const updated = [...f.websites];
+                                                updated[i] = { ...updated[i], label: e.target.value };
+                                                return { ...f, websites: updated };
+                                            })}
+                                            placeholder="Instagram"
+                                            className="w-1/3 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={entry.url}
+                                            onChange={(e) => setForm((f) => {
+                                                const updated = [...f.websites];
+                                                updated[i] = { ...updated[i], url: e.target.value };
+                                                return { ...f, websites: updated };
+                                            })}
+                                            placeholder="https://instagram.com/..."
+                                            className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setForm((f) => ({ ...f, websites: f.websites.filter((_, j) => j !== i) }))}
+                                            className="p-2 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                <p className="text-xs text-muted-foreground/60">Har bir havola uchun nom (Instagram, Telegram...) va URL.</p>
+                            </div>
 
                             {/* Accent color */}
                             <div>

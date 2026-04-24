@@ -49,6 +49,16 @@ export interface AuthorSpotlightItem {
 }
 
 // ── Partner type ──────────────────────────────────────────────────────────────
+export interface PartnerMapEntry {
+  label: string;
+  url: string;
+}
+
+export interface PartnerWebsiteEntry {
+  label: string;
+  url: string;
+}
+
 export interface Partner {
   id: string;
   name: string;
@@ -58,7 +68,9 @@ export interface Partner {
   branches: number | null;
   phone: string | null;
   website: string | null;
+  websites: PartnerWebsiteEntry[];
   maps_url: string | null;
+  maps_urls: PartnerMapEntry[];
   image_url: string | null;
   accent_color: string;
   sort_order: number;
@@ -754,31 +766,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   // ── Mutators — Quiz & Settings ────────────────────────────────────────────
 
   const updateQuizConfig = useCallback(async (config: QuizConfig) => {
-    setQuizConfig(config);
-    const { data: existingRows } = await supabase
-      .from("quiz_config")
-      .select("id")
-      .limit(1);
-    const existing = Array.isArray(existingRows) ? existingRows[0] : null;
     const serialized = JSON.parse(JSON.stringify(config));
-    if (existing) {
-      const { error } = await supabase
-        .from("quiz_config")
-        .update({ config: serialized })
-        .eq("id", existing.id);
-      if (error) {
-        console.warn("[DataContext] updateQuizConfig:", error.message);
-        throw new Error(error.message);
-      }
-    } else {
-      const { error } = await supabase
-        .from("quiz_config")
-        .insert({ config: serialized });
-      if (error) {
-        console.warn("[DataContext] updateQuizConfig:", error.message);
-        throw new Error(error.message);
-      }
+    const { error } = await supabase.rpc("upsert_quiz_config", { config_data: serialized });
+    if (error) {
+      console.warn("[DataContext] updateQuizConfig:", error.message);
+      throw new Error(error.message);
     }
+    setQuizConfig(config);
   }, []);
 
   const updateSiteSettings = useCallback(async (settings: SiteSettings) => {

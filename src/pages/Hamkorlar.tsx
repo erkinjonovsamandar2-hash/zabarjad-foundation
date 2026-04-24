@@ -5,45 +5,45 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useData } from "@/context/DataContext";
-import type { Partner } from "@/context/DataContext";
+import type { Partner, PartnerMapEntry, PartnerWebsiteEntry } from "@/context/DataContext";
 
 // ── Static fallback (shown when partners table empty / not yet migrated) ──────
 const STATIC_PARTNERS: Omit<Partner, "id" | "created_at">[] = [
   {
     name: "Golden Books", type: "Rasmiy hamkor",
     bio: "Toshkentning eng yirik kitob tarmog'i. Bolalar va kattalar adabiyotining keng assortimenti.",
-    location: "Toshkent shahri", branches: 12, phone: null, website: null,
-    maps_url: null, image_url: null, accent_color: "#c8973a", sort_order: 1,
+    location: "Toshkent shahri", branches: 12, phone: null, website: null, websites: [],
+    maps_url: null, maps_urls: [], image_url: null, accent_color: "#c8973a", sort_order: 1,
   },
   {
     name: "Bookmark", type: "Rasmiy hamkor",
     bio: "Zamonaviy kitobsevarlar uchun maxsus tanlangan kolleksiya. Premium xizmat va atmosfera.",
-    location: "Toshkent shahri", branches: 3, phone: null, website: null,
-    maps_url: null, image_url: null, accent_color: "#3a567a", sort_order: 2,
+    location: "Toshkent shahri", branches: 3, phone: null, website: null, websites: [],
+    maps_url: null, maps_urls: [], image_url: null, accent_color: "#3a567a", sort_order: 2,
   },
   {
     name: "Kitob House", type: "Rasmiy hamkor",
     bio: "Bolalar va yoshlar adabiyotiga ixtisoslashgan do'kon tarmog'i. Sifatli kitob — yorqin kelajak.",
-    location: "Toshkent, Chirchiq", branches: 5, phone: null, website: null,
-    maps_url: null, image_url: null, accent_color: "#1a6fba", sort_order: 3,
+    location: "Toshkent, Chirchiq", branches: 5, phone: null, website: null, websites: [],
+    maps_url: null, maps_urls: [], image_url: null, accent_color: "#1a6fba", sort_order: 3,
   },
   {
     name: "Plato Books", type: "Rasmiy hamkor",
     bio: "Falsafa, ilm-fan va badiiy adabiyot bo'yicha O'zbekistondagi eng yirik ixtisoslashgan do'kon.",
-    location: "Toshkent shahri", branches: 2, phone: null, website: null,
-    maps_url: null, image_url: null, accent_color: "#4a9a4a", sort_order: 4,
+    location: "Toshkent shahri", branches: 2, phone: null, website: null, websites: [],
+    maps_url: null, maps_urls: [], image_url: null, accent_color: "#4a9a4a", sort_order: 4,
   },
   {
     name: "Asaxiy", type: "Onlayn hamkor",
     bio: "O'zbekistonning eng yirik onlayn savdo platformasi. Kitoblarimiz butun mamlakat bo'ylab yetkazib beriladi.",
-    location: "Online — butun O'zbekiston", branches: null, phone: null, website: "asaxiy.uz",
-    maps_url: null, image_url: null, accent_color: "#c8973a", sort_order: 5,
+    location: "Online — butun O'zbekiston", branches: null, phone: null, website: "asaxiy.uz", websites: [],
+    maps_url: null, maps_urls: [], image_url: null, accent_color: "#c8973a", sort_order: 5,
   },
   {
     name: "Qamar", type: "Rasmiy hamkor",
     bio: "Adabiy va badiiy kitoblarga ixtisoslashgan premium do'kon. Kitobsevarlar uchun maxsus muhit.",
-    location: "Toshkent shahri", branches: 1, phone: null, website: null,
-    maps_url: null, image_url: null, accent_color: "#8a3a8a", sort_order: 6,
+    location: "Toshkent shahri", branches: 1, phone: null, website: null, websites: [],
+    maps_url: null, maps_urls: [], image_url: null, accent_color: "#8a3a8a", sort_order: 6,
   },
 ];
 
@@ -137,9 +137,16 @@ function MetaItems({
   partner,
   accent,
 }: {
-  partner: Pick<Partner, "location" | "maps_url" | "branches" | "website" | "phone">;
+  partner: Pick<Partner, "location" | "maps_url" | "maps_urls" | "branches" | "website" | "websites" | "phone">;
   accent: string;
 }) {
+  const mapLinks: PartnerMapEntry[] =
+    partner.maps_urls?.length > 0
+      ? partner.maps_urls
+      : partner.maps_url
+      ? [{ label: "Xaritada ko'rish", url: partner.maps_url }]
+      : [];
+
   return (
     <>
       {/* Location */}
@@ -151,16 +158,21 @@ function MetaItems({
           <p className="font-sans text-sm font-medium text-foreground/75 leading-snug mb-1.5">
             {partner.location}
           </p>
-          {partner.maps_url && (
-            <a
-              href={partner.maps_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 font-sans text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-primary/60 hover:text-primary transition-colors duration-200 group/map"
-            >
-              <Navigation size={10} className="group-hover/map:translate-x-0.5 group-hover/map:-translate-y-0.5 transition-transform duration-200" />
-              Xaritada ko'rish
-            </a>
+          {mapLinks.length > 0 && (
+            <div className="flex flex-col gap-1">
+              {mapLinks.map((entry, i) => (
+                <a
+                  key={i}
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-sans text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-primary/60 hover:text-primary transition-colors duration-200 group/map"
+                >
+                  <Navigation size={10} className="group-hover/map:translate-x-0.5 group-hover/map:-translate-y-0.5 transition-transform duration-200" />
+                  {entry.label || "Xaritada ko'rish"}
+                </a>
+              ))}
+            </div>
           )}
         </div>
       )}
@@ -180,23 +192,37 @@ function MetaItems({
         </div>
       )}
 
-      {/* Website — smart label */}
-      {partner.website && (() => {
-        const { href, label } = parseWebsite(partner.website);
+      {/* Websites — multiple social/web links */}
+      {(() => {
+        const webLinks: PartnerWebsiteEntry[] =
+          partner.websites?.length > 0
+            ? partner.websites
+            : partner.website
+            ? [{ label: partner.website, url: partner.website }]
+            : [];
+        if (webLinks.length === 0) return null;
         return (
           <div>
             <p className="font-sans text-[0.55rem] tracking-[0.2em] uppercase text-foreground/30 mb-1.5">
               Ijtimoiy tarmoq
             </p>
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-sans text-xs font-semibold text-primary border border-primary/20 px-3 py-1.5 rounded-lg hover:bg-primary/8 transition-colors duration-200"
-            >
-              <Globe size={11} />
-              {label}
-            </a>
+            <div className="flex flex-col gap-1.5">
+              {webLinks.map((entry, i) => {
+                const { href, label } = parseWebsite(entry.url);
+                return (
+                  <a
+                    key={i}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 font-sans text-xs font-semibold text-primary border border-primary/20 px-3 py-1.5 rounded-lg hover:bg-primary/8 transition-colors duration-200"
+                  >
+                    <Globe size={11} />
+                    {entry.label || label}
+                  </a>
+                );
+              })}
+            </div>
           </div>
         );
       })()}
@@ -279,7 +305,7 @@ function PartnerEntry({
         />
 
         {/* Bio */}
-        <p className="font-serif text-[0.85rem] leading-relaxed text-foreground/52 mb-4">
+        <p className="font-serif text-xl leading-relaxed text-foreground/52 mb-4">
           {partner.bio}
         </p>
 
@@ -333,7 +359,7 @@ function PartnerEntry({
             style={{ width: "1.5rem", backgroundColor: accent }}
           />
 
-          <p className="font-serif text-[0.875rem] leading-relaxed text-foreground/52 max-w-md">
+          <p className="font-serif text-xl leading-relaxed text-foreground/52 max-w-md">
             {partner.bio}
           </p>
         </div>
@@ -451,8 +477,8 @@ export default function Hamkorlar() {
               className="flex flex-col sm:flex-row sm:items-end gap-10 sm:gap-16"
             >
               <p
-                className="font-serif italic text-base leading-relaxed"
-                style={{ color: "rgba(255,255,255,0.4)", maxWidth: "260px" }}
+                className="font-serif italic text-lg leading-relaxed"
+                style={{ color: "rgba(255,255,255,0.4)", maxWidth: "320px" }}
               >
                 O'zbekiston bo'ylab rasmiy hamkor do'konlarimizda topishingiz mumkin.
               </p>

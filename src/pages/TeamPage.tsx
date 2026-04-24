@@ -250,6 +250,10 @@ const AuthorPopup = ({
                             <img
                                 src={author.image_url}
                                 alt={author.name}
+                                width={160}
+                                height={160}
+                                loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover object-top"
                             />
                         ) : (
@@ -529,6 +533,10 @@ export default function TeamPage() {
                                     <img
                                         src={founder.image_url}
                                         alt={founder.name}
+                                        width={400}
+                                        height={533}
+                                        loading="eager"
+                                        decoding="async"
                                         className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
                                     />
                                 ) : (
@@ -602,6 +610,10 @@ export default function TeamPage() {
                                             <img
                                                 src={member.image_url}
                                                 alt={member.name}
+                                                width={300}
+                                                height={375}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
                                             />
                                         ) : (
@@ -731,7 +743,10 @@ export default function TeamPage() {
                                                 <img
                                                     src={author.image_url}
                                                     alt={author.name}
+                                                    width={196}
+                                                    height={196}
                                                     loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full object-cover"
                                                 />
                                             ) : (
