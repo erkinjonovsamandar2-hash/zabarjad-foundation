@@ -32,7 +32,7 @@ const AdminLayout = () => {
   const navItems = [
     { label: "Kitoblar", to: "/admin", icon: BookOpen, end: true },
     { label: "Tanlangan kitoblar", to: "/admin/curated", icon: Library },
-    { label: "Yangi Nashrlar", to: "/admin/new-books", icon: Newspaper },
+    { label: "Tez Orada", to: "/admin/new-books", icon: Newspaper },
     { label: "Blog", to: "/admin/blog", icon: FileText },
     { label: "Quiz", to: "/admin/quiz", icon: Sparkles },
     { label: "Jamoa", to: "/admin/team", icon: Users },

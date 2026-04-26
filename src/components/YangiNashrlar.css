@@ -471,6 +471,7 @@
 
 /* ── CTA ──────────────────────────────────────────────────────────────────────── */
 .yn-cta {
+  display: block;
   position: relative;
   z-index: 10;
   text-align: center;

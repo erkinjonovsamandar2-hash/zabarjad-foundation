@@ -303,7 +303,7 @@ const NewBookManager = () => {
               {newBooks.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-4 py-12 text-center text-sm text-muted-foreground">
-                    Hozircha yangi nashrlar yo'q
+                    Hozircha tez orada nashrlar yo'q
                   </td>
                 </tr>
               )}

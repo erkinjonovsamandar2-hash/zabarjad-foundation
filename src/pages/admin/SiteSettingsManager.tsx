@@ -203,7 +203,7 @@ const SiteSettingsManager = () => {
       <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
         <div className="flex items-center gap-2 mb-4">
           <ImageIcon className="h-5 w-5 text-accent" />
-          <h2 className="text-lg font-semibold text-foreground/90">Yangi Nashrlar — Fon rasm</h2>
+          <h2 className="text-lg font-semibold text-foreground/90">Tez Orada — Fon rasm</h2>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
           Rasm xira ko'rsatiladi (blur + overlay) — faqat jozibali fon sifatida ishlatiladi. AI rasm generatsiya qiling, so'ng bu yerga yuklang.
