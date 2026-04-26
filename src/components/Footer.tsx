@@ -175,7 +175,12 @@ const Footer = () => {
           <span>{t.footer.madeWithLove}</span>
           <span style={{ color: '#E24B4A' }} className="text-[0.85rem] translate-y-[-1px]">♥</span>
           <span className="opacity-50">·</span>
-          <span>SAMANDAR ERKINJONOV</span>
+          <a
+            href="https://t.me/white_crow_8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-white/80 hover:text-white transition-colors"
+          >SAMANDAR ERKINJONOV</a>
         </div>
       </div>
     </footer>

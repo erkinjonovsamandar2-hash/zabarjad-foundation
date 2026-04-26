@@ -278,9 +278,14 @@ const YangiNashrlar = () => {
 
       </div>
 
-      <p className="yn-cta">
+      <a
+        href="https://t.me/booktopia_press"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="yn-cta"
+      >
         Yangi nashrlardan birinchi bo'lib xabardor bo'lish uchun obuna bo'ling →
-      </p>
+      </a>
     </section>
   );
 };
