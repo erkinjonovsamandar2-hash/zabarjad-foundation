@@ -133,10 +133,15 @@ const YangiNashrlar = () => {
   const activeBook = displayBooks[activeIndex];
   const activeTags = BOOK_TAGS[activeBook.id] ?? [];
 
-  // Reactive ambient glow behind the deck — shifts with each book's bg_color
-  const ambientGlow = activeBook.bg_color
-    ? `radial-gradient(ellipse 55% 65% at 68% 50%, hsl(${activeBook.bg_color} / 0.20) 0%, transparent 70%)`
-    : `radial-gradient(ellipse 55% 65% at 68% 50%, rgba(200, 151, 58, 0.10) 0%, transparent 70%)`;
+  // Extract hue only from bg_color — force vibrant S/L so dark book colors
+  // still produce a visible glow (e.g. "210 30% 20%" → hue 210 at full vibrancy)
+  const glowHue = activeBook.bg_color
+    ? parseFloat(activeBook.bg_color.split(" ")[0])
+    : null;
+  const ambientGlow =
+    glowHue != null && !isNaN(glowHue)
+      ? `radial-gradient(ellipse 60% 70% at 68% 50%, hsl(${glowHue} 78% 50% / 0.32) 0%, transparent 72%)`
+      : `radial-gradient(ellipse 60% 70% at 68% 50%, hsl(38 75% 50% / 0.22) 0%, transparent 72%)`;
 
   // Visual position for each book: 0 = front (active), 1–3 = peeking behind
   const visualPos = (bookIndex: number) =>
