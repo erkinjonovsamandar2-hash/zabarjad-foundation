@@ -1,0 +1,579 @@
+/* ── Section ─────────────────────────────────────────────────────────────────── */
+.yn-section {
+  position: relative;
+  width: 100%;
+  /* Deep midnight navy — warmer/more open than AmirTemurSection's #05070a black,
+     darker than the site's standard bg (#0A1931), its own distinct identity. */
+  background-color: #0a1122;
+  overflow: hidden;
+  color: white;
+  padding: 72px 0 80px;
+  border-top: 1px solid rgba(100, 140, 200, 0.08);
+  border-bottom: 1px solid rgba(100, 140, 200, 0.08);
+}
+
+/* ── Painting background image layer ─────────────────────────────────────────── */
+.yn-bg-painting {
+  position: absolute;
+  inset: -20px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(14px);
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+/* Darkening overlay on top of the painting */
+.yn-bg-painting-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 17, 34, 0.35) 0%,
+    rgba(10, 17, 34, 0.18) 40%,
+    rgba(10, 17, 34, 0.35) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Background Layers (same pattern as AmirTemurSection) ─────────────────────── */
+.yn-noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+}
+
+.yn-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-size: 56px 56px;
+  background-image:
+    linear-gradient(to right, rgba(100, 150, 220, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(200, 151, 58, 0.04) 1px, transparent 1px);
+}
+
+/* Reactive glow that shifts color with active book's bg_color */
+.yn-ambient-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 1s ease;
+}
+
+/* ── Content Wrapper ──────────────────────────────────────────────────────────── */
+.yn-content-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 56px;
+  gap: 72px;
+  min-height: 400px;
+}
+
+/* ── Info Panel ───────────────────────────────────────────────────────────────── */
+.yn-info-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 460px;
+  min-width: 0;
+}
+
+.yn-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.yn-eyebrow-line {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(to right, #c8973a, transparent);
+  flex-shrink: 0;
+}
+
+.yn-eyebrow-text {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #c8973a;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Animated text block ─────────────────────────────────────────────────────── */
+@keyframes ynTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.yn-text-block {
+  animation: ynTextIn 0.4s ease-out forwards;
+}
+
+.yn-author {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #c8973a;
+  margin: 0 0 10px;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+.yn-title {
+  font-family: Georgia, serif;
+  font-size: 54px;
+  font-weight: 800;
+  color: #edd270;
+  line-height: 0.96;
+  margin: 0 0 20px;
+  letter-spacing: -0.01em;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+.yn-divider {
+  width: 44px;
+  height: 1.5px;
+  background: linear-gradient(to right, #c8973a, transparent);
+  margin-bottom: 18px;
+  box-shadow: 0 0 10px rgba(200, 151, 58, 0.45);
+}
+
+.yn-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.yn-tag {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  font-weight: 500;
+}
+
+.yn-tag--primary {
+  background: rgba(200, 151, 58, 0.9);
+  color: #07090f;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 2px 8px rgba(200, 151, 58, 0.3);
+}
+
+.yn-description {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0 0 24px;
+  max-width: 380px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.yn-soon-badge {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  font-weight: 700;
+}
+
+/* ── Pagination Dots ──────────────────────────────────────────────────────────── */
+.yn-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 36px;
+}
+
+.yn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.yn-dot:hover:not(.yn-dot--active) {
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.yn-dot--active {
+  background: #c8973a;
+  width: 22px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(200, 151, 58, 0.55);
+}
+
+/* ── Deck Wrapper ─────────────────────────────────────────────────────────────── */
+.yn-deck-wrapper {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.yn-play-btn {
+  position: absolute;
+  top: 0;
+  right: -44px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  z-index: 20;
+  padding: 0;
+}
+
+.yn-play-btn:hover {
+  border-color: rgba(200, 151, 58, 0.4);
+  color: #c8973a;
+  background: rgba(200, 151, 58, 0.08);
+}
+
+/* ── Deck ─────────────────────────────────────────────────────────────────────── */
+.yn-deck {
+  position: relative;
+  width: 270px;
+  height: 340px;
+  isolation: isolate;
+}
+
+/* Ground shadow beneath the stack */
+.yn-deck::after {
+  content: '';
+  position: absolute;
+  bottom: -18px;
+  left: 8%;
+  right: 8%;
+  height: 28px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, transparent 70%);
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Each card: absolutely centered in the deck container */
+.yn-card-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 175px;
+  height: 263px;
+  transform-origin: bottom center;
+  /* z-index snaps instantly (can't be interpolated) */
+  transition:
+    transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1),
+    opacity   0.55s ease,
+    filter    0.55s ease;
+  will-change: transform, opacity, filter;
+}
+
+/* ── Stack positions driven by data-pos attribute ──────────────────────────── */
+
+/* FRONT — active card: centered, elevated, golden glow */
+.yn-card-wrapper[data-pos="0"] {
+  transform: translate(-50%, -50%) rotate(-1deg) translateY(-8px) scale(1.05);
+  opacity: 1;
+  filter:
+    brightness(1.06)
+    drop-shadow(0 22px 48px rgba(0, 0, 0, 0.9))
+    drop-shadow(0 0 22px rgba(200, 151, 58, 0.12));
+  z-index: 4;
+  cursor: default;
+}
+
+/* SECOND — peeking right, dimmed */
+.yn-card-wrapper[data-pos="1"] {
+  transform: translate(-50%, -50%) rotate(9deg) translate(44px, 7px) scale(0.96);
+  opacity: 0.60;
+  filter: brightness(0.50);
+  z-index: 3;
+  cursor: pointer;
+}
+
+/* THIRD — peeking left, more dimmed */
+.yn-card-wrapper[data-pos="2"] {
+  transform: translate(-50%, -50%) rotate(-12deg) translate(-30px, 13px) scale(0.91);
+  opacity: 0.38;
+  filter: brightness(0.32);
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* BACK — barely visible */
+.yn-card-wrapper[data-pos="3"] {
+  transform: translate(-50%, -50%) rotate(5deg) translate(15px, 20px) scale(0.87);
+  opacity: 0.20;
+  filter: brightness(0.18);
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* Hover brightening for non-active cards */
+.yn-card-wrapper[data-pos="1"]:hover {
+  filter: brightness(0.74);
+  opacity: 0.78;
+}
+
+.yn-card-wrapper[data-pos="2"]:hover {
+  filter: brightness(0.52);
+  opacity: 0.55;
+}
+
+.yn-card-wrapper[data-pos="3"]:hover {
+  filter: brightness(0.36);
+  opacity: 0.36;
+}
+
+/* ── Card visual ──────────────────────────────────────────────────────────────── */
+.yn-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px 6px 6px 3px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 2px 0 5px rgba(255, 255, 255, 0.10),
+    inset -3px 0 8px rgba(0, 0, 0, 0.5),
+    -5px 0 16px rgba(0, 0, 0, 0.55);
+}
+
+/* Active card gets a warm border glow */
+.yn-card-wrapper[data-pos="0"] .yn-card {
+  border-color: rgba(200, 151, 58, 0.18);
+  box-shadow:
+    inset 2px 0 6px rgba(255, 255, 255, 0.14),
+    inset -3px 0 8px rgba(0, 0, 0, 0.5),
+    -5px 0 18px rgba(0, 0, 0, 0.6),
+    0 0 32px rgba(200, 151, 58, 0.07);
+}
+
+.yn-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Spine highlight — mimics book binding edge */
+.yn-card-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(to right,
+    rgba(255, 255, 255, 0.48) 0%,
+    rgba(255, 255, 255, 0.07) 1px,
+    rgba(0, 0, 0, 0.26) 3px,
+    rgba(0, 0, 0, 0.66) 5px,
+    transparent 6px);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* "TEZDA" badge — only on the active front card */
+.yn-card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #c8973a;
+  color: #07090f;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 7px;
+  border-radius: 2px;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 12px rgba(200, 151, 58, 0.28);
+}
+
+/* ── Progress bar ─────────────────────────────────────────────────────────────── */
+.yn-progress-track {
+  width: 270px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  margin-top: 28px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.yn-progress-fill {
+  height: 100%;
+  background: #c8973a;
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(200, 151, 58, 0.65);
+  transition: width 0.4s ease;
+}
+
+@keyframes ynCountdown {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+.yn-progress-fill--auto {
+  animation: ynCountdown 5s linear forwards;
+  transition: none;
+}
+
+/* ── CTA ──────────────────────────────────────────────────────────────────────── */
+.yn-cta {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.20);
+  margin-top: 60px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0 24px;
+}
+
+.yn-cta:hover {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .yn-section {
+    padding: 56px 0 64px;
+  }
+
+  .yn-content-wrapper {
+    flex-direction: column;
+    padding: 0 20px;
+    gap: 36px;
+    min-height: unset;
+  }
+
+  /* Deck appears visually first on mobile */
+  .yn-deck-wrapper {
+    order: -1;
+  }
+
+  .yn-info-panel {
+    max-width: 100%;
+    order: 1;
+  }
+
+  .yn-deck {
+    width: 210px;
+    height: 280px;
+  }
+
+  .yn-card-wrapper {
+    width: 140px;
+    height: 210px;
+  }
+
+  /* Tighter offsets for smaller container */
+  .yn-card-wrapper[data-pos="1"] {
+    transform: translate(-50%, -50%) rotate(9deg) translate(34px, 5px) scale(0.95);
+  }
+
+  .yn-card-wrapper[data-pos="2"] {
+    transform: translate(-50%, -50%) rotate(-11deg) translate(-24px, 10px) scale(0.90);
+  }
+
+  .yn-card-wrapper[data-pos="3"] {
+    transform: translate(-50%, -50%) rotate(5deg) translate(12px, 16px) scale(0.86);
+  }
+
+  .yn-play-btn {
+    top: -40px;
+    right: 0;
+  }
+
+  .yn-title {
+    font-size: 36px;
+  }
+
+  .yn-description {
+    font-size: 13.5px;
+  }
+
+  .yn-progress-track {
+    width: 210px;
+  }
+
+  .yn-cta {
+    margin-top: 40px;
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .yn-card-wrapper {
+    transition: opacity 0.3s ease;
+  }
+
+  .yn-text-block {
+    animation: none;
+    opacity: 1;
+  }
+
+  .yn-progress-fill--auto {
+    animation: none;
+    width: 100%;
+  }
+
+  .yn-ambient-glow {
+    transition: none;
+  }
+}

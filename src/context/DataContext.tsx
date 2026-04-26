@@ -102,6 +102,7 @@ export interface SiteSettings {
   map: { enabled: boolean; embed_url: string; title: string };
   bookOfMonth: { quote: string; quote_author: string; badge: string };
   theme: { primary_color: "blue" | "sky" | "gold" };
+  yangiNashrlar: { bg_image_url: string };
 }
 
 // ── Context shape ─────────────────────────────────────────────────────────────
@@ -430,25 +431,26 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     init();
   }, [fetchBooks, fetchNewBooks, fetchBlogPosts, fetchReviews, fetchQuiz, fetchSiteSettings, fetchTeamMembers, fetchAuthorSpotlights, fetchPartners]);
 
-  // ── Realtime subscription — new_books ────────────────────────────────────
-  // Any INSERT / UPDATE / DELETE on new_books triggers a re-fetch so the live
-  // site reflects admin changes without requiring a manual page reload.
+  // ── Realtime subscriptions ───────────────────────────────────────────────
   useEffect(() => {
     const channel = supabase
       .channel("new_books_realtime")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "new_books" },
-        () => { fetchNewBooks(); }
-      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "new_books" }, () => { fetchNewBooks(); })
       .subscribe((status) => {
-        if (status === "CHANNEL_ERROR") {
-          console.warn("[DataContext] new_books realtime subscription error — falling back to poll-on-demand.");
-        }
+        if (status === "CHANNEL_ERROR") console.warn("[DataContext] new_books realtime error.");
       });
-
     return () => { supabase.removeChannel(channel); };
   }, [fetchNewBooks]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("site_settings_realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => { fetchSiteSettings(); })
+      .subscribe((status) => {
+        if (status === "CHANNEL_ERROR") console.warn("[DataContext] site_settings realtime error.");
+      });
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchSiteSettings]);
 
   // ── submitReview ──────────────────────────────────────────────────────────
   const submitReview = useCallback(async (

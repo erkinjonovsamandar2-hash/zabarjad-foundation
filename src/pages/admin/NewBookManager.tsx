@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { useData } from "@/context/DataContext";
 import type { NewBook } from "@/types/database";
-import { Plus, Pencil, Trash2, X, BookOpen, Monitor, Smartphone } from "lucide-react";
+import { Plus, Pencil, Trash2, X, BookOpen, Monitor, Smartphone, ArrowUp, ArrowDown } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
@@ -143,6 +143,27 @@ const NewBookManager = () => {
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<Omit<NewBook, "id" | "created_at" | "updated_at">>(emptyBook);
   const [saving, setSaving] = useState(false);
+  const [reordering, setReordering] = useState<string | null>(null);
+
+  const reorder = async (book: NewBook, direction: "up" | "down") => {
+    const sorted = [...newBooks].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    const idx = sorted.findIndex((b) => b.id === book.id);
+    const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+    const swapBook = sorted[swapIdx];
+    setReordering(book.id);
+    try {
+      await Promise.all([
+        updateNewBook(book.id, { sort_order: swapBook.sort_order ?? 0 }),
+        updateNewBook(swapBook.id, { sort_order: book.sort_order ?? 0 }),
+      ]);
+      await refreshNewBooks();
+    } catch (err: any) {
+      toast.error("Tartiblashda xatolik: " + err.message);
+    } finally {
+      setReordering(null);
+    }
+  };
 
   const nextOrder = newBooks.length > 0
     ? Math.max(...newBooks.map((b) => b.sort_order ?? 0)) + 1
@@ -204,6 +225,7 @@ const NewBookManager = () => {
                 <th className="text-left px-4 py-3 font-semibold text-foreground/70">Nomi</th>
                 <th className="text-left px-4 py-3 font-semibold text-foreground/70 hidden sm:table-cell">Muallif</th>
                 <th className="text-left px-4 py-3 font-semibold text-foreground/70 hidden md:table-cell">Tartib</th>
+                <th className="text-left px-4 py-3 font-semibold text-foreground/70 hidden md:table-cell">Saralash</th>
                 <th className="text-right px-4 py-3 font-semibold text-foreground/70">Amallar</th>
               </tr>
             </thead>
@@ -235,6 +257,26 @@ const NewBookManager = () => {
                   </td>
                   <td className="px-4 py-3 text-foreground/70 hidden sm:table-cell">{book.author}</td>
                   <td className="px-4 py-3 text-foreground/70 hidden md:table-cell">{book.sort_order ?? 0}</td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    <div className="flex flex-col gap-0.5">
+                      <button
+                        onClick={() => reorder(book, "up")}
+                        disabled={!!reordering}
+                        className="p-0.5 rounded text-muted-foreground/60 hover:text-primary hover:bg-primary/5 transition-colors disabled:opacity-40"
+                        title="Yuqoriga"
+                      >
+                        <ArrowUp className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => reorder(book, "down")}
+                        disabled={!!reordering}
+                        className="p-0.5 rounded text-muted-foreground/60 hover:text-primary hover:bg-primary/5 transition-colors disabled:opacity-40"
+                        title="Pastga"
+                      >
+                        <ArrowDown className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex gap-1">
                       <button

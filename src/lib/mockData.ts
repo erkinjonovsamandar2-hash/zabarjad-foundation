@@ -92,4 +92,5 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     badge: "Jahon durdonasi",
   },
   theme: { primary_color: "blue" },
+  yangiNashrlar: { bg_image_url: "" },
 };
