@@ -164,7 +164,7 @@ const YangiNashrlar = () => {
         <div className="yn-info-panel">
           <div className="yn-eyebrow">
             <div className="yn-eyebrow-line" />
-            <span className="yn-eyebrow-text">Tez Orada</span>
+            <span className="yn-eyebrow-text">Tez Kunda</span>
           </div>
 
           {/* Re-keyed on every active change → restarts the CSS entrance animation */}
