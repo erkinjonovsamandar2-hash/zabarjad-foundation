@@ -64,7 +64,8 @@ const translations = {
       authorsTranslators: "Mualliflar va tarjimonlar",
       aboutUs: "Biz haqimizda",
       diary: "Booktopia kundaligi",
-      contactCollab: "Aloqa va hamkorlik",
+      partners: "Hamkorlar",
+      team: "Jamoa",
       publicOffer: "Ommaviy oferta",
       privacyPolicy: "Maxfiylik siyosati",
       termsOfUse: "Foydalanish shartlari",
@@ -79,6 +80,74 @@ const translations = {
       notFoundDesc: "so'ziga mos kitob topilmadi.",
       label: "Booktopia qidiruvi",
       close: "ESC — Yopish",
+    },
+    terms: {
+      title: "Foydalanish shartlari",
+      preface: "Ushbu Foydalanish shartlari \"Booktopia\" nashriyoti va platformasi (keyingi o'rinlarda — \"Nashriyot\") tomonidan taqdim etiladigan barcha raqamli resurslar, veb-sayt, brending materiallari hamda nashr etilgan kitoblar va ularning parchalaridan foydalanish qoidalarini belgilaydi. Platformamizdan foydalanish ushbu shartlarga to'liq roziligingizni bildiradi.",
+      sections: [
+        {
+          title: "Intellektual mulk huquqlari",
+          content: "Nashriyot platformasida e'lon qilingan barcha matnlar, kitoblar, dizaynlar, logotiplar va media materiallar mualliflik huquqi bilan himoyalangan. Ularni Nashriyotning yozma ruxsatisiz ko'chirish, tarqatish yoki tijorat maqsadlarida foydalanish qat'iyan taqiqlanadi."
+        },
+        {
+          title: "Kitoblar va iqtiboslardan foydalanish",
+          content: "Nashr etilgan asarlar va ulardagi parchalar faqat shaxsiy, ma'rifiy va notijorat maqsadlarda ishlatilishi mumkin. Har qanday iqtibos keltirilganda muallif, asar nomi va \"Booktopia\" nashriyoti aniq ko'rsatilishi shart."
+        },
+        {
+          title: "Elektron resurslar va xavfsizlik",
+          content: "Veb-saytimizdan foydalanishda qonuniy va axloqiy me'yorlarga rioya etilishi shart. Sayt faoliyatiga xalaqit beruvchi, ma'lumotlarni noqonuniy ko'chirib oluvchi (scraping) har qanday texnik harakatlar man etiladi."
+        },
+        {
+          title: "Brending va vizual o'ziga xoslik",
+          content: "\"Booktopia\" nomi, logotipi va korporativ dizayni intellektual mulk hisoblanadi. Ulardan uchinchi shaxslar tomonidan ruxsatsiz foydalanilishi mumkin emas."
+        },
+        {
+          title: "Javobgarlikni cheklash",
+          content: "Nashriyot taqdim etilgan ma'lumotlarni qo'llash natijasida kelib chiqishi mumkin bo'lgan bevosita yoki bilvosita zararlar uchun yuridik javobgar emas."
+        },
+        {
+          title: "Shartlarni o'zgartirish huquqi",
+          content: "Booktopia ushbu qoidalarga istalgan vaqtda o'zgartirish kiritish huquqini o'zida saqlab qoladi. Yangilanishlar saytda e'lon qilingan vaqtdan boshlab kuchga kiradi."
+        },
+        {
+          title: "Qonunchilik va nizolarni hal etish",
+          content: "Ushbu shartlar O'zbekiston Respublikasi qonunchiligi asosida tartibga solinadi.\nBooktopia — bilimga mas'uliyat, mualliflik huquqiga hurmat va intellektual halollik tarafdori."
+        }
+      ]
+    },
+    privacy: {
+      title: "Maxfiylik siyosati",
+      preface: "Ushbu Maxfiylik siyosati \"Booktopia\" platformasi (keyingi o'rinlarda — \"Nashriyot\") orqali olinadigan ma'lumotlarning maxfiyligini ta'minlash tartibini belgilaydi. Nashriyot foydalanuvchilarning shaxsiy ma'lumotlariga mas'uliyat bilan yondashadi hamda ularni amaldagi qonunchilikka muvofiq himoya qiladi.",
+      sections: [
+        {
+          title: "Yig'iladigan ma'lumotlar",
+          content: "Nashriyot quyidagi turdagi ma'lumotlarni yig'ishi va qayta ishlashi mumkin: foydalanuvchi tomonidan ixtiyoriy ravishda taqdim etilgan shaxsiy ma'lumotlar (ism, elektron pochta, aloqa ma'lumotlari); veb-sayt va elektron platformalardan foydalanish jarayonida avtomatik tarzda olinadigan texnik ma'lumotlar (masalan, cookie-fayllar)."
+        },
+        {
+          title: "Ma'lumotlardan foydalanish maqsadi",
+          content: "Yig'ilgan ma'lumotlar quyidagi maqsadlarda ishlatiladi: nashriyot xizmatlarini ko'rsatish va takomillashtirish; platforma ichida moslashtirilgan tavsiyalar (\"Kitob sovchilari\" kabi) berish; foydalanuvchilar bilan aloqa o'rnatish; huquqiy va tashkiliy majburiyatlarni bajarish."
+        },
+        {
+          title: "Ma'lumotlarni oshkor etish",
+          content: "Foydalanuvchilarga oid ma'lumotlar uchinchi shaxslarga berilmaydi, qonunchilikda belgilangan holatlar yoki foydalanuvchining yozma roziligi mavjud bo'lgan holatlar bundan mustasno. Hamkor tashkilotlarga ma'lumotlar faqat shartnomaviy majburiyatlarni bajarish doirasidagina taqdim etiladi."
+        },
+        {
+          title: "Ma'lumotlarni himoyalash",
+          content: "Nashriyot ma'lumotlarning yo'qolishi, noqonuniy kirish, o'zgartirilishi yoki oshkor etilishining oldini olish uchun tashkiliy, texnik va huquqiy choralarni ko'radi. Ma'lumotlarga faqat vakolatli shaxslar kirish huquqiga ega."
+        },
+        {
+          title: "Foydalanuvchi huquqlari",
+          content: "Foydalanuvchilar o'z shaxsiy ma'lumotlari haqida axborot olish, ularni yangilash, tuzatish yoki qonun doirasida o'chirishni talab qilish huquqiga ega."
+        },
+        {
+          title: "Siyosatga o'zgartirishlar",
+          content: "Booktopia ushbu Maxfiylik siyosatini istalgan vaqtda o'zgartirish yoki yangilash huquqini o'zida saqlab qoladi. O'zgartirishlar e'lon qilingan paytdan boshlab kuchga kiradi."
+        },
+        {
+          title: "Amaldagi qonunchilik",
+          content: "Ushbu Maxfiylik siyosati O'zbekiston Respublikasi qonunchiligiga muvofiq tartibga solinadi.\nBooktopia ma'lumotlar maxfiyligini professional mas'uliyat va huquqiy majburiyat sifatida qabul qiladi."
+        }
+      ]
     },
     seeAll: "Barchasini ko'rish",
   },
@@ -143,7 +212,8 @@ const translations = {
       authorsTranslators: "Авторы и Переводчики",
       aboutUs: "О нас",
       diary: "Дневник Забарджада",
-      contactCollab: "Контакт и Сотрудничество",
+      partners: "Партнеры",
+      team: "Команда",
       publicOffer: "Публичная оферта",
       privacyPolicy: "Политика конфиденциальности",
       termsOfUse: "Условия использования",
@@ -158,6 +228,74 @@ const translations = {
       notFoundDesc: "— по этому запросу книг не найдено.",
       label: "Поиск Забарджад",
       close: "ESC — Закрыть",
+    },
+    terms: {
+      title: "Условия использования",
+      preface: "Настоящие Условия использования определяют правила использования всех цифровых ресурсов, веб-сайта, брендинговых материалов, изданных книг и их фрагментов, предоставляемых издательством «Booktopia» (далее — «Издательство»). Использование нашей платформы означает ваше полное согласие с данными условиями.",
+      sections: [
+        {
+          title: "Права интеллектуальной собственности",
+          content: "Все тексты, книги, дизайны, логотипы и медиаматериалы, опубликованные на платформе, защищены авторским правом. Их копирование, распространение или использование в коммерческих целях без письменного разрешения Издательства строго запрещено."
+        },
+        {
+          title: "Использование книг и фрагментов",
+          content: "Изданные произведения и их фрагменты могут использоваться только в личных, образовательных и некоммерческих целях. При любом цитировании обязательно указание автора, названия произведения и издательства «Booktopia»."
+        },
+        {
+          title: "Электронные ресурсы и безопасность",
+          content: "При использовании нашего веб-сайта необходимо соблюдать правовые и этические нормы. Любые технические действия, нарушающие работу сайта или направленные на незаконный сбор данных (скрейпинг), запрещены."
+        },
+        {
+          title: "Брендинг и визуальная идентичность",
+          content: "Название, логотип и корпоративный дизайн «Booktopia» являются интеллектуальной собственностью. Несанкционированное использование третьими лицами не допускается."
+        },
+        {
+          title: "Ограничение ответственности",
+          content: "Издательство не несет юридической ответственности за прямой или косвенный ущерб, возникший в результате использования предоставленной информации."
+        },
+        {
+          title: "Право на изменение условий",
+          content: "Booktopia оставляет за собой право вносить изменения в настоящие условия в любое время. Обновления вступают в силу с момента их публикации на сайте."
+        },
+        {
+          title: "Применимое законодательство",
+          content: "Настоящие условия регулируются законодательством Республики Узбекистан.\nBooktopia выступает за ответственное отношение к знаниям, уважение авторских прав и интеллектуальную честность."
+        }
+      ]
+    },
+    privacy: {
+      title: "Политика конфиденциальности",
+      preface: "Настоящая Политика конфиденциальности определяет порядок обеспечения конфиденциальности информации, получаемой через платформу «Booktopia» (далее — «Издательство»). Издательство ответственно подходит к личным данным пользователей и защищает их в соответствии с действующим законодательством.",
+      sections: [
+        {
+          title: "Собираемые данные",
+          content: "Издательство может собирать и обрабатывать: личные данные, добровольно предоставленные пользователем (имя, электронная почта, контактная информация); технические данные, собираемые автоматически при использовании веб-сайта (например, файлы cookie)."
+        },
+        {
+          title: "Цель использования данных",
+          content: "Собранные данные используются для: предоставления и улучшения услуг; предоставления персонализированных рекомендаций на платформе (например, «Kitob sovchilari»); связи с пользователями; выполнения правовых обязательств."
+        },
+        {
+          title: "Раскрытие информации",
+          content: "Данные пользователей не передаются третьим лицам, за исключением случаев, предусмотренных законодательством, или при наличии письменного согласия пользователя. Партнерским организациям данные предоставляются исключительно в рамках выполнения договорных обязательств."
+        },
+        {
+          title: "Защита данных",
+          content: "Издательство принимает организационные, технические и правовые меры для предотвращения потери, несанкционированного доступа, изменения или раскрытия данных."
+        },
+        {
+          title: "Права пользователей",
+          content: "Пользователи имеют право запрашивать информацию о своих личных данных, а также обновлять, исправлять или удалять их в рамках закона."
+        },
+        {
+          title: "Изменения в политике",
+          content: "Booktopia оставляет за собой право вносить изменения в настоящую Политику в любое время. Обновления вступают в силу с момента публикации."
+        },
+        {
+          title: "Применимое законодательство",
+          content: "Настоящая Политика конфиденциальности регулируется законодательством Республики Узбекистан.\nBooktopia рассматривает конфиденциальность данных как профессиональную ответственность и юридическое обязательство."
+        }
+      ]
     },
     seeAll: "Показать все",
   },
@@ -222,7 +360,8 @@ const translations = {
       authorsTranslators: "Authors & Translators",
       aboutUs: "About Us",
       diary: "Booktopia Diary",
-      contactCollab: "Contact & Collaboration",
+      partners: "Partners",
+      team: "Team",
       publicOffer: "Public Offer",
       privacyPolicy: "Privacy Policy",
       termsOfUse: "Terms of Use",
@@ -237,6 +376,74 @@ const translations = {
       notFoundDesc: "— no books matched your search.",
       label: "Booktopia Search",
       close: "ESC — Close",
+    },
+    terms: {
+      title: "Terms of Use",
+      preface: "These Terms of Use govern the rules for using all digital resources, websites, branding materials, published books, and excerpts provided by \"Booktopia\" (hereinafter referred to as the \"Publisher\"). By using our platform, you fully agree to these terms.",
+      sections: [
+        {
+          title: "Intellectual Property Rights",
+          content: "All texts, books, designs, logos, and media materials published on the platform are protected by copyright law. Copying, distributing, or using them for commercial purposes without the Publisher's written consent is strictly prohibited."
+        },
+        {
+          title: "Use of Books and Excerpts",
+          content: "Published works and excerpts may only be used for personal, educational, and non-commercial purposes. Any quotation must clearly state the author, the title of the work, and \"Booktopia\" as the publisher."
+        },
+        {
+          title: "Digital Resources and Security",
+          content: "When using our website, users must comply with legal and ethical standards. Any technical actions that disrupt the site's operation or illegally extract data (scraping) are forbidden."
+        },
+        {
+          title: "Branding and Visual Identity",
+          content: "The \"Booktopia\" name, logo, and corporate design are intellectual property. Unauthorized use by third parties is not allowed."
+        },
+        {
+          title: "Limitation of Liability",
+          content: "The Publisher is not legally responsible for any direct or indirect damages resulting from the use of the information provided."
+        },
+        {
+          title: "Right to Modify Terms",
+          content: "Booktopia reserves the right to modify these terms at any time. Updates become effective immediately upon publication on the site."
+        },
+        {
+          title: "Governing Law and Dispute Resolution",
+          content: "These terms are governed by the laws of the Republic of Uzbekistan.\nBooktopia stands for responsibility towards knowledge, respect for copyright, and intellectual integrity."
+        }
+      ]
+    },
+    privacy: {
+      title: "Privacy Policy",
+      preface: "This Privacy Policy establishes the procedures for ensuring the confidentiality of information obtained through the \"Booktopia\" platform (hereinafter referred to as the \"Publisher\"). The Publisher takes a responsible approach to users' personal data and protects it in accordance with applicable law.",
+      sections: [
+        {
+          title: "Collected Information",
+          content: "The Publisher may collect and process: personal data voluntarily provided by the user (name, email, contact information); technical data automatically collected during the use of the website and digital platforms (e.g., cookies)."
+        },
+        {
+          title: "Purpose of Use",
+          content: "Collected data is used for: providing and improving publishing services; offering personalized recommendations within the platform (such as \"Kitob sovchilari\"); communicating with users; fulfilling legal and organizational obligations."
+        },
+        {
+          title: "Data Disclosure",
+          content: "User data is not transferred to third parties, except as required by law or with the user's explicit written consent. Data is provided to partner organizations solely within the framework of fulfilling contractual obligations."
+        },
+        {
+          title: "Data Protection",
+          content: "The Publisher takes organizational, technical, and legal measures to prevent the loss, unauthorized access, alteration, or disclosure of data. Only authorized personnel have access to this information."
+        },
+        {
+          title: "User Rights",
+          content: "Users have the right to request information about their personal data, as well as to update, correct, or delete it within the framework of the law."
+        },
+        {
+          title: "Policy Changes",
+          content: "Booktopia reserves the right to modify or update this Privacy Policy at any time. Updates become effective immediately upon publication."
+        },
+        {
+          title: "Governing Law",
+          content: "This Privacy Policy is governed by the laws of the Republic of Uzbekistan.\nBooktopia treats data privacy as a professional responsibility and a legal obligation."
+        }
+      ]
     },
     seeAll: "See all",
   },

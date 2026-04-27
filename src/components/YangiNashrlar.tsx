@@ -148,7 +148,7 @@ const YangiNashrlar = () => {
     (bookIndex - activeIndex + displayBooks.length) % displayBooks.length;
 
   return (
-    <section className="yn-section">
+    <section className="yn-section" id="yangi-nashrlar">
       {paintingUrl && (
         <>
           <div className="yn-bg-painting" style={{ backgroundImage: `url(${paintingUrl})` }} />

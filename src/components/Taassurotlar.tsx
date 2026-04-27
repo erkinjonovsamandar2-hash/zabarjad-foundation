@@ -30,7 +30,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Malika Yusupova",
     role: "Adabiyot o'qituvchisi",
     city: "Toshkent",
-    text: "Tarjima shunchalik ravon va tabiiy ediki, qachon o'zbek tiliga o'tib ketganimni sezmay qoldim. Har bir so'z o'z joyida — go'yo asar dastlab shu tilda yozilgandek. Bu haqiqiy san'at.",
+    text: "Tarjima shunchalik ravon va tabiiy chiqibdikiki, qachon o'zbek tiliga o'tib ketganimni sezmay qoldim. Har bir so'z o'z joyida — go'yo asar dastlab shu tilda yozilgandek. Bu haqiqiy san'at.",
     stars: 5,
   },
   {
@@ -38,7 +38,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Jasur Normatov",
     role: "Yozuvchi va bloger",
     city: "Samarqand",
-    text: "Booktopia tarjimalarida eng muhimi — tilning ruhi yo'qolmagan. Qahramonlarning nutqi, ichki kechinmalari — hammasi juda tirik, juda ishonarli. Farzandlarimga katta ishonch bilan tavsiya etaman.",
+    text: "Booktopia tarjimalarida eng muhimi — tilning ruhi yo'qolmagan. Qahramonlarning nutqi, ichki kechinmalari — hammasi juda tirik, juda ishonarli. Qolgan kitobxonlargayam katta ishonch bilan tavsiya etaman.",
     stars: 5,
   },
   {
@@ -54,7 +54,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Sherzod Karimov",
     role: "Muhandis, kitob ixlosmandi",
     city: "Namangan",
-    text: "Texnik soha odami bo'lsam-da, Booktopia kitoblarini qo'yib yuborolmayapman. Uslub o'tkir, fikr aniq — har bir jumla ichingda qolib ketadi. Bu darajadagi sifatni kutmagan edim.",
+    text: "Texnik soha odami bo'lsam-da, Booktopia chiqarayotgan kitoblarni sotib olyapman doimiy. Bu darajadagi sifatni kutmagan edim.",
     stars: 5,
   },
   {
@@ -62,7 +62,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Feruza Mirzayeva",
     role: "Psixolog",
     city: "Farg'ona",
-    text: "Insonning ichki dunyosini ifodalashda tarjimonlar nihoyatda nozik ish qilgan. Bir zarra ham his-tuyg'u yo'qolmagan. Ana shu darajadagi tarjimani uzoq kutgan edik.",
+    text: "Insonning ichki dunyosini ifodalashda tarjimon nihoyatda nozik ish qilgan. Bir zarra ham his-tuyg'u yo'qolmagan. Ana shu darajadagi tarjimani uzoq kutgan edik.",
     stars: 5,
   },
   {
@@ -70,7 +70,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Otabek Xolmatov",
     role: "Jurnalist",
     city: "Qarshi",
-    text: "Booktopia — shunchaki nashriyot emas, bu madaniy missiya. Har bir kitob o'zbek tiliga yangi nafas olib kirmoqda. Tahririyat jamoasiga chin yurakdan rahmat!",
+    text: "Har bir kitob o'zbek tiliga yangi nafas olib kirmoqda. Tahririyat jamoasiga chin yurakdan rahmat!",
     stars: 5,
   },
   {
@@ -86,7 +86,7 @@ const SEED_REVIEWS: Review[] = [
     name: "Bahodir Toshmatov",
     role: "Maktab o'quvchisi",
     city: "Andijon",
-    text: "O'qishni yoqtirmas edim, ammo Booktopia kitobini qo'limga olgach tunlari yashirincha o'qidim! Endi navbatdagi kitobni intiqlik bilan kutib o'tiraman.",
+    text: "Navbatdagi kitobni intiqlik bilan kutyapmiz.",
     stars: 5,
   },
 ];

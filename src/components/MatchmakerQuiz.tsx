@@ -540,8 +540,8 @@ const MatchmakerQuiz = () => {
         <div className="absolute inset-0 bg-background/65" />
       </div>
 
-      <div className="relative z-10 flex-1 flex items-center justify-center py-24 sm:py-32 px-4 sm:px-6">
-        <div className="w-full max-w-2xl mx-auto">
+      <div className="relative z-10 flex-1 flex items-start justify-center pt-28 sm:pt-32 pb-16 px-4 sm:px-6">
+        <div className="w-full max-w-3xl mx-auto">
           <AnimatePresence mode="wait">
 
             {/* ── START ─────────────────────────────────────────────────────── */}
@@ -551,15 +551,15 @@ const MatchmakerQuiz = () => {
                 exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.6, ease: "easeOut" }}
                 className="text-center">
 
-                <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 mb-6 shadow-[0_4px_15px_rgba(236,72,153,0.12)]">
+                <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 mb-5 shadow-[0_4px_15px_rgba(236,72,153,0.12)]">
                   <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-pink-600 dark:text-pink-400">Kitob sovchilari</span>
                 </div>
 
-                <div className="flex justify-center gap-3 mb-8">
+                <div className="flex justify-center gap-2 sm:gap-3 mb-5">
                   {(Object.entries(ARCHETYPES) as [ArchetypeKey, ArchetypeData][]).map(([key, a], i) => (
                     <motion.div key={key} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 + 0.15, duration: 0.5 }}>
-                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden shadow-lg"
+                      transition={{ delay: i * 0.05 + 0.1, duration: 0.4 }}>
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden shadow-lg"
                         style={{ border: `3px solid ${a.accentColor}` }}>
                         <img src={a.img} alt={a.name} width={64} height={64} loading="eager" decoding="async" className="w-full h-full object-cover" />
                       </div>
@@ -567,38 +567,65 @@ const MatchmakerQuiz = () => {
                   ))}
                 </div>
 
-                <h1 className="font-heading text-4xl sm:text-5xl font-black text-foreground leading-[1.05] tracking-wide mb-4 drop-shadow-sm">
+                <h1 className="font-heading text-4xl sm:text-5xl font-black text-foreground leading-[1.05] tracking-wide mb-3 drop-shadow-sm">
                   Siz qanday<br />kitobxonsiz?
                 </h1>
-                <p className="font-lora text-base sm:text-lg text-slate-600 dark:text-slate-400 mt-4 mb-6 max-w-2xl mx-auto leading-relaxed text-center">
+
+                <p className="font-lora text-[0.95rem] sm:text-lg text-slate-600 dark:text-slate-400 mb-2 max-w-2xl mx-auto leading-relaxed text-center">
                   To'g'ri kitobni topish — baxtli nikohdek gap. Bizning 'Kitob sovchilari' siz uchun eng munosib 'nomzodlarni' saralab qo'ygan. Sizga atigi 6 ta savol beramiz va javoblaringiz asosida aynan sizning fe'l-atvoringizga mutanosib bo'lgan ikki ko'rkam asarni tavsiya qilamiz. Adabiy baxtingizni biz bilan kashf eting!
                 </p>
-                <p className="font-sans text-sm text-muted-foreground/55 mb-6 tracking-wide">
+                <p className="font-sans text-xs text-muted-foreground/60 mb-6 tracking-wide">
                   4 ta noyob kitobxon turi · taxminan 2 daqiqa
                 </p>
 
-                <div className="max-w-xs mx-auto mb-8">
-                  <label className="block font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 text-center">
-                    Ismingiz (ixtiyoriy)
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    onKeyDown={e => e.key === "Enter" && setPhase("quiz")}
-                    placeholder="Masalan: Kamola"
-                    maxLength={30}
-                    className="w-full text-center rounded-2xl border border-white/60 dark:border-white/10 bg-white/50 dark:bg-black/25 px-4 py-3 font-heading text-base text-foreground placeholder:text-muted-foreground/35 focus:outline-none focus:ring-2 focus:ring-foreground/20 backdrop-blur-sm transition-all"
-                  />
-                </div>
+                {/* ── CTA Vibe Zone ── */}
+                <div className="relative inline-block mt-0 p-4 w-full max-w-sm mx-auto">
+                  {/* Always-on breathing ambient aura around the whole start block */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-pink-500/10 to-amber-500/10 dark:from-amber-500-[0.15] dark:to-pink-500/[0.15] rounded-[3rem] blur-2xl animate-[pulse_4s_ease-in-out_infinite] pointer-events-none" />
 
-                <motion.button onClick={() => setPhase("quiz")}
-                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-heading font-bold text-lg tracking-wide bg-foreground text-background shadow-xl hover:shadow-2xl transition-all duration-300">
-                  <Sparkles className="w-5 h-5" />
-                  O'zimni kashf etaman
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
+                  <div className="group relative max-w-[280px] sm:max-w-xs mx-auto mb-5 z-10">
+                    <label className="block font-sans text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] text-muted-foreground/75 mb-2.5 text-center transition-colors duration-300 group-focus-within:text-foreground/90">
+                      Ismingiz (ixtiyoriy)
+                    </label>
+                    <div className="relative">
+                      {/* Animated aura ring behind input on focus */}
+                      <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/0 via-amber-500/20 to-pink-500/0 rounded-3xl blur-md opacity-0 group-focus-within:opacity-100 transition-opacity duration-700" />
+                      <motion.input
+                        whileFocus={{ scale: 1.02 }}
+                        type="text"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && setPhase("quiz")}
+                        placeholder="Masalan: Kamola"
+                        maxLength={30}
+                        className="relative w-full text-center rounded-2xl border-2 border-transparent bg-white/70 dark:bg-white/5 px-4 py-3.5 font-heading text-lg text-foreground shadow-sm backdrop-blur-md placeholder:text-muted-foreground/45 outline-none transition-all duration-300 hover:bg-white/90 dark:hover:bg-white/10 focus:bg-white dark:focus:bg-white/10 focus:border-amber-400/50 dark:focus:border-amber-500/30 ring-1 ring-border/20 dark:ring-white/10"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="relative inline-block z-10">
+                    {/* Intense base glow for the button itself to make it irresistible */}
+                    <div className="absolute -inset-3 bg-gradient-to-r from-pink-500/30 via-amber-500/30 to-pink-500/30 rounded-full blur-xl opacity-80 group-hover:opacity-100 transition-opacity duration-700 animate-[pulse_2s_ease-in-out_infinite]" />
+
+                    <motion.button onClick={() => setPhase("quiz")}
+                      whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                      className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 sm:px-10 sm:py-4 rounded-2xl font-heading font-bold text-[1.1rem] sm:text-lg tracking-wide text-white overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/10">
+
+                      {/* Base dark background */}
+                      <div className="absolute inset-0 bg-[#0a0806] dark:bg-[#1a1614]" />
+
+                      {/* Hover gradient reveal */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-amber-600 to-pink-600 transition-opacity duration-500" />
+
+                      {/* Shine effect passing through on hover */}
+                      <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
+
+                      <Sparkles className="w-5 h-5 relative z-10 text-amber-400 group-hover:text-white transition-colors duration-500" />
+                      <span className="relative z-10 drop-shadow-sm">O'zimni kashf etaman</span>
+                      <ArrowRight className="w-5 h-5 relative z-10 text-white/50 group-hover:text-white group-hover:translate-x-1.5 transition-all duration-500" />
+                    </motion.button>
+                  </div>
+                </div>
               </motion.div>
             )}
 

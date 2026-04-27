@@ -115,10 +115,10 @@ const Footer = () => {
               <Link to="/library" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 {t.footer.allBooks}
               </Link>
-              <Link to="/library?tab=new" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
+              <a href="/#yangi-nashrlar" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 {t.footer.newReleases}
-              </Link>
-              <Link to="/authors" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
+              </a>
+              <Link to="/team" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 {t.footer.authorsTranslators}
               </Link>
             </div>
@@ -134,13 +134,12 @@ const Footer = () => {
               <Link to="/blog" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 {t.footer.diary}
               </Link>
-              <a
-                href="#footer"
-                onClick={(e) => { e.preventDefault(); window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }); }}
-                className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none"
-              >
-                {t.footer.contactCollab}
-              </a>
+              <Link to="/hamkorlar" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
+                {t.footer.partners}
+              </Link>
+              <Link to="/team" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
+                {t.footer.team}
+              </Link>
             </div>
 
             {/* Legal */}
@@ -156,9 +155,6 @@ const Footer = () => {
               </Link>
               <Link to="/shartlar" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
                 {t.footer.termsOfUse}
-              </Link>
-              <Link to="/yetkazish" className="block font-sans text-[0.95rem] font-medium text-[rgba(255,255,255,0.55)] mb-4 transition-colors duration-200 hover:text-white outline-none">
-                {t.footer.delivery}
               </Link>
             </div>
 

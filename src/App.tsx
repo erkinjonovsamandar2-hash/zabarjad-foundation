@@ -31,8 +31,11 @@ const QuizPage = lazy(() => import("./pages/QuizPage"));
 const SpotlightPage = lazy(() => import("./pages/SpotlightPage"));
 const BookDetails = lazy(() => import("./pages/BookDetails"));
 const About = lazy(() => import("./pages/About"));
+const BizHaqimizda = lazy(() => import("./pages/BizHaqimizda"));
 const TeamPage = lazy(() => import("./pages/TeamPage"));
 const LegalPage = lazy(() => import("./pages/LegalPage"));
+const TermsOfUse = lazy(() => import("./pages/TermsOfUse"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -209,6 +212,7 @@ const AppInner = () => {
 
           {/* LAZY — public pages */}
           <Route path="/about" element={<Lazy component={About} />} />
+          <Route path="/biz-haqimizda" element={<Lazy component={BizHaqimizda} />} />
           <Route path="/blog" element={<Lazy component={BlogPage} />} />
           <Route path="/blog/:id" element={<Lazy component={BlogPostDetail} />} />
           <Route path="/team" element={<Lazy component={TeamPage} />} />
@@ -220,27 +224,21 @@ const AppInner = () => {
 
           {/* LAZY — legal pages */}
           <Route
-            path="/privacy"
+            path="/maxfiylik"
             element={
               <Suspense fallback={<SuspenseFallback />}>
                 <PageTransition>
-                  <LegalPage title="Maxfiylik Siyosati">
-                    <p>Ushbu maxfiylik siyosati Booktopia saytidan foydalanish qoidalarini belgilaydi...</p>
-                    <h3>1. Ma'lumotlarni yig'ish</h3>
-                    <p>Biz foydalanuvchilarning shaxsiy ma'lumotlarini qat'iy himoya qilamiz...</p>
-                  </LegalPage>
+                  <PrivacyPolicy />
                 </PageTransition>
               </Suspense>
             }
           />
           <Route
-            path="/terms"
+            path="/shartlar" /* Already mapped as /shartlar in footer */
             element={
               <Suspense fallback={<SuspenseFallback />}>
                 <PageTransition>
-                  <LegalPage title="Foydalanish Shartlari">
-                    <p>Saytga tashrif buyurish orqali siz quyidagi shartlarga rozilik bildirasiz...</p>
-                  </LegalPage>
+                  <TermsOfUse />
                 </PageTransition>
               </Suspense>
             }
