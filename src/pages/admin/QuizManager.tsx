@@ -9,19 +9,19 @@ const QUESTION_DEFAULTS: EditableQuestion[] = [
     question: "Kechqurun bo'sh vaqtingizni qanday o'tkazasiz?",
     aunt: "Avval o'zingizni taniysizmi?.. ☕",
     options: [
-      { label: "Choy va kitob",              sublabel: "Sokin kech, chuqur fikrlar" },
+      { label: "Choy va kitob", sublabel: "Sokin kech, chuqur fikrlar" },
       { label: "Podcast yoki hujjatli film", sublabel: "Yangi bilim, yangi nuqtai nazar" },
-      { label: "Detektiv yoki triller",      sublabel: "Jumboqni oxirigacha yechmasam tincholmayman" },
-      { label: "Do'stlar bilan gap-so'z",    sublabel: "Insonlardan kuch olaman" },
+      { label: "Detektiv yoki triller", sublabel: "Jumboqni oxirigacha yechmasam tincholmayman" },
+      { label: "Do'stlar bilan gap-so'z", sublabel: "Insonlardan kuch olaman" },
     ],
   },
   {
     question: "Kitobdagi qaysi lahza sizni o'ziga ko'proq tortadi?",
     aunt: "Ko'nglingiz qayerda to'xtaydi? 📖",
     options: [
-      { label: "Chuqur suhbat va falsafa",    sublabel: "Hayotning ma'nosi qiziqtiradi" },
-      { label: "Yangi olam va sarguzasht",    sublabel: "Kashfiyot zavqi" },
-      { label: "Kutilmagan burilish",          sublabel: "Sir ochildi — nafas tutiladi!" },
+      { label: "Chuqur suhbat va falsafa", sublabel: "Hayotning ma'nosi qiziqtiradi" },
+      { label: "Yangi olam va sarguzasht", sublabel: "Kashfiyot zavqi" },
+      { label: "Kutilmagan burilish", sublabel: "Sir ochildi — nafas tutiladi!" },
       { label: "Yurakni siquvchi hissiy sahna", sublabel: "Hissiyotga to'la, esdan ketmaydi" },
     ],
   },
@@ -29,10 +29,10 @@ const QUESTION_DEFAULTS: EditableQuestion[] = [
     question: "Yangi kitob qo'lingizga qanday tushadi?",
     aunt: "Kitob do'koniga kirsangiz nima bo'ladi? 🏛️",
     options: [
-      { label: "Muallif ismini tanib qolaman",      sublabel: "Tanish qalam — ishonch uyg'otadi" },
-      { label: "Muqova diqqatimni jalb qiladi",     sublabel: "Ko'z — birinchi tanlov" },
+      { label: "Muallif ismini tanib qolaman", sublabel: "Tanish qalam — ishonch uyg'otadi" },
+      { label: "Muqova diqqatimni jalb qiladi", sublabel: "Ko'z — birinchi tanlov" },
       { label: "Annotatsiyani sinchiklab o'qiyman", sublabel: "Sir bor-yo'qligini tekshiraman" },
-      { label: "Kimdir tavsiya qilgan",             sublabel: "Ishonchli odam — ishonchli tavsiya" },
+      { label: "Kimdir tavsiya qilgan", sublabel: "Ishonchli odam — ishonchli tavsiya" },
     ],
   },
   {
@@ -40,9 +40,9 @@ const QUESTION_DEFAULTS: EditableQuestion[] = [
     aunt: "Oxirgi sahifa yopildi — keyin nima? ✨",
     options: [
       { label: "Jim o'tirib, his-tuyg'ular bilan qolaman", sublabel: "Bu lahzani shoshmasdan his etaman" },
-      { label: "Darhol yangi asar boshlayman",             sublabel: "To'xtashni bilmayman" },
+      { label: "Darhol yangi asar boshlayman", sublabel: "To'xtashni bilmayman" },
       { label: "Barcha tafsilotlarni qayta tahlil qilaman", sublabel: "Sirni yana bir bor o'ylayman" },
-      { label: "Kimgadir tavsiya qilaman",                 sublabel: "Bu hisni yolg'iz turolmayman" },
+      { label: "Kimgadir tavsiya qilaman", sublabel: "Bu hisni yolg'iz turolmayman" },
     ],
   },
   {
@@ -50,8 +50,8 @@ const QUESTION_DEFAULTS: EditableQuestion[] = [
     aunt: "O'sha sahifalarda siz bo'lganingizda... 🤔",
     options: [
       { label: "Kamgap, chuqur o'ylovchi", sublabel: "Teran fikrlaydi, so'zini o'lchaб gapiradi" },
-      { label: "Jasur sarguzashtchi",       sublabel: "Ortga qaytishni bilmaydi" },
-      { label: "Ziyrak, sirli zehn",        sublabel: "Har narsaning izini topadi" },
+      { label: "Jasur sarguzashtchi", sublabel: "Ortga qaytishni bilmaydi" },
+      { label: "Ziyrak, sirli zehn", sublabel: "Har narsaning izini topadi" },
       { label: "Yumshoq, mehr-oqibatli inson", sublabel: "Hamma uchun qayg'uradi" },
     ],
   },
@@ -60,9 +60,9 @@ const QUESTION_DEFAULTS: EditableQuestion[] = [
     aunt: "Eng muhim savol — ichingizda nima? 💫",
     options: [
       { label: "Chuqur o'y va yangi savollar", sublabel: "Dunyoga yangicha qarayman" },
-      { label: "Qo'zg'alish va ilhom",          sublabel: "Harakat qilgim kelib ketadi" },
-      { label: "Hayajonli sabrsizlik",          sublabel: "Davomini o'qimasdan qo'yolmayman" },
-      { label: "Qalb isishi va ba'zan yig'i",  sublabel: "His-tuyg'ular meni to'ldirib ketadi" },
+      { label: "Qo'zg'alish va ilhom", sublabel: "Harakat qilgim kelib ketadi" },
+      { label: "Hayajonli sabrsizlik", sublabel: "Davomini o'qimasdan qo'yolmayman" },
+      { label: "Qalb isishi va ba'zan yig'i", sublabel: "His-tuyg'ular meni to'ldirib ketadi" },
     ],
   },
 ];
@@ -77,13 +77,13 @@ const ARCHETYPES = [
 
 // Default cert statement texts (mirrors certStatement in MatchmakerQuiz.tsx)
 const CERT_STATEMENT_DEFAULTS: Record<string, [string, string]> = {
-  faylasuf:     ["Bu shaxs kitobni yopsa ham, fikrlar ketmaydi.", "Bitta jumla uni soatlar bo'yi o'yga toldiradi."],
+  faylasuf: ["Bu shaxs kitobni yopsa ham, fikrlar ketmaydi.", "Bitta jumla uni soatlar bo'yi o'yga toldiradi."],
   kashfiyotchi: ["Kitob tugashi bilan keyingisi allaqachon qo'lida.", "Yangi olam, yangi imkoniyat — bu uning qonida."],
-  ovchi:        ["Qotilni oxirgi sahifadan oldin topadi. Har safar.", "Eng kichik ipuçni ham ko'zdan qochirmaydi."],
-  doktor:       ["Kitob qahramonlari bilan birga yig'laydi. Bu kuch.", "Ba'zi sahifadan keyin jim o'tirib qoladi. Bu normal."],
+  ovchi: ["Qotilni oxirgi sahifadan oldin topadi. Har safar.", "Eng kichik ipuçni ham ko'zdan qochirmaydi."],
+  doktor: ["Kitob qahramonlari bilan birga yig'laydi. Bu kuch.", "Ba'zi sahifadan keyin jim o'tirib qoladi. Bu normal."],
 };
 
-// Per-archetype form state: 2 books + 2 hook texts
+// Per-archetype form state: 2 books + 2 hook texts + up to 6 browse books
 interface ArchRow {
   bookId1: string;
   hook1: string;
@@ -112,6 +112,17 @@ function extractRows(paths: QuizConfig["paths"], books: { id: string }[]): Recor
     kashfiyotchi: row("kashfiyotchi"),
     ovchi: row("ovchi"),
     doktor: row("doktor"),
+  };
+}
+
+// Extract browse book IDs per archetype from quizConfig.browseBooks
+function extractBrowse(browseBooks: QuizConfig["browseBooks"]): Record<ArchKey, string[]> {
+  const empty = (): string[] => [];
+  return {
+    faylasuf: browseBooks?.["faylasuf"] ?? empty(),
+    kashfiyotchi: browseBooks?.["kashfiyotchi"] ?? empty(),
+    ovchi: browseBooks?.["ovchi"] ?? empty(),
+    doktor: browseBooks?.["doktor"] ?? empty(),
   };
 }
 
@@ -150,9 +161,12 @@ const QuizManager = () => {
     }
     return out;
   });
+  const [browseBooks, setBrowseBooks] = useState<Record<ArchKey, string[]>>(
+    () => extractBrowse(quizConfig.browseBooks)
+  );
   const [openQ, setOpenQ] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
-  const [saved,  setSaved]  = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const update = (key: ArchKey, field: keyof ArchRow, value: string) =>
     setRows(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
@@ -180,6 +194,7 @@ const QuizManager = () => {
         paths: buildPaths(rows, quizConfig.paths),
         questions,
         certStatements,
+        browseBooks,
       };
       await updateQuizConfig(newConfig);
       setSaved(true);
@@ -190,6 +205,18 @@ const QuizManager = () => {
     } finally {
       setSaving(false);
     }
+  };
+
+  // Toggle a book in/out of browse list (max 6)
+  const toggleBrowseBook = (archKey: ArchKey, bookId: string) => {
+    setBrowseBooks(prev => {
+      const current = prev[archKey];
+      if (current.includes(bookId)) {
+        return { ...prev, [archKey]: current.filter(id => id !== bookId) };
+      }
+      if (current.length >= 6) return prev; // cap at 6
+      return { ...prev, [archKey]: [...current, bookId] };
+    });
   };
 
   const inputCls = "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none";
@@ -373,7 +400,68 @@ const QuizManager = () => {
         })}
       </div>
 
-      <div className="mt-6 rounded-xl bg-amber-50 border border-amber-200 px-5 py-4">
+      {/* ── Section 4: Browse books (Ko'proq asarlar grid) ───────────────────── */}
+      <h2 className="text-base font-bold text-foreground mb-1 mt-8">Ko'proq asarlar ro'yxati</h2>
+      <p className="text-xs text-muted-foreground mb-3">
+        Har bir arxetip uchun "Ko'proq asarlar" tugmasi bosilganda ko'rinadigan kitoblar (max 6).
+        Agar hech biri tanlanmagan bo'lsa, janr bo'yicha avtomatik tanlanadi.
+      </p>
+      <div className="space-y-5 mb-8">
+        {ARCHETYPES.map((a) => {
+          const selected = browseBooks[a.key];
+          return (
+            <div key={a.key} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"
+                style={{ borderLeftWidth: 4, borderLeftColor: a.color, borderLeftStyle: "solid" }}>
+                <div>
+                  <p className="text-sm font-bold text-foreground">{a.label}</p>
+                  <p className="text-xs text-muted-foreground">{a.sub}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                    style={{ background: `${a.color}20`, color: a.color }}>
+                    {selected.length} / 6
+                  </span>
+                  {selected.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setBrowseBooks(prev => ({ ...prev, [a.key]: [] }))}
+                      className="text-[10px] font-semibold text-red-400 hover:text-red-600 transition-colors"
+                    >
+                      Tozalash
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="px-5 py-3 max-h-52 overflow-y-auto space-y-1">
+                {books.map(b => {
+                  const isSelected = selected.includes(b.id);
+                  const isCapped = !isSelected && selected.length >= 6;
+                  return (
+                    <label
+                      key={b.id}
+                      className={`flex items-center gap-3 rounded-lg px-2 py-1.5 cursor-pointer transition-colors ${isSelected ? "bg-amber-50" : isCapped ? "opacity-40 cursor-not-allowed" : "hover:bg-gray-50"
+                        }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        disabled={isCapped}
+                        onChange={() => !isCapped && toggleBrowseBook(a.key, b.id)}
+                        className="rounded accent-amber-500 w-3.5 h-3.5 shrink-0"
+                      />
+                      <span className="text-sm text-foreground truncate">{b.title}</span>
+                      <span className="text-xs text-muted-foreground/60 truncate ml-auto shrink-0">{b.author}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-2 rounded-xl bg-amber-50 border border-amber-200 px-5 py-4">
         <p className="text-xs font-semibold text-amber-800 mb-1">Eslatma</p>
         <p className="text-xs text-amber-700 leading-relaxed">
           Savol va javob matnlari o'zgartirilsa, test sahifasida darhol aks etadi.

@@ -505,8 +505,16 @@ const MatchmakerQuiz = () => {
     return { book1, book2, hook1, hook2 };
   };
 
-  // Books for browse phase — up to 6
+  // Books for browse phase — prefer admin-pinned list, fall back to genre auto-match
   const archetypeBooks = result ? (() => {
+    const pinnedIds = quizConfig.browseBooks?.[result.key];
+    if (pinnedIds && pinnedIds.length > 0) {
+      // Resolve pinned IDs to book objects (preserving admin order, skipping missing)
+      return pinnedIds
+        .map(id => books.find(b => (b as any).id === id))
+        .filter(Boolean) as typeof books;
+    }
+    // Fallback: genre-based auto-select (original logic)
     const keys = getArch(result.key).genreKeys;
     const matched = books.filter(bk =>
       keys.some(k => ((bk as any).category || "").toLowerCase().includes(k))
@@ -830,7 +838,7 @@ const MatchmakerQuiz = () => {
                     Sizga mo'ljallangan asarlar
                   </h2>
                   <p className="font-lora text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-                    Siymonginizga mos, qiziqarli asarlar
+                    Turingizga mos, qiziqarli asarlar
                   </p>
                 </div>
 

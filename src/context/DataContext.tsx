@@ -107,6 +107,7 @@ export interface QuizConfig {
   defaultReason: string;
   questions?: EditableQuestion[];
   certStatements?: Record<string, [string, string]>;
+  browseBooks?: Record<string, string[]>; // archetype key → up to 6 pinned book IDs
 }
 
 export interface SiteSettings {
@@ -244,7 +245,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchNewBooks = useCallback(async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("new_books")
         .select("*")
         .order("sort_order", { ascending: true, nullsFirst: false });
@@ -383,7 +384,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       if (data && data.length > 0) {
         const merged: Record<string, unknown> = { ...DEFAULT_SITE_SETTINGS };
         data.forEach((row: { key: string; value: unknown }) => {
-          const def = (DEFAULT_SITE_SETTINGS as Record<string, unknown>)[row.key];
+          const def = (DEFAULT_SITE_SETTINGS as unknown as Record<string, unknown>)[row.key];
           if (def && typeof def === "object" && typeof row.value === "object" && row.value !== null) {
             merged[row.key] = { ...def as object, ...row.value as object };
           } else {
@@ -471,14 +472,14 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   ): Promise<{ error: string | null }> => {
     try {
       const insert: Record<string, unknown> = {
-        name:   payload.name,
-        role:   payload.role,
-        city:   payload.city,
-        text:   payload.text,
-        stars:  payload.stars,
+        name: payload.name,
+        role: payload.role,
+        city: payload.city,
+        text: payload.text,
+        stars: payload.stars,
         status: "pending",
       };
-      if (payload.book_id)    insert.book_id    = payload.book_id;
+      if (payload.book_id) insert.book_id = payload.book_id;
       if (payload.book_title) insert.book_title = payload.book_title;
 
       const { error } = await (supabase as any)
@@ -580,7 +581,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const addNewBook = useCallback(async (
     book: Omit<NewBook, "id" | "created_at" | "updated_at">
   ) => {
-    const { error } = await supabase.from("new_books").insert({
+    const { error } = await (supabase as any).from("new_books").insert({
       title: book.title, title_en: book.title_en, title_ru: book.title_ru,
       author: book.author, author_en: book.author_en, author_ru: book.author_ru,
       description: book.description, description_en: book.description_en, description_ru: book.description_ru,
@@ -608,7 +609,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     for (const f of fields) if (data[f] !== undefined) p[f] = data[f];
     // Sanitize cover_url: "" → null to prevent falsy cover rendering
     if ("cover_url" in p) p.cover_url = sanitizeCoverUrl(p.cover_url as string | null);
-    const { error } = await supabase.from("new_books").update(p).eq("id", id);
+    const { error } = await (supabase as any).from("new_books").update(p).eq("id", id);
     if (error) { console.warn("[DataContext] updateNewBook:", error.message); throw new Error(error.message); }
     // Optimistic update — mirror sanitized payload so table re-renders immediately
     setNewBooks((prev) => prev.map((b) => (b.id === id ? { ...b, ...p } : b)));
@@ -616,7 +617,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   }, [fetchNewBooks]);
 
   const deleteNewBook = useCallback(async (id: string, coverUrl?: string | null) => {
-    const { error } = await supabase.from("new_books").delete().eq("id", id);
+    const { error } = await (supabase as any).from("new_books").delete().eq("id", id);
     if (error) { console.warn("[DataContext] deleteNewBook:", error.message); throw new Error(error.message); }
     if (coverUrl) {
       const path = extractStoragePath(coverUrl, "books");
@@ -782,7 +783,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
 
   const updateQuizConfig = useCallback(async (config: QuizConfig) => {
     const serialized = JSON.parse(JSON.stringify(config));
-    const { error } = await supabase.rpc("upsert_quiz_config", { config_data: serialized });
+    const { error } = await (supabase as any).rpc("upsert_quiz_config", { config_data: serialized });
     if (error) {
       console.warn("[DataContext] updateQuizConfig:", error.message);
       throw new Error(error.message);
