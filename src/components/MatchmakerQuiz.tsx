@@ -1,8 +1,7 @@
 // @refresh reset
 import { useState, useEffect } from "react";
-import BookCover from "@/components/BookCover";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, RotateCcw, Download, Copy, Check, ArrowRight, Library } from "lucide-react";
+import { Sparkles, RotateCcw, Download, Share2, Check, ArrowRight, Library } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useData } from "@/context/DataContext";
 import { useLang, locField } from "@/context/LanguageContext";
@@ -30,6 +29,7 @@ interface QuizStep { question: string; aunt: string; options: QuizOption[]; }
 interface ArchetypeData {
   name: string; nameEn: string; tagline: string; desc: string;
   certLines: string[];
+  certStatement: [string, string];
   img: string; primaryColor: string; accentColor: string; certBg: string; certBorder: string;
   genreKeys: string[];
 }
@@ -46,6 +46,10 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
       "Bir ibora sizni soatlab o'yga toldiradi.",
       "Kitobni yopsangiz ham, u sizdan ketmaydi.",
     ],
+    certStatement: [
+      "Bu shaxs kitobni yopsa ham, fikrlar ketmaydi.",
+      "Bitta jumla uni soatlar bo'yi o'yga toldiradi.",
+    ],
     img: faylasufImg, primaryColor: "#7A5C10", accentColor: "#C9A227",
     certBg: "#FDF6E3", certBorder: "#5C3D0A",
     genreKeys: ["falsafa", "falsafiy", "drama", "hikoya", "jahon", "klassik", "roman", "classic", "adabiyot"],
@@ -59,6 +63,10 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
       "Bir kitob tugamay, keyingisi qo'lingizda.",
       "Yangi olam — yangi imkoniyat. Bu sizning yo'lingiz.",
       "Chegaralar siz uchun to'siq emas, taklif xolos.",
+    ],
+    certStatement: [
+      "Kitob tugashi bilan keyingisi allaqachon qo'lida.",
+      "Yangi olam, yangi imkoniyat — bu uning qonida.",
     ],
     img: kashfiyotchiImg, primaryColor: "#0B4F3F", accentColor: "#10B981",
     certBg: "#F0FDF8", certBorder: "#0B4F3F",
@@ -74,6 +82,10 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
       "Yechilmagan jumboq sizni tinch qo'ymaydi.",
       "Mantiq — sizning eng ishonchli quroliz.",
     ],
+    certStatement: [
+      "Qotilni oxirgi sahifadan oldin topadi. Har safar.",
+      "Eng kichik ipuçni ham ko'zdan qochirmaydi.",
+    ],
     img: ovchiImg, primaryColor: "#27265C", accentColor: "#6366F1",
     certBg: "#F5F3FF", certBorder: "#1E1D5C",
     genreKeys: ["detektiv", "triller", "kriminal", "mystery", "fantastika", "psixologiya"],
@@ -87,6 +99,10 @@ const ARCHETYPES: Record<ArchetypeKey, ArchetypeData> = {
       "Ularning dardi ham, quvonchi ham sizniki.",
       "Ba'zan ko'zingiz yoshlanadi — bu kuchning belgisi.",
       "Siz dunyoni aql bilan emas, yurak bilan his qilasiz.",
+    ],
+    certStatement: [
+      "Kitob qahramonlari bilan birga yig'laydi. Bu kuch.",
+      "Ba'zi sahifadan keyin jim o'tirib qoladi. Bu normal.",
     ],
     img: doktorImg, primaryColor: "#6B1A2B", accentColor: "#F43F5E",
     certBg: "#FFF1F2", certBorder: "#6B1A2B",
@@ -203,57 +219,140 @@ async function imgToBase64(src: string): Promise<string> {
   });
 }
 
-async function generateCertPng(arch: ArchetypeData, matchPct: number): Promise<string> {
+async function generateCertPng(arch: ArchetypeData, matchPct: number, personName = ""): Promise<string> {
   const base64 = await imgToBase64(arch.img);
   const serial = `BT-2026-${Math.floor(Math.random() * 9000 + 1000)}`;
   const _now = new Date();
   const _months = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
   const date = `${_now.getDate()} ${_months[_now.getMonth()]} ${_now.getFullYear()}-yil`;
-  const W = 600, H = 760;
+  const W = 600, H = 820;
 
-  const imgEl = base64
-    ? `<image href="${base64}" x="205" y="166" width="190" height="190" clip-path="url(#circ)" preserveAspectRatio="xMidYMid slice"/>`
-    : `<circle cx="300" cy="261" r="95" fill="${arch.primaryColor}" opacity="0.15"/>`;
+  const portrait = base64
+    ? `<image href="${base64}" x="185" y="68" width="230" height="230" clip-path="url(#circ)" preserveAspectRatio="xMidYMid slice"/>`
+    : `<circle cx="300" cy="183" r="113" fill="${arch.primaryColor}" opacity="0.18"/>`;
 
-  const descTspans = arch.certLines
-    .map((line, i) => `<tspan x="300" dy="${i === 0 ? 0 : 18}">${line}</tspan>`)
-    .join("");
+  const barW = 280;
+  const barFill = Math.round(barW * matchPct / 100);
+
+  const hasName = personName.trim().length > 0;
+  const ns = hasName ? 20 : 0;
+  const escapedName = personName.trim().replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c] ?? c));
+  const introText = `Ushbu guvohnoma shuni tasdiqlaydiki`;
+  const nameLineSvg = hasName
+    ? `<text x="${W / 2}" y="376" text-anchor="middle" font-family="Georgia,serif" font-size="14.5" fill="${arch.certBorder}" font-style="italic" opacity="0.75">${escapedName}</text>`
+    : '';
+
+  const ruleY = 518 + ns;
+  const matchLabelY = ruleY + 38;
+  const matchNumY   = ruleY + 86;
+  const matchBarY   = ruleY + 97;
+  const footerLineY = matchBarY + 112;
+  const footerTextY = footerLineY + 18;
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}">
-  <defs><clipPath id="circ"><circle cx="300" cy="261" r="95"/></clipPath></defs>
+  <defs>
+    <clipPath id="circ"><circle cx="300" cy="183" r="113"/></clipPath>
+  </defs>
+
+  <!-- Base -->
   <rect width="${W}" height="${H}" fill="${arch.certBg}"/>
-  <rect x="0" y="0" width="${W}" height="7" fill="${arch.accentColor}" opacity="0.85"/>
-  <rect x="0" y="${H - 7}" width="${W}" height="7" fill="${arch.accentColor}" opacity="0.85"/>
-  <rect x="18" y="18" width="${W - 36}" height="${H - 36}" fill="none" stroke="${arch.certBorder}" stroke-width="2.5"/>
-  <rect x="28" y="28" width="${W - 56}" height="${H - 56}" fill="none" stroke="${arch.certBorder}" stroke-width="0.7" opacity="0.35"/>
-  <text x="22" y="55" font-size="20" fill="${arch.accentColor}" font-family="serif" opacity="0.75">✦</text>
-  <text x="${W - 42}" y="55" font-size="20" fill="${arch.accentColor}" font-family="serif" opacity="0.75">✦</text>
-  <text x="22" y="${H - 22}" font-size="20" fill="${arch.accentColor}" font-family="serif" opacity="0.75">✦</text>
-  <text x="${W - 42}" y="${H - 22}" font-size="20" fill="${arch.accentColor}" font-family="serif" opacity="0.75">✦</text>
-  <text x="${W / 2}" y="62" text-anchor="middle" font-family="Georgia,serif" font-size="10" letter-spacing="5" fill="${arch.certBorder}" font-weight="bold" opacity="0.8">BOOKTOPIA NASHRIYOTI</text>
-  <line x1="70" y1="72" x2="${W - 70}" y2="72" stroke="${arch.certBorder}" stroke-width="0.5" opacity="0.3"/>
-  <text x="${W / 2}" y="98" text-anchor="middle" font-family="Georgia,serif" font-size="23" letter-spacing="2" fill="${arch.certBorder}" font-weight="bold">KITOBXON GUVOHNOMASI</text>
-  <text x="${W / 2}" y="117" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" letter-spacing="4" fill="${arch.primaryColor}" opacity="0.7">READER IDENTITY CERTIFICATE</text>
-  <line x1="70" y1="128" x2="${W - 70}" y2="128" stroke="${arch.certBorder}" stroke-width="0.5" opacity="0.3"/>
-  <text x="${W / 2}" y="152" text-anchor="middle" font-family="Georgia,serif" font-size="11.5" fill="${arch.certBorder}" opacity="0.6" font-style="italic">Ushbu guvohnoma rasmiy tasdiqlaydi:</text>
-  ${imgEl}
-  <circle cx="300" cy="261" r="95" fill="none" stroke="${arch.accentColor}" stroke-width="3.5"/>
-  <circle cx="300" cy="261" r="101" fill="none" stroke="${arch.certBorder}" stroke-width="0.6" opacity="0.2"/>
-  <rect x="70" y="384" width="${W - 140}" height="62" fill="${arch.certBorder}" rx="3"/>
-  <text x="${W / 2}" y="408" text-anchor="middle" font-family="Georgia,serif" font-size="21" letter-spacing="1" fill="${arch.certBg}" font-weight="bold">${arch.name}</text>
-  <text x="${W / 2}" y="430" text-anchor="middle" font-family="Georgia,serif" font-size="9" letter-spacing="3.5" fill="${arch.accentColor}">${arch.nameEn.toUpperCase()}</text>
-  <text x="${W / 2}" y="466" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="${arch.certBorder}" font-style="italic" opacity="0.82">${arch.tagline}</text>
-  <line x1="90" y1="480" x2="${W - 90}" y2="480" stroke="${arch.certBorder}" stroke-width="0.5" opacity="0.2"/>
-  <text x="${W / 2}" y="500" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="${arch.certBorder}" opacity="0.65">${descTspans}</text>
-  <text x="${W / 2}" y="572" text-anchor="middle" font-family="serif" font-size="13" fill="${arch.accentColor}" opacity="0.6">· · ✦ · ·</text>
-  <text x="${W / 2}" y="598" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="${arch.certBorder}" opacity="0.5" letter-spacing="2">MOSLIK DARAJASI: ${matchPct}%</text>
-  <rect x="130" y="607" width="340" height="3" fill="${arch.certBorder}" opacity="0.1" rx="1.5"/>
-  <rect x="130" y="607" width="${Math.round(340 * matchPct / 100)}" height="3" fill="${arch.accentColor}" opacity="0.75" rx="1.5"/>
-  <line x1="70" y1="628" x2="${W - 70}" y2="628" stroke="${arch.certBorder}" stroke-width="0.5" opacity="0.25"/>
-  <text x="78" y="648" font-family="Georgia,serif" font-size="9" fill="${arch.certBorder}" opacity="0.5">${date}</text>
-  <text x="${W / 2}" y="648" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="${arch.certBorder}" opacity="0.5">Raqam: ${serial}</text>
-  <text x="${W - 78}" y="648" text-anchor="end" font-family="Georgia,serif" font-size="9" fill="${arch.certBorder}" opacity="0.5">booktopia.uz/quiz</text>
-  <text x="${W / 2}" y="670" text-anchor="middle" font-family="Georgia,serif" font-size="8.5" fill="${arch.certBorder}" opacity="0.3" font-style="italic">Kitob — eng yaxshi do\'st.</text>
+
+  <!-- Inner frame -->
+  <rect x="8" y="8" width="584" height="804" fill="none" stroke="${arch.accentColor}" stroke-width="1.5" opacity="0.18" rx="3"/>
+
+  <!-- Subtle corner accents -->
+  <circle cx="560" cy="60"  r="100" fill="${arch.accentColor}" opacity="0.04"/>
+  <circle cx="40"  cy="${H - 60}" r="80" fill="${arch.accentColor}" opacity="0.04"/>
+
+  <!-- Top accent band -->
+  <rect width="${W}" height="5" fill="${arch.accentColor}"/>
+
+  <!-- Header -->
+  <text x="${W / 2}" y="30" text-anchor="middle" font-family="Georgia,serif" font-size="11" letter-spacing="6" fill="${arch.accentColor}" font-weight="bold" opacity="0.9">BOOKTOPIA</text>
+  <text x="${W / 2}" y="49" text-anchor="middle" font-family="Georgia,serif" font-size="11.5" letter-spacing="3.5" fill="${arch.certBorder}" opacity="0.62">KITOBXON GUVOHNOMASI</text>
+
+  <!-- Portrait glow disc -->
+  <circle cx="300" cy="183" r="130" fill="${arch.accentColor}" opacity="0.06"/>
+
+  <!-- Portrait image -->
+  ${portrait}
+
+  <!-- Portrait ring -->
+  <circle cx="300" cy="183" r="115" fill="none" stroke="${arch.accentColor}" stroke-width="3.5"/>
+  <circle cx="300" cy="183" r="123" fill="none" stroke="${arch.accentColor}" stroke-width="0.8" opacity="0.22"/>
+
+  <!-- Name background band -->
+  <rect x="0" y="316" width="${W}" height="60" fill="${arch.accentColor}" opacity="0.07"/>
+
+  <!-- Archetype name -->
+  <text x="${W / 2}" y="340" text-anchor="middle" font-family="Georgia,serif" font-size="32" fill="${arch.certBorder}" font-weight="bold">${arch.name}</text>
+  <text x="${W / 2}" y="359" text-anchor="middle" font-family="Georgia,serif" font-size="9" letter-spacing="5" fill="${arch.primaryColor}" opacity="0.5">${arch.nameEn.toUpperCase()}</text>
+
+  <!-- Name line (shown only when personName provided) -->
+  ${nameLineSvg}
+
+  <!-- Ornament divider -->
+  <line x1="210" y1="${374 + ns}" x2="280" y2="${374 + ns}" stroke="${arch.accentColor}" stroke-width="1" opacity="0.45"/>
+  <text x="${W / 2}" y="${378 + ns}" text-anchor="middle" font-family="serif" font-size="11" fill="${arch.accentColor}" opacity="0.7">✦</text>
+  <line x1="320" y1="${374 + ns}" x2="390" y2="${374 + ns}" stroke="${arch.accentColor}" stroke-width="1" opacity="0.45"/>
+
+  <!-- Tagline -->
+  <text x="${W / 2}" y="${400 + ns}" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="${arch.certBorder}" font-style="italic" opacity="0.68">${arch.tagline}</text>
+
+  <!-- Rule before proof section -->
+  <line x1="60" y1="${417 + ns}" x2="${W - 60}" y2="${417 + ns}" stroke="${arch.certBorder}" stroke-width="0.4" opacity="0.1"/>
+
+  <!-- Left accent bar for proof section -->
+  <rect x="56" y="${426 + ns}" width="3" height="82" fill="${arch.accentColor}" rx="1.5" opacity="0.65"/>
+
+  <!-- Proof section label (left-aligned) -->
+  <text x="72" y="${439 + ns}" font-family="Georgia,serif" font-size="7.5" letter-spacing="5" fill="${arch.certBorder}" opacity="0.35">RASMIY TASDIQ</text>
+
+  <!-- Intro sentence (left-aligned, italic) -->
+  <text x="72" y="${459 + ns}" font-family="Georgia,serif" font-size="11" fill="${arch.certBorder}" font-style="italic" opacity="0.52">${introText}</text>
+
+  <!-- certStatement[0] — bold main claim (left-aligned) -->
+  <text x="72" y="${481 + ns}" font-family="Georgia,serif" font-size="14" fill="${arch.certBorder}" font-weight="bold">${arch.certStatement[0]}</text>
+
+  <!-- certStatement[1] — italic supporting line (left-aligned) -->
+  <text x="72" y="${501 + ns}" font-family="Georgia,serif" font-size="12.5" fill="${arch.certBorder}" font-style="italic" opacity="0.68">${arch.certStatement[1]}</text>
+
+  <!-- Rule after proof section -->
+  <line x1="60" y1="${ruleY}" x2="${W - 60}" y2="${ruleY}" stroke="${arch.certBorder}" stroke-width="0.4" opacity="0.1"/>
+
+  <!-- Match section subtle tint -->
+  <rect x="60" y="${ruleY + 10}" width="480" height="90" fill="${arch.accentColor}" opacity="0.04" rx="8"/>
+
+  <!-- Match label -->
+  <text x="${W / 2}" y="${matchLabelY}" text-anchor="middle" font-family="Georgia,serif" font-size="8.5" letter-spacing="3" fill="${arch.certBorder}" opacity="0.36">MOSLIK DARAJASI</text>
+
+  <!-- Match percentage -->
+  <text x="${W / 2}" y="${matchNumY}" text-anchor="middle" font-family="Georgia,serif" font-size="52" fill="${arch.accentColor}" font-weight="bold">${matchPct}%</text>
+
+  <!-- Match bar track -->
+  <rect x="${(W - barW) / 2}" y="${matchBarY}" width="${barW}" height="5" fill="${arch.certBorder}" opacity="0.08" rx="2.5"/>
+  <!-- Match bar fill -->
+  <rect x="${(W - barW) / 2}" y="${matchBarY}" width="${barFill}" height="5" fill="${arch.accentColor}" opacity="0.82" rx="2.5"/>
+
+  <!-- Rubber stamp seal — certBorder color for contrast against certBg -->
+  <g opacity="0.28" transform="rotate(-16, 488, 668)">
+    <circle cx="488" cy="668" r="48" fill="none" stroke="${arch.certBorder}" stroke-width="2.5"/>
+    <circle cx="488" cy="668" r="41" fill="none" stroke="${arch.certBorder}" stroke-width="0.8"/>
+    <text x="488" y="660" text-anchor="middle" font-family="Georgia,serif" font-size="9" letter-spacing="3" fill="${arch.certBorder}" font-weight="bold">RASMIY</text>
+    <text x="488" y="673" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="${arch.certBorder}">✦</text>
+    <text x="488" y="686" text-anchor="middle" font-family="Georgia,serif" font-size="8" letter-spacing="2" fill="${arch.certBorder}" font-weight="bold">TASDIQLANDI</text>
+  </g>
+
+  <!-- Footer rule -->
+  <line x1="60" y1="${footerLineY}" x2="${W - 60}" y2="${footerLineY}" stroke="${arch.certBorder}" stroke-width="0.4" opacity="0.1"/>
+
+  <!-- Footer text -->
+  <text x="70" y="${footerTextY}" font-family="Georgia,serif" font-size="8" fill="${arch.certBorder}" opacity="0.3">${date}</text>
+  <text x="${W / 2}" y="${footerTextY}" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="${arch.certBorder}" opacity="0.3">№ ${serial}</text>
+  <text x="${W - 70}" y="${footerTextY}" text-anchor="end" font-family="Georgia,serif" font-size="8.5" fill="${arch.accentColor}" font-weight="bold" opacity="0.7">booktopia.uz/quiz</text>
+
+  <!-- Bottom accent band -->
+  <rect y="${H - 5}" width="${W}" height="5" fill="${arch.accentColor}"/>
 </svg>`;
 
   return new Promise<string>((resolve, reject) => {
@@ -280,6 +379,7 @@ const MatchmakerQuiz = () => {
   const [step, setStep] = useState(0);
   const [answerScores, setAnswerScores] = useState<Scores[]>([]);
   const [result, setResult] = useState<{ key: ArchetypeKey; matchPct: number } | null>(null);
+  const [name, setName] = useState("");
   const [downloading, setDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [bgReady, setBgReady] = useState(false);
@@ -291,8 +391,34 @@ const MatchmakerQuiz = () => {
     img.src = quizBg;
   }, []);
 
-  const totalSteps = QUESTIONS.length;
-  const current = QUESTIONS[step];
+  // Merge DB-editable texts over hardcoded defaults — scores/images stay fixed
+  const displayQuestions: QuizStep[] = (() => {
+    const eq = quizConfig.questions;
+    if (!eq || eq.length !== QUESTIONS.length) return QUESTIONS;
+    return QUESTIONS.map((q, i) => ({
+      ...q,
+      question: eq[i].question || q.question,
+      aunt:     eq[i].aunt     || q.aunt,
+      options:  q.options.map((opt, j) => ({
+        ...opt,
+        label:    eq[i].options[j]?.label    || opt.label,
+        sublabel: eq[i].options[j]?.sublabel || opt.sublabel,
+      })),
+    }));
+  })();
+
+  const totalSteps = displayQuestions.length;
+  const current = displayQuestions[step];
+
+  const getArch = (key: ArchetypeKey): ArchetypeData => {
+    const base = ARCHETYPES[key];
+    const cs = quizConfig.certStatements?.[key];
+    if (!cs) return base;
+    return {
+      ...base,
+      certStatement: [cs[0] || base.certStatement[0], cs[1] || base.certStatement[1]],
+    };
+  };
 
   const getImgUrl = (url?: string | null): string | null => {
     if (!url) return null;
@@ -316,19 +442,41 @@ const MatchmakerQuiz = () => {
     if (!result) return;
     setDownloading(true);
     try {
-      const png = await generateCertPng(ARCHETYPES[result.key], result.matchPct);
+      const png = await generateCertPng(getArch(result.key), result.matchPct, name);
       const a = document.createElement("a");
       a.href = png; a.download = `kitobxon-guvohnoma-${result.key}.png`; a.click();
     } catch (e) { console.error("cert gen failed", e); }
     finally { setDownloading(false); }
   };
 
-  const handleCopy = () => {
+  const handleShare = async () => {
     if (!result) return;
-    const a = ARCHETYPES[result.key];
-    navigator.clipboard.writeText(
-      `Men — ${a.name}man! Moslik: ${result.matchPct}%.\n${a.tagline}\n\nO'z kitobxon turingizni toping:\nbooktopia.uz/quiz`
-    ).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2500); });
+    setDownloading(true);
+    try {
+      const png = await generateCertPng(getArch(result.key), result.matchPct, name);
+      const a = getArch(result.key);
+      const namePrefix = name.trim() ? `${name.trim()} — ` : "Men — ";
+      const shareText = `${namePrefix}${a.name}!\n${a.tagline}\n\nMoslik: ${result.matchPct}%\n\nbooktopia.uz/quiz`;
+      const base64Data = png.split(",")[1];
+      const binaryStr = atob(base64Data);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+      const blob = new Blob([bytes], { type: "image/png" });
+      const file = new File([blob], `kitobxon-${result.key}.png`, { type: "image/png" });
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ title: `Men — ${a.name}man!`, text: shareText, files: [file] });
+      } else {
+        // Desktop fallback: download the image so it can be shared manually
+        const link = document.createElement("a");
+        link.href = png;
+        link.download = `kitobxon-guvohnoma-${result.key}.png`;
+        link.click();
+      }
+    } catch (e) {
+      if (e instanceof Error && e.name !== "AbortError") console.error(e);
+    } finally {
+      setDownloading(false);
+    }
   };
 
   // ── Book resolution via quizConfig paths ──────────────────────────────────────
@@ -359,7 +507,7 @@ const MatchmakerQuiz = () => {
 
   // Books for browse phase — up to 6
   const archetypeBooks = result ? (() => {
-    const keys = ARCHETYPES[result.key].genreKeys;
+    const keys = getArch(result.key).genreKeys;
     const matched = books.filter(bk =>
       keys.some(k => ((bk as any).category || "").toLowerCase().includes(k))
     ).slice(0, 6);
@@ -368,7 +516,7 @@ const MatchmakerQuiz = () => {
     return [...matched, ...others.slice(0, 6 - matched.length)];
   })() : [];
 
-  const arch = result ? ARCHETYPES[result.key] : null;
+  const arch = result ? getArch(result.key) : null;
   const resolved = result ? resolveBooks(result.key) : null;
 
   return (
@@ -417,9 +565,24 @@ const MatchmakerQuiz = () => {
                 <p className="font-lora text-base sm:text-lg text-muted-foreground mb-2 max-w-sm mx-auto leading-relaxed">
                   Oltita savol — hayot, kitoblar va o'zingiz haqida.
                 </p>
-                <p className="font-sans text-sm text-muted-foreground/55 mb-8 tracking-wide">
+                <p className="font-sans text-sm text-muted-foreground/55 mb-6 tracking-wide">
                   4 ta noyob kitobxon turi · taxminan 2 daqiqa
                 </p>
+
+                <div className="max-w-xs mx-auto mb-8">
+                  <label className="block font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 mb-2 text-center">
+                    Ismingiz (ixtiyoriy)
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && setPhase("quiz")}
+                    placeholder="Masalan: Kamola"
+                    maxLength={30}
+                    className="w-full text-center rounded-2xl border border-white/60 dark:border-white/10 bg-white/50 dark:bg-black/25 px-4 py-3 font-heading text-base text-foreground placeholder:text-muted-foreground/35 focus:outline-none focus:ring-2 focus:ring-foreground/20 backdrop-blur-sm transition-all"
+                  />
+                </div>
 
                 <motion.button onClick={() => setPhase("quiz")}
                   whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
@@ -518,7 +681,9 @@ const MatchmakerQuiz = () => {
                     <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.5 }}>
                       <p className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] mb-2"
-                        style={{ color: arch.primaryColor }}>Sizning kitobxon siymongiz</p>
+                        style={{ color: arch.primaryColor }}>
+                        {name.trim() ? `${name.trim()}, sizning kitobxon turingiz` : "Sizning kitobxon turingiz"}
+                      </p>
                       <h2 className="font-heading text-3xl sm:text-4xl font-black tracking-wide mb-1 leading-tight"
                         style={{ color: arch.certBorder }}>{arch.name}</h2>
                       <p className="font-sans text-xs font-bold tracking-[0.18em] mb-4 uppercase opacity-50"
@@ -543,6 +708,10 @@ const MatchmakerQuiz = () => {
                         </div>
                       </div>
 
+                      <p className="font-sans text-[9px] font-bold uppercase tracking-[0.22em] mb-1.5 opacity-40"
+                        style={{ color: arch.certBorder }}>
+                        Ushbu guvohnoma shuni tasdiqlaydiki
+                      </p>
                       <p className="font-lora text-sm leading-relaxed max-w-sm mx-auto"
                         style={{ color: arch.certBorder, opacity: 0.65 }}>{arch.desc}</p>
                     </motion.div>
@@ -569,13 +738,13 @@ const MatchmakerQuiz = () => {
 
                         {/* Book cover */}
                         <div className="shrink-0 w-14 sm:w-16">
-                          <BookCover
-                            src={getImgUrl((book as any).cover_url)}
-                            alt={locField(book, "title", lang)}
-                            className="w-full"
-                            hover={false}
-                            loading="lazy"
-                          />
+                          <div className="aspect-[2/3] rounded-md overflow-hidden shadow-md"
+                            style={{ boxShadow: "4px 6px 14px rgba(0,0,0,0.22)" }}>
+                            {getImgUrl((book as any).cover_url)
+                              ? <img src={getImgUrl((book as any).cover_url)!} alt={locField(book, "title", lang)} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                              : <div className="w-full h-full bg-muted" />
+                            }
+                          </div>
                         </div>
 
                         {/* Info */}
@@ -623,13 +792,13 @@ const MatchmakerQuiz = () => {
                       {downloading ? "Tayyorlanmoqda..." : "Guvohnomani yuklab olish"}
                     </motion.button>
 
-                    <motion.button onClick={handleCopy}
+                    <motion.button onClick={handleShare} disabled={downloading}
                       whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl
-                        font-heading font-bold text-sm tracking-wide border-2 transition-all duration-300"
+                        font-heading font-bold text-sm tracking-wide border-2 transition-all duration-300 disabled:opacity-60"
                       style={{ borderColor: `${arch.certBorder}55`, color: arch.primaryColor, background: "transparent" }}>
-                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copied ? "Nusxalandi!" : "Ulashish (Telegram)"}
+                      {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+                      {copied ? "Nusxalandi!" : "Ulashish"}
                     </motion.button>
 
                     <button onClick={handleReset}
@@ -661,7 +830,7 @@ const MatchmakerQuiz = () => {
                     Sizga mo'ljallangan asarlar
                   </h2>
                   <p className="font-lora text-sm text-muted-foreground mt-2 max-w-xs mx-auto">
-                    Kitobxon siymonzingizga mos, tetik va qiziqarli asarlar
+                    Siymonginizga mos, qiziqarli asarlar
                   </p>
                 </div>
 
@@ -674,13 +843,13 @@ const MatchmakerQuiz = () => {
                         className="group bg-white/40 dark:bg-black/20 backdrop-blur-xl border border-white/50 dark:border-white/10
                           rounded-2xl p-3 cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                         onClick={() => navigate(`/book/${(bk as any).id}`)}>
-                        <BookCover
-                          src={getImgUrl((bk as any).cover_url)}
-                          alt={locField(bk, "title", lang)}
-                          className="w-full mb-3"
-                          hover={true}
-                          loading="lazy"
-                        />
+                        <div className="aspect-[2/3] rounded-md overflow-hidden mb-3 shadow-md group-hover:shadow-lg transition-shadow"
+                          style={{ boxShadow: "4px 8px 18px rgba(0,0,0,0.22)" }}>
+                          {getImgUrl((bk as any).cover_url)
+                            ? <img src={getImgUrl((bk as any).cover_url)!} alt={locField(bk, "title", lang)} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                            : <div className="w-full h-full bg-muted" />
+                          }
+                        </div>
                         <h4 className="font-heading text-sm font-bold text-foreground leading-tight mb-0.5 line-clamp-2 tracking-wide">
                           {locField(bk, "title", lang)}
                         </h4>

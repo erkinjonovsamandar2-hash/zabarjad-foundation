@@ -89,11 +89,24 @@ export interface QuizPath {
   reason: string;
 }
 
+export interface EditableOption {
+  label: string;
+  sublabel: string;
+}
+
+export interface EditableQuestion {
+  question: string;
+  aunt: string;
+  options: EditableOption[];
+}
+
 export interface QuizConfig {
   steps: QuizStep[];
   paths: QuizPath[];
   defaultBookId: string;
   defaultReason: string;
+  questions?: EditableQuestion[];
+  certStatements?: Record<string, [string, string]>;
 }
 
 export interface SiteSettings {
