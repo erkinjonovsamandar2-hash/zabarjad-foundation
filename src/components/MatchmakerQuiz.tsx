@@ -236,7 +236,7 @@ async function generateCertPng(arch: ArchetypeData, matchPct: number, personName
 
   const hasName = personName.trim().length > 0;
   const ns = hasName ? 20 : 0;
-  const escapedName = personName.trim().replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c] ?? c));
+  const escapedName = personName.trim().replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c] ?? c));
   const introText = `Ushbu guvohnoma shuni tasdiqlaydiki`;
   const nameLineSvg = hasName
     ? `<text x="${W / 2}" y="376" text-anchor="middle" font-family="Georgia,serif" font-size="14.5" fill="${arch.certBorder}" font-style="italic" opacity="0.75">${escapedName}</text>`
@@ -244,8 +244,8 @@ async function generateCertPng(arch: ArchetypeData, matchPct: number, personName
 
   const ruleY = 518 + ns;
   const matchLabelY = ruleY + 38;
-  const matchNumY   = ruleY + 86;
-  const matchBarY   = ruleY + 97;
+  const matchNumY = ruleY + 86;
+  const matchBarY = ruleY + 97;
   const footerLineY = matchBarY + 112;
   const footerTextY = footerLineY + 18;
 
@@ -398,10 +398,10 @@ const MatchmakerQuiz = () => {
     return QUESTIONS.map((q, i) => ({
       ...q,
       question: eq[i].question || q.question,
-      aunt:     eq[i].aunt     || q.aunt,
-      options:  q.options.map((opt, j) => ({
+      aunt: eq[i].aunt || q.aunt,
+      options: q.options.map((opt, j) => ({
         ...opt,
-        label:    eq[i].options[j]?.label    || opt.label,
+        label: eq[i].options[j]?.label || opt.label,
         sublabel: eq[i].options[j]?.sublabel || opt.sublabel,
       })),
     }));
@@ -562,8 +562,8 @@ const MatchmakerQuiz = () => {
                 <h1 className="font-heading text-4xl sm:text-5xl font-black text-foreground leading-[1.05] tracking-wide mb-4 drop-shadow-sm">
                   Siz qanday<br />kitobxonsiz?
                 </h1>
-                <p className="font-lora text-base sm:text-lg text-muted-foreground mb-2 max-w-sm mx-auto leading-relaxed">
-                  Oltita savol — hayot, kitoblar va o'zingiz haqida.
+                <p className="font-lora text-base sm:text-lg text-slate-600 dark:text-slate-400 mt-4 mb-6 max-w-2xl mx-auto leading-relaxed text-center">
+                  To'g'ri kitobni topish — baxtli nikohdek gap. Bizning 'Kitob sovchilari' siz uchun eng munosib 'nomzodlarni' saralab qo'ygan. Sizga atigi 6 ta savol beramiz va javoblaringiz asosida aynan sizning fe'l-atvoringizga mutanosib bo'lgan ikki ko'rkam asarni tavsiya qilamiz. Adabiy baxtingizni biz bilan kashf eting!
                 </p>
                 <p className="font-sans text-sm text-muted-foreground/55 mb-6 tracking-wide">
                   4 ta noyob kitobxon turi · taxminan 2 daqiqa
