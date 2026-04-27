@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BookCover from "@/components/BookCover";
+import SpotlightCard from "@/components/SpotlightCard";
 import { useData } from "@/context/DataContext";
 import { useLang, locField, type Lang } from "@/context/LanguageContext";
 
@@ -17,7 +19,7 @@ const CONTENT = {
     heroLabel: "Nashriyot · Toshkent · Tash. 2024",
     heroTitle: ["O'zbekiston kitob", "nashriyoti."],
     heroDesc:
-      "Booktopia — dunyo adabiyotining eng sara asarlarini o'zbek tiliga professional tarjima qilib, yuqori sifatli kitoblar nashr etuvchi zamonaviy nashriyot.",
+      "Booktopia — dunyo tafakkurining eng muhim asarlarini o‘zbek tilida taqdim etish orqali bilim va mutolaa madaniyatini rivojlantirishni o‘z oldiga maqsad qilgan nashriyotdir.",
     heroTagline:
       "Publishing world literature in Uzbek with licensed rights & expert translation.",
     credLabel: "Rasmiy ma'lumotlar",
@@ -34,7 +36,7 @@ const CONTENT = {
       { value: "100%", main: "Litsenziyali",    sub: "Licensed" },
     ],
     whoLabel: "Kim biz?",
-    whoTitle: ["O'zbekistonda yangi kitob madaniyatini", "biz quramiz."],
+    whoTitle: ["O'zbekistonda yangi kitob madaniyatini", "quramiz."],
     whoP1:
       "Booktopia — jahon adabiyotining eng sara asarlarini o'zbek o'quvchisiga yetkazish maqsadida 2024-yilda tashkil etilgan nashriyot. Har bir kitob tanlov, huquqlar, professional tarjima va premium bosma bosqichlaridan o'tadi.",
     whoP2:
@@ -430,7 +432,9 @@ const BizHaqimizda = () => {
 
       {/* ── §2 WHO WE ARE ───────────────────────────────────────────────────── */}
       <section className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-20 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+        {/* Editorial spread: text left — brand image right */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-12">
 
           {/* Left: text */}
           <div>
@@ -471,24 +475,49 @@ const BizHaqimizda = () => {
             </Reveal>
           </div>
 
-          {/* Right: why us pillars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {T.pillars.map((p, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <div className="rounded-2xl p-5 h-full group hover:-translate-y-1 transition-transform duration-300
-                  bg-white/70 dark:bg-black/40 border border-neutral-200/80 dark:border-white/10 shadow-sm">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center mb-4
-                    bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-900/10
-                    border border-amber-300 dark:border-amber-700/40 text-primary/90 dark:text-accent">
-                    {PILLAR_ICONS[i]}
-                  </div>
-                  <h3 className="font-heading font-bold text-foreground text-base mb-2">{p.title}</h3>
-                  <p className="font-sans text-[13px] text-foreground/60 leading-relaxed">{p.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          {/* Right: brand identity image — editorial spread anchor */}
+          <Reveal from="right" delay={0.12} className="w-full">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl
+              border border-amber-500/20
+              aspect-[4/3] lg:aspect-[1/1]"
+              style={{ boxShadow: "0 32px 64px -16px rgba(0,0,0,0.35), 0 0 0 1px rgba(245,158,11,0.12)" }}>
+              <img
+                src="/booktopia-logo_dark.jpg"
+                alt="Booktopia"
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-[1.03]"
+              />
+              {/* bottom caption strip */}
+              <div className="absolute bottom-0 inset-x-0 px-5 py-4
+                bg-gradient-to-t from-black/80 via-black/30 to-transparent">
+                <p className="font-sans text-[9px] uppercase tracking-[0.4em] text-amber-300/70 font-black">
+                  BOOKTOPIA · TOSHKENT · EST. 2024
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
         </div>
+
+        {/* Pillars — horizontal 4-col row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {T.pillars.map((p, i) => (
+            <Reveal key={i} delay={i * 0.07}>
+              <div className="rounded-2xl p-5 h-full group hover:-translate-y-1 transition-transform duration-300
+                bg-white/70 dark:bg-black/40 border border-neutral-200/80 dark:border-white/10 shadow-sm">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center mb-4
+                  bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-900/10
+                  border border-amber-300 dark:border-amber-700/40 text-primary/90 dark:text-accent">
+                  {PILLAR_ICONS[i]}
+                </div>
+                <h3 className="font-heading font-bold text-foreground text-[14px] mb-2">{p.title}</h3>
+                <p className="font-sans text-[12px] text-foreground/60 leading-relaxed">{p.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
       </section>
 
       <div className="max-w-5xl mx-auto px-8"><Divider /></div>
@@ -627,46 +656,35 @@ const BizHaqimizda = () => {
           </Reveal>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-            {publishedBooks.map((book, i) => {
-              const imgUrl = getImgUrl((book as any).cover_url);
-              return (
-                <Reveal key={(book as any).id} delay={i * 0.06}>
-                  <Link to={`/book/${(book as any).id}`}
-                    className="group block rounded-xl overflow-hidden shadow-sm hover:shadow-xl
-                      transition-all duration-300 hover:-translate-y-1.5
-                      border border-neutral-200/60 dark:border-white/8 bg-white dark:bg-black/40">
-                    <div className="aspect-[2/3] overflow-hidden bg-muted relative">
-                      {imgUrl ? (
-                        <img src={imgUrl}
-                          alt={locField(book as any, "title", lang) || ""}
-                          loading="lazy" decoding="async"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/40 dark:to-amber-900/20">
-                          <span className="font-heading font-black text-3xl text-amber-400/40">B</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100
-                        transition-opacity duration-300 flex items-center justify-center">
-                        <span className="font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-white/90">
-                          {T.booksCta}
-                        </span>
+            {publishedBooks.map((book, i) => (
+              <Reveal key={(book as any).id} delay={i * 0.06}>
+                <Link to={`/book/${(book as any).id}`} className="h-full block">
+                  <SpotlightCard className="h-full p-3 md:p-4 group cursor-pointer">
+                    <div className="flex flex-col gap-3 h-full">
+                      <BookCover
+                        src={(book as any).cover_url}
+                        alt={locField(book as any, "title", lang)}
+                        className="w-3/4 mx-auto"
+                        hover={true}
+                        loading="lazy"
+                      />
+                      <div className="flex flex-col items-center text-center mt-auto">
+                        <h4 className="font-heading font-black tracking-tight text-[13px] md:text-[15px]
+                          text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                          {locField(book as any, "title", lang)}
+                        </h4>
+                        <span className="w-8 h-[1.5px] bg-primary/30 my-2 transition-all duration-500
+                          group-hover:w-14 group-hover:bg-primary" />
+                        <p className="font-sans text-[10px] font-bold text-muted-foreground
+                          tracking-[0.15em] uppercase truncate w-full text-center">
+                          {locField(book as any, "author", lang)}
+                        </p>
                       </div>
                     </div>
-                    <div className="p-3">
-                      <h4 className="font-heading font-bold text-[13px] text-foreground leading-tight
-                        line-clamp-2 mb-0.5">
-                        {locField(book as any, "title", lang)}
-                      </h4>
-                      <p className="font-sans text-[11px] text-muted-foreground truncate uppercase tracking-wide font-semibold">
-                        {locField(book as any, "author", lang)}
-                      </p>
-                    </div>
-                  </Link>
-                </Reveal>
-              );
-            })}
+                  </SpotlightCard>
+                </Link>
+              </Reveal>
+            ))}
           </div>
 
           <Reveal delay={0.2}>
