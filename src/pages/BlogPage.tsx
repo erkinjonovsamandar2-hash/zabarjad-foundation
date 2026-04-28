@@ -39,13 +39,14 @@ const normalizeCategory = (cat: string | null | undefined): string => {
 };
 
 const toCardShape = (a: {
-  id: string; title: string | null; excerpt: string | null;
+  id: string; slug?: string | null; title: string | null; excerpt: string | null;
   image_url: string | null; published_at: string; published: boolean | null;
   category?: string | null; reading_time?: string | null;
   focus_desktop_x?: number | null; focus_desktop_y?: number | null;
   focus_mobile_x?: number | null; focus_mobile_y?: number | null;
 }) => ({
   id: a.id,
+  slug: a.slug ?? null,
   title: a.title ?? "",
   excerpt: a.excerpt ?? "",
   category: normalizeCategory(a.category),
