@@ -24,10 +24,16 @@ export default async function handler(req: any, res: any) {
 
   if (id && SUPABASE_URL && SUPABASE_KEY) {
     try {
-      // match by slug first, then fall back to UUID id
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+      // Use only the matching column — mixing UUID cast with a slug string crashes PostgREST
+      const filter = isUuid
+        ? `or=(slug.eq.${encodeURIComponent(id)},id.eq.${encodeURIComponent(id)})`
+        : `slug=eq.${encodeURIComponent(id)}`;
+
       const url =
         `${SUPABASE_URL}/rest/v1/blog_posts` +
-        `?or=(slug.eq.${encodeURIComponent(id)},id.eq.${encodeURIComponent(id)})` +
+        `?${filter}` +
         `&published=eq.true` +
         `&select=title,excerpt,image_url` +
         `&limit=1`;
