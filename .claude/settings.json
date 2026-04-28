@@ -6,7 +6,10 @@
       "Bash(npm list *)",
       "Bash(npm install *)",
       "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp ready'\\)\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(grep -r \"helmet\\\\|react-helmet\\\\|og:title\\\\|og:image\\\\|meta.*og\" src/ --include=\"*.tsx\" --include=\"*.ts\" -l)",
+      "Bash(grep -r \"helmet\\\\|react-helmet\" package.json)",
+      "Bash(grep -n \"postPath\\\\|/blog/\\\\`\" src/pages/BlogPage.tsx)"
     ]
   },
   "enabledPlugins": {

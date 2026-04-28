@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { useData, Article } from "@/context/DataContext";
 import { Plus, Pencil, Trash2, X, Eye, EyeOff, CalendarDays, Monitor, Smartphone } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
+import { slugify } from "@/lib/blog";
 
 // ── Focal point picker ────────────────────────────────────────────────────────
 interface FocalPointPickerProps {
@@ -90,6 +91,7 @@ const FocalPointPicker = ({ imageUrl, x, y, onChange, aspectRatio, label, icon }
 
 // ── Empty form ────────────────────────────────────────────────────────────────
 const emptyArticle: Omit<Article, "id"> = {
+  slug: null,
   title: "", title_en: null, title_ru: null,
   excerpt: "", excerpt_en: null, excerpt_ru: null,
   content: "", content_en: null, content_ru: null,
@@ -102,6 +104,9 @@ const emptyArticle: Omit<Article, "id"> = {
   focus_desktop_y: 50,
   focus_mobile_x: 50,
   focus_mobile_y: 50,
+  author_name: null,
+  author_photo: null,
+  author_link: null,
   created_at: "",
   updated_at: "",
 };
@@ -126,6 +131,7 @@ const BlogManager = () => {
     setLangTab("uz");
     setEditId(a.id);
     setForm({
+      slug: a.slug ?? null,
       title: a.title, title_en: a.title_en, title_ru: a.title_ru,
       excerpt: a.excerpt, excerpt_en: a.excerpt_en, excerpt_ru: a.excerpt_ru,
       content: a.content, content_en: a.content_en, content_ru: a.content_ru,
@@ -138,6 +144,9 @@ const BlogManager = () => {
       focus_desktop_y: a.focus_desktop_y ?? 50,
       focus_mobile_x: a.focus_mobile_x ?? 50,
       focus_mobile_y: a.focus_mobile_y ?? 50,
+      author_name: a.author_name ?? null,
+      author_photo: a.author_photo ?? null,
+      author_link: a.author_link ?? null,
       created_at: a.created_at,
       updated_at: a.updated_at,
     });
@@ -151,7 +160,11 @@ const BlogManager = () => {
     }
     const payload = {
       ...form,
+      slug: form.slug?.trim() || null,
       image_url: form.image_url?.trim() || null,
+      author_name: form.author_name?.trim() || null,
+      author_link: form.author_link?.trim() || null,
+      author_photo: form.author_photo?.trim() || null,
     };
     setSaving(true);
     try {
@@ -402,6 +415,68 @@ const BlogManager = () => {
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* Slug */}
+              <div>
+                <label className="block text-sm font-medium text-foreground/80 mb-1">
+                  URL slug <span className="text-muted-foreground font-normal text-xs">(masalan: mening-kitobim-haqida)</span>
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    value={form.slug ?? ""}
+                    onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || null })}
+                    placeholder="avto-to'ldiriladi"
+                    className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, slug: slugify(form.title) || null })}
+                    className="px-3 py-2 text-xs font-semibold rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors whitespace-nowrap"
+                  >
+                    Sarlavhadan
+                  </button>
+                </div>
+                {form.slug && (
+                  <p className="mt-1 text-[11px] text-muted-foreground font-mono">
+                    /blog/{form.slug}
+                  </p>
+                )}
+              </div>
+
+              {/* Author */}
+              <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-4 space-y-3">
+                <p className="text-sm font-semibold text-foreground/80">Muallif (ixtiyoriy)</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-medium text-foreground/60 mb-1">To'liq ism</label>
+                    <input
+                      value={form.author_name ?? ""}
+                      onChange={(e) => setForm({ ...form, author_name: e.target.value || null })}
+                      placeholder="Kamola Yusupova"
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-foreground/60 mb-1">Havola (URL, ixtiyoriy)</label>
+                    <input
+                      value={form.author_link ?? ""}
+                      onChange={(e) => setForm({ ...form, author_link: e.target.value || null })}
+                      placeholder="https://instagram.com/..."
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-amber-200 focus:border-amber-400 outline-none bg-white"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-foreground/60 mb-2">Muallif rasmi (doira, ixtiyoriy)</label>
+                  <ImageCropper
+                    currentUrl={form.author_photo}
+                    onImageSaved={(url) => setForm({ ...form, author_photo: url })}
+                    aspectRatio={1}
+                    label=""
+                    bucket="books"
+                  />
+                </div>
               </div>
 
               <div>

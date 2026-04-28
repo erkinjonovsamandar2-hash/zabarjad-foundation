@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Feather, ChevronRight, AlertTriangle, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { postPath } from "@/lib/blog";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LanguageContext";
 import { useData } from "@/context/DataContext";
@@ -69,7 +70,7 @@ const HeroCard = ({ article, navigate }: { article: Card; navigate: (p: string) 
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0, transition: { duration: 0.45 } }}
-      onClick={() => navigate(`/blog/${article.id}`)}
+      onClick={() => navigate(postPath(article))}
       className="group grid md:grid-cols-[5fr_7fr] rounded-2xl overflow-hidden border border-border/60 bg-card hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/10 transition-all duration-400 cursor-pointer no-underline"
     >
       {/* Image */}
@@ -132,7 +133,7 @@ const StandardCard = ({ article, index, navigate }: { article: Card; index: numb
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0, transition: { duration: 0.4, delay: index * 0.07 } }}
-      onClick={() => navigate(`/blog/${article.id}`)}
+      onClick={() => navigate(postPath(article))}
       className="group flex flex-col bg-card border border-border/60 rounded-xl overflow-hidden hover:border-primary/25 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/8 transition-all duration-300 cursor-pointer [&_h3]:no-underline"
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-muted shrink-0">

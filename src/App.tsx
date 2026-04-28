@@ -214,7 +214,7 @@ const AppInner = () => {
           <Route path="/about" element={<Lazy component={About} />} />
           <Route path="/biz-haqimizda" element={<Lazy component={BizHaqimizda} />} />
           <Route path="/blog" element={<Lazy component={BlogPage} />} />
-          <Route path="/blog/:id" element={<Lazy component={BlogPostDetail} />} />
+          <Route path="/blog/:slug" element={<Lazy component={BlogPostDetail} />} />
           <Route path="/team" element={<Lazy component={TeamPage} />} />
           <Route path="/library" element={<Lazy component={LibraryPage} />} />
           <Route path="/book/:id" element={<Lazy component={BookDetails} />} />

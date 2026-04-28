@@ -180,6 +180,7 @@ export interface Database {
       blog_posts: {
         Row: {
           id: string;
+          slug: string | null;
           title: string;
           title_en: string | null;
           title_ru: string | null;
@@ -204,11 +205,15 @@ export interface Database {
           focus_mobile_x: number | null;
           /** Mobile focal point Y 0–100 for CSS object-position */
           focus_mobile_y: number | null;
+          author_name: string | null;
+          author_photo: string | null;
+          author_link: string | null;
           created_at: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
+          slug?: string | null;
           title: string;
           title_en?: string | null;
           title_ru?: string | null;
@@ -227,11 +232,15 @@ export interface Database {
           focus_desktop_y?: number | null;
           focus_mobile_x?: number | null;
           focus_mobile_y?: number | null;
+          author_name?: string | null;
+          author_photo?: string | null;
+          author_link?: string | null;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
+          slug?: string | null;
           title?: string;
           title_en?: string | null;
           title_ru?: string | null;
@@ -250,6 +259,9 @@ export interface Database {
           focus_desktop_y?: number | null;
           focus_mobile_x?: number | null;
           focus_mobile_y?: number | null;
+          author_name?: string | null;
+          author_photo?: string | null;
+          author_link?: string | null;
           updated_at?: string;
         };
       };

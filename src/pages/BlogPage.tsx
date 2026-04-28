@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import parchmentTexture from "@/assets/design/parchment-texture.png";
 import blogHeaderArt from "@/assets/design/blog-header-art.png";
+import { postPath } from "@/lib/blog";
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(() =>
@@ -68,7 +69,7 @@ const HeroCard = ({ article }: { article: Card }) => {
     ? `${article.focusMobileX}% ${article.focusMobileY}%`
     : `${article.focusDesktopX}% ${article.focusDesktopY}%`;
   return (
-    <Link to={`/blog/${article.id}`} className="block no-underline">
+    <Link to={postPath(article)} className="block no-underline">
       <motion.article
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.5 } }}
@@ -130,7 +131,7 @@ const MidCard = ({ article, index }: { article: Card; index: number }) => {
     ? `${article.focusMobileX}% ${article.focusMobileY}%`
     : `${article.focusDesktopX}% ${article.focusDesktopY}%`;
   return (
-    <Link to={`/blog/${article.id}`} className="no-underline">
+    <Link to={postPath(article)} className="no-underline">
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.4, delay: index * 0.07 } }}
@@ -177,7 +178,7 @@ const SmallCard = ({ article, index }: { article: Card; index: number }) => {
     ? `${article.focusMobileX}% ${article.focusMobileY}%`
     : `${article.focusDesktopX}% ${article.focusDesktopY}%`;
   return (
-    <Link to={`/blog/${article.id}`} className="no-underline">
+    <Link to={postPath(article)} className="no-underline">
       <motion.article
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.35, delay: index * 0.05 } }}

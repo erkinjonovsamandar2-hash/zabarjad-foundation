@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { CalendarDays, Clock, ArrowLeft, Feather } from "lucide-react";
+import { CalendarDays, Clock, ArrowLeft, Feather, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { useData } from "@/context/DataContext";
 import Navbar from "@/components/Navbar";
@@ -31,14 +31,17 @@ const formatDate = (dateStr: string): string => {
 };
 
 const BlogPostDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { articles, loading } = useData();
   const isMobile = useIsMobile();
 
+  // support both slug-based and legacy UUID-based URLs
   const article = useMemo(
-    () => articles.find((a) => a.id === id && a.published),
-    [articles, id]
+    () => articles.find(
+      (a) => a.published && ((a.slug && a.slug === slug) || a.id === slug)
+    ),
+    [articles, slug]
   );
 
   // Split content into paragraphs for readable rendering
@@ -131,7 +134,7 @@ const BlogPostDetail = () => {
             </h1>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mb-10 font-medium uppercase tracking-wide border-b border-border/50 pb-6">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground mb-6 font-medium uppercase tracking-wide border-b border-border/50 pb-6">
               <div className="flex items-center gap-1.5">
                 <CalendarDays className="h-3.5 w-3.5" />
                 <span>{formatDate(article.published_at)}</span>
@@ -143,6 +146,45 @@ const BlogPostDetail = () => {
                 </div>
               )}
             </div>
+
+            {/* Author */}
+            {article.author_name && (
+              <div className="flex items-center gap-3 mb-10">
+                {article.author_photo ? (
+                  <img
+                    src={article.author_photo}
+                    alt={article.author_name}
+                    className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-border"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full shrink-0 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-900/10 ring-2 ring-border flex items-center justify-center">
+                    <span className="font-heading font-black text-sm text-amber-700 dark:text-amber-400 select-none">
+                      {article.author_name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                )}
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    Muallif
+                  </span>
+                  {article.author_link ? (
+                    <a
+                      href={article.author_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                    >
+                      {article.author_name}
+                      <ExternalLink className="w-3 h-3 opacity-50" />
+                    </a>
+                  ) : (
+                    <span className="font-sans text-sm font-semibold text-foreground">
+                      {article.author_name}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Cover image */}
             {article.image_url && (

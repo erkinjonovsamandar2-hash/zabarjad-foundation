@@ -1,5 +1,16 @@
 {
   "routes": [
+    {
+      "src": "/blog/([^/?#]+)",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(bot|crawl|spider|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegram|discordbot|slackbot|pinterest|applebot|googlebot|bingbot|yandex|viber|line/).*"
+        }
+      ],
+      "dest": "/api/blog-preview?id=$1"
+    },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
