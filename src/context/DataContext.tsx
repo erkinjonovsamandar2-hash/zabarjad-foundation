@@ -653,6 +653,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       focus_desktop_y: article.focus_desktop_y,
       focus_mobile_x: article.focus_mobile_x,
       focus_mobile_y: article.focus_mobile_y,
+      slug: article.slug,
+      author_name: article.author_name,
+      author_photo: article.author_photo,
+      author_link: article.author_link,
     });
     if (error) {
       console.warn("[DataContext] addArticle:", error.message);
@@ -681,6 +685,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     if (data.focus_desktop_y !== undefined) payload.focus_desktop_y = data.focus_desktop_y;
     if (data.focus_mobile_x !== undefined) payload.focus_mobile_x = data.focus_mobile_x;
     if (data.focus_mobile_y !== undefined) payload.focus_mobile_y = data.focus_mobile_y;
+    if (data.slug !== undefined) payload.slug = data.slug;
+    if (data.author_name !== undefined) payload.author_name = data.author_name;
+    if (data.author_photo !== undefined) payload.author_photo = data.author_photo;
+    if (data.author_link !== undefined) payload.author_link = data.author_link;
 
     const { data: updated, error } = await supabase.from("blog_posts").update(payload).eq("id", id).select("id");
     if (error) {
