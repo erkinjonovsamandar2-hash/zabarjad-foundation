@@ -172,7 +172,7 @@ const BlogPostDetail = () => {
 
               {/* Excerpt / lead */}
               {article.excerpt && (
-                <p className="text-base sm:text-xl font-serif text-foreground/80 leading-relaxed border-l-2 border-gold/50 pl-4 sm:pl-5 mb-6 sm:mb-8 italic">
+                <p className="text-[1.05rem] sm:text-xl font-serif text-foreground/80 leading-relaxed border-l-2 border-gold/50 pl-4 sm:pl-5 mb-6 sm:mb-8 italic">
                   {article.excerpt}
                 </p>
               )}
@@ -183,7 +183,7 @@ const BlogPostDetail = () => {
                   {paragraphs.map((para, i) => (
                     <p
                       key={i}
-                      className="font-serif text-base sm:text-[1.05rem] leading-[1.9] text-foreground/90 hyphens-auto"
+                      className="font-serif text-[1.05rem] sm:text-xl leading-[1.9] text-foreground/90 hyphens-auto"
                     >
                       {para}
                     </p>
