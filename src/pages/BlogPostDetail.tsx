@@ -147,45 +147,6 @@ const BlogPostDetail = () => {
               )}
             </div>
 
-            {/* Author */}
-            {article.author_name && (
-              <div className="flex items-center gap-3 mb-10">
-                {article.author_photo ? (
-                  <img
-                    src={article.author_photo}
-                    alt={article.author_name}
-                    className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-border"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full shrink-0 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-900/10 ring-2 ring-border flex items-center justify-center">
-                    <span className="font-heading font-black text-sm text-amber-700 dark:text-amber-400 select-none">
-                      {article.author_name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                )}
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
-                    Muallif
-                  </span>
-                  {article.author_link ? (
-                    <a
-                      href={article.author_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 font-sans text-sm font-semibold text-foreground hover:text-primary transition-colors"
-                    >
-                      {article.author_name}
-                      <ExternalLink className="w-3 h-3 opacity-50" />
-                    </a>
-                  ) : (
-                    <span className="font-sans text-sm font-semibold text-foreground">
-                      {article.author_name}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-
             {/* Cover image */}
             {article.image_url && (
               <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-10 shadow-2xl shadow-black/20">
@@ -232,6 +193,45 @@ const BlogPostDetail = () => {
                 <p className="text-muted-foreground italic font-serif">
                   Maqola matni hozircha mavjud emas.
                 </p>
+              )}
+
+              {/* ── Author ── */}
+              {article.author_name && (
+                <div className="mt-8 pt-7 border-t border-border/40 flex items-center gap-4">
+                  {article.author_photo ? (
+                    <img
+                      src={article.author_photo}
+                      alt={article.author_name}
+                      className="w-14 h-14 rounded-full object-cover shrink-0 ring-2 ring-border shadow-sm"
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-full shrink-0 bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-900/10 ring-2 ring-border flex items-center justify-center">
+                      <span className="font-heading font-black text-xl text-amber-700 dark:text-amber-400 select-none">
+                        {article.author_name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground/50 mb-0.5">
+                      Muallif
+                    </span>
+                    {article.author_link ? (
+                      <a
+                        href={article.author_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 font-heading font-bold text-base text-foreground hover:text-primary transition-colors"
+                      >
+                        {article.author_name}
+                        <ExternalLink className="w-3.5 h-3.5 opacity-40" />
+                      </a>
+                    ) : (
+                      <span className="font-heading font-bold text-base text-foreground">
+                        {article.author_name}
+                      </span>
+                    )}
+                  </div>
+                </div>
               )}
 
             </div>
