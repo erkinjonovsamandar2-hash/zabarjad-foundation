@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { useData, Article } from "@/context/DataContext";
-import { Plus, Pencil, Trash2, X, Eye, EyeOff, CalendarDays, Monitor, Smartphone } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Eye, EyeOff, CalendarDays, Monitor, Smartphone, Copy, Link2 } from "lucide-react";
 import ImageCropper from "@/components/admin/ImageCropper";
-import { slugify } from "@/lib/blog";
+import { slugify, postPath } from "@/lib/blog";
 
 // ── Focal point picker ────────────────────────────────────────────────────────
 interface FocalPointPickerProps {
@@ -220,6 +220,25 @@ const BlogManager = () => {
                 </span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{a.excerpt}</p>
+              {/* Slug URL row */}
+              <div className="flex items-center gap-1.5 bg-gray-50 rounded-md px-2 py-1.5 border border-gray-100">
+                <Link2 className="h-3 w-3 text-muted-foreground/50 shrink-0" />
+                <span className="font-mono text-[10px] text-muted-foreground truncate flex-1">
+                  /blog/{a.slug || a.id}
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(`https://www.booktopia.uz/blog/${a.slug || a.id}`);
+                    toast.success("Havola nusxalandi!");
+                  }}
+                  title="Havolani nusxalash"
+                  className="shrink-0 p-0.5 rounded hover:bg-gray-200 transition-colors"
+                >
+                  <Copy className="h-3 w-3 text-muted-foreground/60" />
+                </button>
+              </div>
+
               <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
                 <span className="flex items-center gap-1 text-xs text-muted-foreground/80">
                   <CalendarDays className="h-3 w-3" />{a.published_at?.slice(0, 10)}
