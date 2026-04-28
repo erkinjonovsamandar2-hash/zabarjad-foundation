@@ -65,14 +65,14 @@ const BlogPostDetail = () => {
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] pointer-events-none -z-10" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-700/10 rounded-full blur-[120px] pointer-events-none -z-10" />
 
-      <main className="flex-grow pt-28 pb-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-3xl w-full">
+      <main className="flex-grow pt-24 sm:pt-28 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 mx-auto max-w-3xl w-full">
 
         {/* ── Back link ── */}
         <motion.div
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
-          className="mb-10"
+          className="mb-6 sm:mb-10"
         >
           <button
             onClick={() => navigate(-1)}
@@ -129,7 +129,7 @@ const BlogPostDetail = () => {
             )}
 
             {/* Headline */}
-            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-foreground leading-tight mb-6">
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-foreground leading-tight mb-6 break-words hyphens-auto">
               {article.title}
             </h1>
 
@@ -149,7 +149,7 @@ const BlogPostDetail = () => {
 
             {/* Cover image */}
             {article.image_url && (
-              <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-10 shadow-2xl shadow-black/20">
+              <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-6 sm:mb-10 shadow-2xl shadow-black/20">
                 <img
                   src={article.image_url}
                   alt={article.title}
@@ -168,11 +168,11 @@ const BlogPostDetail = () => {
             )}
 
             {/* ── Reading card ── */}
-            <div className="bg-card/70 dark:bg-card/60 backdrop-blur-md border border-border/50 rounded-2xl px-6 sm:px-10 py-8 sm:py-10 shadow-xl shadow-black/10">
+            <div className="sm:bg-card/70 sm:dark:bg-card/60 sm:backdrop-blur-md sm:border sm:border-border/50 sm:rounded-2xl px-0 sm:px-10 py-0 sm:py-10 sm:shadow-xl sm:shadow-black/10">
 
               {/* Excerpt / lead */}
               {article.excerpt && (
-                <p className="text-lg sm:text-xl font-serif text-foreground/80 leading-relaxed border-l-2 border-gold/50 pl-5 mb-8 italic">
+                <p className="text-base sm:text-xl font-serif text-foreground/80 leading-relaxed border-l-2 border-gold/50 pl-4 sm:pl-5 mb-6 sm:mb-8 italic">
                   {article.excerpt}
                 </p>
               )}
@@ -183,7 +183,7 @@ const BlogPostDetail = () => {
                   {paragraphs.map((para, i) => (
                     <p
                       key={i}
-                      className="font-serif text-base sm:text-[1.05rem] leading-[1.9] text-foreground/90"
+                      className="font-serif text-base sm:text-[1.05rem] leading-[1.9] text-foreground/90 hyphens-auto"
                     >
                       {para}
                     </p>
