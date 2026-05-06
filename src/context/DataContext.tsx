@@ -657,6 +657,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       author_name: article.author_name,
       author_photo: article.author_photo,
       author_link: article.author_link,
+      related_book_ids: article.related_book_ids,
     });
     if (error) {
       console.warn("[DataContext] addArticle:", error.message);
@@ -689,6 +690,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     if (data.author_name !== undefined) payload.author_name = data.author_name;
     if (data.author_photo !== undefined) payload.author_photo = data.author_photo;
     if (data.author_link !== undefined) payload.author_link = data.author_link;
+    if (data.related_book_ids !== undefined) payload.related_book_ids = data.related_book_ids;
 
     const { data: updated, error } = await supabase.from("blog_posts").update(payload).eq("id", id).select("id");
     if (error) {
