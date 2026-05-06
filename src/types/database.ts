@@ -208,6 +208,8 @@ export interface Database {
           author_name: string | null;
           author_photo: string | null;
           author_link: string | null;
+          /** UUIDs of curated related books (from books or new_books table) */
+          related_book_ids: string[] | null;
           created_at: string;
           updated_at: string;
         };
@@ -235,6 +237,7 @@ export interface Database {
           author_name?: string | null;
           author_photo?: string | null;
           author_link?: string | null;
+          related_book_ids?: string[] | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -262,6 +265,7 @@ export interface Database {
           author_name?: string | null;
           author_photo?: string | null;
           author_link?: string | null;
+          related_book_ids?: string[] | null;
           updated_at?: string;
         };
       };
