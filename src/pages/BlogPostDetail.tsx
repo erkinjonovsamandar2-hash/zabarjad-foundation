@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { useData } from "@/context/DataContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BookCover from "@/components/BookCover";
+import SpotlightCard from "@/components/SpotlightCard";
 import parchmentTexture from "@/assets/design/parchment-texture.png";
 import { postPath } from "@/lib/blog";
 
@@ -62,44 +64,32 @@ const RelatedBooks = ({ bookIds, allBooks }: { bookIds: string[]; allBooks: Rela
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {books.map((book) => (
-          <Link
-            key={book.id}
-            to={`/book/${book.id}`}
-            className="group flex flex-col rounded-xl overflow-hidden border border-border/50 bg-card hover:border-primary/30 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 transition-all duration-300"
-          >
-            {/* Cover */}
-            <div
-              className="relative aspect-[3/4] overflow-hidden"
-              style={{ background: book.bg_color ? `hsl(${book.bg_color})` : undefined }}
-            >
-              {book.cover_url ? (
-                <img
+          <Link key={book.id} to={`/book/${book.id}`} className="h-full block">
+            <SpotlightCard className="h-full p-3 md:p-4 group cursor-pointer">
+              <div className="flex flex-col gap-4 h-full">
+                <BookCover
                   src={book.cover_url}
                   alt={book.title}
+                  className="w-3/4 mx-auto"
+                  hover={true}
                   loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/30 dark:to-amber-900/10 flex items-center justify-center">
-                  <BookOpen className="w-10 h-10 text-amber-400/50" />
+                <div className="flex flex-col items-center text-center mt-auto">
+                  <h3 className="font-heading font-black tracking-tight text-base text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                    {book.title}
+                  </h3>
+                  <span className="w-8 h-[1.5px] bg-primary/30 my-3 transition-all duration-500 group-hover:w-16 group-hover:bg-primary" />
+                  <p className="text-[10px] font-bold text-muted-foreground tracking-[0.15em] uppercase">
+                    {book.author}
+                  </p>
+                  {book.price != null && (
+                    <p className="text-xs font-semibold text-primary mt-2">
+                      {book.price.toLocaleString()} so'm
+                    </p>
+                  )}
                 </div>
-              )}
-              {/* Subtle gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-
-            {/* Info */}
-            <div className="flex flex-col flex-1 p-3 gap-1">
-              <p className="text-xs font-bold text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                {book.title}
-              </p>
-              <p className="text-[11px] text-muted-foreground">{book.author}</p>
-              {book.price != null && (
-                <p className="text-xs font-semibold text-primary mt-auto pt-1">
-                  {book.price.toLocaleString()} so'm
-                </p>
-              )}
-            </div>
+              </div>
+            </SpotlightCard>
           </Link>
         ))}
       </div>
